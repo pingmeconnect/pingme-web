@@ -1,243 +1,262 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>PingMe — One Scan. Instant Connection.</title>
-  <style>
-    :root {
-      --bg: #0b0f19;
-      --card: #131a2a;
-      --border: #23304d;
-      --accent: #f97316;
-      --accent-hover: #ea580c;
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --success: #22c55e;
-      --danger: #ef4444;
+  
+  <!-- Full-Screen Mobile App Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#090a15">
+  <link rel="manifest" href="/manifest.json">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandDark: '#090a15',
+            brandBlue: '#0c0f2a',
+            brandPurple: '#1d1245',
+            neonGreen: '#10b981',
+            neonBlue: '#3b82f6',
+            neonAmber: '#f59e0b',
+            neonRed: '#ef4444',
+          },
+          boxShadow: {
+            glowGreen: '0 0 15px rgba(16, 185, 129, 0.4)',
+            glowBlue: '0 0 15px rgba(59, 130, 246, 0.4)',
+            glowPurple: '0 0 15px rgba(29, 18, 69, 0.4)',
+          }
+        }
+      }
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-    .container { width: 100%; max-width: 460px; margin: auto; }
-    .brand { text-align: center; margin-bottom: 22px; }
-    .brand h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; color: var(--accent); }
-    .brand p { font-size: 0.85rem; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 4px; }
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; box-shadow: 0 12px 30px rgba(0,0,0,0.4); }
-    .badge { display: inline-block; background: rgba(249,115,22,0.15); color: var(--accent); border: 1px solid rgba(249,115,22,0.35); padding: 4px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; margin-bottom: 12px; }
-    h2 { font-size: 1.35rem; margin-bottom: 8px; }
-    .sub { color: var(--muted); font-size: 0.92rem; line-height: 1.5; margin-bottom: 18px; }
-    label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 6px; margin-top: 14px; }
-    input, select, textarea { width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border); background: #0d1322; color: var(--text); font-size: 0.95rem; outline: none; }
-    input:focus, select:focus, textarea:focus { border-color: var(--accent); }
-    .reason-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
-    .reason-btn { background: #0d1322; border: 1px solid var(--border); color: var(--text); padding: 12px 10px; border-radius: 10px; font-size: 0.88rem; cursor: pointer; text-align: left; transition: 0.15s; }
-    .reason-btn.active { border-color: var(--accent); background: rgba(249,115,22,0.15); font-weight: 600; }
-    .btn { width: 100%; margin-top: 20px; padding: 14px; border: none; border-radius: 12px; background: var(--accent); color: #fff; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.15s; }
-    .btn:hover { background: var(--accent-hover); }
-    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
-    .status-box { margin-top: 16px; padding: 14px; border-radius: 10px; font-size: 0.9rem; line-height: 1.45; display: none; }
-    .status-ok { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.4); color: #86efac; }
-    .status-err { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4); color: #fca5a5; }
-    .privacy-note { margin-top: 16px; font-size: 0.78rem; color: var(--muted); text-align: center; }
-    .footer { margin-top: 24px; text-align: center; font-size: 0.8rem; color: var(--muted); }
-    .hidden { display: none; }
+  </script>
+
+  <!-- Animate.css for Screen & Mascot Transitions -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+  <style>
+    /* Premium visual overrides to enforce app-like containment & feel */
+    body {
+      background: linear-gradient(135deg, #090a15 0%, #111432 50%, #190f3c 100%);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      overflow: hidden; /* Lock viewport scrolling */
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .safe-top {
+      padding-top: env(safe-area-inset-top, 16px);
+    }
+    .safe-bottom {
+      padding-bottom: env(safe-area-inset-bottom, 16px);
+    }
+    /* Pulsing & Glowing Animation */
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+    .pulse-effect {
+      animation: pulse-ring 2s infinite ease-in-out;
+    }
   </style>
 </head>
-<body>
-  <div class="container">
-    <div class="brand">
-      <h1>PINGME</h1>
-      <p>ONE SCAN. INSTANT CONNECTION.</p>
-    </div>
+<body class="text-white min-h-screen flex flex-col justify-between h-screen w-screen relative">
 
-    <!-- VIEW 1: LOADING -->
-    <div id="view-loading" class="card">
-      <h2>Checking PingMe Tag...</h2>
-      <p class="sub">Verifying tag security and connection status.</p>
-    </div>
-
-    <!-- VIEW 2: LANDING (When someone visits pingmeconnect.in without a QR code) -->
-    <div id="view-home" class="card hidden">
-      <span class="badge">Privacy-First Smart QR Tag</span>
-      <h2>Protect Your Vehicle, Keys &amp; Luggage</h2>
-      <p class="sub">Anyone who scans your PingMe tag can alert you instantly on WhatsApp—without ever seeing your phone number or personal details.</p>
-      <label for="manual-code">Have a PingMe Tag Code? Enter it below:</label>
-      <input id="manual-code" type="text" placeholder="e.g. TEST001" />
-      <button class="btn" onclick="openManualTag()">Open Tag</button>
-    </div>
-
-    <!-- VIEW 3: SELF-ACTIVATION (When an unclaimed tag is scanned for the first time) -->
-    <div id="view-activate" class="card hidden">
-      <span class="badge">New Tag Setup</span>
-      <h2>Activate Your PingMe Tag</h2>
-      <p class="sub">Link this tag to your WhatsApp number. Your number stays 100% hidden from scanners.</p>
-
-      <label for="act-name">Your Name</label>
-      <input id="act-name" type="text" placeholder="e.g. Venkat" />
-
-      <label for="act-phone">WhatsApp Number (10-digit Indian mobile)</label>
-      <input id="act-phone" type="tel" placeholder="e.g. 9876543210" />
-
-      <label for="act-type">Tag Category</label>
-      <select id="act-type">
-        <option value="vehicle">Car / Bike (Vehicle Number)</option>
-        <option value="luggage">Bag / Luggage / Laptop</option>
-        <option value="keychain">Keys / Wallet / Personal Item</option>
-        <option value="pet">Pet Collar</option>
-      </select>
-
-      <label for="act-item">Vehicle Number or Item Label</label>
-      <input id="act-item" type="text" placeholder="e.g. TN09AB1234 or Blue Backpack" />
-
-      <button id="btn-activate" class="btn" onclick="activateTag()">Activate Tag Now</button>
-      <div id="act-msg" class="status-box"></div>
-    </div>
-
-    <!-- VIEW 4: SCANNER ALERT SCREEN (When someone scans an active tag) -->
-    <div id="view-scan" class="card hidden">
-      <span class="badge" id="scan-item-badge">VEHICLE / ITEM</span>
-      <h2>Notify the Owner Privately</h2>
-      <p class="sub">Select why you are reaching out. An instant alert will be sent to the owner's WhatsApp.</p>
-
-      <div class="reason-grid">
-        <button type="button" class="reason-btn active" onclick="selectReason(this, 'Blocking / Wrong Parking')">🚗 Blocking Parking</button>
-        <button type="button" class="reason-btn" onclick="selectReason(this, 'Lights / Window Left Open')">💡 Lights / Window Open</button>
-        <button type="button" class="reason-btn" onclick="selectReason(this, 'Found Lost Item / Keys')">🔑 Found Lost Item</button>
-        <button type="button" class="reason-btn" onclick="selectReason(this, 'Urgent / Tow Alert')">🚨 Urgent / Tow Alert</button>
-      </div>
-
-      <label for="scan-note">Optional Note (e.g., location or landmark)</label>
-      <textarea id="scan-note" rows="2" placeholder="Parked near gate 2..."></textarea>
-
-      <button id="btn-alert" class="btn" onclick="sendAlert()">Send Instant Alert</button>
-      <div id="scan-msg" class="status-box"></div>
-      <p class="privacy-note">🔒 Protected by PingMe Privacy Shield. Owner contact details are never disclosed.</p>
-    </div>
-
-    <div class="footer">&copy; 2026 PingMe &bull; pingmeconnect.in</div>
+  <!-- Background decorative light streaks -->
+  <div class="absolute inset-0 pointer-events-none overflow-hidden z-0">
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-brandPurple rounded-full blur-[120px] opacity-40"></div>
+    <div class="absolute bottom-20 -right-20 w-80 h-80 bg-blue-900 rounded-full blur-[100px] opacity-30"></div>
   </div>
 
+  <!-- Header Section (Stays persistent & clean) -->
+  <header class="safe-top z-10 px-6 py-4 flex justify-between items-center w-full border-b border-white/5 bg-brandDark/40 backdrop-blur-md">
+    <div class="flex items-center gap-2">
+      <!-- High-Quality Circular PingMe Logo Badge -->
+      <img src="https://pingmeconnect.in/assets/logo-badge.png" alt="PingMe Badge Logo" class="h-10 w-10 object-contain rounded-full shadow-glowBlue">
+      <div>
+        <span class="font-extrabold text-lg tracking-wider bg-gradient-to-r from-white via-blue-400 to-pink-500 bg-clip-text text-transparent">PINGME</span>
+        <p class="text-[9px] text-gray-400 tracking-widest uppercase">One Scan. Instant Connection.</p>
+      </div>
+    </div>
+    <!-- Bilingual translation toggle button -->
+    <button onclick="toggleLanguage()" id="langBtn" class="px-3 py-1 text-xs font-semibold rounded-full border border-white/10 bg-white/5 hover:bg-white/10 active:scale-95 transition-all text-gray-300">
+      English | தமிழ்
+    </button>
+  </header>
+
+  <!-- SCREEN 1: Welcome & Action Hub -->
+  <main id="screen1" class="flex-grow flex flex-col justify-between overflow-y-auto px-5 py-4 z-10 gap-4 animate__animated animate__fadeIn">
+    
+    <!-- Welcome Header with Animated Mascot -->
+    <div class="flex items-center gap-3 bg-white/5 rounded-2xl p-4 border border-white/5 backdrop-blur-md">
+      <div class="relative flex-shrink-0 animate__animated animate__bounceIn">
+        <img src="https://pingmeconnect.in/assets/mascot-smile.png" alt="PingMe Mascot" class="h-16 w-16 object-contain">
+        <span class="absolute bottom-0 right-0 bg-emerald-500 text-[10px] px-1.5 py-0.5 rounded-full font-bold animate-pulse">LIVE</span>
+      </div>
+      <div>
+        <h1 id="welcomeTitle" class="text-xl font-extrabold bg-gradient-to-r from-emerald-400 to-cyan-300 bg-clip-text text-transparent">👋 Welcome to PingMe!</h1>
+        <p id="welcomeSubtitle" class="text-xs text-gray-300 font-medium">Connect with the owner. Privately.</p>
+      </div>
+    </div>
+
+    <!-- 1. Category Selection -->
+    <div>
+      <h2 id="categoryLabel" class="text-sm font-bold text-gray-300 mb-2 uppercase tracking-wider">Choose a Category</h2>
+      <div class="grid grid-cols-3 gap-2">
+        <!-- Vehicle Category (Default) -->
+        <button onclick="selectCategory('VEHICLE')" id="catVEHICLE" class="flex flex-col items-center justify-center py-3.5 px-2 rounded-xl border-2 bg-gradient-to-b from-blue-900/40 to-blue-950/40 border-blue-500/80 shadow-glowBlue transition-all transform active:scale-95">
+          <span class="text-2xl mb-1">🚗</span>
+          <span class="text-[10px] font-extrabold uppercase tracking-tight text-white">Vehicle</span>
+        </button>
+        <!-- Lost & Found Category -->
+        <button onclick="selectCategory('LOST_FOUND')" id="catLOST_FOUND" class="flex flex-col items-center justify-center py-3.5 px-2 rounded-xl border-2 bg-white/5 border-white/5 hover:bg-white/10 transition-all transform active:scale-95">
+          <span class="text-2xl mb-1">🔑</span>
+          <span id="labelLostFound" class="text-[10px] font-extrabold uppercase tracking-tight text-gray-300">Lost & Found</span>
+        </button>
+        <!-- Other Category -->
+        <button onclick="selectCategory('OTHER')" id="catOTHER" class="flex flex-col items-center justify-center py-3.5 px-2 rounded-xl border-2 bg-white/5 border-white/5 hover:bg-white/10 transition-all transform active:scale-95">
+          <span class="text-2xl mb-1">📦</span>
+          <span id="labelOther" class="text-[10px] font-extrabold uppercase tracking-tight text-gray-300">Other</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 2. Interactive message select option checklist -->
+    <div>
+      <h2 id="messageLabel" class="text-sm font-bold text-gray-300 mb-2 uppercase tracking-wider">Select a Message</h2>
+      <div id="reasonsContainer" class="flex flex-col gap-2">
+        <!-- Populated dynamically based on category & language -->
+      </div>
+    </div>
+
+    <!-- 3. Custom freeform fallback text area -->
+    <div class="relative bg-white/5 rounded-xl border border-white/10 p-3">
+      <div class="flex items-center gap-2 mb-1.5">
+        <span class="text-sm">✍️</span>
+        <label id="addMsgLabel" class="text-xs font-semibold text-gray-400">Add a Message (Optional)</label>
+      </div>
+      <textarea id="customMessage" rows="2" maxlength="160" oninput="updateCharCount()" class="w-full bg-transparent text-sm focus:outline-none placeholder-gray-500 text-white resize-none" placeholder="Type specific details, e.g., 'Parked near gate 3'"></textarea>
+      <div class="text-[10px] text-gray-500 text-right mt-1" id="charCount">0 / 160</div>
+    </div>
+
+    <!-- 4. Quick location toggle checklist -->
+    <div class="flex flex-col gap-2 bg-white/5 rounded-xl border border-white/5 p-3.5">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center gap-2">
+          <span class="text-sm">📍</span>
+          <div>
+            <span id="shareLocLabel" class="text-xs font-semibold">Share Live Location</span>
+          </div>
+        </div>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input type="checkbox" id="shareLocation" checked class="sr-only peer">
+          <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Trigger call button -->
+    <button onclick="handleSendAlert()" class="w-full py-4 rounded-xl font-extrabold text-sm tracking-wide bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 active:scale-95 shadow-glowGreen transition-all flex justify-center items-center gap-2 pulse-effect">
+      <span>💬</span>
+      <span id="btnSendAlert">SEND ALERT PRIVATELY &gt;</span>
+    </button>
+  </main>
+
+  <!-- SCREEN 2: Active Waiting Room (180s Timer) -->
+  <main id="screen2" class="hidden flex-grow flex flex-col justify-between overflow-y-auto px-5 py-6 z-10 gap-5 animate__animated animate__fadeIn">
+    
+    <div class="text-center">
+      <h1 id="waitingTitle" class="text-xl font-extrabold text-white">Waiting for Owner Reply</h1>
+      <p id="waitingSubtitle" class="text-xs text-gray-400 mt-1">The owner has been alerted privately via WhatsApp.</p>
+    </div>
+
+    <!-- Active 180s Timer Ring & Mascot Pair -->
+    <div class="flex items-center justify-around bg-white/5 rounded-2xl p-4 border border-white/5 my-auto">
+      <!-- Count Down Timer -->
+      <div class="relative w-36 h-36 flex items-center justify-center">
+        <!-- SVG Ring -->
+        <svg class="absolute inset-0 w-full h-full -rotate-90">
+          <circle cx="72" cy="72" r="64" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="transparent"/>
+          <circle id="timerProgress" cx="72" cy="72" r="64" stroke="url(#timerGrad)" stroke-width="8" fill="transparent" stroke-dasharray="402" stroke-dashoffset="0" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="timerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#10b981" />
+              <stop offset="100%" stop-color="#06b6d4" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="text-center z-10">
+          <span id="countdownText" class="text-3xl font-black text-emerald-400">180s</span>
+          <p id="countdownLabel" class="text-[9px] text-gray-400 font-bold uppercase mt-1 tracking-wider">Remaining</p>
+        </div>
+      </div>
+
+      <!-- Mascot with interactive alerting alert -->
+      <div class="flex flex-col items-center">
+        <img id="screen2Mascot" src="https://pingmeconnect.in/assets/mascot-waiting.png" alt="Mascot Waiting" class="h-28 w-24 object-contain animate-bounce">
+        <span class="text-[10px] text-amber-400 font-bold tracking-widest uppercase mt-2">ALERTER...</span>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-3">
+      <!-- Status Badge -->
+      <div class="flex items-center justify-center gap-2 py-2.5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
+        <span class="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-ping"></span>
+        <span id="badgeSent" class="text-xs font-black text-emerald-400 uppercase tracking-wide">✓ Alert Sent Privately</span>
+      </div>
+
+      <!-- Dynamic Message Response Card -->
+      <div id="liveResponseBox" class="bg-brandDark/80 border border-white/5 rounded-xl p-4 flex flex-col justify-center min-h-24">
+        <div class="flex items-center gap-2 mb-2 text-gray-400">
+          <span class="animate-pulse">✉</span>
+          <span id="directMsgLabel" class="text-[10px] font-bold uppercase tracking-wider">Owner's Direct Message</span>
+        </div>
+        <p id="liveResponseText" class="text-sm font-bold italic text-gray-400 text-center animate-pulse">Waiting for owner to reply...</p>
+      </div>
+
+      <!-- Live Notification Banner -->
+      <div id="noReplyCard" class="hidden bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-center">
+        <p id="noReplyText" class="text-xs font-semibold text-amber-300">⏳ Time is up, but don't worry! You will get a notification on WhatsApp once the owner replies.</p>
+      </div>
+
+      <!-- Share Referral Feature Card -->
+      <div class="bg-gradient-to-r from-amber-500/10 to-pink-500/10 border border-white/5 rounded-xl p-3.5 flex flex-col gap-2">
+        <h4 id="referTitle" class="text-xs font-black text-amber-400 uppercase tracking-wider">❤️ Like this Smart PingMe concept?</h4>
+        <p id="referDesc" class="text-[10px] text-gray-300">Help others connect safely! Refer to your friends and family.</p>
+        <button onclick="handleReferral()" class="w-full py-2 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-lg text-xs font-bold text-white flex items-center justify-center gap-2 shadow-glowGreen active:scale-95 transition-all">
+          <span>📤</span>
+          <span id="btnRefer">REFER TO FRIENDS & FAMILY</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Done Close -->
+    <button onclick="resetApp()" class="w-full py-3 bg-white/5 hover:bg-white/10 active:scale-95 rounded-xl text-xs font-bold text-gray-300 border border-white/10 transition-all">
+      ✓ Close
+    </button>
+  </main>
+
+  <!-- Persistent Privacy Trust Label -->
+  <footer class="safe-bottom z-10 py-3 text-center w-full bg-brandDark/20 backdrop-blur-md border-t border-white/5">
+    <div class="flex justify-center items-center gap-1.5 text-[10px] font-bold text-gray-500">
+      <span>🔒</span>
+      <span id="footerText">Owner & Scanner Numbers Stay Hidden</span>
+    </div>
+    <p class="text-[8px] text-gray-600 mt-0.5">Powered by @PingMe</p>
+  </footer>
+
+  <!-- Notification Audio Chime & Core App Operations Script -->
   <script>
-    const API_BASE = "https://pingme-api.pingmeconnect.workers.dev";
-    const params = new URLSearchParams(window.location.search);
-    const tagCode = (params.get("t") || params.get("code") || "").trim();
-    let selectedReason = "Blocking / Wrong Parking";
-
-    function showView(id) {
-      ["view-loading", "view-home", "view-activate", "view-scan"].forEach(v => {
-        document.getElementById(v).classList.add("hidden");
-      });
-      document.getElementById(id).classList.remove("hidden");
-    }
-
-    function openManualTag() {
-      const code = document.getElementById("manual-code").value.trim();
-      if (code) window.location.search = `?t=${encodeURIComponent(code)}`;
-    }
-
-    function selectReason(btn, reason) {
-      document.querySelectorAll(".reason-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      selectedReason = reason;
-    }
-
-    function showStatus(elId, text, ok) {
-      const el = document.getElementById(elId);
-      el.textContent = text;
-      el.className = "status-box " + (ok ? "status-ok" : "status-err");
-      el.style.display = "block";
-    }
-
-    async function init() {
-      if (!tagCode) {
-        showView("view-home");
-        return;
-      }
-      try {
-        const res = await fetch(`${API_BASE}/api/tag?code=${encodeURIComponent(tagCode)}`);
-        const data = await res.json();
-        if (!res.ok || !data.valid) {
-          showView("view-home");
-          alert("This QR tag code was not found. Please check the tag.");
-          return;
-        }
-        if (data.status === "unclaimed") {
-          showView("view-activate");
-        } else if (data.status === "active") {
-          document.getElementById("scan-item-badge").textContent = data.vehicle_or_item || "PINGME TAG";
-          showView("view-scan");
-        } else {
-          showView("view-home");
-          alert(`This tag is currently ${data.status}.`);
-        }
-      } catch (e) {
-        showView("view-home");
-      }
-    }
-
-    async function activateTag() {
-      const btn = document.getElementById("btn-activate");
-      btn.disabled = true;
-      btn.textContent = "Activating...";
-      try {
-        const res = await fetch(`${API_BASE}/api/activate`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            tag_code: tagCode,
-            owner_name: document.getElementById("act-name").value,
-            owner_whatsapp: document.getElementById("act-phone").value,
-            tag_type: document.getElementById("act-type").value,
-            vehicle_or_item: document.getElementById("act-item").value
-          })
-        });
-        const data = await res.json();
-        if (res.ok && data.success) {
-          showStatus("act-msg", "Tag activated! Reloading scanner view...", true);
-          setTimeout(() => window.location.reload(), 1200);
-        } else {
-          showStatus("act-msg", data.error || "Activation failed.", false);
-          btn.disabled = false;
-          btn.textContent = "Activate Tag Now";
-        }
-      } catch (e) {
-        showStatus("act-msg", "Network error. Try again.", false);
-        btn.disabled = false;
-        btn.textContent = "Activate Tag Now";
-      }
-    }
-
-    async function sendAlert() {
-      const btn = document.getElementById("btn-alert");
-      btn.disabled = true;
-      btn.textContent = "Sending Alert...";
-      try {
-        const res = await fetch(`${API_BASE}/api/alert`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            tag_code: tagCode,
-            reason: selectedReason,
-            custom_message: document.getElementById("scan-note").value
-          })
-        });
-        const data = await res.json();
-        if (res.ok && data.success) {
-          showStatus("scan-msg", "✅ Alert delivered! The owner has been notified privately.", true);
-          btn.textContent = "Alert Sent";
-        } else {
-          showStatus("scan-msg", data.error || "Could not send alert.", false);
-          btn.disabled = false;
-          btn.textContent = "Send Instant Alert";
-        }
-      } catch (e) {
-        showStatus("scan-msg", "Network error. Try again.", false);
-        btn.disabled = false;
-        btn.textContent = "Send Instant Alert";
-      }
-    }
-
-    init();
-  </script>
-</body>
-</html>
+    // URL Params & Core Identity States
+    const urlParams = new URLSearchParams(window.location.search);
+    const tagCode = urlParams.get('t') || 'TEST001';
+    
+    // Core Static Configuration
+    const TARGET
