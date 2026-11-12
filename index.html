@@ -416,7 +416,7 @@
     const SESSION_KEY = `pingme_closed_${tagCode}`;
 
     // Replace with your Cloudflare Worker or Supabase Edge Function URL
-    const TARGET = "YOUR_BACKEND_API_URL";
+    const TARGET = "https://pingme-api.pingmeconnect.workers.dev/api/scan](https://pingme-api.pingmeconnect.workers.dev/api/scan";
 
     let currentLang = 'en';
     let currentCategory = 'VEHICLE';
@@ -745,7 +745,7 @@
       };
 
       try {
-        if (TARGET && TARGET !== "YOUR_BACKEND_API_URL") {
+        if (TARGET && TARGET !== "https://pingme-api.pingmeconnect.workers.dev/api/scan](https://pingme-api.pingmeconnect.workers.dev/api/scan") {
           const res = await fetch(TARGET, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -785,7 +785,7 @@
         }
       }, 1000);
 
-      if (activeAlertId && TARGET !== "YOUR_BACKEND_API_URL") {
+      if (activeAlertId && TARGET !== "https://pingme-api.pingmeconnect.workers.dev/api/scan](https://pingme-api.pingmeconnect.workers.dev/api/scan") {
         pollInterval = setInterval(async () => {
           try {
             const res = await fetch(`${TARGET}?alert_id=${encodeURIComponent(activeAlertId)}`);
