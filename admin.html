@@ -251,8 +251,7 @@
         </div>
       </div>
     </div>
-
-    <!-- 2. ADD NEW CUSTOMER -->
+<!-- 2. ADD NEW CUSTOMER -->
     <div id="view-new" class="card hidden">
       <div class="card-header">
         <h3 class="card-title">← Add New Customer</h3>
@@ -263,48 +262,41 @@
       <label>WhatsApp Number *</label>
       <input type="tel" id="fPhone" placeholder="9840547587" />
 
-      <label>Email (Optional)</label>
-      <input type="email" id="fEmail" placeholder="customer@gmail.com" />
-
-      <label>Vehicle / Item Label *</label>
-      <input type="text" id="fItem" placeholder="TN 09 AB 1234 / Keys - Home" />
-
       <div class="row-2">
         <div>
-          <label>Category *</label>
-          <select id="fType">
-            <option value="vehicle">Vehicle</option>
-            <option value="keys">Keys / Keychain</option>
-            <option value="luggage">Laptop Bag / Luggage</option>
-            <option value="kids">Kids / Elderly ID</option>
-            <option value="pet">Pet Collar</option>
-            <option value="business">Shop / Doorbell</option>
-          </select>
+          <label>Email (Optional)</label>
+          <input type="email" id="fEmail" placeholder="customer@gmail.com" />
         </div>
+        <div>
+          <label>Item / Reference Note (Optional)</label>
+          <input type="text" id="fItem" placeholder="Leave blank or add note" />
+        </div>
+      </div>
+
+      <label>Address (Optional)</label>
+      <input type="text" id="fAddress" placeholder="Area / City (Optional)" />
+
+      <div class="row-2">
         <div>
           <label>Initial Credits</label>
           <input type="number" id="fCredits" value="50" />
         </div>
-      </div>
-
-      <div class="row-2">
         <div>
-          <label>Customer Status *</label>
+          <label>Customer Status</label>
           <select id="fStatus">
             <option value="active">🟢 Active (Instant)</option>
             <option value="inactive">🔴 Inactive (Default)</option>
           </select>
         </div>
-        <div>
-          <label>Subscription Period *</label>
-          <select id="fDays">
-            <option value="360">1 Year (360 Days)</option>
-            <option value="180">6 Months (180 Days)</option>
-            <option value="720">2 Years (720 Days)</option>
-            <option value="30">Trial (30 Days)</option>
-          </select>
-        </div>
       </div>
+
+      <label>Subscription Period</label>
+      <select id="fDays">
+        <option value="360">1 Year (360 Days)</option>
+        <option value="180">6 Months (180 Days)</option>
+        <option value="720">2 Years (720 Days)</option>
+        <option value="30">Trial (30 Days)</option>
+      </select>
 
       <button class="btn btn-green-full" id="btnCreate" onclick="createCustomer()">👤+ Create Customer & Generate QR</button>
     </div>
@@ -577,14 +569,15 @@
       owner_name: document.getElementById("fName").value.trim(),
       owner_whatsapp: document.getElementById("fPhone").value.trim(),
       email: document.getElementById("fEmail").value.trim(),
+      address: document.getElementById("fAddress").value.trim(),
       vehicle_or_item: document.getElementById("fItem").value.trim(),
-      tag_type: document.getElementById("fType").value,
+      tag_type: "general",
       initial_credits: document.getElementById("fCredits").value,
       status: document.getElementById("fStatus").value,
       valid_days: document.getElementById("fDays").value
     };
-    if (!payload.owner_name || !payload.owner_whatsapp || !payload.vehicle_or_item) {
-      return toast("Fill Name, WhatsApp & Vehicle/Item");
+    if (!payload.owner_name || !payload.owner_whatsapp) {
+      return toast("Customer Name and WhatsApp Number are required");
     }
     const btn = document.getElementById("btnCreate");
     btn.disabled = true; btn.textContent = "Creating...";
@@ -598,6 +591,7 @@
       document.getElementById("fName").value = "";
       document.getElementById("fPhone").value = "";
       document.getElementById("fEmail").value = "";
+      document.getElementById("fAddress").value = "";
       document.getElementById("fItem").value = "";
 
       await loadDashboard(true);
