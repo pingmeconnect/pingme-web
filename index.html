@@ -12,7 +12,7 @@
   <link rel="icon" type="image/png" href="/assets/icon-192.png">
   <link rel="apple-touch-icon" href="/assets/icon-512.png">
   <meta property="og:title" content="PingMe — One Scan. Instant Connection.">
-  <meta property="og:description" content="Connect with the owner privately on WhatsApp without sharing phone numbers.">
+  <meta property="og:description" content="Reach the owner. Privately.">
   <meta property="og:image" content="https://pingmeconnect.in/assets/og-preview.png">
   <link rel="manifest" href="/manifest.json">
 
@@ -81,11 +81,9 @@
         </button>
       </div>
 
-  <!-- Persistent PingMe Logo with High-Contrast Pill -->
+      <!-- Persistent PingMe Logo -->
       <div class="flex flex-col items-center justify-center">
-        <div class="px-5 py-1.5 rounded-full bg-white/95 shadow-[0_0_24px_rgba(56,189,248,0.65)] border-2 border-cyan-300/80 flex items-center justify-center">
-          <img src="/assets/pingme-logo.png" alt="PingMe — One Scan. Instant Connection." class="h-12 object-contain">
-        </div>
+        <img src="/assets/pingme-logo.png" alt="PingMe — One Scan. Instant Connection." class="h-14 object-contain drop-shadow-[0_4px_14px_rgba(59,130,246,0.65)]">
       </div>
     </header>
 
@@ -101,7 +99,7 @@
           <span class="absolute bottom-0 -right-2 bg-emerald-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full shadow-glowGreen border border-white/30">LIVE</span>
         </div>
         <h1 id="welcomeTitle" class="text-lg font-black text-emerald-400 drop-shadow mt-0.5">Welcome to PingMe!</h1>
-        <p id="welcomeSubtitle" class="text-[11px] text-blue-100/90 font-medium">Connect with the owner privately on WhatsApp.</p>
+        <p id="welcomeSubtitle" class="text-xs text-blue-100/90 font-medium">Reach the owner. Privately.</p>
       </div>
 
       <!-- 1. Category Selection (3D Icons) -->
@@ -430,7 +428,7 @@
     const translations = {
       en: {
         welcomeTitle: "Welcome to PingMe!",
-        welcomeSubtitle: "Connect with the owner privately on WhatsApp.",
+        welcomeSubtitle: "Reach the owner. Privately.",
         categoryLabel: "Choose a Category",
         labelVehicle: "Vehicle",
         labelLostFound: "Lost & Found",
@@ -460,7 +458,7 @@
       },
       ta: {
         welcomeTitle: "PingMe-க்கு வரவேற்கிறோம்!",
-        welcomeSubtitle: "WhatsApp மூலம் உரிமையாளரை தனிப்பட்ட முறையில் தொடர்பு கொள்ளுங்கள்.",
+        welcomeSubtitle: "உரிமையாளரைத் தொடர்பு கொள்ளுங்கள். தனிப்பட்ட முறையில்.",
         categoryLabel: "வகையைத் தேர்ந்தெடுக்கவும்",
         labelVehicle: "வாகனம்",
         labelLostFound: "தொலைந்தவை",
@@ -674,7 +672,6 @@
       });
     }
 
-    // Unlock mobile audio & haptics on user gesture
     function unlockMobileFeedback() {
       try {
         const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -688,7 +685,6 @@
       } catch (e) {}
     }
 
-    // Play double-chime + mobile vibration when owner reply arrives
     function triggerReplyAlert() {
       try {
         if (navigator.vibrate) {
@@ -700,7 +696,6 @@
           if (audioCtx.state === 'suspended') audioCtx.resume();
 
           const now = audioCtx.currentTime;
-          // First pleasant chime note (E5)
           const osc1 = audioCtx.createOscillator();
           const gain1 = audioCtx.createGain();
           osc1.type = 'triangle';
@@ -712,7 +707,6 @@
           osc1.start(now);
           osc1.stop(now + 0.25);
 
-          // Second higher chime note (A5)
           const osc2 = audioCtx.createOscillator();
           const gain2 = audioCtx.createGain();
           osc2.type = 'triangle';
@@ -823,7 +817,6 @@
       }
     }
 
-    // Allows "Try Again" from Screen 4 (No Reply Yet) only
     function retryAlert() {
       clearInterval(countdownInterval);
       clearInterval(pollInterval);
@@ -833,13 +826,11 @@
       showScreen('screen1');
     }
 
-    // Locks the session permanently until the user physically scans the QR tag again
     function closeSession() {
       clearInterval(countdownInterval);
       clearInterval(pollInterval);
       sessionStorage.setItem(SESSION_KEY, 'true');
 
-      // Strip ?t= parameter from URL bar so refreshing cannot re-open the tag
       if (window.history && window.history.replaceState) {
         window.history.replaceState({}, document.title, window.location.pathname);
       }
@@ -848,7 +839,6 @@
       try { window.close(); } catch (e) {}
     }
 
-    // Check if this session was already closed; otherwise start Screen 1
     if (sessionStorage.getItem(SESSION_KEY) === 'true' || !urlParams.get('t')) {
       showScreen('screenClosed');
     } else {
