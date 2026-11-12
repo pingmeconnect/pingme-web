@@ -433,7 +433,7 @@
     const el = document.getElementById("toast");
     el.textContent = msg;
     el.style.display = "block";
-    setTimeout(() => el.style.display = "none", 3000);
+    setTimeout(() => el.style.display = "none", 3500);
   }
 
   function headers() {
@@ -451,14 +451,16 @@
     localStorage.setItem("pm_pass", pass);
     if (base) localStorage.setItem("pm_base", base.endsWith("/") ? base : base + "/");
 
-    const ok = await loadDashboard(silent);
-    if (ok) {
+    const result = await loadDashboard(silent);
+    if (result === true) {
       document.getElementById("loginView").classList.add("hidden");
       document.getElementById("appView").classList.remove("hidden");
       document.getElementById("topActions").classList.remove("hidden");
-    } else {
+    } else if (result === "unauthorized") {
       localStorage.removeItem("pm_pass");
       if (!silent) toast("Wrong Password");
+    } else {
+      if (!silent) toast("Render Error: " + result);
     }
   }
 
@@ -470,17 +472,19 @@
   async function loadDashboard(silent = false) {
     try {
       const res = await fetch(`${API_BASE}/api/admin/dashboard`, { headers: headers() });
-      if (!res.ok) return false;
+      if (res.status === 401) return "unauthorized";
+      if (!res.ok) return "HTTP " + res.status;
+
       const data = await res.json();
-      tags = data.tags || [];
-      logs = data.logs || [];
+      tags = Array.isArray(data.tags) ? data.tags : [];
+      logs = Array.isArray(data.logs) ? data.logs : [];
 
       const todayStr = new Date().toISOString().slice(0, 10);
-      const scansToday = logs.filter(l => (l.created_at || "").startsWith(todayStr)).length;
+      const scansToday = logs.filter(l => String(l.created_at || "").startsWith(todayStr)).length;
       const totalCredits = tags.reduce((sum, t) => sum + (Number(t.scan_credits) || 0), 0);
 
       document.getElementById("stCustomers").textContent = tags.length;
-      document.getElementById("stTags").textContent = tags.filter(t => t.status === "active").length;
+      document.getElementById("stTags").textContent = tags.filter(t => (t.status || "").toLowerCase() === "active").length;
       document.getElementById("stScansToday").textContent = scansToday;
       document.getElementById("stCredits").textContent = totalCredits.toLocaleString("en-IN");
 
@@ -488,11 +492,11 @@
       renderAllCustomers();
       renderLogs();
       populateWaDropdown();
-      if (!silent) toast("Synced");
+      if (!silent) toast("Dashboard Unlocked!");
       return true;
-    } catch {
-      toast("Connection error");
-      return false;
+    } catch (err) {
+      console.error("Dashboard Error:", err);
+      return err.message || "Unknown JS Error";
     }
   }
 
@@ -505,26 +509,29 @@
 
   function catIcon(type) {
     const map = { vehicle: "🚗", keys: "🔑", luggage: "🎒", kids: "🧒", pet: "🐾", business: "🏪" };
-    return map[type] || "🏷️";
+    return map[(type || "").toLowerCase()] || "🏷️";
   }
 
   function formatDate(iso) {
     if (!iso) return "-";
-    return new Date(iso).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+    const d = new Date(iso);
+    return isNaN(d.getTime()) ? "-" : d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
   }
 
   function customerRowHtml(t) {
+    const status = (t.status || "inactive").toLowerCase();
     const custScans = logs.filter(l => l.tag_id === t.id).length;
-    const pillCls = t.status === "active" ? "pill-active" : (t.status === "inactive" ? "pill-inactive" : "pill-expired");
+    const pillCls = status === "active" ? "pill-active" : (status === "inactive" ? "pill-inactive" : "pill-expired");
+    const safeJson = JSON.stringify(t).replace(/'/g, "&#39;").replace(/"/g, "&quot;");
     return `
-      <div class="cust-row" onclick='openDetail(${JSON.stringify(t).replace(/'/g, "&#39;")})'>
+      <div class="cust-row" onclick="openDetailById('${t.id}')">
         <div class="cust-ico">${catIcon(t.tag_type)}</div>
         <div class="cust-info">
-          <div class="cust-title">${t.serial_no} &nbsp; ${t.owner_name || "Unclaimed"}</div>
+          <div class="cust-title">${t.serial_no || "TAG"} &nbsp; ${t.owner_name || "Unclaimed"}</div>
           <div class="cust-sub">${t.vehicle_or_item || "-"} • Credits: <b>${t.scan_credits ?? 0}</b> • Scans: <b>${custScans}</b></div>
           <div class="cust-dates">Reg: ${formatDate(t.created_at)} | Exp: ${formatDate(t.expires_at)}</div>
         </div>
-        <span class="pill ${pillCls}">${t.status}</span>
+        <span class="pill ${pillCls}">${status}</span>
       </div>
     `;
   }
@@ -553,12 +560,12 @@
         <div class="card" style="padding:12px; margin-bottom:8px;">
           <div style="display:flex; justify-content:space-between;">
             <strong>${t.serial_no || "Tag"} • ${t.owner_name || ""}</strong>
-            <span class="pill pill-active">${l.whatsapp_status}</span>
+            <span class="pill pill-active">${l.whatsapp_status || "logged"}</span>
           </div>
           <div style="font-size:12px; color:var(--subtext); margin-top:4px;">
-            Reason: <b>${l.reason}</b> ${l.custom_message ? `— "${l.custom_message}"` : ""}<br/>
+            Reason: <b>${l.reason || "-"}</b> ${l.custom_message ? `— "${l.custom_message}"` : ""}<br/>
             ${l.owner_reply ? `Reply: <b style="color:var(--green);">${l.owner_reply}</b><br/>` : ""}
-            <span style="color:var(--muted); font-size:11px;">${l.scanner_city || "Unknown"} • ${new Date(l.created_at).toLocaleString("en-IN")}</span>
+            <span style="color:var(--muted); font-size:11px;">${l.scanner_city || "Unknown"} • ${formatDate(l.created_at)}</span>
           </div>
         </div>
       `;
@@ -605,18 +612,23 @@
 
   function getScanUrl(t) {
     const base = localStorage.getItem("pm_base") || autoBase;
-    return `${base}?t=${encodeURIComponent(t.tag_code)}`;
+    return `${base}?t=${encodeURIComponent(t.tag_code || "")}`;
+  }
+
+  function openDetailById(id) {
+    const t = tags.find(x => String(x.id) === String(id));
+    if (t) openDetail(t);
   }
 
   function openDetail(t) {
     selectedTag = t;
     const custScans = logs.filter(l => l.tag_id === t.id).length;
-    document.getElementById("mTitle").textContent = `${t.serial_no} • ${t.owner_name}`;
+    document.getElementById("mTitle").textContent = `${t.serial_no || "TAG"} • ${t.owner_name || "Unclaimed"}`;
     document.getElementById("mScansCount").textContent = custScans;
     document.getElementById("mCreditsLeft").textContent = t.scan_credits ?? 0;
-    document.getElementById("mStatusText").textContent = (t.status || "").toUpperCase();
+    document.getElementById("mStatusText").textContent = (t.status || "INACTIVE").toUpperCase();
     document.getElementById("mExpiryText").textContent = `Exp: ${formatDate(t.expires_at)}`;
-    document.getElementById("mQrCaption").textContent = `${t.serial_no} | ${t.vehicle_or_item}`;
+    document.getElementById("mQrCaption").textContent = `${t.serial_no || ""} | ${t.vehicle_or_item || ""}`;
 
     document.getElementById("eName").value = t.owner_name || "";
     document.getElementById("ePhone").value = t.owner_whatsapp || "";
@@ -641,14 +653,14 @@
     if (res.ok) {
       const d = await res.json();
       await loadDashboard(true);
-      openDetail(d.tag);
+      if (d.tag) openDetail(d.tag);
       toast("Updated!");
     }
   }
 
   async function toggleStatus() {
     if (!selectedTag) return;
-    const nextStatus = selectedTag.status === "active" ? "inactive" : "active";
+    const nextStatus = (selectedTag.status || "").toLowerCase() === "active" ? "inactive" : "active";
     const res = await fetch(`${API_BASE}/api/admin/update-tag`, {
       method: "POST", headers: headers(),
       body: JSON.stringify({ id: selectedTag.id, status: nextStatus })
@@ -656,7 +668,7 @@
     if (res.ok) {
       const d = await res.json();
       await loadDashboard(true);
-      openDetail(d.tag);
+      if (d.tag) openDetail(d.tag);
       toast(`Status set to ${nextStatus}`);
     }
   }
@@ -676,7 +688,7 @@
     if (res.ok) {
       const d = await res.json();
       await loadDashboard(true);
-      openDetail(d.tag);
+      if (d.tag) openDetail(d.tag);
       toast("Details saved");
     }
   }
@@ -707,7 +719,7 @@
     ctx.fillText("ONE SCAN. INSTANT CONNECTION.", 300, 124);
     ctx.drawImage(src, 110, 160, 380, 380);
     ctx.fillStyle = "#0f172a"; ctx.font = "bold 28px sans-serif";
-    ctx.fillText(`${selectedTag.serial_no}  •  ${selectedTag.vehicle_or_item}`, 300, 600);
+    ctx.fillText(`${selectedTag.serial_no || ""}  •  ${selectedTag.vehicle_or_item || ""}`, 300, 600);
     ctx.fillStyle = "#475569"; ctx.font = "20px sans-serif";
     ctx.fillText("Scan to alert owner privately via WhatsApp", 300, 645);
     return c;
@@ -717,7 +729,7 @@
     const c = buildQrCanvas();
     if (!c) return;
     const a = document.createElement("a");
-    a.download = `${selectedTag.serial_no}_${selectedTag.owner_name.replace(/\s+/g, "_")}.png`;
+    a.download = `${selectedTag.serial_no || "PingMe"}_${(selectedTag.owner_name || "Tag").replace(/\s+/g, "_")}.png`;
     a.href = c.toDataURL("image/png");
     a.click();
     toast("QR Downloaded");
@@ -729,7 +741,7 @@
     const url = getScanUrl(selectedTag);
     const text = `PingMe Smart Tag (${selectedTag.serial_no}) for ${selectedTag.vehicle_or_item}: ${url}`;
     c.toBlob(async blob => {
-      const file = new File([blob], `${selectedTag.serial_no}.png`, { type: "image/png" });
+      const file = new File([blob], `${selectedTag.serial_no || "PingMe"}.png`, { type: "image/png" });
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({ title: selectedTag.serial_no, text, files: [file] });
       } else if (navigator.share) {
@@ -741,10 +753,9 @@
     });
   }
 
-  /* WHATSAPP NOTIFICATION CENTER */
   function populateWaDropdown() {
     const sel = document.getElementById("waCustomerSelect");
-    sel.innerHTML = tags.map(t => `<option value="${t.id}">${t.serial_no} — ${t.owner_name} (${t.vehicle_or_item})</option>`).join("");
+    sel.innerHTML = tags.map(t => `<option value="${t.id}">${t.serial_no || "TAG"} — ${t.owner_name || "Unclaimed"} (${t.vehicle_or_item || "-"})</option>`).join("");
     updateWaPreview();
   }
 
@@ -759,28 +770,27 @@
   function updateWaPreview() {
     const id = document.getElementById("waCustomerSelect").value;
     const type = document.getElementById("waTemplateType").value;
-    const t = tags.find(x => x.id === id);
+    const t = tags.find(x => String(x.id) === String(id));
     if (!t) return;
     const url = getScanUrl(t);
     const exp = formatDate(t.expires_at);
+    const statusLabel = (t.status || "ACTIVE").toUpperCase();
 
     const templates = {
-      welcome: `Hi ${t.owner_name}! 🎉 Welcome to *PingMe*.\nYour Smart QR Tag *${t.serial_no}* for *${t.vehicle_or_item}* is now *${t.status.toUpperCase()}*.\n\n🔗 *Tag Link:* ${url}\n🎟️ *Credits:* ${t.scan_credits} alerts\n📅 *Valid Till:* ${exp}\n\n*ONE SCAN. INSTANT CONNECTION.*`,
-      credits: `Hi ${t.owner_name}, ⚠️ *Low Credit Alert* for your PingMe Tag *${t.serial_no}* (${t.vehicle_or_item}).\nYou currently have *${t.scan_credits} scan alerts* remaining. Reply to this message to top up your credits and keep instant alerts active!`,
-      expiry: `Hi ${t.owner_name}, 📅 *Renewal Reminder* for your PingMe Tag *${t.serial_no}* (${t.vehicle_or_item}).\nYour subscription is valid until *${exp}*. Reply here to renew for another 360 days without interruption.`,
-      maintenance: `Hi ${t.owner_name}, 🛠️ *PingMe Service Notice*:\nWe are performing a brief system upgrade to enhance instant WhatsApp alert delivery for tag *${t.serial_no}*. No action is needed from your side. Thank you for choosing PingMe!`,
-      custom: `Hi ${t.owner_name} (${t.serial_no} - ${t.vehicle_or_item}),\n`
+      welcome: `Hi ${t.owner_name || "Customer"}! 🎉 Welcome to *PingMe*.\nYour Smart QR Tag *${t.serial_no}* for *${t.vehicle_or_item}* is now *${statusLabel}*.\n\n🔗 *Tag Link:* ${url}\n🎟️ *Credits:* ${t.scan_credits ?? 0} alerts\n📅 *Valid Till:* ${exp}\n\n*ONE SCAN. INSTANT CONNECTION.*`,
+      credits: `Hi ${t.owner_name || "Customer"}, ⚠️ *Low Credit Alert* for your PingMe Tag *${t.serial_no}* (${t.vehicle_or_item}).\nYou currently have *${t.scan_credits ?? 0} scan alerts* remaining. Reply to this message to top up your credits and keep instant alerts active!`,
+      expiry: `Hi ${t.owner_name || "Customer"}, 📅 *Renewal Reminder* for your PingMe Tag *${t.serial_no}* (${t.vehicle_or_item}).\nYour subscription is valid until *${exp}*. Reply here to renew for another 360 days without interruption.`,
+      maintenance: `Hi ${t.owner_name || "Customer"}, 🛠️ *PingMe Service Notice*:\nWe are performing a brief system upgrade to enhance instant WhatsApp alert delivery for tag *${t.serial_no}*. No action is needed from your side. Thank you for choosing PingMe!`,
+      custom: `Hi ${t.owner_name || "Customer"} (${t.serial_no} - ${t.vehicle_or_item}),\n`
     };
     document.getElementById("waMessageBox").value = templates[type] || "";
   }
 
   function sendCustomWa() {
     const id = document.getElementById("waCustomerSelect").value;
-    const t = tags.find(x => x.id === id);
+    const t = tags.find(x => String(x.id) === String(id));
     if (!t || !t.owner_whatsapp) return toast("Customer phone missing");
     const msg = encodeURIComponent(document.getElementById("waMessageBox").value);
     window.open(`https://wa.me/${t.owner_whatsapp}?text=${msg}`, "_blank");
   }
 </script>
-</body>
-</html>
