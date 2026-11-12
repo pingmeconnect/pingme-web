@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PingMe — One Scan. Instant Connection.</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card: #131a2a;
+      --border: #23304d;
+      --accent: #f97316;
+      --accent-hover: #ea580c;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --success: #22c55e;
+      --danger: #ef4444;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+    .container { width: 100%; max-width: 460px; margin: auto; }
+    .brand { text-align: center; margin-bottom: 22px; }
+    .brand h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; color: var(--accent); }
+    .brand p { font-size: 0.85rem; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 4px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; box-shadow: 0 12px 30px rgba(0,0,0,0.4); }
+    .badge { display: inline-block; background: rgba(249,115,22,0.15); color: var(--accent); border: 1px solid rgba(249,115,22,0.35); padding: 4px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; margin-bottom: 12px; }
+    h2 { font-size: 1.35rem; margin-bottom: 8px; }
+    .sub { color: var(--muted); font-size: 0.92rem; line-height: 1.5; margin-bottom: 18px; }
+    label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 6px; margin-top: 14px; }
+    input, select, textarea { width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border); background: #0d1322; color: var(--text); font-size: 0.95rem; outline: none; }
+    input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+    .reason-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+    .reason-btn { background: #0d1322; border: 1px solid var(--border); color: var(--text); padding: 12px 10px; border-radius: 10px; font-size: 0.88rem; cursor: pointer; text-align: left; transition: 0.15s; }
+    .reason-btn.active { border-color: var(--accent); background: rgba(249,115,22,0.15); font-weight: 600; }
+    .btn { width: 100%; margin-top: 20px; padding: 14px; border: none; border-radius: 12px; background: var(--accent); color: #fff; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.15s; }
+    .btn:hover { background: var(--accent-hover); }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+    .status-box { margin-top: 16px; padding: 14px; border-radius: 10px; font-size: 0.9rem; line-height: 1.45; display: none; }
+    .status-ok { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.4); color: #86efac; }
+    .status-err { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4); color: #fca5a5; }
+    .privacy-note { margin-top: 16px; font-size: 0.78rem; color: var(--muted); text-align: center; }
+    .footer { margin-top: 24px; text-align: center; font-size: 0.8rem; color: var(--muted); }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="brand">
+      <h1>PINGME</h1>
+      <p>ONE SCAN. INSTANT CONNECTION.</p>
+    </div>
+
+    <!-- VIEW 1: LOADING -->
+    <div id="view-loading" class="card">
+      <h2>Checking PingMe Tag...</h2>
+      <p class="sub">Verifying tag security and connection status.</p>
+    </div>
+
+    <!-- VIEW 2: LANDING (When someone visits pingmeconnect.in without a QR code) -->
+    <div id="view-home" class="card hidden">
+      <span class="badge">Privacy-First Smart QR Tag</span>
+      <h2>Protect Your Vehicle, Keys &amp; Luggage</h2>
+      <p class="sub">Anyone who scans your PingMe tag can alert you instantly on WhatsApp—without ever seeing your phone number or personal details.</p>
+      <label for="manual-code">Have a PingMe Tag Code? Enter it below:</label>
+      <input id="manual-code" type="text" placeholder="e.g. TEST001" />
+      <button class="btn" onclick="openManualTag()">Open Tag</button>
+    </div>
+
+    <!-- VIEW 3: SELF-ACTIVATION (When an unclaimed tag is scanned for the first time) -->
+    <div id="view-activate" class="card hidden">
+      <span class="badge">New Tag Setup</span>
+      <h2>Activate Your PingMe Tag</h2>
+      <p class="sub">Link this tag to your WhatsApp number. Your number stays 100% hidden from scanners.</p>
+
+      <label for="act-name">Your Name</label>
+      <input id="act-name" type="text" placeholder="e.g. Venkat" />
+
+      <label for="act-phone">WhatsApp Number (10-digit Indian mobile)</label>
+      <input id="act-phone" type="tel" placeholder="e.g. 9876543210" />
+
+      <label for="act-type">Tag Category</label>
+      <select id="act-type">
+        <option value="vehicle">Car / Bike (Vehicle Number)</option>
+        <option value="luggage">Bag / Luggage / Laptop</option>
+        <option value="keychain">Keys / Wallet / Personal Item</option>
+        <option value="pet">Pet Collar</option>
+      </select>
+
+      <label for="act-item">Vehicle Number or Item Label</label>
+      <input id="act-item" type="text" placeholder="e.g. TN09AB1234 or Blue Backpack" />
+
+      <button id="btn-activate" class="btn" onclick="activateTag()">Activate Tag Now</button>
+      <div id="act-msg" class="status-box"></div>
+    </div>
+
+    <!-- VIEW 4: SCANNER ALERT SCREEN (When someone scans an active tag) -->
+    <div id="view-scan" class="card hidden">
+      <span class="badge" id="scan-item-badge">VEHICLE / ITEM</span>
+      <h2>Notify the Owner Privately</h2>
+      <p class="sub">Select why you are reaching out. An instant alert will be sent to the owner's WhatsApp.</p>
+
+      <div class="reason-grid">
+        <button type="button" class="reason-btn active" onclick="selectReason(this, 'Blocking / Wrong Parking')">🚗 Blocking Parking</button>
+        <button type="button" class="reason-btn" onclick="selectReason(this, 'Lights / Window Left Open')">💡 Lights / Window Open</button>
+        <button type="button" class="reason-btn" onclick="selectReason(this, 'Found Lost Item / Keys')">🔑 Found Lost Item</button>
+        <button type="button" class="reason-btn" onclick="selectReason(this, 'Urgent / Tow Alert')">🚨 Urgent / Tow Alert</button>
+      </div>
+
+      <label for="scan-note">Optional Note (e.g., location or landmark)</label>
+      <textarea id="scan-note" rows="2" placeholder="Parked near gate 2..."></textarea>
+
+      <button id="btn-alert" class="btn" onclick="sendAlert()">Send Instant Alert</button>
+      <div id="scan-msg" class="status-box"></div>
+      <p class="privacy-note">🔒 Protected by PingMe Privacy Shield. Owner contact details are never disclosed.</p>
+    </div>
+
+    <div class="footer">&copy; 2026 PingMe &bull; pingmeconnect.in</div>
+  </div>
+
+  <script>
+    const API_BASE = "https://pingme-api.pingmeconnect.workers.dev";
+    const params = new URLSearchParams(window.location.search);
+    const tagCode = (params.get("t") || params.get("code") || "").trim();
+    let selectedReason = "Blocking / Wrong Parking";
+
+    function showView(id) {
+      ["view-loading", "view-home", "view-activate", "view-scan"].forEach(v => {
+        document.getElementById(v).classList.add("hidden");
+      });
+      document.getElementById(id).classList.remove("hidden");
+    }
+
+    function openManualTag() {
+      const code = document.getElementById("manual-code").value.trim();
+      if (code) window.location.search = `?t=${encodeURIComponent(code)}`;
+    }
+
+    function selectReason(btn, reason) {
+      document.querySelectorAll(".reason-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      selectedReason = reason;
+    }
+
+    function showStatus(elId, text, ok) {
+      const el = document.getElementById(elId);
+      el.textContent = text;
+      el.className = "status-box " + (ok ? "status-ok" : "status-err");
+      el.style.display = "block";
+    }
+
+    async function init() {
+      if (!tagCode) {
+        showView("view-home");
+        return;
+      }
+      try {
+        const res = await fetch(`${API_BASE}/api/tag?code=${encodeURIComponent(tagCode)}`);
+        const data = await res.json();
+        if (!res.ok || !data.valid) {
+          showView("view-home");
+          alert("This QR tag code was not found. Please check the tag.");
+          return;
+        }
+        if (data.status === "unclaimed") {
+          showView("view-activate");
+        } else if (data.status === "active") {
+          document.getElementById("scan-item-badge").textContent = data.vehicle_or_item || "PINGME TAG";
+          showView("view-scan");
+        } else {
+          showView("view-home");
+          alert(`This tag is currently ${data.status}.`);
+        }
+      } catch (e) {
+        showView("view-home");
+      }
+    }
+
+    async function activateTag() {
+      const btn = document.getElementById("btn-activate");
+      btn.disabled = true;
+      btn.textContent = "Activating...";
+      try {
+        const res = await fetch(`${API_BASE}/api/activate`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            tag_code: tagCode,
+            owner_name: document.getElementById("act-name").value,
+            owner_whatsapp: document.getElementById("act-phone").value,
+            tag_type: document.getElementById("act-type").value,
+            vehicle_or_item: document.getElementById("act-item").value
+          })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          showStatus("act-msg", "Tag activated! Reloading scanner view...", true);
+          setTimeout(() => window.location.reload(), 1200);
+        } else {
+          showStatus("act-msg", data.error || "Activation failed.", false);
+          btn.disabled = false;
+          btn.textContent = "Activate Tag Now";
+        }
+      } catch (e) {
+        showStatus("act-msg", "Network error. Try again.", false);
+        btn.disabled = false;
+        btn.textContent = "Activate Tag Now";
+      }
+    }
+
+    async function sendAlert() {
+      const btn = document.getElementById("btn-alert");
+      btn.disabled = true;
+      btn.textContent = "Sending Alert...";
+      try {
+        const res = await fetch(`${API_BASE}/api/alert`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            tag_code: tagCode,
+            reason: selectedReason,
+            custom_message: document.getElementById("scan-note").value
+          })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          showStatus("scan-msg", "✅ Alert delivered! The owner has been notified privately.", true);
+          btn.textContent = "Alert Sent";
+        } else {
+          showStatus("scan-msg", data.error || "Could not send alert.", false);
+          btn.disabled = false;
+          btn.textContent = "Send Instant Alert";
+        }
+      } catch (e) {
+        showStatus("scan-msg", "Network error. Try again.", false);
+        btn.disabled = false;
+        btn.textContent = "Send Instant Alert";
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
