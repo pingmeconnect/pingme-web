@@ -1,866 +1,533 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>PingMe — One Scan. Instant Connection.</title>
-  
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="theme-color" content="#0b1033">
-  <link rel="icon" type="image/png" href="assets/icon-192.png">
-  <link rel="apple-touch-icon" href="assets/icon-512.png">
-  <meta property="og:title" content="PingMe — One Scan. Instant Connection.">
-  <meta property="og:description" content="Reach the owner. Privately.">
-  <meta property="og:image" content="https://pingmeconnect.in/assets/og-preview.png">
-  <link rel="manifest" href="manifest.json">
-
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          boxShadow: {
-            glowCyan: '0 0 22px rgba(34, 211, 238, 0.45)',
-            glowGreen: '0 0 22px rgba(16, 185, 129, 0.5)',
-            glowGold: '0 0 20px rgba(245, 158, 11, 0.45)',
-            glowPink: '0 0 20px rgba(236, 72, 153, 0.45)',
-            glowPurple: '0 0 25px rgba(139, 92, 246, 0.45)',
-          }
-        }
-      }
-    }
-  </script>
-
-  <!-- Animate.css -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-tap-highlight-color: transparent; }
     body {
-      background-color: #06091e;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      overflow: hidden;
-      user-select: none;
-      -webkit-user-select: none;
-      -webkit-tap-highlight-color: transparent;
+      background: radial-gradient(circle at top, #102a38 0%, #08151d 55%, #050c11 100%);
+      color: #f8fafc;
+      min-height: 100vh;
     }
-    .cosmic-bg {
-      background: radial-gradient(circle at 50% 18%, #1e3a8a 0%, #171549 45%, #090c26 100%);
+    .glass-card {
+      background: rgba(15, 35, 48, 0.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(56, 189, 248, 0.14);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
     }
-    .safe-top { padding-top: env(safe-area-inset-top, 10px); }
-    .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 10px); }
-    main::-webkit-scrollbar { display: none; }
-    main { -ms-overflow-style: none; scrollbar-width: none; }
-    @keyframes floatSlow {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-4px); }
+    .cat-btn {
+      background: rgba(12, 28, 39, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      transition: all 0.2s ease;
     }
-    .float-mascot { animation: floatSlow 3s ease-in-out infinite; }
+    .cat-btn.active {
+      background: linear-gradient(145deg, rgba(16, 185, 129, 0.22), rgba(6, 182, 212, 0.18));
+      border: 1.5px solid #34d399;
+      box-shadow: 0 0 18px rgba(16, 185, 129, 0.25);
+    }
+    .reason-pill {
+      background: rgba(12, 28, 39, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      transition: all 0.18s ease;
+    }
+    .reason-pill.active {
+      background: linear-gradient(90deg, rgba(16, 185, 129, 0.24), rgba(6, 182, 212, 0.18));
+      border: 1.5px solid #34d399;
+      color: #ffffff;
+    }
+    .send-btn {
+      background: linear-gradient(90deg, #10b981 0%, #06b6d4 100%);
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.35);
+      transition: transform 0.15s ease, opacity 0.2s ease;
+    }
+    .send-btn:active { transform: scale(0.98); }
+    .send-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .pulse-ring {
+      animation: pulseRing 2s infinite;
+    }
+    @keyframes pulseRing {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+      70% { box-shadow: 0 0 0 14px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
   </style>
 </head>
-<body class="text-white min-h-screen w-screen flex items-center justify-center relative">
+<body class="flex justify-center px-4 py-5">
+  <div class="w-full max-w-md flex flex-col justify-between">
 
-  <!-- Mobile App Container -->
-  <div class="cosmic-bg w-full max-w-md h-screen flex flex-col justify-between relative overflow-hidden shadow-2xl border-x border-blue-400/20">
-
-    <!-- Ambient Glowing Orbs -->
-    <div class="absolute inset-0 pointer-events-none overflow-hidden z-0">
-      <div class="absolute top-12 left-1/2 -translate-x-1/2 w-72 h-72 bg-cyan-500/25 rounded-full blur-[90px]"></div>
-      <div class="absolute bottom-24 -left-16 w-64 h-64 bg-purple-600/25 rounded-full blur-[90px]"></div>
-      <div class="absolute top-1/2 -right-16 w-64 h-64 bg-emerald-500/15 rounded-full blur-[90px]"></div>
-    </div>
-
-    <!-- Top Header: Persistent PingMe Logo Across All Screens + Language Switcher -->
-    <header class="safe-top z-10 px-4 pt-2.5 pb-1 flex flex-col items-center relative w-full">
-      <div class="w-full flex justify-end mb-0.5">
-        <button type="button" onclick="toggleLanguage()" id="langBtn" class="px-3 py-1 text-[11px] font-bold rounded-full border border-white/20 bg-white/10 hover:bg-white/20 backdrop-blur-md active:scale-95 transition-all text-white flex items-center gap-1 shadow">
-          <span>🌐</span>
-          <span id="langText">English | தமிழ்</span>
-        </button>
-      </div>
-
-<!-- Persistent PingMe Logo with High-Contrast Pill -->
-      <div class="flex flex-col items-center justify-center">
-        <div class="px-5 py-1.5 rounded-full bg-white/95 shadow-[0_0_24px_rgba(56,189,248,0.65)] border-2 border-cyan-300/80 flex items-center justify-center">
-          <img src="assets/pingme-logo.png" alt="PingMe — One Scan. Instant Connection." class="h-12 object-contain">
+    <!-- TOP BAR -->
+    <header class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center shadow-lg">
+          <svg class="w-4 h-4 text-slate-950" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+          </svg>
+        </div>
+        <div>
+          <div class="font-extrabold text-base tracking-tight leading-none text-white">Ping<span class="text-emerald-400">Me</span></div>
+          <div class="text-[9px] tracking-widest uppercase text-cyan-300/80 font-semibold mt-0.5">One Scan. Instant Connection.</div>
         </div>
       </div>
+
+      <button id="langToggle" onclick="toggleLanguage()" class="px-3 py-1.5 rounded-full glass-card text-xs font-semibold text-slate-200 hover:border-emerald-400/50 transition">
+        🌐 English | தமிழ்
+      </button>
     </header>
 
-    <!-- =====================================================================
-         SCREEN 1: WELCOME & SEND ALERT
-    ====================================================================== -->
-    <main id="screen1" class="flex-grow flex flex-col justify-between overflow-y-auto px-4 py-1.5 z-10 gap-2 animate__animated animate__fadeIn">
-      
-      <!-- Hero Smiling Mascot + Welcome Title -->
-      <div class="flex flex-col items-center text-center relative">
-        <div class="relative flex items-center justify-center">
-          <img src="assets/mascot-smile.png" alt="PingMe Mascot" class="h-20 w-20 object-contain float-mascot drop-shadow-[0_8px_18px_rgba(16,185,129,0.45)]">
-          <span class="absolute bottom-0 -right-2 bg-emerald-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full shadow-glowGreen border border-white/30">LIVE</span>
+    <!-- ========================================== -->
+    <!-- SCREEN 1: SCANNER ALERT INTERFACE          -->
+    <!-- ========================================== -->
+    <main id="screen1" class="space-y-4">
+      <!-- Hero Banner -->
+      <div class="glass-card rounded-2xl p-4 text-center relative overflow-hidden">
+        <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-[10px] font-bold uppercase tracking-wider mb-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+          <span id="tagBadge">LIVE TAG</span>
         </div>
-        <h1 id="welcomeTitle" class="text-lg font-black text-emerald-400 drop-shadow mt-0.5">Welcome to PingMe!</h1>
-        <p id="welcomeSubtitle" class="text-xs text-blue-100/90 font-medium">Reach the owner. Privately.</p>
+        <h1 id="heroTitle" class="text-xl font-extrabold text-white tracking-tight">Welcome to PingMe!</h1>
+        <p id="heroSubtitle" class="text-xs text-slate-300 mt-0.5">Reach the owner. Privately.</p>
       </div>
 
-      <!-- 1. Category Selection (3D Icons) -->
+      <!-- Category Selector -->
       <div>
-        <h2 id="categoryLabel" class="text-[11px] font-extrabold text-cyan-200 mb-1.5 uppercase tracking-wider">Choose a Category</h2>
-        <div class="grid grid-cols-3 gap-2">
-          <button type="button" onclick="selectCategory('VEHICLE')" id="catVEHICLE" class="flex flex-col items-center justify-center py-2 px-2 rounded-2xl border-2 bg-gradient-to-b from-cyan-500/30 to-blue-900/50 border-cyan-400 shadow-glowCyan transition-all transform active:scale-95">
-            <img src="assets/icon-vehicle.png" alt="Vehicle" class="w-8 h-8 object-contain mb-0.5 drop-shadow">
-            <span id="labelVehicle" class="text-[10px] font-extrabold uppercase tracking-tight text-white">Vehicle</span>
+        <label id="lblCategory" class="block text-[11px] font-bold uppercase tracking-wider text-cyan-300/90 mb-2">Choose a Category</label>
+        <div class="grid grid-cols-3 gap-2.5">
+          <button type="button" onclick="selectCategory('vehicle')" id="cat-vehicle" class="cat-btn active rounded-xl py-3 px-2 flex flex-col items-center gap-1.5">
+            <span class="text-xl">🚗</span>
+            <span id="txtCatVehicle" class="text-[11px] font-bold tracking-wide">VEHICLE</span>
           </button>
-          <button type="button" onclick="selectCategory('LOST_FOUND')" id="catLOST_FOUND" class="flex flex-col items-center justify-center py-2 px-2 rounded-2xl border-2 bg-white/5 border-white/10 hover:bg-white/10 transition-all transform active:scale-95">
-            <img src="assets/icon-lostfound.png" alt="Lost & Found" class="w-8 h-8 object-contain mb-0.5 drop-shadow">
-            <span id="labelLostFound" class="text-[10px] font-extrabold uppercase tracking-tight text-gray-300">Lost & Found</span>
+          <button type="button" onclick="selectCategory('lost')" id="cat-lost" class="cat-btn rounded-xl py-3 px-2 flex flex-col items-center gap-1.5">
+            <span class="text-xl">🎒</span>
+            <span id="txtCatLost" class="text-[11px] font-bold tracking-wide">LOST & FOUND</span>
           </button>
-          <button type="button" onclick="selectCategory('OTHER')" id="catOTHER" class="flex flex-col items-center justify-center py-2 px-2 rounded-2xl border-2 bg-white/5 border-white/10 hover:bg-white/10 transition-all transform active:scale-95">
-            <img src="assets/icon-other.png" alt="Other" class="w-8 h-8 object-contain mb-0.5 drop-shadow">
-            <span id="labelOther" class="text-[10px] font-extrabold uppercase tracking-tight text-gray-300">Other</span>
+          <button type="button" onclick="selectCategory('other')" id="cat-other" class="cat-btn rounded-xl py-3 px-2 flex flex-col items-center gap-1.5">
+            <span class="text-xl">📦</span>
+            <span id="txtCatOther" class="text-[11px] font-bold tracking-wide">OTHER</span>
           </button>
         </div>
       </div>
 
-      <!-- 2. Message Templates -->
+      <!-- Preset Reasons -->
       <div>
-        <h2 id="messageLabel" class="text-[11px] font-extrabold text-cyan-200 mb-1.5 uppercase tracking-wider">Select a Message</h2>
-        <div id="reasonsContainer" class="flex flex-col gap-1.5"></div>
+        <label id="lblMessage" class="block text-[11px] font-bold uppercase tracking-wider text-cyan-300/90 mb-2">Select a Message</label>
+        <div id="reasonsContainer" class="space-y-2"></div>
       </div>
 
-      <!-- 3. Custom Message -->
-      <div class="relative bg-white/10 backdrop-blur-md rounded-2xl border border-white/15 p-2.5">
-        <div class="flex items-center gap-1.5 mb-1">
-          <span class="text-xs">✍️</span>
-          <label id="addMsgLabel" class="text-[11px] font-bold text-blue-100">Add a Message (Optional)</label>
+      <!-- Optional Note -->
+      <div class="glass-card rounded-xl p-3">
+        <div class="flex items-center justify-between mb-1.5">
+          <label id="lblNote" class="text-xs font-semibold text-amber-300">✍️ Add a Message (Optional)</label>
+          <span id="charCount" class="text-[10px] text-slate-400">0/160</span>
         </div>
-        <textarea id="customMessage" rows="2" maxlength="160" oninput="updateCharCount()" class="w-full bg-transparent text-xs focus:outline-none placeholder-blue-200/40 text-white resize-none" placeholder="Type specific details, e.g., 'Parked near gate 3'"></textarea>
-        <div class="text-[9px] text-blue-200/50 text-right" id="charCount">0 / 160</div>
+        <textarea id="customNote" rows="2" maxlength="160" oninput="updateCharCount()"
+          placeholder="Type specific details, e.g. 'Parked near gate 3'"
+          class="w-full bg-slate-950/60 border border-slate-700/70 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400 resize-none"></textarea>
       </div>
 
-      <!-- 4. Attach Photo Option (3D Camera Icon) -->
-      <div class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/15 p-2.5">
-        <input type="file" id="photoInput" accept="image/*" capture="environment" class="hidden" onchange="handlePhotoSelect(event)">
-        
-        <button type="button" id="attachPhotoBtn" onclick="document.getElementById('photoInput').click()" class="w-full flex items-center justify-between text-left group">
-          <div class="flex items-center gap-2.5">
-            <img src="assets/icon-camera.png" alt="Attach Photo" class="w-9 h-9 object-contain drop-shadow">
-            <div>
-              <p id="attachPhotoTitle" class="text-xs font-bold text-white">Attach Photo (Optional)</p>
-              <p id="attachPhotoSub" class="text-[10px] text-blue-200/70">Snap or upload a quick photo for clarity</p>
-            </div>
+      <!-- Optional Photo & Location Row -->
+      <div class="grid grid-cols-2 gap-2.5">
+        <label class="glass-card rounded-xl p-3 flex items-center justify-between cursor-pointer hover:border-cyan-400/40 transition">
+          <div class="flex items-center gap-2 overflow-hidden">
+            <span class="text-base">📷</span>
+            <span id="photoLabel" class="text-xs font-semibold text-slate-200 truncate">Attach Photo</span>
           </div>
-          <span id="attachPhotoAction" class="px-2.5 py-1 rounded-lg bg-white/10 group-hover:bg-white/20 text-[10px] font-extrabold text-cyan-300 border border-cyan-400/30">
-            + ADD
-          </span>
-        </button>
-
-        <div id="photoPreviewBox" class="hidden flex items-center justify-between gap-2.5">
-          <div class="flex items-center gap-2.5">
-            <img id="photoPreviewImg" src="" alt="Attached preview" class="w-12 h-12 rounded-xl object-cover border border-emerald-400 shadow">
-            <div>
-              <p id="photoAttachedLabel" class="text-xs font-bold text-emerald-300">✓ Photo Attached</p>
-              <p id="photoFileName" class="text-[10px] text-blue-200/70 truncate max-w-[160px]">image.jpg</p>
-            </div>
-          </div>
-          <button type="button" onclick="removePhoto()" class="px-2.5 py-1 rounded-lg bg-red-500/20 hover:bg-red-500/30 border border-red-400/40 text-[10px] font-extrabold text-red-300 active:scale-95">
-            ✕ Remove
-          </button>
-        </div>
-      </div>
-
-      <!-- 5. Live Location Toggle -->
-      <div class="flex justify-between items-center bg-white/10 backdrop-blur-md rounded-2xl border border-white/15 px-3 py-2">
-        <div class="flex items-center gap-2">
-          <span class="text-sm">📍</span>
-          <span id="shareLocLabel" class="text-xs font-bold text-white">Share Live Location</span>
-        </div>
-        <label class="relative inline-flex items-center cursor-pointer">
-          <input type="checkbox" id="shareLocation" checked class="sr-only peer">
-          <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+          <span id="photoBadge" class="text-[10px] font-bold px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300">+ ADD</span>
+          <input type="file" id="photoInput" accept="image/*" capture="environment" class="hidden" onchange="handlePhoto(event)" />
         </label>
-      </div>
 
-      <!-- Send Alert Button -->
-      <button type="button" id="sendBtn" onclick="handleSendAlert()" class="w-full py-3.5 rounded-2xl font-black text-sm tracking-wide bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-500 hover:from-emerald-300 hover:to-teal-400 text-[#041d15] active:scale-95 shadow-glowGreen transition-all flex justify-center items-center gap-2">
-        <span>💬</span>
-        <span id="btnSendAlert">SEND ALERT PRIVATELY &gt;</span>
-      </button>
-    </main>
-
-    <!-- =====================================================================
-         SCREEN 2: ACTIVE WAITING ROOM (180s TIMER)
-    ====================================================================== -->
-    <main id="screen2" class="hidden flex-grow flex flex-col justify-between overflow-y-auto px-4 py-3 z-10 gap-3 animate__animated animate__fadeIn">
-      
-      <div class="text-center">
-        <h1 id="waitingTitle" class="text-xl font-black text-cyan-300 drop-shadow">Alerting Owner...</h1>
-        <p id="waitingSubtitle" class="text-xs text-blue-100/80 mt-0.5">The owner has been notified privately on WhatsApp.</p>
-      </div>
-
-      <!-- 180s Timer Ring + Waiting Boy Mascot -->
-      <div class="flex items-center justify-around bg-white/10 backdrop-blur-md rounded-3xl p-4 border border-cyan-400/25 shadow-glowCyan my-auto">
-        <div class="relative w-32 h-32 flex items-center justify-center">
-          <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 144 144">
-            <circle cx="72" cy="72" r="64" stroke="rgba(255,255,255,0.12)" stroke-width="8" fill="transparent"/>
-            <circle id="timerProgress" cx="72" cy="72" r="64" stroke="url(#timerGrad)" stroke-width="8" fill="transparent" stroke-dasharray="402" stroke-dashoffset="0" stroke-linecap="round"/>
-            <defs>
-              <linearGradient id="timerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#34d399" />
-                <stop offset="100%" stop-color="#38bdf8" />
-              </linearGradient>
-            </defs>
-          </svg>
-          <div class="text-center z-10">
-            <span id="countdownText" class="text-2xl font-black text-emerald-300">180s</span>
-            <p id="countdownLabel" class="text-[9px] text-blue-200 font-bold uppercase mt-0.5 tracking-wider">Remaining</p>
+        <button type="button" onclick="attachLocation()" id="locBtn" class="glass-card rounded-xl p-3 flex items-center justify-between hover:border-emerald-400/40 transition">
+          <div class="flex items-center gap-2 overflow-hidden">
+            <span class="text-base">📍</span>
+            <span id="locLabel" class="text-xs font-semibold text-slate-200 truncate">Share GPS</span>
           </div>
-        </div>
-
-        <div class="flex flex-col items-center">
-          <img src="assets/boy-waiting.png" alt="Waiting Boy" class="h-24 w-24 object-contain float-mascot drop-shadow">
-          <span class="mt-1 px-2.5 py-0.5 rounded-full bg-amber-400/20 border border-amber-400/40 text-[9px] text-amber-300 font-extrabold tracking-widest uppercase">LIVE STATUS</span>
-        </div>
-      </div>
-
-      <!-- Status Pill -->
-      <div class="flex items-center justify-center gap-2 py-2.5 bg-emerald-500/20 border border-emerald-400/40 rounded-2xl shadow-glowGreen">
-        <span class="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-ping"></span>
-        <span id="badgeSent" class="text-xs font-black text-emerald-300 uppercase tracking-wide">✓ Private Alert Delivered</span>
-      </div>
-
-      <!-- Referral & Get Tag Cards -->
-      <div class="flex flex-col gap-2.5">
-        <button type="button" onclick="handleReferral()" class="w-full p-3 rounded-2xl bg-gradient-to-r from-amber-500/30 via-yellow-500/25 to-amber-600/30 border border-amber-400/60 shadow-glowGold flex items-center justify-between text-left active:scale-95 transition-all">
-          <div class="flex items-center gap-3">
-            <img src="assets/mascot-airplane-3d.png" alt="Share PingMe" class="w-10 h-10 object-contain drop-shadow">
-            <div>
-              <p class="text-xs font-black text-white">Enjoying PingMe? 💚 Share PingMe</p>
-              <p class="text-[10px] text-amber-100/90">Help others stay connected safely!</p>
-            </div>
-          </div>
-          <span class="text-amber-300 font-black text-lg">&gt;</span>
+          <span id="locBadge" class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">+ ADD</span>
         </button>
+      </div>
 
-        <a href="https://pingmeconnect.in" target="_blank" class="w-full p-3 rounded-2xl bg-gradient-to-r from-pink-500/25 via-white/95 to-white border border-pink-400/60 shadow-glowPink flex items-center justify-between text-left active:scale-95 transition-all">
-          <div class="flex items-center gap-3">
-            <img src="assets/qr-tag-mockup.png" alt="Smart QR Tag" class="w-10 h-10 object-contain drop-shadow">
-            <div>
-              <p class="text-xs font-black text-slate-900">Get Your Own Smart QR Tag</p>
-              <p class="text-[10px] text-slate-600 font-semibold">For Car • Bike • Keys • Luggage & More</p>
+      <!-- Submit Button -->
+      <button type="button" id="sendBtn" onclick="sendAlert()" class="send-btn w-full py-3.5 rounded-xl font-extrabold text-sm text-slate-950 tracking-wide flex items-center justify-center gap-2">
+        <span>🚀</span>
+        <span id="txtSendBtn">SEND ALERT PRIVATELY</span>
+      </button>
+    </main>
+
+    <!-- ========================================== -->
+    <!-- SCREEN 2: LIVE WAITING & OWNER REPLY ROOM  -->
+    <!-- ========================================== -->
+    <section id="screen2" class="hidden space-y-4">
+      <div class="glass-card rounded-2xl p-5 text-center space-y-4">
+        <div>
+          <h2 id="waitTitle" class="text-xl font-extrabold text-white">Alerting Owner...</h2>
+          <p id="waitSubtitle" class="text-xs text-slate-300 mt-1">The owner has been notified privately on WhatsApp.</p>
+        </div>
+
+        <!-- Countdown Circle -->
+        <div id="timerBox" class="flex flex-col items-center justify-center py-2">
+          <div class="w-28 h-28 rounded-full border-4 border-emerald-400/80 bg-slate-900/80 flex flex-col items-center justify-center pulse-ring">
+            <span id="countdownText" class="text-2xl font-extrabold text-emerald-300">180s</span>
+            <span id="txtRemaining" class="text-[9px] uppercase tracking-widest text-slate-400 font-bold mt-0.5">REMAINING</span>
+          </div>
+          <div class="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 text-[10px] font-bold uppercase tracking-wider">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>
+            <span id="liveStatusText">WAITING FOR LIVE REPLY...</span>
+          </div>
+        </div>
+
+        <!-- LIVE OWNER REPLY CARD (Appears automatically when owner replies on WhatsApp) -->
+        <div id="ownerReplyBox" class="hidden bg-emerald-500/15 border-2 border-emerald-400 rounded-xl p-4 text-left space-y-1.5 animate-fade-in">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-300 flex items-center gap-1.5">
+              <span>💬</span> <span id="txtReplyHeader">Owner Replied Live!</span>
+            </span>
+            <span id="replyTimeText" class="text-[10px] text-emerald-200/70">Just now</span>
+          </div>
+          <p id="ownerReplyText" class="text-sm font-semibold text-white leading-relaxed break-words"></p>
+        </div>
+
+        <!-- Status Pill -->
+        <div class="py-2 px-3 rounded-lg bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs font-bold">
+          ✓ <span id="txtDelivered">PRIVATE ALERT DELIVERED</span>
+        </div>
+
+        <!-- Promo & Close Actions -->
+        <div class="space-y-2.5 pt-1 text-left">
+          <a href="https://wa.me/919840548224?text=Hi!%20I%20just%20scanned%20a%20PingMe%20QR%20tag%20and%20want%20to%20order%20one%20for%20myself." target="_blank"
+             class="block glass-card rounded-xl p-3 hover:border-emerald-400/50 transition">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-xs font-bold text-white">Get Your Own Smart QR Tag</div>
+                <div class="text-[11px] text-slate-400">For Car • Bike • Keys • Luggage & More</div>
+              </div>
+              <span class="text-emerald-400 font-bold text-sm">›</span>
             </div>
-          </div>
-          <span class="text-slate-800 font-black text-lg">&gt;</span>
-        </a>
-      </div>
-
-      <button type="button" onclick="closeSession()" class="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-95 rounded-2xl text-xs font-extrabold text-white border border-blue-400/40 shadow transition-all">
-        ✓ Close
-      </button>
-    </main>
-
-    <!-- =====================================================================
-         SCREEN 3: OWNER REPLIED!
-    ====================================================================== -->
-    <main id="screen3" class="hidden flex-grow flex flex-col justify-between overflow-y-auto px-4 py-2 z-10 gap-2.5 animate__animated animate__fadeIn">
-      
-      <div class="flex flex-col items-center text-center relative">
-        <img src="assets/confetti-burst.png" alt="Celebration" class="absolute -top-2 w-72 h-28 object-contain pointer-events-none opacity-95">
-        <div class="relative flex items-center justify-center z-10">
-          <span class="w-9 h-9 rounded-full bg-emerald-500 border-2 border-white flex items-center justify-center text-white font-black text-base shadow-glowGreen mr-1">✓</span>
-          <img src="assets/boy-happy.png" alt="Happy Boy" class="h-24 w-24 object-contain float-mascot drop-shadow">
-        </div>
-        <h1 id="repliedTitle" class="text-2xl font-black text-emerald-400 drop-shadow mt-0.5 z-10">Owner Replied!</h1>
-        <p id="repliedSubtitle" class="text-xs text-blue-100 z-10">You're now connected with the owner privately on WhatsApp.</p>
-      </div>
-
-      <!-- Glowing Green Owner's Reply Card -->
-      <div class="rounded-2xl bg-gradient-to-b from-emerald-500/25 to-teal-900/40 border border-emerald-400/70 shadow-glowGreen p-3.5">
-        <div class="flex items-center gap-2 mb-2">
-          <span class="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-xs">💬</span>
-          <span id="ownerReplyLabel" class="text-xs font-extrabold text-white">Owner's Reply</span>
-        </div>
-        <div class="bg-white rounded-xl rounded-tl-none p-3 text-slate-900 shadow">
-          <p id="liveResponseText" class="text-xs font-bold leading-relaxed">Thank you! I will move my vehicle in 2 minutes.</p>
-          <div class="flex justify-end items-center gap-1 mt-1 text-[10px] text-slate-500 font-semibold">
-            <span id="replyTimestamp">Just now</span>
-            <span class="text-sky-500 font-black">✓✓</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Golden Referral Banner -->
-      <button type="button" onclick="handleReferral()" class="w-full p-3 rounded-2xl bg-gradient-to-r from-amber-500/35 via-yellow-500/30 to-amber-600/35 border border-amber-400/70 shadow-glowGold flex items-center justify-between text-left active:scale-95 transition-all">
-        <div class="flex items-center gap-3">
-          <img src="assets/mascot-airplane-3d.png" alt="Share PingMe" class="w-10 h-10 object-contain drop-shadow">
-          <div>
-            <p class="text-xs font-black text-white">Enjoying PingMe? 💚 Share PingMe</p>
-            <p class="text-[10px] text-amber-100/90">Help others stay connected safely!</p>
-          </div>
-        </div>
-        <span class="text-amber-300 font-black text-lg">&gt;</span>
-      </button>
-
-      <!-- Pink & White Order Kit CTA -->
-      <a href="https://pingmeconnect.in" target="_blank" class="w-full p-3 rounded-2xl bg-gradient-to-r from-pink-500/30 via-white to-white border border-pink-400/70 shadow-glowPink flex items-center justify-between text-left active:scale-95 transition-all">
-        <div class="flex items-center gap-3">
-          <img src="assets/qr-tag-mockup.png" alt="Smart QR Tag" class="w-10 h-10 object-contain drop-shadow">
-          <div>
-            <p class="text-xs font-black text-slate-900">Get Your Own Smart QR Tag</p>
-            <p class="text-[10px] text-slate-600 font-semibold">For Car • Bike • Keys • Luggage & More</p>
-          </div>
-        </div>
-        <span class="text-slate-800 font-black text-lg">&gt;</span>
-      </a>
-
-      <button type="button" onclick="closeSession()" class="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-95 rounded-2xl text-xs font-extrabold text-white border border-blue-400/40 shadow transition-all">
-        ✓ Close
-      </button>
-    </main>
-
-    <!-- =====================================================================
-         SCREEN 4: NO REPLY YET!
-    ====================================================================== -->
-    <main id="screen4" class="hidden flex-grow flex flex-col justify-between overflow-y-auto px-4 py-2.5 z-10 gap-2.5 animate__animated animate__fadeIn">
-      
-      <div class="flex flex-col items-center text-center">
-        <img src="assets/boy-sad.png" alt="No Reply Boy" class="h-24 w-24 object-contain float-mascot drop-shadow">
-        <h1 id="noReplyTitle" class="text-2xl font-black text-amber-300 drop-shadow mt-0.5">No Reply Yet!</h1>
-        <p id="noReplySubtitle" class="text-xs text-blue-100">The 180-second waiting time has ended.</p>
-      </div>
-
-      <!-- What You Can Do Next Box -->
-      <div class="rounded-2xl bg-indigo-950/60 border border-indigo-400/40 shadow-glowPurple p-3">
-        <p id="nextActionsLabel" class="text-center text-xs font-extrabold text-white mb-2.5">💡 What you can do next?</p>
-        <div class="grid grid-cols-3 gap-2">
-          <button type="button" onclick="retryAlert()" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-gradient-to-b from-emerald-500/40 to-teal-900/60 border border-emerald-400/60 active:scale-95 transition-all">
-            <span class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-sm mb-1 shadow">💬</span>
-            <span class="text-[11px] font-extrabold text-white">Try Again</span>
-            <span class="text-[9px] text-emerald-200 text-center leading-tight mt-0.5">Send another alert</span>
-          </button>
-          <button type="button" onclick="retryAlert()" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-gradient-to-b from-blue-500/40 to-indigo-900/60 border border-blue-400/60 active:scale-95 transition-all">
-            <span class="w-8 h-8 rounded-full bg-sky-500 flex items-center justify-center text-sm mb-1 shadow">📍</span>
-            <span class="text-[11px] font-extrabold text-white">Leave a Note</span>
-            <span class="text-[9px] text-blue-200 text-center leading-tight mt-0.5">(Optional)</span>
-          </button>
-          <a href="https://pingmeconnect.in" target="_blank" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-gradient-to-b from-pink-500/45 to-purple-900/60 border border-pink-400/60 active:scale-95 transition-all">
-            <span class="w-8 h-8 rounded-full bg-pink-500 flex items-center justify-center text-sm mb-1 shadow">📞</span>
-            <span class="text-[11px] font-extrabold text-white">Contact</span>
-            <span class="text-[9px] text-pink-200 text-center leading-tight mt-0.5">Support</span>
           </a>
+
+          <button type="button" onclick="closeSession()" class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs tracking-wide transition">
+            ✓ <span id="txtCloseBtn">Close Session</span>
+          </button>
         </div>
       </div>
+    </section>
 
-      <!-- Golden Referral Banner -->
-      <button type="button" onclick="handleReferral()" class="w-full p-3 rounded-2xl bg-gradient-to-r from-amber-500/35 via-yellow-500/30 to-amber-600/35 border border-amber-400/70 shadow-glowGold flex items-center justify-between text-left active:scale-95 transition-all">
-        <div class="flex items-center gap-3">
-          <img src="assets/mascot-airplane-3d.png" alt="Share PingMe" class="w-10 h-10 object-contain drop-shadow">
-          <div>
-            <p class="text-xs font-black text-white">Enjoying PingMe? 💚 Share PingMe</p>
-            <p class="text-[10px] text-amber-100/90">Help others stay connected safely!</p>
-          </div>
-        </div>
-        <span class="text-amber-300 font-black text-lg">&gt;</span>
-      </button>
-
-      <!-- Pink & White Order Kit CTA -->
-      <a href="https://pingmeconnect.in" target="_blank" class="w-full p-3 rounded-2xl bg-gradient-to-r from-pink-500/30 via-white to-white border border-pink-400/70 shadow-glowPink flex items-center justify-between text-left active:scale-95 transition-all">
-        <div class="flex items-center gap-3">
-          <img src="assets/qr-tag-mockup.png" alt="Smart QR Tag" class="w-10 h-10 object-contain drop-shadow">
-          <div>
-            <p class="text-xs font-black text-slate-900">Get Your Own Smart QR Tag</p>
-            <p class="text-[10px] text-slate-600 font-semibold">For Car • Bike • Keys • Luggage & More</p>
-          </div>
-        </div>
-        <span class="text-slate-800 font-black text-lg">&gt;</span>
-      </a>
-
-      <button type="button" onclick="closeSession()" class="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-95 rounded-2xl text-xs font-extrabold text-white border border-blue-400/40 shadow transition-all">
-        ✓ Close
-      </button>
-    </main>
-
-    <!-- =====================================================================
-         SCREEN 5: SESSION CLOSED (LOCKS PAGE UNTIL QR IS SCANNED AGAIN)
-    ====================================================================== -->
-    <main id="screenClosed" class="hidden flex-grow flex flex-col items-center justify-center px-6 text-center z-10 gap-4 animate__animated animate__fadeIn">
-      <div class="w-20 h-20 rounded-full bg-blue-500/20 border-2 border-cyan-400/50 shadow-glowCyan flex items-center justify-center text-4xl">
-        🔒
-      </div>
-      <div>
-        <h1 id="closedTitle" class="text-2xl font-black text-white">Session Closed</h1>
-        <p id="closedSubtitle" class="text-xs text-blue-100/80 mt-1.5 leading-relaxed">
-          For privacy and security, this session has ended.<br>Please scan the <span class="text-cyan-300 font-bold">PingMe QR Tag</span> again to send a new alert.
-        </p>
-      </div>
-      <a href="https://pingmeconnect.in" class="mt-2 px-5 py-2.5 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/20 text-xs font-extrabold text-cyan-300 transition-all">
-        Learn More About PingMe →
-      </a>
-    </main>
-
-    <!-- Persistent Privacy Trust Footer -->
-    <footer class="safe-bottom z-10 py-2 text-center w-full bg-black/20 backdrop-blur-md border-t border-white/10">
-      <div class="flex justify-center items-center gap-1.5 text-[11px] font-bold text-blue-100/80">
-        <span>🔒</span>
-        <span id="footerText">Private • Secure • No Number Shared</span>
-      </div>
+    <!-- FOOTER -->
+    <footer class="text-center pt-4 pb-1">
+      <p id="footerPrivacy" class="text-[11px] text-slate-400 font-medium">🔒 Private • Secure • No Number Shared</p>
     </footer>
-
   </div>
 
-  <!-- Core App Script -->
   <script>
+    const BACKEND_URL = "https://pingme-api.pingmeconnect.workers.dev";
     const urlParams = new URLSearchParams(window.location.search);
-    const tagCode = urlParams.get('t') || 'TEST001';
-    const SESSION_KEY = `pingme_closed_${tagCode}`;
+    const TAG_CODE = (urlParams.get("t") || "TEST001").trim();
 
-    // Replace with your Cloudflare Worker or Supabase Edge Function URL
-    const API_BASE = "https://pingme-api.pingmeconnect.workers.dev";
+    let currentLang = "en";
+    let currentCategory = "vehicle";
+    let selectedReason = "";
+    let photoBase64 = null;
+    let locationUrl = null;
+    let currentSessionId = null;
+    let countdownTimer = null;
+    let replyPollTimer = null;
+    let secondsLeft = 180;
 
-    let currentLang = 'en';
-    let currentCategory = 'VEHICLE';
-    let selectedReason = '';
-    let attachedPhotoBase64 = null;
-    let activeAlertId = null;
-    let countdownInterval = null;
-    let pollInterval = null;
-    let audioCtx = null;
-
-    const translations = {
+    const i18n = {
       en: {
-        welcomeTitle: "Welcome to PingMe!",
-        welcomeSubtitle: "Reach the owner. Privately.",
-        categoryLabel: "Choose a Category",
-        labelVehicle: "Vehicle",
-        labelLostFound: "Lost & Found",
-        labelOther: "Other",
-        messageLabel: "Select a Message",
-        addMsgLabel: "Add a Message (Optional)",
-        customPlaceholder: "Type specific details, e.g., 'Parked near gate 3'",
-        attachPhotoTitle: "Attach Photo (Optional)",
-        attachPhotoSub: "Snap or upload a quick photo for clarity",
-        attachPhotoAction: "+ ADD",
-        photoAttachedLabel: "✓ Photo Attached",
-        shareLocLabel: "Share Live Location",
-        btnSendAlert: "SEND ALERT PRIVATELY >",
-        waitingTitle: "Alerting Owner...",
-        waitingSubtitle: "The owner has been notified privately on WhatsApp.",
-        countdownLabel: "Remaining",
-        badgeSent: "✓ Private Alert Delivered",
-        repliedTitle: "Owner Replied!",
-        repliedSubtitle: "You're now connected with the owner privately on WhatsApp.",
-        ownerReplyLabel: "Owner's Reply",
-        noReplyTitle: "No Reply Yet!",
-        noReplySubtitle: "The 180-second waiting time has ended.",
-        nextActionsLabel: "💡 What you can do next?",
-        closedTitle: "Session Closed",
-        closedSubtitle: "For privacy and security, this session has ended. Please scan the PingMe QR Tag again to send a new alert.",
-        footerText: "Private • Secure • No Number Shared"
+        heroTitle: "Welcome to PingMe!",
+        heroSubtitle: "Reach the owner. Privately.",
+        lblCategory: "Choose a Category",
+        catVehicle: "VEHICLE",
+        catLost: "LOST & FOUND",
+        catOther: "OTHER",
+        lblMessage: "Select a Message",
+        lblNote: "✍️ Add a Message (Optional)",
+        notePlaceholder: "Type specific details, e.g. 'Parked near gate 3'",
+        photoLabel: "Attach Photo",
+        locLabel: "Share GPS",
+        sendBtn: "SEND ALERT PRIVATELY",
+        sending: "SENDING ALERT...",
+        waitTitle: "Alerting Owner...",
+        waitSubtitle: "The owner has been notified privately on WhatsApp.",
+        remaining: "REMAINING",
+        waitingReply: "WAITING FOR LIVE REPLY...",
+        replyHeader: "Owner Replied Live!",
+        delivered: "PRIVATE ALERT DELIVERED",
+        closeBtn: "Close Session",
+        footer: "🔒 Private • Secure • No Number Shared",
+        reasons: {
+          vehicle: [
+            "🚗 Your vehicle is blocking my way",
+            "💡 Lights / Alarm left ON",
+            "🅿️ No-parking zone alert — please move",
+            "⚠️ Vehicle window / door is open"
+          ],
+          lost: [
+            "🎒 Found your lost bag / item",
+            "🔑 Found your keys / wallet",
+            "📱 Found your phone / gadget",
+            "🐾 Found your pet — safe with me"
+          ],
+          other: [
+            "📦 Delivery / Courier waiting at gate",
+            "🏠 Urgent message regarding your property",
+            "👋 Need to speak with you briefly"
+          ]
+        }
       },
       ta: {
-        welcomeTitle: "PingMe-க்கு வரவேற்கிறோம்!",
-        welcomeSubtitle: "உரிமையாளரைத் தொடர்பு கொள்ளுங்கள். தனிப்பட்ட முறையில்.",
-        categoryLabel: "வகையைத் தேர்ந்தெடுக்கவும்",
-        labelVehicle: "வாகனம்",
-        labelLostFound: "தொலைந்தவை",
-        labelOther: "மற்றவை",
-        messageLabel: "செய்தியைத் தேர்ந்தெடுக்கவும்",
-        addMsgLabel: "கூடுதல் செய்தி (விருப்பமானது)",
-        customPlaceholder: "விவரங்களை தட்டச்சு செய்க, எ.கா. 'கேட் 3 அருகில்'",
-        attachPhotoTitle: "புகைப்படம் இணைக்கவும் (விருப்பமானது)",
-        attachPhotoSub: "தெளிவுக்காக ஒரு புகைப்படம் எடுக்கவும் / பதிவேற்றவும்",
-        attachPhotoAction: "+ சேர்",
-        photoAttachedLabel: "✓ புகைப்படம் இணைக்கப்பட்டது",
-        shareLocLabel: "நேரலை இருப்பிடத்தைப் பகிர்",
-        btnSendAlert: "தனிப்பட்ட முறையில் அனுப்பு >",
-        waitingTitle: "உரிமையாளருக்கு தகவல் அனுப்பப்படுகிறது...",
-        waitingSubtitle: "WhatsApp மூலம் உரிமையாளருக்கு தகவல் அனுப்பப்பட்டுள்ளது.",
-        countdownLabel: "மீதமுள்ளது",
-        badgeSent: "✓ தகவல் அனுப்பப்பட்டது",
-        repliedTitle: "உரிமையாளர் பதிலளித்தார்!",
-        repliedSubtitle: "நீங்கள் இப்போது உரிமையாளருடன் இணைக்கப்பட்டுள்ளீர்கள்.",
-        ownerReplyLabel: "உரிமையாளரின் பதில்",
-        noReplyTitle: "இன்னும் பதில் இல்லை!",
-        noReplySubtitle: "180 வினாடிகள் காத்திருப்பு நேரம் முடிந்துவிட்டது.",
-        nextActionsLabel: "💡 அடுத்து என்ன செய்யலாம்?",
-        closedTitle: "அமர்வு முடிந்தது",
-        closedSubtitle: "பாதுகாப்பிற்காக இந்த அமர்வு மூடப்பட்டது. புதிய தகவல் அனுப்ப PingMe QR குறியீட்டை மீண்டும் ஸ்கேன் செய்யவும்.",
-        footerText: "தனிப்பட்டது • பாதுகாப்பானது • எண் பகிரப்படாது"
-      }
-    };
-
-    const templates = {
-      VEHICLE: {
-        en: [
-          "🚗 Your vehicle is blocking my way",
-          "🚨 Lights / Alarm left ON",
-          "🅿️ No-parking zone alert — please move",
-          "⚠️ Vehicle window / door is open"
-        ],
-        ta: [
-          "🚗 உங்கள் வாகனம் வழிமறிக்கிறது",
-          "🚨 வாகன விளக்கு / அலாரம் எரிகிறது",
-          "🅿️ பார்க்கிங் தடை பகுதி — நகர்த்தவும்",
-          "⚠️ வாகன கதவு / ஜன்னல் திறந்துள்ளது"
-        ]
-      },
-      LOST_FOUND: {
-        en: [
-          "🔑 Found your keys / wallet safely",
-          "🎒 Found your bag / item here",
-          "📱 Found your phone — contact to collect"
-        ],
-        ta: [
-          "🔑 உங்கள் சாவி / பர்ஸ் கிடைத்துள்ளது",
-          "🎒 உங்கள் பை / பொருள் கிடைத்துள்ளது",
-          "📱 உங்கள் மொபைல் கிடைத்துள்ளது"
-        ]
-      },
-      OTHER: {
-        en: [
-          "📦 Delivery / Courier waiting at gate",
-          "🔔 Urgent — please check outside",
-          "💬 Need to speak with you briefly"
-        ],
-        ta: [
-          "📦 டெலிவரி / கூரியர் காத்திருக்கிறது",
-          "🔔 அவசரம் — வெளியே பார்க்கவும்",
-          "💬 உங்களுடன் சிறிது பேச வேண்டும்"
-        ]
-      }
-    };
-
-    function showScreen(screenId) {
-      ['screen1', 'screen2', 'screen3', 'screen4', 'screenClosed'].forEach(id => {
-        const el = document.getElementById(id);
-        if (id === screenId) {
-          el.classList.remove('hidden');
-        } else {
-          el.classList.add('hidden');
+        heroTitle: "PingMe-க்கு நல்வரவு!",
+        heroSubtitle: "உரிமையாளரைத் தொடர்பு கொள்ளுங்கள். தனிப்பட்ட முறையில்.",
+        lblCategory: "வகையைத் தேர்ந்தெடுக்கவும்",
+        catVehicle: "வாகனம்",
+        catLost: "தொலைந்த பொருள்",
+        catOther: "மற்றவை",
+        lblMessage: "செய்தியைத் தேர்ந்தெடுக்கவும்",
+        lblNote: "✍️ கூடுதல் தகவல் (விருப்பம்)",
+        notePlaceholder: "குறிப்பிட்ட விவரங்களை உள்ளிடவும்...",
+        photoLabel: "புகைப்படம் இணை",
+        locLabel: "இடம் பகிர்",
+        sendBtn: "தனிப்பட்ட அலர்ட் அனுப்பு",
+        sending: "அலர்ட் அனுப்பப்படுகிறது...",
+        waitTitle: "உரிமையாளருக்கு தகவல் அனுப்பப்பட்டது...",
+        waitSubtitle: "WhatsApp மூலம் உடனடி தகவல் அனுப்பப்பட்டுள்ளது.",
+        remaining: "வினாடிகள்",
+        waitingReply: "உரிமையாளர் பதிலுக்காக காத்திருக்கிறது...",
+        replyHeader: "உரிமையாளர் பதில் அனுப்பியுள்ளார்!",
+        delivered: "தனிப்பட்ட அலர்ட் சென்றடைந்தது",
+        closeBtn: "மூடு",
+        footer: "🔒 பாதுகாப்பானது • எண் பகிரப்படாது",
+        reasons: {
+          vehicle: [
+            "🚗 உங்கள் வாகனம் வழியை மறைக்கிறது",
+            "💡 வாகனத்தின் விளக்கு / அலாரம் எரிகிறது",
+            "🅿️ நோ-பார்க்கிங் பகுதி — தயவுசெய்து நகர்த்தவும்",
+            "⚠️ வாகனத்தின் கதவு / ஜன்னல் திறந்துள்ளது"
+          ],
+          lost: [
+            "🎒 உங்கள் பை / பொருள் கிடைத்துள்ளது",
+            "🔑 உங்கள் சாவி / பர்ஸ் கிடைத்துள்ளது",
+            "📱 உங்கள் மொபைல் / பொருள் கிடைத்துள்ளது",
+            "🐾 உங்கள் செல்லப்பிராணி பாதுகாப்பாக உள்ளது"
+          ],
+          other: [
+            "📦 டெலிவரி / கொரியர் வாசலில் காத்திருக்கிறது",
+            "🏠 அவசரத் தகவல் தெரிவிக்க வேண்டும்",
+            "👋 உங்களிடம் சிறிது பேச வேண்டும்"
+          ]
         }
-      });
-    }
+      }
+    };
 
     function renderReasons() {
-      const container = document.getElementById('reasonsContainer');
-      const list = templates[currentCategory][currentLang];
-      selectedReason = list[0];
-
-      container.innerHTML = list.map((msg, idx) => `
-        <button type="button" onclick="pickReason(this, '${msg.replace(/'/g, "\\'")}')"
-          class="reason-btn text-left px-3.5 py-2 rounded-xl border text-xs font-bold transition-all ${
-            idx === 0
-              ? 'bg-emerald-500/25 border-emerald-400 text-white shadow-glowGreen'
-              : 'bg-white/10 border-white/10 text-blue-100 hover:bg-white/15'
-          }">
-          ${msg}
+      const list = i18n[currentLang].reasons[currentCategory];
+      if (!list.includes(selectedReason)) selectedReason = list[0];
+      const container = document.getElementById("reasonsContainer");
+      container.innerHTML = list.map(r => `
+        <button type="button" onclick="selectReason('${r.replace(/'/g, "\\'")}')"
+          class="reason-pill ${selectedReason === r ? "active" : ""} w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-200 flex items-center justify-between">
+          <span>${r}</span>
+          ${selectedReason === r ? '<span class="text-emerald-400 text-xs">●</span>' : ''}
         </button>
-      `).join('');
-    }
-
-    function pickReason(btn, msg) {
-      selectedReason = msg;
-      document.querySelectorAll('.reason-btn').forEach(b => {
-        b.className = 'reason-btn text-left px-3.5 py-2 rounded-xl border text-xs font-bold transition-all bg-white/10 border-white/10 text-blue-100 hover:bg-white/15';
-      });
-      btn.className = 'reason-btn text-left px-3.5 py-2 rounded-xl border text-xs font-bold transition-all bg-emerald-500/25 border-emerald-400 text-white shadow-glowGreen';
+      `).join("");
     }
 
     function selectCategory(cat) {
       currentCategory = cat;
-      ['VEHICLE', 'LOST_FOUND', 'OTHER'].forEach(c => {
-        const el = document.getElementById('cat' + c);
-        const lbl = el.querySelector('span:last-child');
-        if (c === cat) {
-          el.className = 'flex flex-col items-center justify-center py-2 px-2 rounded-2xl border-2 bg-gradient-to-b from-cyan-500/30 to-blue-900/50 border-cyan-400 shadow-glowCyan transition-all transform active:scale-95';
-          lbl.classList.remove('text-gray-300');
-          lbl.classList.add('text-white');
-        } else {
-          el.className = 'flex flex-col items-center justify-center py-2 px-2 rounded-2xl border-2 bg-white/5 border-white/10 hover:bg-white/10 transition-all transform active:scale-95';
-          lbl.classList.remove('text-white');
-          lbl.classList.add('text-gray-300');
-        }
+      ["vehicle", "lost", "other"].forEach(c => {
+        document.getElementById(`cat-${c}`).classList.toggle("active", c === cat);
       });
       renderReasons();
     }
 
+    function selectReason(reason) {
+      selectedReason = reason;
+      renderReasons();
+    }
+
     function toggleLanguage() {
-      currentLang = currentLang === 'en' ? 'ta' : 'en';
-      const t = translations[currentLang];
-      document.getElementById('welcomeTitle').textContent = t.welcomeTitle;
-      document.getElementById('welcomeSubtitle').textContent = t.welcomeSubtitle;
-      document.getElementById('categoryLabel').textContent = t.categoryLabel;
-      document.getElementById('labelVehicle').textContent = t.labelVehicle;
-      document.getElementById('labelLostFound').textContent = t.labelLostFound;
-      document.getElementById('labelOther').textContent = t.labelOther;
-      document.getElementById('messageLabel').textContent = t.messageLabel;
-      document.getElementById('addMsgLabel').textContent = t.addMsgLabel;
-      document.getElementById('customMessage').placeholder = t.customPlaceholder;
-      document.getElementById('attachPhotoTitle').textContent = t.attachPhotoTitle;
-      document.getElementById('attachPhotoSub').textContent = t.attachPhotoSub;
-      document.getElementById('attachPhotoAction').textContent = t.attachPhotoAction;
-      document.getElementById('photoAttachedLabel').textContent = t.photoAttachedLabel;
-      document.getElementById('shareLocLabel').textContent = t.shareLocLabel;
-      document.getElementById('btnSendAlert').textContent = t.btnSendAlert;
-      document.getElementById('waitingTitle').textContent = t.waitingTitle;
-      document.getElementById('waitingSubtitle').textContent = t.waitingSubtitle;
-      document.getElementById('countdownLabel').textContent = t.countdownLabel;
-      document.getElementById('badgeSent').textContent = t.badgeSent;
-      document.getElementById('repliedTitle').textContent = t.repliedTitle;
-      document.getElementById('repliedSubtitle').textContent = t.repliedSubtitle;
-      document.getElementById('ownerReplyLabel').textContent = t.ownerReplyLabel;
-      document.getElementById('noReplyTitle').textContent = t.noReplyTitle;
-      document.getElementById('noReplySubtitle').textContent = t.noReplySubtitle;
-      document.getElementById('nextActionsLabel').textContent = t.nextActionsLabel;
-      document.getElementById('closedTitle').textContent = t.closedTitle;
-      document.getElementById('closedSubtitle').textContent = t.closedSubtitle;
-      document.getElementById('footerText').textContent = t.footerText;
+      currentLang = currentLang === "en" ? "ta" : "en";
+      const t = i18n[currentLang];
+      document.getElementById("heroTitle").textContent = t.heroTitle;
+      document.getElementById("heroSubtitle").textContent = t.heroSubtitle;
+      document.getElementById("lblCategory").textContent = t.lblCategory;
+      document.getElementById("txtCatVehicle").textContent = t.catVehicle;
+      document.getElementById("txtCatLost").textContent = t.catLost;
+      document.getElementById("txtCatOther").textContent = t.catOther;
+      document.getElementById("lblMessage").textContent = t.lblMessage;
+      document.getElementById("lblNote").textContent = t.lblNote;
+      document.getElementById("customNote").placeholder = t.notePlaceholder;
+      if (!photoBase64) document.getElementById("photoLabel").textContent = t.photoLabel;
+      if (!locationUrl) document.getElementById("locLabel").textContent = t.locLabel;
+      document.getElementById("txtSendBtn").textContent = t.sendBtn;
+      document.getElementById("waitTitle").textContent = t.waitTitle;
+      document.getElementById("waitSubtitle").textContent = t.waitSubtitle;
+      document.getElementById("txtRemaining").textContent = t.remaining;
+      document.getElementById("liveStatusText").textContent = t.waitingReply;
+      document.getElementById("txtReplyHeader").textContent = t.replyHeader;
+      document.getElementById("txtDelivered").textContent = t.delivered;
+      document.getElementById("txtCloseBtn").textContent = t.closeBtn;
+      document.getElementById("footerPrivacy").textContent = t.footer;
       renderReasons();
     }
 
     function updateCharCount() {
-      const val = document.getElementById('customMessage').value;
-      document.getElementById('charCount').textContent = `${val.length} / 160`;
+      const len = document.getElementById("customNote").value.length;
+      document.getElementById("charCount").textContent = `${len}/160`;
     }
 
-    function handlePhotoSelect(event) {
+    function handlePhoto(event) {
       const file = event.target.files[0];
       if (!file) return;
-
       const reader = new FileReader();
       reader.onload = function(e) {
         const img = new Image();
         img.onload = function() {
-          const canvas = document.createElement('canvas');
-          const MAX_WIDTH = 900;
-          const scale = img.width > MAX_WIDTH ? MAX_WIDTH / img.width : 1;
+          const canvas = document.createElement("canvas");
+          const maxW = 720;
+          const scale = Math.min(1, maxW / img.width);
           canvas.width = img.width * scale;
           canvas.height = img.height * scale;
-
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-          attachedPhotoBase64 = canvas.toDataURL('image/jpeg', 0.72);
-          document.getElementById('photoPreviewImg').src = attachedPhotoBase64;
-          document.getElementById('photoFileName').textContent = file.name;
-          document.getElementById('attachPhotoBtn').classList.add('hidden');
-          document.getElementById('photoPreviewBox').classList.remove('hidden');
+          canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+          photoBase64 = canvas.toDataURL("image/jpeg", 0.65);
+          document.getElementById("photoLabel").textContent = "Photo Attached";
+          document.getElementById("photoBadge").textContent = "✓ READY";
         };
         img.src = e.target.result;
       };
       reader.readAsDataURL(file);
     }
 
-    function removePhoto() {
-      attachedPhotoBase64 = null;
-      document.getElementById('photoInput').value = '';
-      document.getElementById('photoPreviewImg').src = '';
-      document.getElementById('photoPreviewBox').classList.add('hidden');
-      document.getElementById('attachPhotoBtn').classList.remove('hidden');
-    }
-
-    function getLocation() {
-      return new Promise((resolve) => {
-        const shareLoc = document.getElementById('shareLocation').checked;
-        if (!shareLoc || !navigator.geolocation) {
-          return resolve(null);
-        }
-        navigator.geolocation.getCurrentPosition(
-          (pos) => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-          () => resolve(null),
-          { enableHighAccuracy: true, timeout: 5000 }
-        );
-      });
-    }
-
-    function unlockMobileFeedback() {
-      try {
-        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        if (AudioContextClass) {
-          if (!audioCtx) audioCtx = new AudioContextClass();
-          if (audioCtx.state === 'suspended') audioCtx.resume();
-        }
-        if (navigator.vibrate) {
-          navigator.vibrate(40);
-        }
-      } catch (e) {}
-    }
-
-    function triggerReplyAlert() {
-      try {
-        if (navigator.vibrate) {
-          navigator.vibrate([300, 120, 300]);
-        }
-        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        if (AudioContextClass) {
-          if (!audioCtx) audioCtx = new AudioContextClass();
-          if (audioCtx.state === 'suspended') audioCtx.resume();
-
-          const now = audioCtx.currentTime;
-          const osc1 = audioCtx.createOscillator();
-          const gain1 = audioCtx.createGain();
-          osc1.type = 'triangle';
-          osc1.frequency.setValueAtTime(659.25, now);
-          gain1.gain.setValueAtTime(0.25, now);
-          gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
-          osc1.connect(gain1);
-          gain1.connect(audioCtx.destination);
-          osc1.start(now);
-          osc1.stop(now + 0.25);
-
-          const osc2 = audioCtx.createOscillator();
-          const gain2 = audioCtx.createGain();
-          osc2.type = 'triangle';
-          osc2.frequency.setValueAtTime(880, now + 0.18);
-          gain2.gain.setValueAtTime(0.3, now + 0.18);
-          gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.55);
-          osc2.connect(gain2);
-          gain2.connect(audioCtx.destination);
-          osc2.start(now + 0.18);
-          osc2.stop(now + 0.55);
-        }
-      } catch (e) {}
-    }
-
-    async function handleSendAlert() {
-      unlockMobileFeedback();
-
-      const btn = document.getElementById('sendBtn');
-      const btnText = document.getElementById('btnSendAlert');
-      btn.disabled = true;
-      btnText.textContent = currentLang === 'en' ? 'SENDING...' : 'அனுப்புகிறது...';
-
-      const coords = await getLocation();
-      const locationUrl = coords ? `https://maps.google.com/?q=${coords.lat},${coords.lng}` : null;
-      const customNote = document.getElementById('customMessage').value.trim();
-
-      const payload = {
-        tag_code: tagCode,
-        reason: selectedReason,
-        custom_message: customNote,
-        location_url: locationUrl,
-        photo_data: attachedPhotoBase64
-      };
-
-      try {
-        const res = await fetch(`${API_BASE}/api/alert`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) {
-          alert(data.error || `Server Error (${res.status})`);
-          btn.disabled = false;
-          btnText.textContent = translations[currentLang].btnSendAlert;
-          return;
-        }
-        activeAlertId = data.session_id || null;
-      } catch (err) {
-        alert('Network error: ' + err.message);
-        btn.disabled = false;
-        btnText.textContent = translations[currentLang].btnSendAlert;
+    function attachLocation() {
+      if (!navigator.geolocation) {
+        alert("GPS location is not supported on this browser.");
         return;
       }
-
-      showScreen('screen2');
-      startWaitingTimer();
+      document.getElementById("locBadge").textContent = "...";
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          locationUrl = `https://maps.google.com/?q=${pos.coords.latitude.toFixed(6)},${pos.coords.longitude.toFixed(6)}`;
+          document.getElementById("locLabel").textContent = "GPS Attached";
+          document.getElementById("locBadge").textContent = "✓ READY";
+        },
+        () => {
+          document.getElementById("locBadge").textContent = "+ ADD";
+          alert("Unable to fetch GPS. Please allow location access or send without GPS.");
+        },
+        { enableHighAccuracy: true, timeout: 8000 }
+      );
     }
 
-    function startWaitingTimer() {
-      let timeLeft = 180;
-      const totalTime = 180;
-      const circumference = 402;
-      const progressCircle = document.getElementById('timerProgress');
-      const countdownText = document.getElementById('countdownText');
+    async function sendAlert() {
+      const btn = document.getElementById("sendBtn");
+      const txt = document.getElementById("txtSendBtn");
+      btn.disabled = true;
+      txt.textContent = i18n[currentLang].sending;
 
-      clearInterval(countdownInterval);
-      clearInterval(pollInterval);
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/alert`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            tag_code: TAG_CODE,
+            reason: selectedReason,
+            custom_message: document.getElementById("customNote").value.trim(),
+            location_url: locationUrl,
+            photo_data: photoBase64
+          })
+        });
 
-      countdownInterval = setInterval(() => {
-        timeLeft--;
-        countdownText.textContent = `${timeLeft}s`;
-        const offset = circumference - (timeLeft / totalTime) * circumference;
-        progressCircle.style.strokeDashoffset = offset;
-
-        if (timeLeft <= 0) {
-          clearInterval(countdownInterval);
-          clearInterval(pollInterval);
-          showScreen('screen4');
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          alert(data.error || "Unable to send alert. Please try again.");
+          btn.disabled = false;
+          txt.textContent = i18n[currentLang].sendBtn;
+          return;
         }
+
+        currentSessionId = data.session_id;
+        openWaitingRoom();
+      } catch (err) {
+        alert("Network error connecting to PingMe server. Please check your internet.");
+        btn.disabled = false;
+        txt.textContent = i18n[currentLang].sendBtn;
+      }
+    }
+
+    function openWaitingRoom() {
+      document.getElementById("screen1").classList.add("hidden");
+      document.getElementById("screen2").classList.remove("hidden");
+      secondsLeft = 180;
+      document.getElementById("countdownText").textContent = `${secondsLeft}s`;
+
+      countdownTimer = setInterval(() => {
+        secondsLeft--;
+        if (secondsLeft <= 0) {
+          clearInterval(countdownTimer);
+          clearInterval(replyPollTimer);
+          document.getElementById("countdownText").textContent = "0s";
+          document.getElementById("liveStatusText").textContent = "SESSION WINDOW ENDED";
+          return;
+        }
+        document.getElementById("countdownText").textContent = `${secondsLeft}s`;
       }, 1000);
 
-      if (activeAlertId) {
-        pollInterval = setInterval(async () => {
-          try {
-            const res = await fetch(`${API_BASE}/api/session?id=${encodeURIComponent(activeAlertId)}`);
-            const data = await res.json();
-            const reply = data?.session?.owner_reply;
-            if (reply) {
-              clearInterval(countdownInterval);
-              clearInterval(pollInterval);
-              document.getElementById('liveResponseText').textContent = reply;
-              document.getElementById('replyTimestamp').textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-              triggerReplyAlert();
-              showScreen('screen3');
-            }
-          } catch (e) {
-            console.error('Polling error:', e);
-          }
-        }, 4000);
+      if (currentSessionId) {
+        replyPollTimer = setInterval(pollForOwnerReply, 3000);
       }
     }
 
-    function handleReferral() {
-      const shareData = {
-        title: 'PingMe — One Scan. Instant Connection.',
-        text: 'Protect your privacy! Get a smart PingMe QR tag for your vehicle, keys, or valuables.',
-        url: 'https://pingmeconnect.in'
-      };
-      if (navigator.share) {
-        navigator.share(shareData).catch(() => {});
-      } else {
-        navigator.clipboard.writeText('https://pingmeconnect.in');
-        alert('Link copied: https://pingmeconnect.in');
-      }
-    }
+    async function pollForOwnerReply() {
+      if (!currentSessionId) return;
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/session?id=${encodeURIComponent(currentSessionId)}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        const session = data.session;
 
-    function retryAlert() {
-      clearInterval(countdownInterval);
-      clearInterval(pollInterval);
-      const btn = document.getElementById('sendBtn');
-      btn.disabled = false;
-      document.getElementById('btnSendAlert').textContent = translations[currentLang].btnSendAlert;
-      showScreen('screen1');
+        if (session && session.owner_reply) {
+          clearInterval(replyPollTimer);
+          clearInterval(countdownTimer);
+          document.getElementById("timerBox").classList.add("hidden");
+          document.getElementById("waitTitle").textContent = i18n[currentLang].replyHeader;
+          document.getElementById("ownerReplyText").textContent = session.owner_reply;
+          document.getElementById("ownerReplyBox").classList.remove("hidden");
+        }
+      } catch (_) {}
     }
 
     async function closeSession() {
-      clearInterval(countdownInterval);
-      clearInterval(pollInterval);
-      sessionStorage.setItem(SESSION_KEY, 'true');
-
-      if (activeAlertId) {
-        fetch(`${API_BASE}/api/session/close`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ session_id: activeAlertId })
+      clearInterval(countdownTimer);
+      clearInterval(replyPollTimer);
+      if (currentSessionId) {
+        fetch(`${BACKEND_URL}/api/session/close`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ session_id: currentSessionId })
         }).catch(() => {});
       }
-
-      if (window.history && window.history.replaceState) {
-        window.history.replaceState({}, document.title, window.location.pathname);
-      }
-
-      showScreen('screenClosed');
-      try { window.close(); } catch (e) {}
+      window.location.reload();
     }
 
-    if (sessionStorage.getItem(SESSION_KEY) === 'true' || !urlParams.get('t')) {
-      showScreen('screenClosed');
-    } else {
-      selectCategory('VEHICLE');
+    async function loadTagMeta() {
+      document.getElementById("tagBadge").textContent = `TAG • ${TAG_CODE}`;
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/tag?t=${encodeURIComponent(TAG_CODE)}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.tag) {
+          document.getElementById("tagBadge").textContent = `${data.tag.serial_no || TAG_CODE} • ${data.tag.effective_status.toUpperCase()}`;
+          if (data.tag.tag_type) selectCategory(data.tag.tag_type === "lost" ? "lost" : data.tag.tag_type === "other" ? "other" : "vehicle");
+        }
+      } catch (_) {}
     }
+
+    renderReasons();
+    loadTagMeta();
   </script>
 </body>
 </html>
