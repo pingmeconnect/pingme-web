@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>PingMe Admin — One Scan. Instant Connection.</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --bg: #140704;
+      --bg-grad: radial-gradient(circle at top, #3b1208 0%, #140704 65%);
+      --card: #220c07;
+      --card-alt: #2d110a;
+      --border: #4d2015;
+      --orange: #f97316;
+      --orange-glow: rgba(249, 115, 22, 0.35);
+      --green: #22c55e;
+      --blue: #38bdf8;
+      --purple: #a855f7;
+      --red: #ef4444;
+      --amber: #f59e0b;
+      --text: #fff7ed;
+      --muted: #fdba74;
+      --subtext: #cbd5e1;
+    }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body {
+      margin: 0; background: var(--bg); background-image: var(--bg-grad);
+      color: var(--text); min-height: 100vh; padding-bottom: 40px;
+    }
+    header {
+      background: rgba(26, 9, 5, 0.92); backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border); padding: 12px 16px;
+      position: sticky; top: 0; z-index: 25;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .logo-wrap { display: flex; align-items: center; gap: 10px; }
+    .logo-icon {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: linear-gradient(135deg, #38bdf8, #ec4899);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 20px; color: #fff; box-shadow: 0 0 12px rgba(236,72,153,0.5);
+    }
+    .logo-text { display: flex; align-items: center; gap: 6px; font-size: 20px; font-weight: 800; }
+    .admin-pill {
+      font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 999px;
+      border: 1px solid var(--orange); color: var(--orange); letter-spacing: 0.8px;
+    }
+    .tagline { font-size: 9px; letter-spacing: 1.2px; color: var(--muted); font-weight: 600; margin-top: 2px; }
+    .container { max-width: 920px; margin: 0 auto; padding: 14px; }
+
+    /* 4 STAT CARDS */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
+    .stat-card {
+      border-radius: 14px; padding: 12px 6px; text-align: center;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .sc-blue { background: linear-gradient(180deg, rgba(14,116,144,0.45), rgba(20,7,4,0.8)); border-color: #0284c7; }
+    .sc-green { background: linear-gradient(180deg, rgba(21,128,61,0.45), rgba(20,7,4,0.8)); border-color: #16a34a; }
+    .sc-red { background: linear-gradient(180deg, rgba(185,28,28,0.45), rgba(20,7,4,0.8)); border-color: #dc2626; }
+    .sc-amber { background: linear-gradient(180deg, rgba(180,83,9,0.45), rgba(20,7,4,0.8)); border-color: #d97706; }
+    .stat-num { font-size: 20px; font-weight: 800; margin: 4px 0 2px; }
+    .stat-lbl { font-size: 10px; color: var(--subtext); font-weight: 600; }
+
+    /* 5 NAV TABS */
+    .nav-bar {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 6px; margin-bottom: 14px;
+    }
+    .nav-btn {
+      background: transparent; border: none; color: var(--muted);
+      padding: 8px 4px; border-radius: 10px; font-size: 10px; font-weight: 700;
+      cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+    .nav-btn span.ico { font-size: 16px; }
+    .nav-btn.active {
+      background: linear-gradient(135deg, #ea580c, #dc2626);
+      color: #fff; box-shadow: 0 4px 12px var(--orange-glow);
+    }
+
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 14px; margin-bottom: 14px;
+    }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .card-title { font-size: 15px; font-weight: 700; margin: 0; }
+    .link-btn { background: none; border: none; color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; }
+
+    /* CUSTOMER LIST ITEMS */
+    .cust-row {
+      background: var(--card-alt); border: 1px solid var(--border); border-radius: 12px;
+      padding: 12px; margin-bottom: 9px; display: flex; align-items: center; justify-content: space-between;
+      gap: 10px; cursor: pointer; transition: 0.15s;
+    }
+    .cust-row:hover { border-color: var(--orange); }
+    .cust-ico {
+      width: 38px; height: 38px; border-radius: 10px; background: rgba(249,115,22,0.15);
+      border: 1px solid rgba(249,115,22,0.35); display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .cust-info { flex: 1; min-width: 0; }
+    .cust-title { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cust-sub { font-size: 12px; color: var(--subtext); margin-top: 2px; }
+    .cust-dates { font-size: 10px; color: var(--muted); margin-top: 4px; }
+    .pill {
+      padding: 3px 9px; border-radius: 999px; font-size: 10px; font-weight: 700; text-transform: capitalize;
+    }
+    .pill-active { background: rgba(34,197,94,0.2); color: #4ade80; border: 1px solid #22c55e; }
+    .pill-inactive { background: rgba(239,68,68,0.2); color: #f87171; border: 1px solid #ef4444; }
+    .pill-expired, .pill-exhausted { background: rgba(245,158,11,0.2); color: #fbbf24; border: 1px solid #f59e0b; }
+
+    /* QUICK ACTIONS GRID */
+    .qa-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .qa-btn {
+      border-radius: 12px; padding: 12px 6px; border: 1px solid var(--border);
+      background: var(--card-alt); color: #fff; font-size: 11px; font-weight: 700;
+      cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center;
+    }
+    .qa-btn:hover { border-color: var(--orange); }
+
+    /* FORMS */
+    label { display: block; font-size: 12px; color: var(--muted); font-weight: 600; margin: 10px 0 5px; }
+    input, select, textarea {
+      width: 100%; padding: 11px 12px; border-radius: 10px; border: 1px solid var(--border);
+      background: #120503; color: #fff; font-size: 14px; outline: none;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--orange); }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 12px 14px; border-radius: 12px; border: none; font-weight: 700; font-size: 14px; cursor: pointer;
+    }
+    .btn-green-full {
+      width: 100%; margin-top: 14px; color: #fff;
+      background: linear-gradient(90deg, #16a34a, #22c55e); box-shadow: 0 4px 14px rgba(34,197,94,0.3);
+    }
+    .btn-orange { background: linear-gradient(135deg, #ea580c, #dc2626); color: #fff; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .btn-danger { background: rgba(239,68,68,0.18); border: 1px solid var(--red); color: #fca5a5; }
+    .btn-sm { padding: 8px 10px; font-size: 12px; border-radius: 9px; }
+
+    /* MODALS */
+    .modal-bg {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.82);
+      display: none; align-items: center; justify-content: center; padding: 14px; z-index: 50;
+    }
+    .modal-bg.open { display: flex; }
+    .modal {
+      background: var(--card); border: 1px solid var(--orange); border-radius: 18px;
+      width: 100%; max-width: 440px; max-height: 90vh; overflow-y: auto; padding: 16px;
+    }
+    .qr-box {
+      background: #fff; color: #0f172a; border-radius: 14px; padding: 16px; text-align: center; margin: 10px 0;
+    }
+    #qrHolder { display: flex; justify-content: center; margin: 8px 0; }
+    .mini-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0; }
+    .mini-stat {
+      background: var(--card-alt); border: 1px solid var(--border); border-radius: 10px; padding: 8px; text-align: center;
+    }
+    .hidden { display: none !important; }
+    .toast {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      background: #2d110a; border: 1px solid var(--orange); color: #fff;
+      padding: 10px 18px; border-radius: 999px; font-size: 13px; z-index: 100; display: none;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-wrap">
+    <div class="logo-icon">P</div>
+    <div>
+      <div class="logo-text">PingMe <span class="admin-pill">ADMIN</span></div>
+      <div class="tagline">ONE SCAN. INSTANT CONNECTION.</div>
+    </div>
+  </div>
+  <div id="topActions" class="hidden" style="display:flex; gap:6px;">
+    <button class="btn btn-sm btn-outline" onclick="loadDashboard()">↻</button>
+    <button class="btn btn-sm btn-danger" onclick="logout()">Exit</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- LOGIN SCREEN -->
+  <div id="loginView" class="card" style="max-width:420px; margin: 36px auto;">
+    <h2 style="margin:0 0 6px; font-size:18px;">Admin Security Login</h2>
+    <p style="font-size:12px; color:var(--muted); margin-top:0;">Protected access for desktop & mobile management.</p>
+    <label>Scanner Base URL (GitHub Pages)</label>
+    <input type="url" id="scannerBaseInput" />
+    <label>Admin Password</label>
+    <input type="password" id="passInput" placeholder="Enter your ADMIN_PASSWORD" onkeyup="if(event.key==='Enter') doLogin()" />
+    <button class="btn btn-green-full" onclick="doLogin()">Unlock PingMe Admin</button>
+  </div>
+
+  <!-- APP VIEW -->
+  <div id="appView" class="hidden">
+
+    <!-- 4 OVERALL STATS -->
+    <div class="stats-grid">
+      <div class="stat-card sc-blue">
+        <div>👤</div>
+        <div class="stat-num" id="stCustomers">0</div>
+        <div class="stat-lbl">Customers</div>
+      </div>
+      <div class="stat-card sc-green">
+        <div>📱</div>
+        <div class="stat-num" id="stTags">0</div>
+        <div class="stat-lbl">Active QRs</div>
+      </div>
+      <div class="stat-card sc-red">
+        <div>📷</div>
+        <div class="stat-num" id="stScansToday">0</div>
+        <div class="stat-lbl">Scans Today</div>
+      </div>
+      <div class="stat-card sc-amber">
+        <div>🪙</div>
+        <div class="stat-num" id="stCredits">0</div>
+        <div class="stat-lbl">Credits Left</div>
+      </div>
+    </div>
+
+    <!-- 5 NAVIGATION TABS -->
+    <div class="nav-bar">
+      <button class="nav-btn active" id="nav-dash" onclick="showTab('dash')"><span class="ico">🏠</span>Dashboard</button>
+      <button class="nav-btn" id="nav-new" onclick="showTab('new')"><span class="ico">👤+</span>New Customer</button>
+      <button class="nav-btn" id="nav-cust" onclick="showTab('cust')"><span class="ico">👥</span>Customers</button>
+      <button class="nav-btn" id="nav-logs" onclick="showTab('logs')"><span class="ico">📈</span>Scan Logs</button>
+      <button class="nav-btn" id="nav-wa" onclick="showTab('wa')"><span class="ico">💬</span>WhatsApp</button>
+    </div>
+
+    <!-- 1. DASHBOARD HOME -->
+    <div id="view-dash">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Recent Customers</h3>
+          <button class="link-btn" onclick="showTab('cust')">View All ›</button>
+        </div>
+        <div id="recentList"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3 class="card-title">Quick Actions</h3></div>
+        <div class="qa-grid">
+          <button class="qa-btn" onclick="showTab('new')"><span style="font-size:20px;">🏁</span>Generate QR</button>
+          <button class="qa-btn" onclick="showTab('cust')"><span style="font-size:20px;">🪙</span>Add Credits</button>
+          <button class="qa-btn" onclick="showTab('cust')"><span style="font-size:20px;">📅</span>Extend Plan</button>
+          <button class="qa-btn" onclick="showTab('wa')"><span style="font-size:20px;">📨</span>Send Message</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. ADD NEW CUSTOMER -->
+    <div id="view-new" class="card hidden">
+      <div class="card-header">
+        <h3 class="card-title">← Add New Customer</h3>
+      </div>
+      <label>Customer Name *</label>
+      <input type="text" id="fName" placeholder="Karthik Raja" />
+
+      <label>WhatsApp Number *</label>
+      <input type="tel" id="fPhone" placeholder="9840547587" />
+
+      <label>Email (Optional)</label>
+      <input type="email" id="fEmail" placeholder="customer@gmail.com" />
+
+      <label>Vehicle / Item Label *</label>
+      <input type="text" id="fItem" placeholder="TN 09 AB 1234 / Keys - Home" />
+
+      <div class="row-2">
+        <div>
+          <label>Category *</label>
+          <select id="fType">
+            <option value="vehicle">Vehicle</option>
+            <option value="keys">Keys / Keychain</option>
+            <option value="luggage">Laptop Bag / Luggage</option>
+            <option value="kids">Kids / Elderly ID</option>
+            <option value="pet">Pet Collar</option>
+            <option value="business">Shop / Doorbell</option>
+          </select>
+        </div>
+        <div>
+          <label>Initial Credits</label>
+          <input type="number" id="fCredits" value="50" />
+        </div>
+      </div>
+
+      <div class="row-2">
+        <div>
+          <label>Customer Status *</label>
+          <select id="fStatus">
+            <option value="active">🟢 Active (Instant)</option>
+            <option value="inactive">🔴 Inactive (Default)</option>
+          </select>
+        </div>
+        <div>
+          <label>Subscription Period *</label>
+          <select id="fDays">
+            <option value="360">1 Year (360 Days)</option>
+            <option value="180">6 Months (180 Days)</option>
+            <option value="720">2 Years (720 Days)</option>
+            <option value="30">Trial (30 Days)</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn btn-green-full" id="btnCreate" onclick="createCustomer()">👤+ Create Customer & Generate QR</button>
+    </div>
+
+    <!-- 3. ALL CUSTOMERS -->
+    <div id="view-cust" class="hidden">
+      <div class="card" style="padding:10px;">
+        <input type="search" id="searchBox" placeholder="Search name, PM-0001, vehicle, or phone..." oninput="renderAllCustomers()" />
+      </div>
+      <div id="allCustomersList"></div>
+    </div>
+
+    <!-- 4. SCAN LOGS -->
+    <div id="view-logs" class="hidden">
+      <div id="scanLogsList"></div>
+    </div>
+
+    <!-- 5. WHATSAPP MESSAGE CENTER -->
+    <div id="view-wa" class="card hidden">
+      <h3 class="card-title" style="margin-bottom:8px;">💬 Customer WhatsApp Notifications</h3>
+      <label>Select Customer</label>
+      <select id="waCustomerSelect" onchange="updateWaPreview()"></select>
+
+      <label>Message Template Type</label>
+      <select id="waTemplateType" onchange="updateWaPreview()">
+        <option value="welcome">✅ Welcome & Tag Activation Message</option>
+        <option value="credits">⚠️ Low Scan Credits / Limit Reminder</option>
+        <option value="expiry">📅 Plan Expiry & Renewal Reminder</option>
+        <option value="maintenance">🛠️ Service / Maintenance Update</option>
+        <option value="custom">✏️ Custom Message</option>
+      </select>
+
+      <label>Message Preview (Editable before sending)</label>
+      <textarea id="waMessageBox" rows="7"></textarea>
+
+      <button class="btn btn-green-full" onclick="sendCustomWa()">📲 Send via WhatsApp</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- CUSTOMER DETAIL & QR MODAL -->
+<div id="detailModal" class="modal-bg">
+  <div class="modal">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <strong id="mTitle" style="font-size:16px;">PM-0001</strong>
+      <button class="btn btn-sm btn-outline" onclick="closeModal('detailModal')">✕</button>
+    </div>
+
+    <!-- INDIVIDUAL CUSTOMER STATS -->
+    <div class="mini-stats">
+      <div class="mini-stat">
+        <div style="font-size:18px; font-weight:800; color:var(--blue);" id="mScansCount">0</div>
+        <div style="font-size:10px; color:var(--muted);">Total Scans</div>
+      </div>
+      <div class="mini-stat">
+        <div style="font-size:18px; font-weight:800; color:var(--amber);" id="mCreditsLeft">0</div>
+        <div style="font-size:10px; color:var(--muted);">Credits Left</div>
+      </div>
+      <div class="mini-stat">
+        <div style="font-size:13px; font-weight:800; color:var(--green);" id="mStatusText">ACTIVE</div>
+        <div style="font-size:10px; color:var(--muted);" id="mExpiryText">Exp: -</div>
+      </div>
+    </div>
+
+    <!-- QR CODE CARD -->
+    <div class="qr-box">
+      <div style="font-weight:900; font-size:18px;">PINGME</div>
+      <div style="font-size:9px; color:#475569; letter-spacing:1px;">ONE SCAN. INSTANT CONNECTION.</div>
+      <div id="qrHolder"></div>
+      <div id="mQrCaption" style="font-weight:700; font-size:13px;"></div>
+    </div>
+
+    <div class="row-2" style="margin-bottom:8px;">
+      <button class="btn btn-sm btn-orange" onclick="downloadQrPng()">⬇ Download QR</button>
+      <button class="btn btn-sm btn-green-full" style="margin-top:0;" onclick="shareQr()">📤 Share QR</button>
+    </div>
+
+    <!-- QUICK MANAGE BUTTONS -->
+    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:6px; margin-bottom:10px;">
+      <button class="btn btn-sm btn-outline" onclick="quickUpdate(50, 0)">+50 Credits</button>
+      <button class="btn btn-sm btn-outline" onclick="quickUpdate(0, 360)">+1 Year</button>
+      <button class="btn btn-sm btn-outline" onclick="toggleStatus()">Toggle Active</button>
+    </div>
+
+    <div class="row-2" style="margin-bottom:10px;">
+      <button class="btn btn-sm btn-outline" onclick="jumpToWa()">💬 WhatsApp Alert</button>
+      <button class="btn btn-sm btn-danger" onclick="deleteCustomer()">🗑️ Delete Tag</button>
+    </div>
+
+    <!-- EDIT CUSTOMER DETAILS -->
+    <details style="border-top:1px solid var(--border); padding-top:8px;">
+      <summary style="cursor:pointer; font-size:13px; font-weight:700; color:var(--muted);">✏️ Edit Customer Details</summary>
+      <label>Name</label><input type="text" id="eName" />
+      <label>WhatsApp</label><input type="tel" id="ePhone" />
+      <label>Vehicle / Item</label><input type="text" id="eItem" />
+      <label>Email</label><input type="email" id="eEmail" />
+      <button class="btn btn-sm btn-orange" style="width:100%; margin-top:10px;" onclick="saveEdits()">Save Details</button>
+    </details>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+  const API_BASE = "https://pingme-api.pingmeconnect.workers.dev";
+  let tags = [];
+  let logs = [];
+  let selectedTag = null;
+
+  const autoBase = window.location.href.includes("github.io")
+    ? window.location.href.replace(/admin\.html.*$/, "")
+    : "https://pingmeconnect.github.io/pingme-web/";
+
+  document.getElementById("scannerBaseInput").value = localStorage.getItem("pm_base") || autoBase;
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const p = localStorage.getItem("pm_pass");
+    if (p) {
+      document.getElementById("passInput").value = p;
+      doLogin(true);
+    }
+  });
+
+  function toast(msg) {
+    const el = document.getElementById("toast");
+    el.textContent = msg;
+    el.style.display = "block";
+    setTimeout(() => el.style.display = "none", 3000);
+  }
+
+  function headers() {
+    return {
+      "Content-Type": "application/json",
+      "X-Admin-Password": localStorage.getItem("pm_pass") || ""
+    };
+  }
+
+  async function doLogin(silent = false) {
+    const pass = document.getElementById("passInput").value.trim();
+    const base = document.getElementById("scannerBaseInput").value.trim();
+    if (!pass) return toast("Enter Admin Password");
+
+    localStorage.setItem("pm_pass", pass);
+    if (base) localStorage.setItem("pm_base", base.endsWith("/") ? base : base + "/");
+
+    const ok = await loadDashboard(silent);
+    if (ok) {
+      document.getElementById("loginView").classList.add("hidden");
+      document.getElementById("appView").classList.remove("hidden");
+      document.getElementById("topActions").classList.remove("hidden");
+    } else {
+      localStorage.removeItem("pm_pass");
+      if (!silent) toast("Wrong Password");
+    }
+  }
+
+  function logout() {
+    localStorage.removeItem("pm_pass");
+    location.reload();
+  }
+
+  async function loadDashboard(silent = false) {
+    try {
+      const res = await fetch(`${API_BASE}/api/admin/dashboard`, { headers: headers() });
+      if (!res.ok) return false;
+      const data = await res.json();
+      tags = data.tags || [];
+      logs = data.logs || [];
+
+      const todayStr = new Date().toISOString().slice(0, 10);
+      const scansToday = logs.filter(l => (l.created_at || "").startsWith(todayStr)).length;
+      const totalCredits = tags.reduce((sum, t) => sum + (Number(t.scan_credits) || 0), 0);
+
+      document.getElementById("stCustomers").textContent = tags.length;
+      document.getElementById("stTags").textContent = tags.filter(t => t.status === "active").length;
+      document.getElementById("stScansToday").textContent = scansToday;
+      document.getElementById("stCredits").textContent = totalCredits.toLocaleString("en-IN");
+
+      renderRecent();
+      renderAllCustomers();
+      renderLogs();
+      populateWaDropdown();
+      if (!silent) toast("Synced");
+      return true;
+    } catch {
+      toast("Connection error");
+      return false;
+    }
+  }
+
+  function showTab(name) {
+    ["dash", "new", "cust", "logs", "wa"].forEach(t => {
+      document.getElementById("view-" + t).classList.toggle("hidden", t !== name);
+      document.getElementById("nav-" + t).classList.toggle("active", t === name);
+    });
+  }
+
+  function catIcon(type) {
+    const map = { vehicle: "🚗", keys: "🔑", luggage: "🎒", kids: "🧒", pet: "🐾", business: "🏪" };
+    return map[type] || "🏷️";
+  }
+
+  function formatDate(iso) {
+    if (!iso) return "-";
+    return new Date(iso).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+  }
+
+  function customerRowHtml(t) {
+    const custScans = logs.filter(l => l.tag_id === t.id).length;
+    const pillCls = t.status === "active" ? "pill-active" : (t.status === "inactive" ? "pill-inactive" : "pill-expired");
+    return `
+      <div class="cust-row" onclick='openDetail(${JSON.stringify(t).replace(/'/g, "&#39;")})'>
+        <div class="cust-ico">${catIcon(t.tag_type)}</div>
+        <div class="cust-info">
+          <div class="cust-title">${t.serial_no} &nbsp; ${t.owner_name || "Unclaimed"}</div>
+          <div class="cust-sub">${t.vehicle_or_item || "-"} • Credits: <b>${t.scan_credits ?? 0}</b> • Scans: <b>${custScans}</b></div>
+          <div class="cust-dates">Reg: ${formatDate(t.created_at)} | Exp: ${formatDate(t.expires_at)}</div>
+        </div>
+        <span class="pill ${pillCls}">${t.status}</span>
+      </div>
+    `;
+  }
+
+  function renderRecent() {
+    const el = document.getElementById("recentList");
+    el.innerHTML = tags.slice(0, 4).map(customerRowHtml).join("") || `<p style="color:var(--muted); font-size:13px;">No customers yet.</p>`;
+  }
+
+  function renderAllCustomers() {
+    const q = (document.getElementById("searchBox").value || "").toLowerCase();
+    const list = tags.filter(t =>
+      (t.owner_name || "").toLowerCase().includes(q) ||
+      (t.serial_no || "").toLowerCase().includes(q) ||
+      (t.vehicle_or_item || "").toLowerCase().includes(q) ||
+      (t.owner_whatsapp || "").includes(q)
+    );
+    document.getElementById("allCustomersList").innerHTML = list.map(customerRowHtml).join("") || `<div class="card">No matching customers.</div>`;
+  }
+
+  function renderLogs() {
+    const el = document.getElementById("scanLogsList");
+    el.innerHTML = logs.map(l => {
+      const t = tags.find(x => x.id === l.tag_id) || {};
+      return `
+        <div class="card" style="padding:12px; margin-bottom:8px;">
+          <div style="display:flex; justify-content:space-between;">
+            <strong>${t.serial_no || "Tag"} • ${t.owner_name || ""}</strong>
+            <span class="pill pill-active">${l.whatsapp_status}</span>
+          </div>
+          <div style="font-size:12px; color:var(--subtext); margin-top:4px;">
+            Reason: <b>${l.reason}</b> ${l.custom_message ? `— "${l.custom_message}"` : ""}<br/>
+            ${l.owner_reply ? `Reply: <b style="color:var(--green);">${l.owner_reply}</b><br/>` : ""}
+            <span style="color:var(--muted); font-size:11px;">${l.scanner_city || "Unknown"} • ${new Date(l.created_at).toLocaleString("en-IN")}</span>
+          </div>
+        </div>
+      `;
+    }).join("") || `<div class="card">No scans recorded yet.</div>`;
+  }
+
+  async function createCustomer() {
+    const payload = {
+      owner_name: document.getElementById("fName").value.trim(),
+      owner_whatsapp: document.getElementById("fPhone").value.trim(),
+      email: document.getElementById("fEmail").value.trim(),
+      vehicle_or_item: document.getElementById("fItem").value.trim(),
+      tag_type: document.getElementById("fType").value,
+      initial_credits: document.getElementById("fCredits").value,
+      status: document.getElementById("fStatus").value,
+      valid_days: document.getElementById("fDays").value
+    };
+    if (!payload.owner_name || !payload.owner_whatsapp || !payload.vehicle_or_item) {
+      return toast("Fill Name, WhatsApp & Vehicle/Item");
+    }
+    const btn = document.getElementById("btnCreate");
+    btn.disabled = true; btn.textContent = "Creating...";
+    try {
+      const res = await fetch(`${API_BASE}/api/admin/create-customer`, {
+        method: "POST", headers: headers(), body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Error");
+
+      document.getElementById("fName").value = "";
+      document.getElementById("fPhone").value = "";
+      document.getElementById("fEmail").value = "";
+      document.getElementById("fItem").value = "";
+
+      await loadDashboard(true);
+      openDetail(data.customer);
+      toast(`Created ${data.customer.serial_no}`);
+    } catch (e) {
+      toast(e.message);
+    } finally {
+      btn.disabled = false; btn.textContent = "👤+ Create Customer & Generate QR";
+    }
+  }
+
+  function getScanUrl(t) {
+    const base = localStorage.getItem("pm_base") || autoBase;
+    return `${base}?t=${encodeURIComponent(t.tag_code)}`;
+  }
+
+  function openDetail(t) {
+    selectedTag = t;
+    const custScans = logs.filter(l => l.tag_id === t.id).length;
+    document.getElementById("mTitle").textContent = `${t.serial_no} • ${t.owner_name}`;
+    document.getElementById("mScansCount").textContent = custScans;
+    document.getElementById("mCreditsLeft").textContent = t.scan_credits ?? 0;
+    document.getElementById("mStatusText").textContent = (t.status || "").toUpperCase();
+    document.getElementById("mExpiryText").textContent = `Exp: ${formatDate(t.expires_at)}`;
+    document.getElementById("mQrCaption").textContent = `${t.serial_no} | ${t.vehicle_or_item}`;
+
+    document.getElementById("eName").value = t.owner_name || "";
+    document.getElementById("ePhone").value = t.owner_whatsapp || "";
+    document.getElementById("eItem").value = t.vehicle_or_item || "";
+    document.getElementById("eEmail").value = t.email || "";
+
+    const holder = document.getElementById("qrHolder");
+    holder.innerHTML = "";
+    new QRCode(holder, { text: getScanUrl(t), width: 190, height: 190, correctLevel: QRCode.CorrectLevel.H });
+
+    document.getElementById("detailModal").classList.add("open");
+  }
+
+  function closeModal(id) { document.getElementById(id).classList.remove("open"); }
+
+  async function quickUpdate(add_credits, extend_days) {
+    if (!selectedTag) return;
+    const res = await fetch(`${API_BASE}/api/admin/update-tag`, {
+      method: "POST", headers: headers(),
+      body: JSON.stringify({ id: selectedTag.id, add_credits, extend_days })
+    });
+    if (res.ok) {
+      const d = await res.json();
+      await loadDashboard(true);
+      openDetail(d.tag);
+      toast("Updated!");
+    }
+  }
+
+  async function toggleStatus() {
+    if (!selectedTag) return;
+    const nextStatus = selectedTag.status === "active" ? "inactive" : "active";
+    const res = await fetch(`${API_BASE}/api/admin/update-tag`, {
+      method: "POST", headers: headers(),
+      body: JSON.stringify({ id: selectedTag.id, status: nextStatus })
+    });
+    if (res.ok) {
+      const d = await res.json();
+      await loadDashboard(true);
+      openDetail(d.tag);
+      toast(`Status set to ${nextStatus}`);
+    }
+  }
+
+  async function saveEdits() {
+    if (!selectedTag) return;
+    const res = await fetch(`${API_BASE}/api/admin/update-tag`, {
+      method: "POST", headers: headers(),
+      body: JSON.stringify({
+        id: selectedTag.id,
+        owner_name: document.getElementById("eName").value,
+        owner_whatsapp: document.getElementById("ePhone").value,
+        vehicle_or_item: document.getElementById("eItem").value,
+        email: document.getElementById("eEmail").value
+      })
+    });
+    if (res.ok) {
+      const d = await res.json();
+      await loadDashboard(true);
+      openDetail(d.tag);
+      toast("Details saved");
+    }
+  }
+
+  async function deleteCustomer() {
+    if (!selectedTag || !confirm(`Delete ${selectedTag.serial_no}?`)) return;
+    const res = await fetch(`${API_BASE}/api/admin/delete-tag`, {
+      method: "POST", headers: headers(), body: JSON.stringify({ id: selectedTag.id })
+    });
+    if (res.ok) {
+      closeModal("detailModal");
+      await loadDashboard(true);
+      toast("Deleted");
+    }
+  }
+
+  function buildQrCanvas() {
+    const src = document.querySelector("#qrHolder canvas");
+    if (!src || !selectedTag) return null;
+    const c = document.createElement("canvas");
+    c.width = 600; c.height = 740;
+    const ctx = c.getContext("2d");
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, 600, 740);
+    ctx.strokeStyle = "#ea580c"; ctx.lineWidth = 12; ctx.strokeRect(20, 20, 560, 700);
+    ctx.fillStyle = "#0f172a"; ctx.font = "bold 44px sans-serif"; ctx.textAlign = "center";
+    ctx.fillText("PINGME", 300, 90);
+    ctx.fillStyle = "#ea580c"; ctx.font = "bold 18px sans-serif";
+    ctx.fillText("ONE SCAN. INSTANT CONNECTION.", 300, 124);
+    ctx.drawImage(src, 110, 160, 380, 380);
+    ctx.fillStyle = "#0f172a"; ctx.font = "bold 28px sans-serif";
+    ctx.fillText(`${selectedTag.serial_no}  •  ${selectedTag.vehicle_or_item}`, 300, 600);
+    ctx.fillStyle = "#475569"; ctx.font = "20px sans-serif";
+    ctx.fillText("Scan to alert owner privately via WhatsApp", 300, 645);
+    return c;
+  }
+
+  function downloadQrPng() {
+    const c = buildQrCanvas();
+    if (!c) return;
+    const a = document.createElement("a");
+    a.download = `${selectedTag.serial_no}_${selectedTag.owner_name.replace(/\s+/g, "_")}.png`;
+    a.href = c.toDataURL("image/png");
+    a.click();
+    toast("QR Downloaded");
+  }
+
+  function shareQr() {
+    const c = buildQrCanvas();
+    if (!c) return;
+    const url = getScanUrl(selectedTag);
+    const text = `PingMe Smart Tag (${selectedTag.serial_no}) for ${selectedTag.vehicle_or_item}: ${url}`;
+    c.toBlob(async blob => {
+      const file = new File([blob], `${selectedTag.serial_no}.png`, { type: "image/png" });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ title: selectedTag.serial_no, text, files: [file] });
+      } else if (navigator.share) {
+        await navigator.share({ title: selectedTag.serial_no, text, url });
+      } else {
+        await navigator.clipboard.writeText(text);
+        toast("Link copied!");
+      }
+    });
+  }
+
+  /* WHATSAPP NOTIFICATION CENTER */
+  function populateWaDropdown() {
+    const sel = document.getElementById("waCustomerSelect");
+    sel.innerHTML = tags.map(t => `<option value="${t.id}">${t.serial_no} — ${t.owner_name} (${t.vehicle_or_item})</option>`).join("");
+    updateWaPreview();
+  }
+
+  function jumpToWa() {
+    if (!selectedTag) return;
+    closeModal("detailModal");
+    showTab("wa");
+    document.getElementById("waCustomerSelect").value = selectedTag.id;
+    updateWaPreview();
+  }
+
+  function updateWaPreview() {
+    const id = document.getElementById("waCustomerSelect").value;
+    const type = document.getElementById("waTemplateType").value;
+    const t = tags.find(x => x.id === id);
+    if (!t) return;
+    const url = getScanUrl(t);
+    const exp = formatDate(t.expires_at);
+
+    const templates = {
+      welcome: `Hi ${t.owner_name}! 🎉 Welcome to *PingMe*.\nYour Smart QR Tag *${t.serial_no}* for *${t.vehicle_or_item}* is now *${t.status.toUpperCase()}*.\n\n🔗 *Tag Link:* ${url}\n🎟️ *Credits:* ${t.scan_credits} alerts\n📅 *Valid Till:* ${exp}\n\n*ONE SCAN. INSTANT CONNECTION.*`,
+      credits: `Hi ${t.owner_name}, ⚠️ *Low Credit Alert* for your PingMe Tag *${t.serial_no}* (${t.vehicle_or_item}).\nYou currently have *${t.scan_credits} scan alerts* remaining. Reply to this message to top up your credits and keep instant alerts active!`,
+      expiry: `Hi ${t.owner_name}, 📅 *Renewal Reminder* for your PingMe Tag *${t.serial_no}* (${t.vehicle_or_item}).\nYour subscription is valid until *${exp}*. Reply here to renew for another 360 days without interruption.`,
+      maintenance: `Hi ${t.owner_name}, 🛠️ *PingMe Service Notice*:\nWe are performing a brief system upgrade to enhance instant WhatsApp alert delivery for tag *${t.serial_no}*. No action is needed from your side. Thank you for choosing PingMe!`,
+      custom: `Hi ${t.owner_name} (${t.serial_no} - ${t.vehicle_or_item}),\n`
+    };
+    document.getElementById("waMessageBox").value = templates[type] || "";
+  }
+
+  function sendCustomWa() {
+    const id = document.getElementById("waCustomerSelect").value;
+    const t = tags.find(x => x.id === id);
+    if (!t || !t.owner_whatsapp) return toast("Customer phone missing");
+    const msg = encodeURIComponent(document.getElementById("waMessageBox").value);
+    window.open(`https://wa.me/${t.owner_whatsapp}?text=${msg}`, "_blank");
+  }
+</script>
+</body>
+</html>
