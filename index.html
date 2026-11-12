@@ -14,7 +14,7 @@
   <meta property="og:title" content="PingMe — One Scan. Instant Connection.">
   <meta property="og:description" content="Reach the owner. Privately.">
   <meta property="og:image" content="https://pingmeconnect.in/assets/og-preview.png">
-  <link rel="manifest" href="/manifest.json">
+  <link rel="manifest" href="manifest.json">
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -737,6 +737,7 @@
       const payload = {
         tag_code: tagCode,
         category: currentCategory,
+        reason: selectedReason,
         selected_reason: selectedReason,
         custom_message: customNote,
         photo_base64: attachedPhotoBase64,
@@ -745,17 +746,24 @@
       };
 
       try {
-        if (TARGET && TARGET !== "https://pingme-api.pingmeconnect.workers.dev/api/scan") {
-          const res = await fetch(TARGET, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-          const data = await res.json();
-          activeAlertId = data.alert_id || data.id || null;
+        const res = await fetch(TARGET, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          alert(data.error || `Server Error (${res.status})`);
+          btn.disabled = false;
+          btnText.textContent = translations[currentLang].btnSendAlert;
+          return;
         }
+        activeAlertId = data.alert_id || data.id || null;
       } catch (err) {
-        console.error('Alert send error:', err);
+        alert('Network error: ' + err.message);
+        btn.disabled = false;
+        btnText.textContent = translations[currentLang].btnSendAlert;
+        return;
       }
 
       showScreen('screen2');
@@ -785,7 +793,7 @@
         }
       }, 1000);
 
-      if (activeAlertId && TARGET !== "https://pingme-api.pingmeconnect.workers.dev/api/scan") {
+      if (activeAlertId && TARGET) {
         pollInterval = setInterval(async () => {
           try {
             const res = await fetch(`${TARGET}?alert_id=${encodeURIComponent(activeAlertId)}`);
