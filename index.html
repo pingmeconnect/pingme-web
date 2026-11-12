@@ -9,6 +9,11 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#0b1033">
+  <link rel="icon" type="image/png" href="/assets/icon-192.png">
+  <link rel="apple-touch-icon" href="/assets/icon-512.png">
+  <meta property="og:title" content="PingMe — One Scan. Instant Connection.">
+  <meta property="og:description" content="Connect with the owner privately on WhatsApp without sharing phone numbers.">
+  <meta property="og:image" content="https://pingmeconnect.in/assets/og-preview.png">
   <link rel="manifest" href="/manifest.json">
 
   <!-- Tailwind CSS -->
@@ -67,7 +72,7 @@
       <div class="absolute top-1/2 -right-16 w-64 h-64 bg-emerald-500/15 rounded-full blur-[90px]"></div>
     </div>
 
-    <!-- Top Header: Centered PingMe Logo + Language Switcher -->
+    <!-- Top Header: Persistent PingMe Logo Across All Screens + Language Switcher -->
     <header class="safe-top z-10 px-4 pt-2.5 pb-1 flex flex-col items-center relative w-full">
       <div class="w-full flex justify-end mb-0.5">
         <button type="button" onclick="toggleLanguage()" id="langBtn" class="px-3 py-1 text-[11px] font-bold rounded-full border border-white/20 bg-white/10 hover:bg-white/20 backdrop-blur-md active:scale-95 transition-all text-white flex items-center gap-1 shadow">
@@ -76,48 +81,41 @@
         </button>
       </div>
 
-      <!-- Centered PingMe Logo Badge -->
+      <!-- Persistent PingMe Logo -->
       <div class="flex flex-col items-center justify-center">
-        <img src="/assets/pingme-logo.png" onerror="this.style.display='none'; document.getElementById('fallbackLogo').classList.remove('hidden');" alt="PingMe" class="h-12 object-contain drop-shadow-[0_4px_12px_rgba(59,130,246,0.6)]">
-        <div id="fallbackLogo" class="hidden flex flex-col items-center">
-          <div class="flex items-center gap-1.5 px-3 py-0.5 rounded-2xl bg-white/10 border border-cyan-400/40 shadow-glowCyan">
-            <span class="text-lg">📲</span>
-            <span class="font-black text-xl tracking-tight text-white drop-shadow">Ping<span class="text-cyan-300">Me</span></span>
-          </div>
-          <span class="mt-1 px-2.5 py-0.5 rounded-full bg-white text-[#0b1033] text-[8px] font-black tracking-widest uppercase shadow">ONE SCAN. INSTANT CONNECTION.</span>
-        </div>
+        <img src="/assets/pingme-logo.png" alt="PingMe — One Scan. Instant Connection." class="h-14 object-contain drop-shadow-[0_4px_14px_rgba(59,130,246,0.65)]">
       </div>
     </header>
 
     <!-- =====================================================================
          SCREEN 1: WELCOME & SEND ALERT
     ====================================================================== -->
-    <main id="screen1" class="flex-grow flex flex-col justify-between overflow-y-auto px-4 py-1.5 z-10 gap-2.5 animate__animated animate__fadeIn">
+    <main id="screen1" class="flex-grow flex flex-col justify-between overflow-y-auto px-4 py-1.5 z-10 gap-2 animate__animated animate__fadeIn">
       
       <!-- Hero Smiling Mascot + Welcome Title -->
       <div class="flex flex-col items-center text-center relative">
         <div class="relative flex items-center justify-center">
-          <img src="/assets/mascot-smile.png" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 120 120%22><circle cx=%2260%22 cy=%2260%22 r=%2254%22 fill=%22%231e3a8a%22 stroke=%22%2338bdf8%22 stroke-width=%224%22/><text x=%2260%22 y=%2276%22 font-size=%2256%22 text-anchor=%22middle%22>👦🏻</text></svg>'" alt="PingMe Smiling Boy" class="h-20 w-20 object-contain float-mascot drop-shadow-[0_8px_18px_rgba(16,185,129,0.45)]">
+          <img src="/assets/mascot-smile.png" alt="PingMe Mascot" class="h-20 w-20 object-contain float-mascot drop-shadow-[0_8px_18px_rgba(16,185,129,0.45)]">
           <span class="absolute bottom-0 -right-2 bg-emerald-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full shadow-glowGreen border border-white/30">LIVE</span>
         </div>
         <h1 id="welcomeTitle" class="text-lg font-black text-emerald-400 drop-shadow mt-0.5">Welcome to PingMe!</h1>
         <p id="welcomeSubtitle" class="text-[11px] text-blue-100/90 font-medium">Connect with the owner privately on WhatsApp.</p>
       </div>
 
-      <!-- 1. Category Selection -->
+      <!-- 1. Category Selection (3D Icons) -->
       <div>
         <h2 id="categoryLabel" class="text-[11px] font-extrabold text-cyan-200 mb-1.5 uppercase tracking-wider">Choose a Category</h2>
         <div class="grid grid-cols-3 gap-2">
-          <button type="button" onclick="selectCategory('VEHICLE')" id="catVEHICLE" class="flex flex-col items-center justify-center py-2.5 px-2 rounded-2xl border-2 bg-gradient-to-b from-cyan-500/30 to-blue-900/50 border-cyan-400 shadow-glowCyan transition-all transform active:scale-95">
-            <span class="text-xl mb-0.5">🚗</span>
+          <button type="button" onclick="selectCategory('VEHICLE')" id="catVEHICLE" class="flex flex-col items-center justify-center py-2 px-2 rounded-2xl border-2 bg-gradient-to-b from-cyan-500/30 to-blue-900/50 border-cyan-400 shadow-glowCyan transition-all transform active:scale-95">
+            <img src="/assets/icon-vehicle.png" alt="Vehicle" class="w-8 h-8 object-contain mb-0.5 drop-shadow">
             <span id="labelVehicle" class="text-[10px] font-extrabold uppercase tracking-tight text-white">Vehicle</span>
           </button>
-          <button type="button" onclick="selectCategory('LOST_FOUND')" id="catLOST_FOUND" class="flex flex-col items-center justify-center py-2.5 px-2 rounded-2xl border-2 bg-white/5 border-white/10 hover:bg-white/10 transition-all transform active:scale-95">
-            <span class="text-xl mb-0.5">🔑</span>
+          <button type="button" onclick="selectCategory('LOST_FOUND')" id="catLOST_FOUND" class="flex flex-col items-center justify-center py-2 px-2 rounded-2xl border-2 bg-white/5 border-white/10 hover:bg-white/10 transition-all transform active:scale-95">
+            <img src="/assets/icon-lostfound.png" alt="Lost & Found" class="w-8 h-8 object-contain mb-0.5 drop-shadow">
             <span id="labelLostFound" class="text-[10px] font-extrabold uppercase tracking-tight text-gray-300">Lost & Found</span>
           </button>
-          <button type="button" onclick="selectCategory('OTHER')" id="catOTHER" class="flex flex-col items-center justify-center py-2.5 px-2 rounded-2xl border-2 bg-white/5 border-white/10 hover:bg-white/10 transition-all transform active:scale-95">
-            <span class="text-xl mb-0.5">📦</span>
+          <button type="button" onclick="selectCategory('OTHER')" id="catOTHER" class="flex flex-col items-center justify-center py-2 px-2 rounded-2xl border-2 bg-white/5 border-white/10 hover:bg-white/10 transition-all transform active:scale-95">
+            <img src="/assets/icon-other.png" alt="Other" class="w-8 h-8 object-contain mb-0.5 drop-shadow">
             <span id="labelOther" class="text-[10px] font-extrabold uppercase tracking-tight text-gray-300">Other</span>
           </button>
         </div>
@@ -139,16 +137,13 @@
         <div class="text-[9px] text-blue-200/50 text-right" id="charCount">0 / 160</div>
       </div>
 
-      <!-- 4. Attach Photo Option (Optional) -->
+      <!-- 4. Attach Photo Option (3D Camera Icon) -->
       <div class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/15 p-2.5">
         <input type="file" id="photoInput" accept="image/*" capture="environment" class="hidden" onchange="handlePhotoSelect(event)">
         
-        <!-- Default Upload Trigger Button -->
         <button type="button" id="attachPhotoBtn" onclick="document.getElementById('photoInput').click()" class="w-full flex items-center justify-between text-left group">
           <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-pink-500/30 to-purple-600/40 border border-pink-400/40 flex items-center justify-center text-base">
-              📸
-            </div>
+            <img src="/assets/icon-camera.png" alt="Attach Photo" class="w-9 h-9 object-contain drop-shadow">
             <div>
               <p id="attachPhotoTitle" class="text-xs font-bold text-white">Attach Photo (Optional)</p>
               <p id="attachPhotoSub" class="text-[10px] text-blue-200/70">Snap or upload a quick photo for clarity</p>
@@ -159,7 +154,6 @@
           </span>
         </button>
 
-        <!-- Image Preview Bar (Shown once photo is attached) -->
         <div id="photoPreviewBox" class="hidden flex items-center justify-between gap-2.5">
           <div class="flex items-center gap-2.5">
             <img id="photoPreviewImg" src="" alt="Attached preview" class="w-12 h-12 rounded-xl object-cover border border-emerald-400 shadow">
@@ -175,7 +169,7 @@
       </div>
 
       <!-- 5. Live Location Toggle -->
-      <div class="flex justify-between items-center bg-white/10 backdrop-blur-md rounded-2xl border border-white/15 px-3 py-2.5">
+      <div class="flex justify-between items-center bg-white/10 backdrop-blur-md rounded-2xl border border-white/15 px-3 py-2">
         <div class="flex items-center gap-2">
           <span class="text-sm">📍</span>
           <span id="shareLocLabel" class="text-xs font-bold text-white">Share Live Location</span>
@@ -203,7 +197,7 @@
         <p id="waitingSubtitle" class="text-xs text-blue-100/80 mt-0.5">The owner has been notified privately on WhatsApp.</p>
       </div>
 
-      <!-- 180s Timer Ring + Thinking Mascot -->
+      <!-- 180s Timer Ring + Waiting Boy Mascot -->
       <div class="flex items-center justify-around bg-white/10 backdrop-blur-md rounded-3xl p-4 border border-cyan-400/25 shadow-glowCyan my-auto">
         <div class="relative w-32 h-32 flex items-center justify-center">
           <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 144 144">
@@ -223,7 +217,7 @@
         </div>
 
         <div class="flex flex-col items-center">
-          <img src="/assets/mascot-waiting.png" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 120 120%22><circle cx=%2260%22 cy=%2260%22 r=%2254%22 fill=%22%231e3a8a%22 stroke=%22%23f59e0b%22 stroke-width=%224%22/><text x=%2260%22 y=%2276%22 font-size=%2256%22 text-anchor=%22middle%22>🤔</text></svg>'" alt="Waiting Mascot" class="h-24 w-24 object-contain float-mascot">
+          <img src="/assets/boy-waiting.png" alt="Waiting Boy" class="h-24 w-24 object-contain float-mascot drop-shadow">
           <span class="mt-1 px-2.5 py-0.5 rounded-full bg-amber-400/20 border border-amber-400/40 text-[9px] text-amber-300 font-extrabold tracking-widest uppercase">LIVE STATUS</span>
         </div>
       </div>
@@ -238,10 +232,10 @@
       <div class="flex flex-col gap-2.5">
         <button type="button" onclick="handleReferral()" class="w-full p-3 rounded-2xl bg-gradient-to-r from-amber-500/30 via-yellow-500/25 to-amber-600/30 border border-amber-400/60 shadow-glowGold flex items-center justify-between text-left active:scale-95 transition-all">
           <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-full bg-sky-500 flex items-center justify-center text-white shadow">✈️</div>
+            <img src="/assets/mascot-airplane-3d.png" alt="Share PingMe" class="w-10 h-10 object-contain drop-shadow">
             <div>
-              <p id="referTitle1" class="text-xs font-black text-white">Enjoying PingMe? 💚 Share PingMe</p>
-              <p id="referDesc1" class="text-[10px] text-amber-100/90">Help others stay connected safely!</p>
+              <p class="text-xs font-black text-white">Enjoying PingMe? 💚 Share PingMe</p>
+              <p class="text-[10px] text-amber-100/90">Help others stay connected safely!</p>
             </div>
           </div>
           <span class="text-amber-300 font-black text-lg">&gt;</span>
@@ -249,10 +243,10 @@
 
         <a href="https://pingmeconnect.in" target="_blank" class="w-full p-3 rounded-2xl bg-gradient-to-r from-pink-500/25 via-white/95 to-white border border-pink-400/60 shadow-glowPink flex items-center justify-between text-left active:scale-95 transition-all">
           <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-full bg-pink-600 flex items-center justify-center text-white shadow">🛒</div>
+            <img src="/assets/qr-tag-mockup.png" alt="Smart QR Tag" class="w-10 h-10 object-contain drop-shadow">
             <div>
-              <p id="orderTitle1" class="text-xs font-black text-slate-900">Get Your Own Smart QR Tag</p>
-              <p id="orderDesc1" class="text-[10px] text-slate-600 font-semibold">For Car • Bike • Keys • Luggage & More</p>
+              <p class="text-xs font-black text-slate-900">Get Your Own Smart QR Tag</p>
+              <p class="text-[10px] text-slate-600 font-semibold">For Car • Bike • Keys • Luggage & More</p>
             </div>
           </div>
           <span class="text-slate-800 font-black text-lg">&gt;</span>
@@ -265,17 +259,18 @@
     </main>
 
     <!-- =====================================================================
-         SCREEN 3: OWNER REPLIED! (Matches Left Screen of Reference)
+         SCREEN 3: OWNER REPLIED!
     ====================================================================== -->
-    <main id="screen3" class="hidden flex-grow flex flex-col justify-between overflow-y-auto px-4 py-2.5 z-10 gap-2.5 animate__animated animate__fadeIn">
+    <main id="screen3" class="hidden flex-grow flex flex-col justify-between overflow-y-auto px-4 py-2 z-10 gap-2.5 animate__animated animate__fadeIn">
       
-      <div class="flex flex-col items-center text-center">
-        <div class="relative flex items-center justify-center">
+      <div class="flex flex-col items-center text-center relative">
+        <img src="/assets/confetti-burst.png" alt="Celebration" class="absolute -top-2 w-72 h-28 object-contain pointer-events-none opacity-95">
+        <div class="relative flex items-center justify-center z-10">
           <span class="w-9 h-9 rounded-full bg-emerald-500 border-2 border-white flex items-center justify-center text-white font-black text-base shadow-glowGreen mr-1">✓</span>
-          <img src="/assets/mascot-smile.png" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 120 120%22><circle cx=%2260%22 cy=%2260%22 r=%2254%22 fill=%22%231e3a8a%22 stroke=%22%2310b981%22 stroke-width=%224%22/><text x=%2260%22 y=%2276%22 font-size=%2256%22 text-anchor=%22middle%22>👦🏻</text></svg>'" alt="Owner Replied Mascot" class="h-24 w-24 object-contain float-mascot">
+          <img src="/assets/boy-happy.png" alt="Happy Boy" class="h-24 w-24 object-contain float-mascot drop-shadow">
         </div>
-        <h1 id="repliedTitle" class="text-2xl font-black text-emerald-400 drop-shadow mt-0.5">Owner Replied!</h1>
-        <p id="repliedSubtitle" class="text-xs text-blue-100">You're now connected with the owner privately on WhatsApp.</p>
+        <h1 id="repliedTitle" class="text-2xl font-black text-emerald-400 drop-shadow mt-0.5 z-10">Owner Replied!</h1>
+        <p id="repliedSubtitle" class="text-xs text-blue-100 z-10">You're now connected with the owner privately on WhatsApp.</p>
       </div>
 
       <!-- Glowing Green Owner's Reply Card -->
@@ -296,7 +291,7 @@
       <!-- Golden Referral Banner -->
       <button type="button" onclick="handleReferral()" class="w-full p-3 rounded-2xl bg-gradient-to-r from-amber-500/35 via-yellow-500/30 to-amber-600/35 border border-amber-400/70 shadow-glowGold flex items-center justify-between text-left active:scale-95 transition-all">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-full bg-sky-500 flex items-center justify-center text-white shadow">✈️</div>
+          <img src="/assets/mascot-airplane-3d.png" alt="Share PingMe" class="w-10 h-10 object-contain drop-shadow">
           <div>
             <p class="text-xs font-black text-white">Enjoying PingMe? 💚 Share PingMe</p>
             <p class="text-[10px] text-amber-100/90">Help others stay connected safely!</p>
@@ -308,7 +303,7 @@
       <!-- Pink & White Order Kit CTA -->
       <a href="https://pingmeconnect.in" target="_blank" class="w-full p-3 rounded-2xl bg-gradient-to-r from-pink-500/30 via-white to-white border border-pink-400/70 shadow-glowPink flex items-center justify-between text-left active:scale-95 transition-all">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-full bg-pink-600 flex items-center justify-center text-white shadow">🛒</div>
+          <img src="/assets/qr-tag-mockup.png" alt="Smart QR Tag" class="w-10 h-10 object-contain drop-shadow">
           <div>
             <p class="text-xs font-black text-slate-900">Get Your Own Smart QR Tag</p>
             <p class="text-[10px] text-slate-600 font-semibold">For Car • Bike • Keys • Luggage & More</p>
@@ -323,12 +318,12 @@
     </main>
 
     <!-- =====================================================================
-         SCREEN 4: NO REPLY YET! (Matches Right Screen of Reference)
+         SCREEN 4: NO REPLY YET!
     ====================================================================== -->
     <main id="screen4" class="hidden flex-grow flex flex-col justify-between overflow-y-auto px-4 py-2.5 z-10 gap-2.5 animate__animated animate__fadeIn">
       
       <div class="flex flex-col items-center text-center">
-        <img src="/assets/mascot-waiting.png" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 120 120%22><circle cx=%2260%22 cy=%2260%22 r=%2254%22 fill=%22%231e3a8a%22 stroke=%22%23f59e0b%22 stroke-width=%224%22/><text x=%2260%22 y=%2276%22 font-size=%2256%22 text-anchor=%22middle%22>🤔</text></svg>'" alt="No Reply Mascot" class="h-24 w-24 object-contain float-mascot">
+        <img src="/assets/boy-sad.png" alt="No Reply Boy" class="h-24 w-24 object-contain float-mascot drop-shadow">
         <h1 id="noReplyTitle" class="text-2xl font-black text-amber-300 drop-shadow mt-0.5">No Reply Yet!</h1>
         <p id="noReplySubtitle" class="text-xs text-blue-100">The 180-second waiting time has ended.</p>
       </div>
@@ -358,7 +353,7 @@
       <!-- Golden Referral Banner -->
       <button type="button" onclick="handleReferral()" class="w-full p-3 rounded-2xl bg-gradient-to-r from-amber-500/35 via-yellow-500/30 to-amber-600/35 border border-amber-400/70 shadow-glowGold flex items-center justify-between text-left active:scale-95 transition-all">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-full bg-sky-500 flex items-center justify-center text-white shadow">✈️</div>
+          <img src="/assets/mascot-airplane-3d.png" alt="Share PingMe" class="w-10 h-10 object-contain drop-shadow">
           <div>
             <p class="text-xs font-black text-white">Enjoying PingMe? 💚 Share PingMe</p>
             <p class="text-[10px] text-amber-100/90">Help others stay connected safely!</p>
@@ -370,7 +365,7 @@
       <!-- Pink & White Order Kit CTA -->
       <a href="https://pingmeconnect.in" target="_blank" class="w-full p-3 rounded-2xl bg-gradient-to-r from-pink-500/30 via-white to-white border border-pink-400/70 shadow-glowPink flex items-center justify-between text-left active:scale-95 transition-all">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-full bg-pink-600 flex items-center justify-center text-white shadow">🛒</div>
+          <img src="/assets/qr-tag-mockup.png" alt="Smart QR Tag" class="w-10 h-10 object-contain drop-shadow">
           <div>
             <p class="text-xs font-black text-slate-900">Get Your Own Smart QR Tag</p>
             <p class="text-[10px] text-slate-600 font-semibold">For Car • Bike • Keys • Luggage & More</p>
@@ -552,11 +547,11 @@
         const el = document.getElementById('cat' + c);
         const lbl = el.querySelector('span:last-child');
         if (c === cat) {
-          el.className = 'flex flex-col items-center justify-center py-2.5 px-2 rounded-2xl border-2 bg-gradient-to-b from-cyan-500/30 to-blue-900/50 border-cyan-400 shadow-glowCyan transition-all transform active:scale-95';
+          el.className = 'flex flex-col items-center justify-center py-2 px-2 rounded-2xl border-2 bg-gradient-to-b from-cyan-500/30 to-blue-900/50 border-cyan-400 shadow-glowCyan transition-all transform active:scale-95';
           lbl.classList.remove('text-gray-300');
           lbl.classList.add('text-white');
         } else {
-          el.className = 'flex flex-col items-center justify-center py-2.5 px-2 rounded-2xl border-2 bg-white/5 border-white/10 hover:bg-white/10 transition-all transform active:scale-95';
+          el.className = 'flex flex-col items-center justify-center py-2 px-2 rounded-2xl border-2 bg-white/5 border-white/10 hover:bg-white/10 transition-all transform active:scale-95';
           lbl.classList.remove('text-white');
           lbl.classList.add('text-gray-300');
         }
@@ -601,7 +596,6 @@
       document.getElementById('charCount').textContent = `${val.length} / 160`;
     }
 
-    // Compress and preview selected photo
     function handlePhotoSelect(event) {
       const file = event.target.files[0];
       if (!file) return;
