@@ -253,7 +253,7 @@
         </a>
       </div>
 
-      <button type="button" onclick="resetApp()" class="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-95 rounded-2xl text-xs font-extrabold text-white border border-blue-400/40 shadow transition-all">
+      <button type="button" onclick="closeSession()" class="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-95 rounded-2xl text-xs font-extrabold text-white border border-blue-400/40 shadow transition-all">
         ✓ Close
       </button>
     </main>
@@ -312,7 +312,7 @@
         <span class="text-slate-800 font-black text-lg">&gt;</span>
       </a>
 
-      <button type="button" onclick="resetApp()" class="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-95 rounded-2xl text-xs font-extrabold text-white border border-blue-400/40 shadow transition-all">
+      <button type="button" onclick="closeSession()" class="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-95 rounded-2xl text-xs font-extrabold text-white border border-blue-400/40 shadow transition-all">
         ✓ Close
       </button>
     </main>
@@ -332,12 +332,12 @@
       <div class="rounded-2xl bg-indigo-950/60 border border-indigo-400/40 shadow-glowPurple p-3">
         <p id="nextActionsLabel" class="text-center text-xs font-extrabold text-white mb-2.5">💡 What you can do next?</p>
         <div class="grid grid-cols-3 gap-2">
-          <button type="button" onclick="resetApp()" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-gradient-to-b from-emerald-500/40 to-teal-900/60 border border-emerald-400/60 active:scale-95 transition-all">
+          <button type="button" onclick="retryAlert()" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-gradient-to-b from-emerald-500/40 to-teal-900/60 border border-emerald-400/60 active:scale-95 transition-all">
             <span class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-sm mb-1 shadow">💬</span>
             <span class="text-[11px] font-extrabold text-white">Try Again</span>
             <span class="text-[9px] text-emerald-200 text-center leading-tight mt-0.5">Send another alert</span>
           </button>
-          <button type="button" onclick="resetApp()" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-gradient-to-b from-blue-500/40 to-indigo-900/60 border border-blue-400/60 active:scale-95 transition-all">
+          <button type="button" onclick="retryAlert()" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-gradient-to-b from-blue-500/40 to-indigo-900/60 border border-blue-400/60 active:scale-95 transition-all">
             <span class="w-8 h-8 rounded-full bg-sky-500 flex items-center justify-center text-sm mb-1 shadow">📍</span>
             <span class="text-[11px] font-extrabold text-white">Leave a Note</span>
             <span class="text-[9px] text-blue-200 text-center leading-tight mt-0.5">(Optional)</span>
@@ -374,9 +374,27 @@
         <span class="text-slate-800 font-black text-lg">&gt;</span>
       </a>
 
-      <button type="button" onclick="resetApp()" class="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-95 rounded-2xl text-xs font-extrabold text-white border border-blue-400/40 shadow transition-all">
+      <button type="button" onclick="closeSession()" class="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-95 rounded-2xl text-xs font-extrabold text-white border border-blue-400/40 shadow transition-all">
         ✓ Close
       </button>
+    </main>
+
+    <!-- =====================================================================
+         SCREEN 5: SESSION CLOSED (LOCKS PAGE UNTIL QR IS SCANNED AGAIN)
+    ====================================================================== -->
+    <main id="screenClosed" class="hidden flex-grow flex flex-col items-center justify-center px-6 text-center z-10 gap-4 animate__animated animate__fadeIn">
+      <div class="w-20 h-20 rounded-full bg-blue-500/20 border-2 border-cyan-400/50 shadow-glowCyan flex items-center justify-center text-4xl">
+        🔒
+      </div>
+      <div>
+        <h1 id="closedTitle" class="text-2xl font-black text-white">Session Closed</h1>
+        <p id="closedSubtitle" class="text-xs text-blue-100/80 mt-1.5 leading-relaxed">
+          For privacy and security, this session has ended.<br>Please scan the <span class="text-cyan-300 font-bold">PingMe QR Tag</span> again to send a new alert.
+        </p>
+      </div>
+      <a href="https://pingmeconnect.in" class="mt-2 px-5 py-2.5 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/20 text-xs font-extrabold text-cyan-300 transition-all">
+        Learn More About PingMe →
+      </a>
     </main>
 
     <!-- Persistent Privacy Trust Footer -->
@@ -393,6 +411,7 @@
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     const tagCode = urlParams.get('t') || 'TEST001';
+    const SESSION_KEY = `pingme_closed_${tagCode}`;
 
     // Replace with your Cloudflare Worker or Supabase Edge Function URL
     const TARGET = "YOUR_BACKEND_API_URL";
@@ -404,6 +423,7 @@
     let activeAlertId = null;
     let countdownInterval = null;
     let pollInterval = null;
+    let audioCtx = null;
 
     const translations = {
       en: {
@@ -432,6 +452,8 @@
         noReplyTitle: "No Reply Yet!",
         noReplySubtitle: "The 180-second waiting time has ended.",
         nextActionsLabel: "💡 What you can do next?",
+        closedTitle: "Session Closed",
+        closedSubtitle: "For privacy and security, this session has ended. Please scan the PingMe QR Tag again to send a new alert.",
         footerText: "Private • Secure • No Number Shared"
       },
       ta: {
@@ -460,6 +482,8 @@
         noReplyTitle: "இன்னும் பதில் இல்லை!",
         noReplySubtitle: "180 வினாடிகள் காத்திருப்பு நேரம் முடிந்துவிட்டது.",
         nextActionsLabel: "💡 அடுத்து என்ன செய்யலாம்?",
+        closedTitle: "அமர்வு முடிந்தது",
+        closedSubtitle: "பாதுகாப்பிற்காக இந்த அமர்வு மூடப்பட்டது. புதிய தகவல் அனுப்ப PingMe QR குறியீட்டை மீண்டும் ஸ்கேன் செய்யவும்.",
         footerText: "தனிப்பட்டது • பாதுகாப்பானது • எண் பகிரப்படாது"
       }
     };
@@ -506,7 +530,7 @@
     };
 
     function showScreen(screenId) {
-      ['screen1', 'screen2', 'screen3', 'screen4'].forEach(id => {
+      ['screen1', 'screen2', 'screen3', 'screen4', 'screenClosed'].forEach(id => {
         const el = document.getElementById(id);
         if (id === screenId) {
           el.classList.remove('hidden');
@@ -587,6 +611,8 @@
       document.getElementById('noReplyTitle').textContent = t.noReplyTitle;
       document.getElementById('noReplySubtitle').textContent = t.noReplySubtitle;
       document.getElementById('nextActionsLabel').textContent = t.nextActionsLabel;
+      document.getElementById('closedTitle').textContent = t.closedTitle;
+      document.getElementById('closedSubtitle').textContent = t.closedSubtitle;
       document.getElementById('footerText').textContent = t.footerText;
       renderReasons();
     }
@@ -646,7 +672,62 @@
       });
     }
 
+    // Unlock mobile audio & haptics on user gesture
+    function unlockMobileFeedback() {
+      try {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          if (!audioCtx) audioCtx = new AudioContextClass();
+          if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
+        if (navigator.vibrate) {
+          navigator.vibrate(40);
+        }
+      } catch (e) {}
+    }
+
+    // Play double-chime + mobile vibration when owner reply arrives
+    function triggerReplyAlert() {
+      try {
+        if (navigator.vibrate) {
+          navigator.vibrate([300, 120, 300]);
+        }
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          if (!audioCtx) audioCtx = new AudioContextClass();
+          if (audioCtx.state === 'suspended') audioCtx.resume();
+
+          const now = audioCtx.currentTime;
+          // First pleasant chime note (E5)
+          const osc1 = audioCtx.createOscillator();
+          const gain1 = audioCtx.createGain();
+          osc1.type = 'triangle';
+          osc1.frequency.setValueAtTime(659.25, now);
+          gain1.gain.setValueAtTime(0.25, now);
+          gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+          osc1.connect(gain1);
+          gain1.connect(audioCtx.destination);
+          osc1.start(now);
+          osc1.stop(now + 0.25);
+
+          // Second higher chime note (A5)
+          const osc2 = audioCtx.createOscillator();
+          const gain2 = audioCtx.createGain();
+          osc2.type = 'triangle';
+          osc2.frequency.setValueAtTime(880, now + 0.18);
+          gain2.gain.setValueAtTime(0.3, now + 0.18);
+          gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.55);
+          osc2.connect(gain2);
+          gain2.connect(audioCtx.destination);
+          osc2.start(now + 0.18);
+          osc2.stop(now + 0.55);
+        }
+      } catch (e) {}
+    }
+
     async function handleSendAlert() {
+      unlockMobileFeedback();
+
       const btn = document.getElementById('sendBtn');
       const btnText = document.getElementById('btnSendAlert');
       btn.disabled = true;
@@ -716,7 +797,7 @@
               clearInterval(pollInterval);
               document.getElementById('liveResponseText').textContent = data.owner_reply;
               document.getElementById('replyTimestamp').textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-              playChime();
+              triggerReplyAlert();
               showScreen('screen3');
             }
           } catch (e) {
@@ -724,21 +805,6 @@
           }
         }, 4000);
       }
-    }
-
-    function playChime() {
-      try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(880, ctx.currentTime);
-        gain.gain.setValueAtTime(0.15, ctx.currentTime);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.25);
-      } catch (e) {}
     }
 
     function handleReferral() {
@@ -755,21 +821,37 @@
       }
     }
 
-    function resetApp() {
+    // Allows "Try Again" from Screen 4 (No Reply Yet) only
+    function retryAlert() {
       clearInterval(countdownInterval);
       clearInterval(pollInterval);
-      removePhoto();
-      document.getElementById('customMessage').value = '';
-      updateCharCount();
-
       const btn = document.getElementById('sendBtn');
       btn.disabled = false;
       document.getElementById('btnSendAlert').textContent = translations[currentLang].btnSendAlert;
       showScreen('screen1');
     }
 
-    // Initialize default view
-    selectCategory('VEHICLE');
+    // Locks the session permanently until the user physically scans the QR tag again
+    function closeSession() {
+      clearInterval(countdownInterval);
+      clearInterval(pollInterval);
+      sessionStorage.setItem(SESSION_KEY, 'true');
+
+      // Strip ?t= parameter from URL bar so refreshing cannot re-open the tag
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+
+      showScreen('screenClosed');
+      try { window.close(); } catch (e) {}
+    }
+
+    // Check if this session was already closed; otherwise start Screen 1
+    if (sessionStorage.getItem(SESSION_KEY) === 'true' || !urlParams.get('t')) {
+      showScreen('screenClosed');
+    } else {
+      selectCategory('VEHICLE');
+    }
   </script>
 </body>
 </html>
