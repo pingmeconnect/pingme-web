@@ -416,7 +416,7 @@
     const SESSION_KEY = `pingme_closed_${tagCode}`;
 
     // Replace with your Cloudflare Worker or Supabase Edge Function URL
-    const TARGET = "https://pingme-api.pingmeconnect.workers.dev/api/scan";
+    const API_BASE = "https://pingme-api.pingmeconnect.workers.dev";
 
     let currentLang = 'en';
     let currentCategory = 'VEHICLE';
@@ -732,21 +732,19 @@
       btnText.textContent = currentLang === 'en' ? 'SENDING...' : 'அனுப்புகிறது...';
 
       const coords = await getLocation();
+      const locationUrl = coords ? `https://maps.google.com/?q=${coords.lat},${coords.lng}` : null;
       const customNote = document.getElementById('customMessage').value.trim();
 
       const payload = {
         tag_code: tagCode,
-        category: currentCategory,
         reason: selectedReason,
-        selected_reason: selectedReason,
         custom_message: customNote,
-        photo_base64: attachedPhotoBase64,
-        location: coords,
-        language: currentLang
+        location_url: locationUrl,
+        photo_data: attachedPhotoBase64
       };
 
       try {
-        const res = await fetch(TARGET, {
+        const res = await fetch(`${API_BASE}/api/alert`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
@@ -758,7 +756,7 @@
           btnText.textContent = translations[currentLang].btnSendAlert;
           return;
         }
-        activeAlertId = data.alert_id || data.id || null;
+        activeAlertId = data.session_id || null;
       } catch (err) {
         alert('Network error: ' + err.message);
         btn.disabled = false;
@@ -793,15 +791,16 @@
         }
       }, 1000);
 
-      if (activeAlertId && TARGET) {
+      if (activeAlertId) {
         pollInterval = setInterval(async () => {
           try {
-            const res = await fetch(`${TARGET}?alert_id=${encodeURIComponent(activeAlertId)}`);
+            const res = await fetch(`${API_BASE}/api/session?id=${encodeURIComponent(activeAlertId)}`);
             const data = await res.json();
-            if (data && data.owner_reply) {
+            const reply = data?.session?.owner_reply;
+            if (reply) {
               clearInterval(countdownInterval);
               clearInterval(pollInterval);
-              document.getElementById('liveResponseText').textContent = data.owner_reply;
+              document.getElementById('liveResponseText').textContent = reply;
               document.getElementById('replyTimestamp').textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
               triggerReplyAlert();
               showScreen('screen3');
@@ -836,10 +835,18 @@
       showScreen('screen1');
     }
 
-    function closeSession() {
+    async function closeSession() {
       clearInterval(countdownInterval);
       clearInterval(pollInterval);
       sessionStorage.setItem(SESSION_KEY, 'true');
+
+      if (activeAlertId) {
+        fetch(`${API_BASE}/api/session/close`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ session_id: activeAlertId })
+        }).catch(() => {});
+      }
 
       if (window.history && window.history.replaceState) {
         window.history.replaceState({}, document.title, window.location.pathname);
