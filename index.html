@@ -89,7 +89,7 @@
       100% { width: 100%; }
     }
 
-    /* Mobile Single-Screen Fit (100dvh) + Desktop Wide Dashboard */
+    /* Adaptive App Shell: Fluid Mobile Single-Screen Fit + Balanced Desktop Card */
     .app-shell {
       width: 100%;
       min-height: 100dvh;
@@ -98,17 +98,14 @@
       flex-direction: column;
       position: relative;
       overflow-x: hidden;
-      padding-bottom: calc(28px + env(safe-area-inset-bottom));
       transition: background 0.25s ease;
     }
 
     @media (max-width: 767px) {
       .app-shell {
-        height: 100dvh;
-        max-height: 100dvh;
-        overflow-y: auto;
+        min-height: 100dvh;
         justify-content: space-between;
-        padding-bottom: calc(26px + env(safe-area-inset-bottom));
+        padding-bottom: calc(34px + env(safe-area-inset-bottom));
       }
     }
 
@@ -121,11 +118,11 @@
         background: radial-gradient(circle at top, #132a56 0%, #071226 60%, #040914 100%);
       }
       .app-shell {
-        max-width: 1020px;
+        max-width: 1040px;
         min-height: auto;
         border-radius: 32px;
-        border: 1.5px solid rgba(148, 163, 184, 0.25);
-        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.65);
+        border: 1.5px solid rgba(148, 163, 184, 0.28);
+        box-shadow: 0 28px 75px rgba(0, 0, 0, 0.65);
         padding-bottom: 24px;
       }
     }
@@ -142,7 +139,7 @@
       color: #f8fafc;
     }
 
-    /* Top App Header */
+    /* Sticky Top Header */
     .app-header {
       position: sticky;
       top: 0;
@@ -172,7 +169,7 @@
 
     .brand-pill {
       background: #ffffff;
-      border-radius: 0 20px 20px 0;
+      border-radius: 0 22px 22px 0;
       box-shadow: 0 6px 16px rgba(15, 23, 42, 0.14), inset 0 -2px 0 rgba(148, 163, 184, 0.25);
     }
 
@@ -186,6 +183,39 @@
     .tagline-pill {
       background: linear-gradient(90deg, #4338ca 0%, #7e22ce 52%, #db2777 100%);
       box-shadow: 0 4px 14px rgba(126, 34, 206, 0.28);
+    }
+
+    /* Cleanly Crops Pingy + QR Tag out of Pingy_Welcome_Reference.png without duplicate poster text */
+    .pingy-hero-frame {
+      overflow: hidden;
+      border-radius: 22px;
+      background: radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.18) 0%, rgba(56, 189, 248, 0.12) 65%, transparent 100%);
+      box-shadow: 0 10px 24px rgba(30, 58, 138, 0.16);
+      border: 1.5px solid rgba(255, 255, 255, 0.85);
+    }
+    .pingy-hero-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 36% 78%;
+      transform: scale(1.26);
+      transform-origin: 36% 76%;
+    }
+
+    /* Desktop Left Showcase Card */
+    @media (min-width: 768px) {
+      .desktop-showcase-card {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(238, 242, 255, 0.85) 100%);
+        border: 1.5px solid rgba(255, 255, 255, 0.9);
+        border-radius: 26px;
+        box-shadow: 0 12px 32px rgba(30, 58, 138, 0.1);
+      }
+      .desktop-form-card {
+        background: rgba(255, 255, 255, 0.62);
+        border: 1.5px solid rgba(255, 255, 255, 0.9);
+        border-radius: 26px;
+        box-shadow: 0 12px 32px rgba(30, 58, 138, 0.08);
+      }
     }
 
     .cat-card {
@@ -272,8 +302,8 @@
     }
 
     @keyframes mascotFloat {
-      0%, 100% { transform: translateY(0px) scale(1); }
-      50% { transform: translateY(-3px) scale(1.012); }
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-3px); }
     }
     .mascot-float {
       animation: mascotFloat 3s ease-in-out infinite;
@@ -325,7 +355,7 @@
     <header class="app-header pr-3.5 md:pr-6 pb-1.5 md:pb-2.5 flex items-center justify-between gap-2">
       <div class="brand-pill pl-3 pr-4 py-1 md:py-1.5 flex items-center">
         <img src="assets/pingme-logo.png" alt="PingMe — One Scan. Instant Connection."
-             class="h-8 sm:h-10 md:h-12 w-auto max-w-[165px] md:max-w-[185px] object-contain" />
+             class="h-8 sm:h-10 md:h-11 w-auto max-w-[165px] md:max-w-[185px] object-contain" />
       </div>
 
       <button id="langToggle" onclick="toggleLanguage()"
@@ -337,112 +367,108 @@
 
     <!-- ========================================== -->
     <!-- SCREEN 1: WELCOME & SEND ALERT             -->
-    <!-- Compact single-screen mobile fit + 2-column desktop view -->
+    <!-- Mobile: Centered Welcome + Centered Pingy + Single-Screen Fit -->
+    <!-- Desktop: Balanced 2-Column Showcase + Interactive Form -->
     <!-- ========================================== -->
-    <main id="screen1" class="flex-1 flex flex-col justify-between px-3.5 md:px-7 pt-1.5 md:pt-5 pb-2 md:pb-4 md:grid md:grid-cols-12 md:gap-7 md:items-start">
+    <main id="screen1" class="flex-1 flex flex-col justify-between px-3.5 md:px-6 pt-1.5 md:pt-4 pb-2 md:pb-2 md:grid md:grid-cols-12 md:gap-6 md:items-stretch">
 
-      <!-- LEFT / TOP SECTION (Hero Row + Category Selector) -->
-      <div class="md:col-span-5 space-y-2 md:space-y-3.5">
-        <!-- Compact Side-by-Side Hero on Mobile, Stacked on Desktop -->
-        <div class="flex md:flex-col items-center justify-between gap-2 bg-white/55 md:bg-transparent rounded-2xl p-2 md:p-0 border border-white/70 md:border-0">
-          <!-- Left: Pingy Mascot + QR Tag -->
-          <div class="flex items-center gap-2 md:w-full md:justify-between">
-            <img src="assets/Pingy_Welcome_Reference.png" alt="PingMe Mascot with Universal QR Tag"
-                 class="w-24 h-24 sm:w-28 sm:h-28 md:w-full md:max-w-[255px] md:h-auto object-contain rounded-xl mascot-float drop-shadow-[0_8px_14px_rgba(30,58,138,0.2)] shrink-0" />
+      <!-- LEFT COLUMN (Desktop Brand Showcase / Mobile Centered Welcome + Pingy) -->
+      <div class="md:col-span-5 desktop-showcase-card md:p-5 flex flex-col justify-between items-center text-center space-y-1.5 md:space-y-3">
+        <!-- Centered Welcome Heading & Tagline -->
+        <div class="w-full flex flex-col items-center text-center space-y-1">
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-950/10 border border-indigo-900/15 text-indigo-950 text-[10px] md:text-[11px] font-extrabold uppercase tracking-wider">
+            <span class="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-emerald-500 animate-ping"></span>
+            <span id="tagBadge">LIVE TAG</span>
+          </div>
+          <h1 id="heroTitle" class="text-[23px] sm:text-[26px] md:text-[30px] font-extrabold text-[#111d4a] tracking-tight leading-tight">
+            Welcome to <span class="text-[#1d4ed8]">PingMe!</span>
+          </h1>
+          <div class="inline-block tagline-pill px-3.5 py-0.5 md:px-4 md:py-1 rounded-full">
+            <p id="heroTagline" class="text-[10px] md:text-xs font-extrabold tracking-widest text-white uppercase">
+              ONE SCAN. INSTANT CONNECTION.
+            </p>
+          </div>
+        </div>
 
-            <!-- Mobile Title & Tagline next to Pingy -->
-            <div class="md:hidden text-left min-w-0">
-              <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-indigo-950/10 text-indigo-950 text-[10px] font-extrabold uppercase tracking-wider">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
-                <span id="tagBadgeMobile">LIVE TAG</span>
-              </div>
-              <h1 id="heroTitleMobile" class="text-[21px] font-extrabold text-[#111d4a] tracking-tight leading-tight mt-0.5">
-                Welcome to <span class="text-[#1d4ed8]">PingMe!</span>
-              </h1>
-              <div class="inline-block tagline-pill px-2.5 py-0.5 rounded-full mt-1">
-                <p id="heroTaglineMobile" class="text-[9.5px] font-extrabold tracking-wider text-white uppercase">
-                  ONE SCAN. INSTANT CONNECTION.
-                </p>
-              </div>
-            </div>
+        <!-- Centered Pingy + QR Tag Illustration (with right-side vertical icons on mobile, bottom horizontal strip on desktop) -->
+        <div class="w-full flex md:flex-col items-center justify-center gap-2.5 md:gap-3.5 my-auto">
+          <!-- Spacer on mobile to keep Pingy perfectly centered opposite the 5 right icons -->
+          <div class="w-7 md:hidden shrink-0" aria-hidden="true"></div>
+
+          <!-- Cropped HD Pingy + Universal QR Tag Frame -->
+          <div class="pingy-hero-frame w-[150px] h-[116px] sm:w-[175px] sm:h-[135px] md:w-full md:max-w-[295px] md:h-[225px] mascot-float shrink-0">
+            <img src="assets/Pingy_Welcome_Reference.png" alt="PingMe Mascot with Universal QR Tag" />
           </div>
 
-          <!-- Desktop-Only Heading (hidden on mobile because shown above) -->
-          <div class="hidden md:block text-left space-y-1.5 order-first w-full">
-            <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-indigo-950/10 border border-indigo-900/15 text-indigo-950 text-[11px] font-extrabold uppercase tracking-wider">
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-              <span id="tagBadge">LIVE TAG</span>
+          <!-- 5 Supporting 3D Icons: Vertical right column on Mobile, Horizontal 5-icon row on Desktop -->
+          <div class="flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2.5 shrink-0">
+            <div class="w-6 h-6 md:w-12 md:h-12 rounded-lg md:rounded-2xl bg-white p-0.5 md:p-1.5 shadow-sm md:shadow-md border border-slate-200 flex items-center justify-center" title="Car">
+              <img src="assets/support-car-3d.png" alt="Car" onerror="this.src='assets/icon-vehicle.png'" class="w-full h-full object-contain" />
             </div>
-            <h1 id="heroTitle" class="text-[30px] font-extrabold text-[#111d4a] tracking-tight leading-tight">
-              Welcome to <span class="text-[#1d4ed8]">PingMe!</span>
-            </h1>
-            <div class="inline-block tagline-pill px-4 py-1 rounded-full">
-              <p id="heroTagline" class="text-xs font-extrabold tracking-widest text-white uppercase">
-                ONE SCAN. INSTANT CONNECTION.
-              </p>
+            <div class="w-6 h-6 md:w-12 md:h-12 rounded-lg md:rounded-2xl bg-white p-0.5 md:p-1.5 shadow-sm md:shadow-md border border-slate-200 flex items-center justify-center" title="Bike">
+              <img src="assets/support-bike-3d.png" alt="Bike" onerror="this.src='assets/car-bike-3d.png'" class="w-full h-full object-contain" />
             </div>
-          </div>
-
-          <!-- 5 Supporting 3D Icons (Compact Vertical Strip on Mobile & Desktop) -->
-          <div class="flex flex-col gap-1 shrink-0">
-            <div class="w-6 h-6 md:w-10 md:h-10 rounded-lg bg-white p-0.5 md:p-1 shadow-sm border border-slate-200 flex items-center justify-center" title="Car">
-              <img src="assets/support-car-3d.png" alt="" onerror="this.src='assets/icon-vehicle.png'" class="w-full h-full object-contain" />
+            <div class="w-6 h-6 md:w-12 md:h-12 rounded-lg md:rounded-2xl bg-white p-0.5 md:p-1.5 shadow-sm md:shadow-md border border-slate-200 flex items-center justify-center" title="Keys">
+              <img src="assets/support-keys-3d.png" alt="Keys" onerror="this.src='assets/icon-keys-luggage.png'" class="w-full h-full object-contain" />
             </div>
-            <div class="w-6 h-6 md:w-10 md:h-10 rounded-lg bg-white p-0.5 md:p-1 shadow-sm border border-slate-200 flex items-center justify-center" title="Bike">
-              <img src="assets/support-bike-3d.png" alt="" onerror="this.src='assets/car-bike-3d.png'" class="w-full h-full object-contain" />
+            <div class="w-6 h-6 md:w-12 md:h-12 rounded-lg md:rounded-2xl bg-white p-0.5 md:p-1.5 shadow-sm md:shadow-md border border-slate-200 flex items-center justify-center" title="Luggage">
+              <img src="assets/support-luggage-3d.png" alt="Luggage" onerror="this.src='assets/luggage-keys-3d.png'" class="w-full h-full object-contain" />
             </div>
-            <div class="w-6 h-6 md:w-10 md:h-10 rounded-lg bg-white p-0.5 md:p-1 shadow-sm border border-slate-200 flex items-center justify-center" title="Keys">
-              <img src="assets/support-keys-3d.png" alt="" onerror="this.src='assets/icon-keys-luggage.png'" class="w-full h-full object-contain" />
-            </div>
-            <div class="w-6 h-6 md:w-10 md:h-10 rounded-lg bg-white p-0.5 md:p-1 shadow-sm border border-slate-200 flex items-center justify-center" title="Luggage">
-              <img src="assets/support-luggage-3d.png" alt="" onerror="this.src='assets/luggage-keys-3d.png'" class="w-full h-full object-contain" />
-            </div>
-            <div class="w-6 h-6 md:w-10 md:h-10 rounded-lg bg-white p-0.5 md:p-1 shadow-sm border border-slate-200 flex items-center justify-center" title="Parcel">
-              <img src="assets/support-parcel-3d.png" alt="" onerror="this.src='assets/icon-other.png'" class="w-full h-full object-contain" />
+            <div class="w-6 h-6 md:w-12 md:h-12 rounded-lg md:rounded-2xl bg-white p-0.5 md:p-1.5 shadow-sm md:shadow-md border border-slate-200 flex items-center justify-center" title="Parcel">
+              <img src="assets/support-parcel-3d.png" alt="Parcel" onerror="this.src='assets/icon-other.png'" class="w-full h-full object-contain" />
             </div>
           </div>
         </div>
 
+        <!-- Desktop Trust Strip (balances bottom of left card) -->
+        <div class="hidden md:flex items-center justify-center gap-2.5 text-xs font-bold text-slate-700 pt-1">
+          <span class="flex items-center gap-1"><span class="text-emerald-600">🛡️</span> Private</span>
+          <span class="text-slate-400">|</span>
+          <span class="flex items-center gap-1"><span class="text-indigo-700">🔒</span> Secure</span>
+          <span class="text-slate-400">|</span>
+          <span class="flex items-center gap-1"><span class="text-slate-700">📵</span> No Number Shared</span>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN (Categories, Message Templates, Custom Note, Attachments, SEND ALERT) -->
+      <div class="md:col-span-7 desktop-form-card md:p-5 flex flex-col justify-between space-y-2 md:space-y-3">
         <!-- Category Selection (3 Categories) -->
         <div>
           <div class="flex items-center gap-1.5 mb-1.5">
             <span class="w-4 h-4 md:w-5 md:h-5 rounded bg-blue-600 text-white text-[10px] md:text-xs font-extrabold flex items-center justify-center">❖</span>
-            <h2 id="lblCategory" class="text-[13px] md:text-base font-extrabold text-[#111d4a]">Choose a Category</h2>
+            <h2 id="lblCategory" class="text-[13px] md:text-[15px] font-extrabold text-[#111d4a]">Choose a Category</h2>
           </div>
 
           <div class="grid grid-cols-3 gap-2 md:gap-2.5">
             <button type="button" onclick="selectCategory('vehicle')" id="cat-vehicle"
               class="cat-card active relative py-1.5 md:py-2.5 px-1.5 flex flex-col items-center gap-0.5 md:gap-1">
               <span id="check-vehicle" class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-emerald-500 text-white text-[10px] font-extrabold flex items-center justify-center shadow border-2 border-white">✓</span>
-              <img src="assets/icon-vehicle.png" alt="Vehicle" class="w-8 h-8 md:w-12 md:h-12 object-contain rounded-lg" />
+              <img src="assets/icon-vehicle.png" alt="Vehicle" class="w-8 h-8 md:w-11 md:h-11 object-contain rounded-lg" />
               <span id="txtCatVehicle" class="text-xs md:text-[13px] font-extrabold text-slate-900 leading-tight text-center">Vehicle</span>
             </button>
 
             <button type="button" onclick="selectCategory('lost')" id="cat-lost"
               class="cat-card relative py-1.5 md:py-2.5 px-1.5 flex flex-col items-center gap-0.5 md:gap-1">
               <span id="check-lost" class="hidden absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-emerald-500 text-white text-[10px] font-extrabold flex items-center justify-center shadow border-2 border-white">✓</span>
-              <img src="assets/icon-lostfound.png" alt="Lost & Found" class="w-8 h-8 md:w-12 md:h-12 object-contain rounded-lg" />
+              <img src="assets/icon-lostfound.png" alt="Lost & Found" class="w-8 h-8 md:w-11 md:h-11 object-contain rounded-lg" />
               <span id="txtCatLost" class="text-xs md:text-[13px] font-extrabold text-slate-900 leading-tight text-center">Lost &amp; Found</span>
             </button>
 
             <button type="button" onclick="selectCategory('other')" id="cat-other"
               class="cat-card relative py-1.5 md:py-2.5 px-1.5 flex flex-col items-center gap-0.5 md:gap-1">
               <span id="check-other" class="hidden absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-emerald-500 text-white text-[10px] font-extrabold flex items-center justify-center shadow border-2 border-white">✓</span>
-              <img src="assets/icon-other.png" alt="Other" class="w-8 h-8 md:w-12 md:h-12 object-contain rounded-lg" />
+              <img src="assets/icon-other.png" alt="Other" class="w-8 h-8 md:w-11 md:h-11 object-contain rounded-lg" />
               <span id="txtCatOther" class="text-xs md:text-[13px] font-extrabold text-slate-900 leading-tight text-center">Other</span>
             </button>
           </div>
         </div>
-      </div>
 
-      <!-- RIGHT / BOTTOM SECTION (Templates, Custom Note, Attachments, SEND ALERT) -->
-      <div class="md:col-span-7 space-y-2 md:space-y-3.5">
         <!-- Default Templates -->
         <div>
           <div class="flex items-center justify-between mb-1.5">
             <div class="flex items-center gap-1.5">
               <span class="w-4 h-4 md:w-5 md:h-5 rounded bg-indigo-600 text-white text-[10px] md:text-xs font-extrabold flex items-center justify-center">💬</span>
-              <h2 class="text-[13px] md:text-base font-extrabold text-[#111d4a]">
+              <h2 class="text-[13px] md:text-[15px] font-extrabold text-[#111d4a]">
                 <span id="lblMessage">Select a Message</span>
                 <span id="lblActiveCatTag" class="text-[#2563eb]">(Vehicle)</span>
               </h2>
@@ -457,7 +483,7 @@
         </div>
 
         <!-- Custom Message (Optional) -->
-        <div class="surface-card p-2 md:p-3">
+        <div class="surface-card p-2 md:p-2.5">
           <div class="flex items-center justify-between mb-1">
             <label id="lblNote" for="customNote" class="text-xs md:text-sm font-extrabold text-[#111d4a]">
               ✍️ Add a Message (Optional)
@@ -466,12 +492,12 @@
           </div>
           <input type="text" id="customNote" maxlength="160" oninput="updateCharCount()"
             placeholder="Type additional details here..."
-            class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-1.5 md:py-2 text-base text-slate-900 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:bg-white" />
+            class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-1.5 text-base text-slate-900 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:bg-white" />
         </div>
 
         <!-- Optional Attachments -->
         <div class="grid grid-cols-2 gap-2">
-          <label class="surface-card p-2 md:p-2.5 flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition">
+          <label class="surface-card p-2 flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition">
             <img src="assets/icon-camera.png" alt="Attach Photo" class="w-6 h-6 md:w-7 md:h-7 object-contain shrink-0" />
             <div class="text-left leading-tight">
               <div id="txtAttachPhoto" class="text-[11px] sm:text-xs font-extrabold text-[#111d4a]">ATTACH PHOTO</div>
@@ -481,7 +507,7 @@
           </label>
 
           <button type="button" onclick="attachLocation()" id="locBtn"
-            class="surface-card p-2 md:p-2.5 flex items-center justify-center gap-2 active:scale-95 transition">
+            class="surface-card p-2 flex items-center justify-center gap-2 active:scale-95 transition">
             <div class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-pink-100 text-pink-600 text-sm md:text-base flex items-center justify-center shrink-0">
               📍
             </div>
@@ -530,7 +556,8 @@
             <span id="txtSendBtn">SEND ALERT</span>
           </button>
 
-          <div id="footerPrivacy" class="flex items-center justify-center gap-2 text-[11px] md:text-xs font-bold text-slate-700">
+          <!-- Mobile Trust Strip -->
+          <div id="footerPrivacy" class="flex md:hidden items-center justify-center gap-2 text-[11px] font-bold text-slate-700">
             <span class="flex items-center gap-1"><span class="text-emerald-600">🛡️</span> Private</span>
             <span class="text-slate-400">|</span>
             <span class="flex items-center gap-1"><span class="text-indigo-700">🔒</span> Secure</span>
@@ -1040,9 +1067,7 @@
       }
 
       document.getElementById("heroTitle").innerHTML = t.heroTitleHtml;
-      document.getElementById("heroTitleMobile").innerHTML = t.heroTitleHtml;
       document.getElementById("heroTagline").textContent = t.heroTagline;
-      document.getElementById("heroTaglineMobile").textContent = t.heroTagline;
       document.getElementById("lblCategory").textContent = t.lblCategory;
       document.getElementById("txtCatVehicle").textContent = t.catVehicle;
       document.getElementById("txtCatLost").textContent = t.catLost;
@@ -1368,7 +1393,6 @@
     async function loadTagMeta() {
       const defaultBadge = `TAG • ${TAG_CODE}`;
       document.getElementById("tagBadge").textContent = defaultBadge;
-      document.getElementById("tagBadgeMobile").textContent = defaultBadge;
       try {
         const res = await fetch(`${CONFIG.BACKEND_URL}/api/tag?t=${encodeURIComponent(TAG_CODE)}`);
         if (!res.ok) return;
@@ -1376,9 +1400,7 @@
         if (data.tag) {
           const serial = data.tag.serial_no || TAG_CODE;
           const status = (data.tag.effective_status || "ACTIVE").toUpperCase();
-          const badgeText = `${serial} • ${status}`;
-          document.getElementById("tagBadge").textContent = badgeText;
-          document.getElementById("tagBadgeMobile").textContent = badgeText;
+          document.getElementById("tagBadge").textContent = `${serial} • ${status}`;
           if (data.tag.effective_status && data.tag.effective_status.toLowerCase() === "inactive") {
             sessionClosed = true;
             document.getElementById("sendBtn").disabled = true;
