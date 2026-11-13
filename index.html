@@ -35,28 +35,44 @@
       user-select: none;
     }
 
-    /* Native Mobile App Frame with Bottom Gesture/Nav Bar Clearance */
+    /* Responsive App Shell: Full-bleed on Mobile, Wide Balanced Card on Desktop */
     .app-shell {
       width: 100%;
-      max-width: 440px;
       min-height: 100dvh;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
       position: relative;
       overflow-x: hidden;
-      box-shadow: 0 0 65px rgba(0, 0, 0, 0.85);
-      /* Generous bottom clearance so Android/iOS bottom nav buttons never cover UI */
-      padding-bottom: calc(52px + env(safe-area-inset-bottom));
+      padding-bottom: calc(44px + env(safe-area-inset-bottom));
+      transition: background 0.25s ease;
     }
 
-    /* Screen 1 Light-Lavender/Sky Premium Theme (Matches Reference Screen 1) */
+    @media (min-width: 768px) {
+      body {
+        padding: 20px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at top, #132a56 0%, #071226 60%, #040914 100%);
+      }
+      .app-shell {
+        max-width: 1020px;
+        min-height: auto;
+        border-radius: 32px;
+        border: 1.5px solid rgba(148, 163, 184, 0.25);
+        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.65);
+        padding-bottom: 24px;
+      }
+    }
+
+    /* Screen 1 Light-Lavender/Sky Premium Theme */
     .theme-light {
       background: linear-gradient(180deg, #dbeafe 0%, #eef2ff 24%, #f5f3ff 65%, #ede9fe 100%);
       color: #0f172a;
     }
 
-    /* Screens 2, 3, 4 Deep Navy / Electric Blue / Magenta Theme (Matches Reference Screens 2-4) */
+    /* Screens 2, 3, 4 Deep Navy / Electric Blue / Magenta Theme */
     .theme-dark {
       background:
         radial-gradient(circle at 50% 22%, rgba(56, 189, 248, 0.24) 0%, rgba(168, 85, 247, 0.16) 35%, transparent 65%),
@@ -64,35 +80,40 @@
       color: #f8fafc;
     }
 
-    /* Sticky Top App Header */
+    /* Top App Header */
     .app-header {
       position: sticky;
       top: 0;
       z-index: 30;
-      padding-top: max(12px, env(safe-area-inset-top));
+      padding-top: max(10px, env(safe-area-inset-top));
       transition: background 0.25s ease, border-color 0.25s ease;
     }
+    @media (min-width: 768px) {
+      .app-header {
+        position: relative;
+        border-radius: 30px 30px 0 0;
+        padding-top: 16px;
+      }
+    }
     .theme-light .app-header {
-      background: rgba(219, 234, 254, 0.88);
+      background: rgba(219, 234, 254, 0.9);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(59, 130, 246, 0.14);
     }
     .theme-dark .app-header {
-      background: rgba(7, 18, 38, 0.86);
+      background: rgba(7, 18, 38, 0.88);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(56, 189, 248, 0.16);
     }
 
-    /* 3D Brand Logo Pill */
     .brand-pill {
       background: #ffffff;
       border-radius: 0 24px 24px 0;
-      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.18), inset 0 -2px 0 rgba(148, 163, 184, 0.25);
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.16), inset 0 -2px 0 rgba(148, 163, 184, 0.25);
     }
 
-    /* Language Toggle Pill */
     .lang-pill {
       background: linear-gradient(180deg, #162b4d 0%, #0c1930 100%);
       border: 1.5px solid rgba(56, 189, 248, 0.45);
@@ -100,13 +121,11 @@
       color: #ffffff;
     }
 
-    /* Tagline Banner Pill */
     .tagline-pill {
       background: linear-gradient(90deg, #4338ca 0%, #7e22ce 52%, #db2777 100%);
       box-shadow: 0 6px 18px rgba(126, 34, 206, 0.32);
     }
 
-    /* 3D Category Cards */
     .cat-card {
       background: #ffffff;
       border: 2px solid #e2e8f0;
@@ -121,7 +140,6 @@
       box-shadow: 0 8px 22px rgba(6, 182, 212, 0.28), inset 0 -3px 0 rgba(6, 182, 212, 0.35);
     }
 
-    /* 3D Template Pills */
     .tpl-pill {
       background: #ffffff;
       border: 1.5px solid #cbd5e1;
@@ -138,7 +156,6 @@
       box-shadow: 0 5px 14px rgba(6, 182, 212, 0.22);
     }
 
-    /* Light Surface Input & Attachment Cards */
     .surface-card {
       background: #ffffff;
       border: 1.5px solid #cbd5e1;
@@ -146,7 +163,6 @@
       box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
     }
 
-    /* Primary Gradient 3D SEND ALERT Button */
     .btn-send-alert {
       background: linear-gradient(90deg, #0ea5e9 0%, #6366f1 48%, #ec4899 100%);
       box-shadow: 0 10px 26px rgba(236, 72, 153, 0.38), inset 0 2px 0 rgba(255, 255, 255, 0.35), inset 0 -4px 0 rgba(131, 24, 67, 0.35);
@@ -155,7 +171,6 @@
     .btn-send-alert:active { transform: scale(0.97); }
     .btn-send-alert:disabled { opacity: 0.65; cursor: not-allowed; }
 
-    /* 3D Action Buttons: BUY / SHARE / REVIEW */
     .btn-buy {
       background: linear-gradient(180deg, #f43f5e 0%, #db2777 55%, #9d174d 100%);
       border: 1.5px solid #f9a8d4;
@@ -176,14 +191,12 @@
     }
     .btn-3d-tap:active { transform: scale(0.95); }
 
-    /* 3D FINISH Button */
     .btn-finish {
       background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 55%, #1e3a8a 100%);
       border: 1.5px solid #93c5fd;
       box-shadow: 0 8px 22px rgba(29, 78, 216, 0.45), inset 0 2px 0 rgba(255, 255, 255, 0.35);
     }
 
-    /* Countdown Neon Emerald Ring */
     .countdown-ring {
       background: radial-gradient(circle, #06182c 58%, #042f2e 100%);
       border: 6px solid #10b981;
@@ -196,7 +209,6 @@
       100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0), inset 0 0 16px rgba(16, 185, 129, 0.35); }
     }
 
-    /* Mascot Gentle Float & Expression Transition */
     @keyframes mascotFloat {
       0%, 100% { transform: translateY(0px) scale(1); }
       50% { transform: translateY(-4px) scale(1.015); }
@@ -205,7 +217,6 @@
       animation: mascotFloat 3s ease-in-out infinite;
     }
 
-    /* Sprite Frame Cropping for Pingy_Expression_Sequence_Reference.png (4 poses side-by-side) */
     .sprite-box {
       width: 152px;
       height: 152px;
@@ -231,17 +242,13 @@
 <body>
   <div id="appShell" class="app-shell theme-light">
 
-    <!-- ========================================== -->
-    <!-- STICKY TOP APP HEADER                      -->
-    <!-- ========================================== -->
-    <header class="app-header pr-4 pb-2.5 flex items-center justify-between gap-2">
-      <!-- Official PingMe Logo (Unmodified) -->
+    <!-- STICKY TOP APP HEADER -->
+    <header class="app-header pr-4 md:pr-6 pb-2.5 flex items-center justify-between gap-2">
       <div class="brand-pill pl-3.5 pr-5 py-1.5 flex items-center">
         <img src="assets/pingme-logo.png" alt="PingMe — One Scan. Instant Connection."
-             class="h-11 sm:h-12 w-auto max-w-[185px] object-contain" />
+             class="h-10 sm:h-11 md:h-12 w-auto max-w-[185px] object-contain" />
       </div>
 
-      <!-- Language Selector -->
       <button id="langToggle" onclick="toggleLanguage()"
         class="lang-pill px-3.5 py-2 rounded-full text-xs sm:text-sm font-bold flex items-center gap-1.5 active:scale-95 transition shrink-0">
         <span class="text-cyan-300 text-base leading-none">🌐</span>
@@ -251,192 +258,189 @@
 
     <!-- ========================================== -->
     <!-- SCREEN 1: WELCOME & SEND ALERT             -->
+    <!-- Responsive: Single column on mobile, 2-column split on desktop -->
     <!-- ========================================== -->
-    <main id="screen1" class="px-4 pt-3 pb-4 space-y-4">
+    <main id="screen1" class="px-4 md:px-7 pt-3 md:pt-5 pb-4 grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-7 items-start">
 
-      <!-- Welcome Heading & Tagline -->
-      <div class="text-center space-y-1.5">
-        <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-indigo-950/10 border border-indigo-900/15 text-indigo-950 text-[11px] font-extrabold uppercase tracking-wider">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-          <span id="tagBadge">LIVE TAG</span>
+      <!-- LEFT COLUMN (Welcome, Mascot, Supporting Icons, Category Selector) -->
+      <div class="md:col-span-5 space-y-3.5">
+        <div class="text-center md:text-left space-y-1.5">
+          <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-indigo-950/10 border border-indigo-900/15 text-indigo-950 text-[11px] font-extrabold uppercase tracking-wider">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+            <span id="tagBadge">LIVE TAG</span>
+          </div>
+          <h1 id="heroTitle" class="text-[26px] sm:text-[30px] font-extrabold text-[#111d4a] tracking-tight leading-tight">
+            Welcome to <span class="text-[#1d4ed8]">PingMe!</span>
+          </h1>
+          <div class="inline-block tagline-pill px-4 py-1 rounded-full">
+            <p id="heroTagline" class="text-[11px] sm:text-xs font-extrabold tracking-widest text-white uppercase">
+              ONE SCAN. INSTANT CONNECTION.
+            </p>
+          </div>
         </div>
-        <h1 id="heroTitle" class="text-[28px] sm:text-[31px] font-extrabold text-[#111d4a] tracking-tight leading-tight">
-          Welcome to <span class="text-[#1d4ed8]">PingMe!</span>
-        </h1>
-        <div class="inline-block tagline-pill px-4 py-1 rounded-full">
-          <p id="heroTagline" class="text-[11px] sm:text-xs font-extrabold tracking-widest text-white uppercase">
-            ONE SCAN. INSTANT CONNECTION.
-          </p>
+
+        <!-- Pingy Welcome Mascot + 5 Supporting Icons -->
+        <div class="flex items-center justify-between gap-2 pt-0.5">
+          <div class="flex-1 flex items-center justify-center md:justify-start">
+            <img src="assets/Pingy_Welcome_Reference.png" alt="PingMe Mascot with Universal QR Tag"
+                 class="w-full max-w-[235px] sm:max-w-[260px] h-auto object-contain rounded-2xl mascot-float drop-shadow-[0_12px_20px_rgba(30,58,138,0.22)]" />
+          </div>
+
+          <!-- 5 Supporting Icons (Auto-hides broken img if not yet uploaded) -->
+          <div class="flex flex-col gap-1.5 shrink-0">
+            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white/95 p-1 shadow-md border border-slate-200/90 flex items-center justify-center" title="Car">
+              <img src="assets/support-car-3d.png" alt="" onerror="this.src='assets/icon-vehicle.png'" class="w-full h-full object-contain" />
+            </div>
+            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white/95 p-1 shadow-md border border-slate-200/90 flex items-center justify-center" title="Bike">
+              <img src="assets/support-bike-3d.png" alt="" onerror="this.src='assets/car-bike-3d.png'" class="w-full h-full object-contain" />
+            </div>
+            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white/95 p-1 shadow-md border border-slate-200/90 flex items-center justify-center" title="Keys">
+              <img src="assets/support-keys-3d.png" alt="" onerror="this.src='assets/icon-keys-luggage.png'" class="w-full h-full object-contain" />
+            </div>
+            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white/95 p-1 shadow-md border border-slate-200/90 flex items-center justify-center" title="Luggage">
+              <img src="assets/support-luggage-3d.png" alt="" onerror="this.src='assets/luggage-keys-3d.png'" class="w-full h-full object-contain" />
+            </div>
+            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white/95 p-1 shadow-md border border-slate-200/90 flex items-center justify-center" title="Parcel">
+              <img src="assets/support-parcel-3d.png" alt="" onerror="this.src='assets/icon-other.png'" class="w-full h-full object-contain" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Category Selection (3 Categories) -->
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-5 h-5 rounded-md bg-blue-600 text-white text-xs font-extrabold flex items-center justify-center shadow-sm">❖</span>
+            <h2 id="lblCategory" class="text-[15px] sm:text-base font-extrabold text-[#111d4a]">Choose a Category</h2>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2.5">
+            <button type="button" onclick="selectCategory('vehicle')" id="cat-vehicle"
+              class="cat-card active relative py-2.5 px-2 flex flex-col items-center gap-1">
+              <span id="check-vehicle" class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-emerald-500 text-white text-xs font-extrabold flex items-center justify-center shadow-md border-2 border-white">✓</span>
+              <img src="assets/icon-vehicle.png" alt="Vehicle" class="w-11 h-11 sm:w-12 sm:h-12 object-contain rounded-xl" />
+              <span id="txtCatVehicle" class="text-[13px] font-extrabold text-slate-900 leading-tight text-center">Vehicle</span>
+            </button>
+
+            <button type="button" onclick="selectCategory('lost')" id="cat-lost"
+              class="cat-card relative py-2.5 px-2 flex flex-col items-center gap-1">
+              <span id="check-lost" class="hidden absolute -top-2 -right-2 w-6 h-6 rounded-full bg-emerald-500 text-white text-xs font-extrabold flex items-center justify-center shadow-md border-2 border-white">✓</span>
+              <img src="assets/icon-lostfound.png" alt="Lost & Found" class="w-11 h-11 sm:w-12 sm:h-12 object-contain rounded-xl" />
+              <span id="txtCatLost" class="text-[13px] font-extrabold text-slate-900 leading-tight text-center">Lost &amp; Found</span>
+            </button>
+
+            <button type="button" onclick="selectCategory('other')" id="cat-other"
+              class="cat-card relative py-2.5 px-2 flex flex-col items-center gap-1">
+              <span id="check-other" class="hidden absolute -top-2 -right-2 w-6 h-6 rounded-full bg-emerald-500 text-white text-xs font-extrabold flex items-center justify-center shadow-md border-2 border-white">✓</span>
+              <img src="assets/icon-other.png" alt="Other" class="w-11 h-11 sm:w-12 sm:h-12 object-contain rounded-xl" />
+              <span id="txtCatOther" class="text-[13px] font-extrabold text-slate-900 leading-tight text-center">Other</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      <!-- Hero Visual: Pingy Welcome Mascot + Universal QR Tag + 5 Supporting 3D Icons -->
-      <div class="relative flex items-center justify-between gap-1.5 pt-1 pb-1">
-        <!-- Pingy Welcome Mascot with Thumbs-Up & Universal QR Tag -->
-        <div class="flex-1 flex items-center justify-center relative">
-          <img src="assets/Pingy_Welcome_Reference.png" alt="PingMe Mascot with Universal QR Tag"
-               class="w-full max-w-[265px] sm:max-w-[285px] h-auto object-contain rounded-2xl mascot-float drop-shadow-[0_12px_20px_rgba(30,58,138,0.22)]" />
+      <!-- RIGHT COLUMN (Message Templates, Custom Note, Attachments, SEND ALERT) -->
+      <div class="md:col-span-7 space-y-3.5">
+        <!-- Default Templates -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <span class="w-5 h-5 rounded-md bg-indigo-600 text-white text-xs font-extrabold flex items-center justify-center shadow-sm">💬</span>
+              <h2 class="text-[15px] sm:text-base font-extrabold text-[#111d4a]">
+                <span id="lblMessage">Select a Message</span>
+                <span id="lblActiveCatTag" class="text-[#2563eb]">(Vehicle)</span>
+              </h2>
+            </div>
+            <button type="button" id="clearTplBtn" onclick="clearTemplateSelection()"
+              class="hidden text-xs font-bold text-rose-600 underline">
+              Clear
+            </button>
+          </div>
+
+          <div id="reasonsContainer" class="space-y-2"></div>
         </div>
 
-        <!-- 5 Supporting 3D Icons Column (Car, Bike, Keys, Luggage, Parcel) -->
-        <div class="flex flex-col gap-1.5 shrink-0 pr-0.5">
-          <div class="w-11 h-11 rounded-xl bg-white/95 p-1 shadow-md border border-slate-200/90 flex items-center justify-center" title="Car">
-            <img src="assets/support-car-3d.png" alt="Car" class="w-full h-full object-contain" />
+        <!-- Custom Message (Optional) -->
+        <div class="surface-card p-3">
+          <div class="flex items-center justify-between mb-1">
+            <label id="lblNote" for="customNote" class="text-sm font-extrabold text-[#111d4a]">
+              ✍️ Add a Message (Optional)
+            </label>
+            <span id="charCount" class="text-xs font-bold text-slate-500">0 / 160</span>
           </div>
-          <div class="w-11 h-11 rounded-xl bg-white/95 p-1 shadow-md border border-slate-200/90 flex items-center justify-center" title="Bike">
-            <img src="assets/support-bike-3d.png" alt="Bike" class="w-full h-full object-contain" />
-          </div>
-          <div class="w-11 h-11 rounded-xl bg-white/95 p-1 shadow-md border border-slate-200/90 flex items-center justify-center" title="Keys">
-            <img src="assets/support-keys-3d.png" alt="Keys" class="w-full h-full object-contain" />
-          </div>
-          <div class="w-11 h-11 rounded-xl bg-white/95 p-1 shadow-md border border-slate-200/90 flex items-center justify-center" title="Luggage">
-            <img src="assets/support-luggage-3d.png" alt="Luggage" class="w-full h-full object-contain" />
-          </div>
-          <div class="w-11 h-11 rounded-xl bg-white/95 p-1 shadow-md border border-slate-200/90 flex items-center justify-center" title="Parcel">
-            <img src="assets/support-parcel-3d.png" alt="Parcel" class="w-full h-full object-contain" />
-          </div>
-        </div>
-      </div>
-
-      <!-- Category Selection (3 Categories) -->
-      <div>
-        <div class="flex items-center gap-2 mb-2">
-          <span class="w-5 h-5 rounded-md bg-blue-600 text-white text-xs font-extrabold flex items-center justify-center shadow-sm">❖</span>
-          <h2 id="lblCategory" class="text-[15px] sm:text-base font-extrabold text-[#111d4a]">Choose a Category</h2>
+          <textarea id="customNote" rows="2" maxlength="160" oninput="updateCharCount()"
+            placeholder="Type additional details here..."
+            class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-base text-slate-900 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:bg-white resize-none"></textarea>
         </div>
 
-        <div class="grid grid-cols-3 gap-2.5">
-          <!-- Vehicle -->
-          <button type="button" onclick="selectCategory('vehicle')" id="cat-vehicle"
-            class="cat-card active relative py-3 px-2 flex flex-col items-center gap-1.5">
-            <span id="check-vehicle" class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-emerald-500 text-white text-xs font-extrabold flex items-center justify-center shadow-md border-2 border-white">✓</span>
-            <img src="assets/icon-vehicle.png" alt="Vehicle" class="w-12 h-12 sm:w-14 sm:h-14 object-contain rounded-xl" />
-            <span id="txtCatVehicle" class="text-[13px] sm:text-sm font-extrabold text-slate-900 leading-tight text-center">Vehicle</span>
-          </button>
-
-          <!-- Lost & Found -->
-          <button type="button" onclick="selectCategory('lost')" id="cat-lost"
-            class="cat-card relative py-3 px-2 flex flex-col items-center gap-1.5">
-            <span id="check-lost" class="hidden absolute -top-2 -right-2 w-6 h-6 rounded-full bg-emerald-500 text-white text-xs font-extrabold flex items-center justify-center shadow-md border-2 border-white">✓</span>
-            <img src="assets/icon-lostfound.png" alt="Lost & Found" class="w-12 h-12 sm:w-14 sm:h-14 object-contain rounded-xl" />
-            <span id="txtCatLost" class="text-[13px] sm:text-sm font-extrabold text-slate-900 leading-tight text-center">Lost &amp; Found</span>
-          </button>
-
-          <!-- Other -->
-          <button type="button" onclick="selectCategory('other')" id="cat-other"
-            class="cat-card relative py-3 px-2 flex flex-col items-center gap-1.5">
-            <span id="check-other" class="hidden absolute -top-2 -right-2 w-6 h-6 rounded-full bg-emerald-500 text-white text-xs font-extrabold flex items-center justify-center shadow-md border-2 border-white">✓</span>
-            <img src="assets/icon-other.png" alt="Other" class="w-12 h-12 sm:w-14 sm:h-14 object-contain rounded-xl" />
-            <span id="txtCatOther" class="text-[13px] sm:text-sm font-extrabold text-slate-900 leading-tight text-center">Other</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Default Templates -->
-      <div>
-        <div class="flex items-center justify-between mb-2">
-          <div class="flex items-center gap-2">
-            <span class="w-5 h-5 rounded-md bg-indigo-600 text-white text-xs font-extrabold flex items-center justify-center shadow-sm">💬</span>
-            <h2 class="text-[15px] sm:text-base font-extrabold text-[#111d4a]">
-              <span id="lblMessage">Select a Message</span>
-              <span id="lblActiveCatTag" class="text-[#2563eb]">(Vehicle)</span>
-            </h2>
-          </div>
-          <button type="button" id="clearTplBtn" onclick="clearTemplateSelection()"
-            class="hidden text-xs font-bold text-rose-600 underline">
-            Clear
-          </button>
-        </div>
-
-        <div id="reasonsContainer" class="space-y-2"></div>
-      </div>
-
-      <!-- Custom Message (Optional) -->
-      <div class="surface-card p-3.5">
-        <div class="flex items-center justify-between mb-1.5">
-          <label id="lblNote" for="customNote" class="text-sm font-extrabold text-[#111d4a]">
-            ✍️ Add a Message (Optional)
+        <!-- Optional Attachments -->
+        <div class="grid grid-cols-2 gap-2.5">
+          <label class="surface-card p-2.5 flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition">
+            <img src="assets/icon-camera.png" alt="Attach Photo" class="w-7 h-7 object-contain shrink-0" />
+            <div class="text-left leading-tight">
+              <div id="txtAttachPhoto" class="text-xs sm:text-[13px] font-extrabold text-[#111d4a]">ATTACH PHOTO</div>
+              <div id="subAttachPhoto" class="text-[11px] font-semibold text-slate-500">(Optional)</div>
+            </div>
+            <input type="file" id="photoInput" accept="image/*" capture="environment" class="hidden" onchange="handlePhoto(event)" />
           </label>
-          <span id="charCount" class="text-xs font-bold text-slate-500">0 / 160</span>
-        </div>
-        <textarea id="customNote" rows="2" maxlength="160" oninput="updateCharCount()"
-          placeholder="Type additional details here..."
-          class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-base text-slate-900 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:bg-white resize-none"></textarea>
-      </div>
 
-      <!-- Optional Attachments: ATTACH PHOTO & SHARE LOCATION -->
-      <div class="grid grid-cols-2 gap-2.5">
-        <!-- Attach Photo Button -->
-        <label class="surface-card p-3 flex items-center justify-center gap-2.5 cursor-pointer active:scale-95 transition">
-          <img src="assets/icon-camera.png" alt="Attach Photo" class="w-8 h-8 object-contain shrink-0" />
-          <div class="text-left leading-tight">
-            <div id="txtAttachPhoto" class="text-xs sm:text-[13px] font-extrabold text-[#111d4a]">ATTACH PHOTO</div>
-            <div id="subAttachPhoto" class="text-[11px] font-semibold text-slate-500">(Optional)</div>
-          </div>
-          <input type="file" id="photoInput" accept="image/*" capture="environment" class="hidden" onchange="handlePhoto(event)" />
-        </label>
-
-        <!-- Share Location Button -->
-        <button type="button" onclick="attachLocation()" id="locBtn"
-          class="surface-card p-3 flex items-center justify-center gap-2.5 active:scale-95 transition">
-          <div class="w-8 h-8 rounded-xl bg-pink-100 text-pink-600 text-lg flex items-center justify-center shrink-0">
-            📍
-          </div>
-          <div class="text-left leading-tight">
-            <div id="txtShareLocation" class="text-xs sm:text-[13px] font-extrabold text-[#111d4a]">SHARE LOCATION</div>
-            <div id="subShareLocation" class="text-[11px] font-semibold text-slate-500">(Optional)</div>
-          </div>
-        </button>
-      </div>
-
-      <!-- Attachment Previews with Remove Controls -->
-      <div id="attachmentPreviews" class="hidden space-y-2">
-        <!-- Photo Preview -->
-        <div id="photoPreviewCard" class="hidden surface-card p-2.5 flex items-center justify-between gap-3">
-          <div class="flex items-center gap-2.5 min-w-0">
-            <img id="photoThumb" src="" alt="Attached preview" class="w-12 h-12 rounded-xl object-cover border border-slate-300 shrink-0" />
-            <div class="min-w-0">
-              <div class="text-xs font-extrabold text-emerald-700">✓ Photo Attached</div>
-              <div class="text-[11px] text-slate-500 truncate">Ready to send with alert</div>
+          <button type="button" onclick="attachLocation()" id="locBtn"
+            class="surface-card p-2.5 flex items-center justify-center gap-2 active:scale-95 transition">
+            <div class="w-7 h-7 rounded-xl bg-pink-100 text-pink-600 text-base flex items-center justify-center shrink-0">
+              📍
             </div>
-          </div>
-          <button type="button" onclick="removePhoto()"
-            class="px-2.5 py-1.5 rounded-lg bg-rose-100 text-rose-700 text-xs font-extrabold active:scale-95">
-            ✕ Remove
+            <div class="text-left leading-tight">
+              <div id="txtShareLocation" class="text-xs sm:text-[13px] font-extrabold text-[#111d4a]">SHARE LOCATION</div>
+              <div id="subShareLocation" class="text-[11px] font-semibold text-slate-500">(Optional)</div>
+            </div>
           </button>
         </div>
 
-        <!-- Location Preview -->
-        <div id="locPreviewCard" class="hidden surface-card p-2.5 flex items-center justify-between gap-3">
-          <div class="flex items-center gap-2.5 min-w-0">
-            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 text-lg flex items-center justify-center shrink-0">📍</div>
-            <div class="min-w-0">
-              <div class="text-xs font-extrabold text-emerald-700">✓ GPS Location Attached</div>
-              <div id="locCoordsText" class="text-[11px] text-slate-500 truncate">Coordinates ready</div>
+        <!-- Attachment Previews -->
+        <div id="attachmentPreviews" class="hidden space-y-2">
+          <div id="photoPreviewCard" class="hidden surface-card p-2.5 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <img id="photoThumb" src="" alt="Attached preview" class="w-11 h-11 rounded-xl object-cover border border-slate-300 shrink-0" />
+              <div class="min-w-0">
+                <div class="text-xs font-extrabold text-emerald-700">✓ Photo Attached</div>
+                <div class="text-[11px] text-slate-500 truncate">Ready to send with alert</div>
+              </div>
             </div>
+            <button type="button" onclick="removePhoto()"
+              class="px-2.5 py-1.5 rounded-lg bg-rose-100 text-rose-700 text-xs font-extrabold active:scale-95">
+              ✕ Remove
+            </button>
           </div>
-          <button type="button" onclick="removeLocation()"
-            class="px-2.5 py-1.5 rounded-lg bg-rose-100 text-rose-700 text-xs font-extrabold active:scale-95">
-            ✕ Remove
-          </button>
+
+          <div id="locPreviewCard" class="hidden surface-card p-2.5 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 text-base flex items-center justify-center shrink-0">📍</div>
+              <div class="min-w-0">
+                <div class="text-xs font-extrabold text-emerald-700">✓ GPS Location Attached</div>
+                <div id="locCoordsText" class="text-[11px] text-slate-500 truncate">Coordinates ready</div>
+              </div>
+            </div>
+            <button type="button" onclick="removeLocation()"
+              class="px-2.5 py-1.5 rounded-lg bg-rose-100 text-rose-700 text-xs font-extrabold active:scale-95">
+              ✕ Remove
+            </button>
+          </div>
         </div>
-      </div>
 
-      <!-- Main Button: SEND ALERT -->
-      <div class="pt-1 space-y-2.5">
-        <button type="button" id="sendBtn" onclick="sendAlert()"
-          class="btn-send-alert w-full py-4 rounded-full font-extrabold text-lg text-white tracking-wide flex items-center justify-center gap-2.5">
-          <span class="text-xl">➤</span>
-          <span id="txtSendBtn">SEND ALERT</span>
-        </button>
+        <!-- Main Button: SEND ALERT -->
+        <div class="pt-0.5 space-y-2">
+          <button type="button" id="sendBtn" onclick="sendAlert()"
+            class="btn-send-alert w-full py-3.5 rounded-full font-extrabold text-lg text-white tracking-wide flex items-center justify-center gap-2.5">
+            <span class="text-xl">➤</span>
+            <span id="txtSendBtn">SEND ALERT</span>
+          </button>
 
-        <!-- Trust Footer -->
-        <div id="footerPrivacy" class="flex items-center justify-center gap-2.5 text-xs font-bold text-slate-700 pt-0.5">
-          <span class="flex items-center gap-1"><span class="text-emerald-600">🛡️</span> Private</span>
-          <span class="text-slate-400">|</span>
-          <span class="flex items-center gap-1"><span class="text-indigo-700">🔒</span> Secure</span>
-          <span class="text-slate-400">|</span>
-          <span class="flex items-center gap-1"><span class="text-slate-700">📵</span> No Number Shared</span>
+          <div id="footerPrivacy" class="flex items-center justify-center gap-2.5 text-xs font-bold text-slate-700">
+            <span class="flex items-center gap-1"><span class="text-emerald-600">🛡️</span> Private</span>
+            <span class="text-slate-400">|</span>
+            <span class="flex items-center gap-1"><span class="text-indigo-700">🔒</span> Secure</span>
+            <span class="text-slate-400">|</span>
+            <span class="flex items-center gap-1"><span class="text-slate-700">📵</span> No Number Shared</span>
+          </div>
         </div>
       </div>
     </main>
@@ -444,9 +448,8 @@
     <!-- ========================================== -->
     <!-- SCREEN 2: ALERT SENT / WAITING             -->
     <!-- ========================================== -->
-    <section id="screen2" class="hidden px-4 pt-4 pb-4 flex-1 flex flex-col justify-between space-y-4">
+    <section id="screen2" class="hidden px-4 pt-5 pb-4 max-w-md mx-auto w-full flex-1 flex flex-col justify-between space-y-4">
       <div class="text-center space-y-4">
-        <!-- Heading -->
         <div>
           <div class="inline-flex items-center justify-center gap-2">
             <span class="w-8 h-8 rounded-full bg-emerald-500 text-white text-lg font-extrabold flex items-center justify-center shadow-lg">✓</span>
@@ -457,18 +460,15 @@
           </p>
         </div>
 
-        <!-- Animated Pingy Mascot (Periodic Expression Changes) -->
         <div class="flex flex-col items-center justify-center">
           <div id="mascotMainWrap" class="w-40 h-40 rounded-full flex items-center justify-center relative">
             <img id="waitMascotPrimary" src="assets/Pingy_Waiting_Reference.png" alt="Pingy Waiting"
                  class="w-40 h-40 object-contain rounded-full mascot-float drop-shadow-[0_12px_24px_rgba(16,185,129,0.35)]" />
-            <!-- Sprite Frame Container for Expression Sequence -->
             <div id="waitMascotSprite" class="hidden sprite-box mascot-float">
               <img id="spriteImg" src="assets/Pingy_Expression_Sequence_Reference.png" alt="Pingy Expression" class="sprite-sheet" />
             </div>
           </div>
 
-          <!-- Friendly Mascot Status Pill -->
           <div class="mt-2 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-cyan-400/40 shadow-md">
             <span class="flex gap-1">
               <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-bounce"></span>
@@ -479,7 +479,6 @@
           </div>
         </div>
 
-        <!-- Seconds-Only Countdown Circle -->
         <div class="flex flex-col items-center justify-center">
           <div class="countdown-ring w-32 h-32 rounded-full flex flex-col items-center justify-center">
             <span id="countdownNumber" class="text-4xl font-extrabold text-white leading-none">180</span>
@@ -487,7 +486,6 @@
           </div>
         </div>
 
-        <!-- Status Indicators -->
         <div class="space-y-2 max-w-xs mx-auto">
           <div class="py-2 px-4 rounded-full bg-slate-900/80 border border-cyan-400/35 text-xs sm:text-sm font-extrabold tracking-wider text-cyan-200 uppercase">
             <span id="txtWaitingReply">WAITING FOR OWNER'S REPLY</span>
@@ -498,7 +496,6 @@
         </div>
       </div>
 
-      <!-- Three Customer Action Buttons + FINISH -->
       <div class="space-y-3 pt-2">
         <div class="grid grid-cols-3 gap-2.5">
           <button type="button" onclick="openBuyModal()"
@@ -529,15 +526,13 @@
     <!-- ========================================== -->
     <!-- SCREEN 3: OWNER RESPONDED                  -->
     <!-- ========================================== -->
-    <section id="screen3" class="hidden px-4 pt-4 pb-4 flex-1 flex flex-col justify-between space-y-4">
+    <section id="screen3" class="hidden px-4 pt-5 pb-4 max-w-md mx-auto w-full flex-1 flex flex-col justify-between space-y-4">
       <div class="text-center space-y-4">
-        <!-- Pingy Happy Celebration / Thumbs-Up -->
         <div class="flex justify-center">
           <img src="assets/Pingy_ThumbsUp_Reference.png" alt="Owner Responded"
                class="w-44 h-44 object-contain rounded-full mascot-float drop-shadow-[0_14px_28px_rgba(16,185,129,0.45)]" />
         </div>
 
-        <!-- GREAT NEWS! Banner -->
         <div class="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-gradient-to-r from-emerald-500 to-green-600 border-2 border-emerald-200 shadow-lg">
           <span class="text-xl">💬</span>
           <h2 id="respTitle" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">GREAT NEWS!</h2>
@@ -547,7 +542,6 @@
           The owner has responded! 🎉
         </p>
 
-        <!-- Clean Guidance Card (No private WhatsApp message exposed publicly) -->
         <div class="bg-white rounded-2xl p-4 shadow-xl border-2 border-cyan-300 flex items-center gap-3.5 text-left">
           <div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white text-2xl flex items-center justify-center shrink-0 shadow-md">
             💬
@@ -558,7 +552,6 @@
         </div>
       </div>
 
-      <!-- Three Customer Action Buttons + FINISH -->
       <div class="space-y-3 pt-2">
         <div class="grid grid-cols-3 gap-2.5">
           <button type="button" onclick="openBuyModal()"
@@ -589,8 +582,7 @@
     <!-- ========================================== -->
     <!-- SCREEN 4: FINISH & THANK YOU               -->
     <!-- ========================================== -->
-    <section id="screen4" class="hidden px-4 pt-6 pb-6 flex-1 flex flex-col items-center justify-center text-center space-y-5">
-      <!-- Pingy Thank You Mascot -->
+    <section id="screen4" class="hidden px-4 pt-6 pb-6 max-w-md mx-auto w-full flex-1 flex flex-col items-center justify-center text-center space-y-5">
       <img src="assets/Pingy_ThankYou_Reference.png" alt="Thank You from PingMe"
            class="w-48 h-48 object-contain rounded-full mascot-float drop-shadow-[0_14px_28px_rgba(56,189,248,0.35)]" />
 
@@ -629,7 +621,6 @@
           </button>
         </div>
 
-        <!-- Product Title & Price -->
         <div class="text-center space-y-2">
           <h3 id="kitProductName" class="text-2xl font-extrabold tracking-tight text-amber-300">PINGME STARTER KIT</h3>
           <div class="flex items-center justify-center gap-3">
@@ -641,7 +632,6 @@
           </div>
         </div>
 
-        <!-- Physical Kit Contents -->
         <div class="rounded-2xl bg-white/10 border border-white/15 p-4 space-y-2">
           <h4 class="text-base font-extrabold text-cyan-300">Physical Kit Contents:</h4>
           <ul id="kitPhysicalList" class="space-y-1.5 text-base font-semibold text-white">
@@ -653,7 +643,6 @@
           </ul>
         </div>
 
-        <!-- Included Benefits -->
         <div class="rounded-2xl bg-white/10 border border-white/15 p-4 space-y-2">
           <h4 class="text-base font-extrabold text-amber-300">Included Benefits:</h4>
           <ul id="kitBenefitsList" class="space-y-1.5 text-base font-semibold text-white">
@@ -664,7 +653,6 @@
           </ul>
         </div>
 
-        <!-- ORDER NOW Button -->
         <button type="button" onclick="orderStarterKitWhatsApp()"
           class="w-full py-4 rounded-full bg-gradient-to-r from-amber-400 via-orange-500 to-pink-600 text-slate-950 font-extrabold text-lg tracking-wide shadow-xl active:scale-95 transition flex items-center justify-center gap-2">
           <span>🛒</span>
@@ -741,16 +729,11 @@
   </div>
 
   <script>
-    // =========================================================================
-    // CONFIGURABLE SETTINGS (Edit these anytime without touching UI layout)
-    // =========================================================================
     const CONFIG = {
       BACKEND_URL: "https://pingme-api.pingmeconnect.workers.dev",
       PUBLIC_SITE_URL: "https://pingmeconnect.in",
-      // Set your official WhatsApp ordering number (country code + digits, no '+' sign)
       WHATSAPP_ORDER_NUMBER: "",
       STARTER_KIT_ORDER_MESSAGE: "Hi, I'm interested in ordering the PingMe Starter Kit for ₹599.",
-      // Set your official Google Business Review URL once finalized (leave "" until ready)
       GOOGLE_REVIEW_URL: ""
     };
 
@@ -771,7 +754,6 @@
     let mascotStep = 0;
     let secondsLeft = 180;
 
-    // 4 Approved Default Templates per Category (English & Tamil)
     const i18n = {
       en: {
         heroTitleHtml: 'Welcome to <span class="text-[#1d4ed8]">PingMe!</span>',
@@ -903,7 +885,7 @@
         const isSelected = selectedReason === item.text;
         return `
           <button type="button" onclick="toggleTemplate('${item.text.replace(/'/g, "\\'")}')"
-            class="tpl-pill ${isSelected ? "active" : ""} w-full text-left px-3.5 py-2.5 flex items-center justify-between gap-2.5">
+            class="tpl-pill ${isSelected ? "active" : ""} w-full text-left px-3.5 py-2 flex items-center justify-between gap-2.5">
             <div class="flex items-center gap-2.5 min-w-0">
               <span class="text-lg shrink-0">${item.icon}</span>
               <span class="text-[15px] font-bold leading-snug">${item.text}</span>
@@ -922,7 +904,6 @@
         document.getElementById(`cat-${c}`).classList.toggle("active", c === cat);
         document.getElementById(`check-${c}`).classList.toggle("hidden", c !== cat);
       });
-      // Default to first template if previous selection belonged to another category
       const list = i18n[currentLang].templates[cat];
       if (!list.some(t => t.text === selectedReason)) {
         selectedReason = list[0].text;
@@ -1131,7 +1112,6 @@
       secondsLeft = 180;
       document.getElementById("countdownNumber").textContent = String(secondsLeft);
 
-      // Start periodic Pingy mascot expression animation
       mascotStep = 0;
       updateMascotExpression();
       mascotAnimTimer = setInterval(() => {
@@ -1139,7 +1119,6 @@
         updateMascotExpression();
       }, 3200);
 
-      // Preserve existing 180-second seconds-only countdown logic
       countdownTimer = setInterval(() => {
         secondsLeft--;
         if (secondsLeft <= 0) {
@@ -1154,7 +1133,6 @@
         document.getElementById("countdownNumber").textContent = String(secondsLeft);
       }, 1000);
 
-      // Poll existing session reply mechanism
       if (currentSessionId) {
         replyPollTimer = setInterval(pollForOwnerReply, 3000);
       }
@@ -1168,7 +1146,6 @@
       const spriteWrap = document.getElementById("waitMascotSprite");
       const spriteImg = document.getElementById("spriteImg");
 
-      // Cycle across Pingy_Waiting_Reference.png and the 4 poses in Pingy_Expression_Sequence_Reference.png
       const frame = mascotStep % 5;
       if (frame === 0) {
         primary.classList.remove("hidden");
@@ -1176,7 +1153,7 @@
       } else {
         primary.classList.add("hidden");
         spriteWrap.classList.remove("hidden");
-        const poseIndex = frame - 1; // 0: Waving, 1: Checking Phone, 2: Thumbs-up/Wink, 3: Looking Around
+        const poseIndex = frame - 1;
         spriteImg.style.transform = `translateX(-${poseIndex * 25}%)`;
       }
     }
@@ -1189,7 +1166,6 @@
         const data = await res.json();
         const session = data.session;
 
-        // Trigger Screen 3 immediately when actual owner reply is detected
         if (session && (session.owner_reply || session.status === "replied")) {
           clearInterval(replyPollTimer);
           clearInterval(countdownTimer);
@@ -1209,7 +1185,6 @@
       if (sessionClosed) return;
       sessionClosed = true;
 
-      // Disable Screen 1 submit button so closed sessions cannot submit again
       const sendBtn = document.getElementById("sendBtn");
       if (sendBtn) sendBtn.disabled = true;
 
@@ -1226,7 +1201,6 @@
       switchToDarkScreen("screen4");
     }
 
-    // Optional Customer Actions (Never reset countdown or create new sessions)
     function openBuyModal() {
       document.getElementById("buyModal").classList.remove("hidden");
     }
@@ -1304,7 +1278,6 @@
       } catch (_) {}
     }
 
-    // Initialize default selection
     selectedReason = i18n.en.templates.vehicle[0].text;
     renderTemplates();
     loadTagMeta();
