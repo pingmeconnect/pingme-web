@@ -149,7 +149,7 @@
     .stat-pink { background: linear-gradient(135deg, #db2777 0%, #be185d 55%, #831843 100%); border-color: #f9a8d4; }
     .stat-gold { background: linear-gradient(135deg, #eab308 0%, #ca8a04 55%, #854d0e 100%); border-color: #fde047; }
 
-    /* Recent Customer Light-Surface Cards (Matches Reference) */
+    /* Recent Customer Light-Surface Cards */
     .customer-card {
       background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
       border: 1.5px solid #cbd5e1;
@@ -303,16 +303,12 @@
 </head>
 <body>
 
-  <!-- ========================================================= -->
-  <!-- TOP DEVOTIONAL & BRAND HEADER (DESKTOP + MOBILE MURUGAN)  -->
-  <!-- ========================================================= -->
+  <!-- TOP DEVOTIONAL & BRAND HEADER -->
   <header class="admin-header px-3 sm:px-6 py-2">
-    <!-- Subtle Tiruchendur Temple & Seashore Backdrop -->
     <img src="assets/tiruchendur-temple-bg.png" onerror="this.onerror=null;this.src='assets/tiruchendur-temple-bg.jpg'"
          alt="" class="temple-backdrop" />
 
     <div class="relative z-10 max-w-[1380px] mx-auto flex items-center justify-between gap-2">
-      <!-- Left: Mobile Hamburger + Official PingMe Gold-Rimmed Logo -->
       <div class="flex items-center gap-2.5">
         <button id="mobileMenuBtn" onclick="toggleMobileDrawer(true)"
           class="lg:hidden w-10 h-10 rounded-xl bg-slate-900/80 border border-amber-400/60 text-amber-300 flex items-center justify-center active:scale-95">
@@ -327,7 +323,6 @@
         </div>
       </div>
 
-      <!-- Center: ADMIN PANEL Title + Tagline + Elegant Tiruchendur Murugan -->
       <div class="flex items-center gap-3 sm:gap-5">
         <div class="hidden sm:flex flex-col items-center text-center">
           <div class="admin-title-badge px-4 py-1 rounded-full flex items-center gap-2">
@@ -339,7 +334,6 @@
           </span>
         </div>
 
-        <!-- Lord Tiruchendur Murugan Portrait (Visible on both Mobile & Desktop) -->
         <div class="murugan-frame shrink-0">
           <img src="assets/murugan-header.png" onerror="this.onerror=null;this.src='assets/murugan-header.jpg'"
                alt="Sri Tiruchendur Murugan"
@@ -347,7 +341,6 @@
         </div>
       </div>
 
-      <!-- Right: Admin Profile & Exit Button -->
       <div id="topRightControls" class="hidden flex items-center gap-2">
         <button onclick="loadDashboard()" title="Refresh Data"
           class="w-9 h-9 rounded-full bg-slate-900/85 border border-cyan-400/50 text-cyan-300 flex items-center justify-center text-sm font-bold hover:bg-cyan-500/20">
@@ -366,9 +359,7 @@
     </div>
   </header>
 
-  <!-- ========================================================= -->
-  <!-- ADMIN LOGIN CARD                                          -->
-  <!-- ========================================================= -->
+  <!-- ADMIN LOGIN CARD -->
   <div id="loginView" class="px-4 py-12">
     <div class="gold-panel max-w-md mx-auto p-6 space-y-4">
       <div class="text-center space-y-1">
@@ -397,17 +388,14 @@
     </div>
   </div>
 
-  <!-- ========================================================= -->
-  <!-- MAIN DASHBOARD SHELL (SIDEBAR + WORKSPACE)                -->
-  <!-- ========================================================= -->
+  <!-- MAIN DASHBOARD SHELL -->
   <div id="appView" class="hidden max-w-[1380px] mx-auto px-3 sm:px-6 pt-4 pb-10">
-    <!-- Mobile Drawer Backdrop -->
     <div id="drawerBackdrop" onclick="toggleMobileDrawer(false)"
          class="hidden fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm lg:hidden"></div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
 
-      <!-- 9-ITEM GOLD-BORDERED SIDEBAR NAVIGATION -->
+      <!-- SIDEBAR NAVIGATION -->
       <aside id="sidebarDrawer" class="lg:col-span-3 sidebar-shell p-3.5 flex flex-col justify-between min-h-[calc(100dvh-115px)]">
         <div class="space-y-1.5 relative z-10">
           <div class="flex lg:hidden items-center justify-between pb-2 mb-2 border-b border-amber-400/30">
@@ -461,7 +449,6 @@
           </button>
         </div>
 
-        <!-- Peacock Feather + Gold Ribbon Flourish at Bottom of Sidebar -->
         <div class="pt-6 flex items-end justify-start pointer-events-none select-none">
           <img src="assets/peacock-feather-accent.png" onerror="this.onerror=null;this.src='assets/peacock-feather-accent.jpg'"
                alt="" class="w-32 h-auto object-contain opacity-95 drop-shadow-[0_6px_14px_rgba(0,0,0,0.6)]" />
@@ -471,7 +458,6 @@
       <!-- MAIN CONTENT WORKSPACE -->
       <main class="lg:col-span-9 space-y-5">
 
-        <!-- 4 OVERALL STAT CARDS (ALWAYS VISIBLE AT TOP) -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
           <div class="stat-card stat-cyan">
             <div class="w-11 h-11 rounded-2xl bg-white/20 flex items-center justify-center text-2xl shrink-0">👥</div>
@@ -506,11 +492,8 @@
           </div>
         </div>
 
-        <!-- ===================================================== -->
-        <!-- TAB 1: DASHBOARD HOME                                 -->
-        <!-- ===================================================== -->
+        <!-- TAB 1: DASHBOARD HOME -->
         <div id="view-dash" class="space-y-5">
-          <!-- Recent Customers -->
           <section class="gold-panel p-4 sm:p-5 space-y-3">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2">
@@ -524,7 +507,6 @@
             <div id="recentList" class="space-y-2.5"></div>
           </section>
 
-          <!-- Quick Actions -->
           <section class="gold-panel p-4 sm:p-5 space-y-3">
             <div class="flex items-center gap-2">
               <span class="text-amber-300 text-lg">⚡</span>
@@ -552,9 +534,7 @@
           </section>
         </div>
 
-        <!-- ===================================================== -->
-        <!-- TAB 2: ADD NEW CUSTOMER & GENERATE QR                 -->
-        <!-- ===================================================== -->
+        <!-- TAB 2: ADD NEW CUSTOMER & GENERATE QR -->
         <section id="view-new" class="hidden gold-panel p-4 sm:p-6 space-y-3">
           <div class="flex items-center justify-between border-b border-amber-400/25 pb-2.5">
             <h2 class="text-lg font-extrabold text-amber-300">👤+ Register New Customer &amp; Generate QR</h2>
@@ -626,9 +606,7 @@
           </button>
         </section>
 
-        <!-- ===================================================== -->
-        <!-- TAB 3: ALL CUSTOMERS                                  -->
-        <!-- ===================================================== -->
+        <!-- TAB 3: ALL CUSTOMERS -->
         <section id="view-cust" class="hidden gold-panel p-4 sm:p-5 space-y-3">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <h2 class="text-lg font-extrabold text-amber-300">👥 All Registered Customers</h2>
@@ -646,9 +624,7 @@
           <div id="allCustomersList" class="space-y-2.5"></div>
         </section>
 
-        <!-- ===================================================== -->
-        <!-- TAB 4: SCAN LOGS                                      -->
-        <!-- ===================================================== -->
+        <!-- TAB 4: SCAN LOGS -->
         <section id="view-logs" class="hidden gold-panel p-4 sm:p-5 space-y-3">
           <div class="flex items-center justify-between">
             <h2 class="text-lg font-extrabold text-amber-300">📷 Live QR Scan &amp; Alert Logs</h2>
@@ -657,9 +633,7 @@
           <div id="scanLogsList" class="space-y-2.5"></div>
         </section>
 
-        <!-- ===================================================== -->
-        <!-- TAB 5: CREDITS & VALIDITY + TRANSACTION HISTORY       -->
-        <!-- ===================================================== -->
+        <!-- TAB 5: CREDITS & VALIDITY -->
         <section id="view-credits" class="hidden gold-panel p-4 sm:p-5 space-y-4">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-amber-400/25 pb-3">
             <div>
@@ -672,7 +646,6 @@
             </button>
           </div>
 
-          <!-- Filter by Credit Type -->
           <div class="flex flex-wrap items-center justify-between gap-2">
             <h3 class="text-sm font-extrabold text-white">Credit Transaction History</h3>
             <select id="creditTypeFilter" onchange="renderCreditHistory()" class="pm-select !py-1.5 !text-xs !w-44">
@@ -687,9 +660,7 @@
           <div id="creditHistoryList" class="space-y-2.5"></div>
         </section>
 
-        <!-- ===================================================== -->
-        <!-- TAB 6: SUBSCRIPTION & EXPIRY                          -->
-        <!-- ===================================================== -->
+        <!-- TAB 6: SUBSCRIPTION -->
         <section id="view-subs" class="hidden gold-panel p-4 sm:p-5 space-y-3">
           <div class="flex items-center justify-between border-b border-amber-400/25 pb-2.5">
             <h2 class="text-lg font-extrabold text-amber-300">📅 Subscriptions &amp; Validity Windows</h2>
@@ -697,9 +668,7 @@
           <div id="subscriptionList" class="space-y-2.5"></div>
         </section>
 
-        <!-- ===================================================== -->
-        <!-- TAB 7: REPORTS & WHATSAPP DELIVERY LOGS               -->
-        <!-- ===================================================== -->
+        <!-- TAB 7: REPORTS -->
         <section id="view-reports" class="hidden gold-panel p-4 sm:p-5 space-y-4">
           <div class="flex items-center justify-between border-b border-amber-400/25 pb-2.5">
             <h2 class="text-lg font-extrabold text-amber-300">📊 System Reports &amp; WhatsApp API Delivery Logs</h2>
@@ -732,9 +701,7 @@
           <div id="waDeliveryLogList" class="space-y-2"></div>
         </section>
 
-        <!-- ===================================================== -->
-        <!-- TAB 8: SETTINGS                                       -->
-        <!-- ===================================================== -->
+        <!-- TAB 8: SETTINGS -->
         <section id="view-settings" class="hidden gold-panel p-4 sm:p-5 space-y-3">
           <h2 class="text-lg font-extrabold text-amber-300">⚙️ Admin &amp; API Configuration</h2>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -757,9 +724,7 @@
     </div>
   </div>
 
-  <!-- ========================================================= -->
-  <!-- MODAL 1: DIRECT WHATSAPP CLOUD API — SEND MESSAGE         -->
-  <!-- ========================================================= -->
+  <!-- MODAL 1: DIRECT WHATSAPP CLOUD API (pingme_instant_alert - 4 Variables) -->
   <div id="sendMessageModal" class="modal-backdrop">
     <div class="modal-box space-y-3">
       <div class="flex items-center justify-between border-b border-amber-400/30 pb-2.5">
@@ -771,7 +736,7 @@
       </div>
 
       <p class="text-xs text-cyan-200 bg-cyan-500/10 border border-cyan-400/30 rounded-xl px-3 py-2">
-        Sends directly via <strong>PingMe WhatsApp Business Cloud API</strong> to the customer's registered WhatsApp number (no external redirect).
+        Sends directly via <strong>PingMe WhatsApp Business Cloud API</strong> using approved 4-variable template <strong>pingme_instant_alert</strong>.
       </p>
 
       <div>
@@ -780,9 +745,10 @@
       </div>
 
       <div>
-<select id="waTemplateSelect" onchange="populateWaTemplateFields()" class="pm-select">
-  <option value="pingme_instant_alert">pingme_instant_alert — 4-Variable Alert Template</option>
-</select>
+        <label class="pm-label">Approved Template Name (en_US)</label>
+        <select id="waTemplateSelect" onchange="populateWaTemplateFields()" class="pm-select">
+          <option value="pingme_instant_alert">pingme_instant_alert — Approved 4-Variable Template</option>
+        </select>
       </div>
 
       <div class="grid grid-cols-2 gap-2.5">
@@ -791,24 +757,24 @@
           <input type="text" id="waVarName" class="pm-input !py-2 !text-sm" />
         </div>
         <div>
-          <label class="pm-label">Tag ID / Serial ({{2}})</label>
+          <label class="pm-label">Category / Asset ({{2}})</label>
           <input type="text" id="waVarTag" class="pm-input !py-2 !text-sm" />
         </div>
       </div>
 
       <div class="grid grid-cols-2 gap-2.5">
         <div>
-          <label class="pm-label">Credits / Validity ({{3}})</label>
+          <label class="pm-label">Alert Reason ({{3}})</label>
           <input type="text" id="waVarCredits" class="pm-input !py-2 !text-sm" />
         </div>
         <div>
-          <label class="pm-label">Expiry / Custom Note ({{4}})</label>
+          <label class="pm-label">Additional Info ({{4}})</label>
           <input type="text" id="waVarExpiry" class="pm-input !py-2 !text-sm" />
         </div>
       </div>
 
       <div>
-        <label class="pm-label">Permitted Message Note / Preview</label>
+        <label class="pm-label">Message Preview</label>
         <textarea id="waPreviewBox" rows="3" class="pm-textarea !text-xs"></textarea>
       </div>
 
@@ -827,9 +793,7 @@
     </div>
   </div>
 
-  <!-- ========================================================= -->
-  <!-- MODAL 2: ADD CREDITS — PER-LOT CREDIT & EXPIRY MANAGER    -->
-  <!-- ========================================================= -->
+  <!-- MODAL 2: ADD CREDITS -->
   <div id="addCreditsModal" class="modal-backdrop">
     <div class="modal-box space-y-3">
       <div class="flex items-center justify-between border-b border-amber-400/30 pb-2.5">
@@ -846,9 +810,8 @@
         <div id="credCurrentBalanceNote" class="text-xs text-cyan-300 font-bold mt-1">Current Active Balance: 0 credits</div>
       </div>
 
-      <!-- Quick Presets (Examples, fully editable below) -->
       <div>
-        <label class="pm-label">Quick Presets (Optional — Fully Customizable Below)</label>
+        <label class="pm-label">Quick Presets</label>
         <div class="grid grid-cols-3 gap-2">
           <button type="button" onclick="applyCreditPreset(5, 1, 'trial', 'Testing Credit (1 Day)')"
             class="py-2 px-2 rounded-xl bg-cyan-500/15 border border-cyan-400/40 text-cyan-200 text-xs font-extrabold hover:bg-cyan-500/25">
@@ -868,8 +831,7 @@
       <div class="grid grid-cols-2 gap-2.5">
         <div>
           <label class="pm-label">Credits to Add / Adjust *</label>
-          <input type="number" id="credAmount" class="pm-input" value="250" step="1"
-                 placeholder="Use negative (e.g. -10) to deduct" />
+          <input type="number" id="credAmount" class="pm-input" value="250" step="1" />
         </div>
         <div>
           <label class="pm-label">Allocation Type</label>
@@ -896,7 +858,7 @@
 
       <div>
         <label class="pm-label">Admin Notes (Optional)</label>
-        <input type="text" id="credNotes" class="pm-input" placeholder="e.g. Starter Kit activation / ₹99 UPI recharge / 1-day test" />
+        <input type="text" id="credNotes" class="pm-input" placeholder="e.g. Starter Kit activation" />
       </div>
 
       <div class="flex gap-2.5 pt-1">
@@ -912,9 +874,7 @@
     </div>
   </div>
 
-  <!-- ========================================================= -->
-  <!-- MODAL 3: CUSTOMER DETAILS, QR CODE & EDIT                 -->
-  <!-- ========================================================= -->
+  <!-- MODAL 3: CUSTOMER DETAILS & QR -->
   <div id="detailModal" class="modal-backdrop">
     <div class="modal-box space-y-3">
       <div class="flex items-center justify-between border-b border-amber-400/30 pb-2">
@@ -937,7 +897,6 @@
         </div>
       </div>
 
-      <!-- Printable White QR Card -->
       <div class="bg-white text-slate-950 rounded-2xl p-4 text-center shadow-lg">
         <div class="font-extrabold text-lg tracking-tight">PINGME</div>
         <div class="text-[9px] font-bold tracking-widest text-slate-500">ONE SCAN. INSTANT CONNECTION.</div>
@@ -946,38 +905,31 @@
       </div>
 
       <div class="grid grid-cols-2 gap-2">
-        <button onclick="downloadQrPng()"
-          class="py-2.5 rounded-xl bg-amber-500 text-slate-950 font-extrabold text-xs">
+        <button onclick="downloadQrPng()" class="py-2.5 rounded-xl bg-amber-500 text-slate-950 font-extrabold text-xs">
           ⬇ Download QR PNG
         </button>
-        <button onclick="shareQr()"
-          class="py-2.5 rounded-xl bg-emerald-500 text-slate-950 font-extrabold text-xs">
+        <button onclick="shareQr()" class="py-2.5 rounded-xl bg-emerald-500 text-slate-950 font-extrabold text-xs">
           📤 Share QR
         </button>
       </div>
 
       <div class="grid grid-cols-3 gap-2">
-        <button onclick="openAddCreditsModal(selectedTag?.id)"
-          class="py-2 rounded-xl bg-white/10 border border-amber-400/40 text-amber-200 font-bold text-xs">
+        <button onclick="openAddCreditsModal(selectedTag?.id)" class="py-2 rounded-xl bg-white/10 border border-amber-400/40 text-amber-200 font-bold text-xs">
           + Add Credits
         </button>
-        <button onclick="extendPlanOneYear(selectedTag?.id)"
-          class="py-2 rounded-xl bg-white/10 border border-cyan-400/40 text-cyan-200 font-bold text-xs">
+        <button onclick="extendPlanOneYear(selectedTag?.id)" class="py-2 rounded-xl bg-white/10 border border-cyan-400/40 text-cyan-200 font-bold text-xs">
           +1 Year Plan
         </button>
-        <button onclick="toggleStatus(selectedTag?.id)"
-          class="py-2 rounded-xl bg-white/10 border border-emerald-400/40 text-emerald-200 font-bold text-xs">
+        <button onclick="toggleStatus(selectedTag?.id)" class="py-2 rounded-xl bg-white/10 border border-emerald-400/40 text-emerald-200 font-bold text-xs">
           Toggle Status
         </button>
       </div>
 
       <div class="grid grid-cols-2 gap-2">
-        <button onclick="openSendMessageModal(selectedTag?.id)"
-          class="py-2 rounded-xl bg-pink-600/30 border border-pink-400/50 text-pink-200 font-bold text-xs">
+        <button onclick="openSendMessageModal(selectedTag?.id)" class="py-2 rounded-xl bg-pink-600/30 border border-pink-400/50 text-pink-200 font-bold text-xs">
           📨 Send WhatsApp API
         </button>
-        <button onclick="deleteCustomer(selectedTag?.id)"
-          class="py-2 rounded-xl bg-rose-600/25 border border-rose-400/50 text-rose-200 font-bold text-xs">
+        <button onclick="deleteCustomer(selectedTag?.id)" class="py-2 rounded-xl bg-rose-600/25 border border-rose-400/50 text-rose-200 font-bold text-xs">
           🗑️ Delete Customer
         </button>
       </div>
@@ -989,8 +941,7 @@
           <input type="tel" id="ePhone" class="pm-input !py-2 !text-sm" placeholder="WhatsApp Number" />
           <input type="text" id="eItem" class="pm-input !py-2 !text-sm" placeholder="Vehicle / Item" />
           <input type="email" id="eEmail" class="pm-input !py-2 !text-sm" placeholder="Email" />
-          <button onclick="saveEdits()"
-            class="w-full py-2.5 rounded-xl bg-amber-400 text-slate-950 font-extrabold text-xs">
+          <button onclick="saveEdits()" class="w-full py-2.5 rounded-xl bg-amber-400 text-slate-950 font-extrabold text-xs">
             Save Changes
           </button>
         </div>
@@ -1086,7 +1037,7 @@
         const data = await res.json();
         tags = Array.isArray(data.tags) ? data.tags : [];
         logs = Array.isArray(data.logs) ? data.logs : [];
-        creditLots = Array.isArray(data.credit_lots) ? data.credit_lots : buildFallbackCreditLots();
+        creditLots = Array.isArray(data.credit_lots) ? data.credit_lots : [];
         messageLogs = Array.isArray(data.message_logs) ? data.message_logs : getLocalMessageLogs();
 
         const todayStr = new Date().toISOString().slice(0, 10);
@@ -1277,22 +1228,6 @@
       }).join("") || `<p class="text-sm text-slate-300">No scans recorded yet.</p>`;
     }
 
-    function buildFallbackCreditLots() {
-      return tags.map(t => ({
-        id: "lot-" + t.id,
-        tag_id: t.id,
-        customer_name: `${t.serial_no || ""} ${t.owner_name || ""}`.trim(),
-        credits_added: Number(t.scan_credits) || 0,
-        credits_used: logs.filter(l => String(l.tag_id) === String(t.id)).length,
-        credits_remaining: Number(t.scan_credits) || 0,
-        validity_days: 365,
-        expires_at: t.expires_at,
-        credit_type: "paid",
-        admin_notes: "Initial Tag Allocation",
-        created_at: t.created_at
-      }));
-    }
-
     function renderCreditHistory() {
       const filterType = document.getElementById("creditTypeFilter").value;
       const list = creditLots.filter(c => filterType === "all" || (c.credit_type || "paid") === filterType);
@@ -1368,9 +1303,7 @@
       document.getElementById("credCustomerSelect").innerHTML = optionsHtml;
     }
 
-    // =========================================================
-    // DIRECT WHATSAPP CLOUD API MODAL LOGIC (NO REDIRECTS)
-    // =========================================================
+    // DIRECT WHATSAPP CLOUD API (pingme_instant_alert - 4 Variables)
     function openSendMessageModal(preselectTagId) {
       toggleMobileDrawer(false);
       if (!tags.length) return toast("No customers available");
@@ -1385,25 +1318,16 @@
 
     function populateWaTemplateFields() {
       const id = document.getElementById("waCustomerSelect").value;
-      const tpl = document.getElementById("waTemplateSelect").value;
       const t = tags.find(x => String(x.id) === String(id));
       if (!t) return;
 
-      const credits = getEffectiveCredits(t);
-      const exp = formatDate(t.expires_at);
-
+      const categoryStr = `${(t.tag_type || "Vehicle").toUpperCase()} (${t.vehicle_or_item || t.serial_no || ""})`;
       document.getElementById("waVarName").value = t.owner_name || "Customer";
-      document.getElementById("waVarTag").value = `${t.serial_no || ""} (${t.vehicle_or_item || "Tag"})`;
-      document.getElementById("waVarCredits").value = `${credits} Alert Credits`;
-      document.getElementById("waVarExpiry").value = exp;
+      document.getElementById("waVarTag").value = categoryStr;
+      document.getElementById("waVarCredits").value = "Admin Direct Test Alert";
+      document.getElementById("waVarExpiry").value = "Direct notification from admin panel";
 
-      const previews = {
-        pingme_tag_activated: `Hello ${t.owner_name || "Customer"}, your PingMe QR Tag ${t.serial_no} is now ACTIVE with ${credits} alert credits valid until ${exp}.`,
-        pingme_credit_reminder: `Hello ${t.owner_name || "Customer"}, your PingMe Tag ${t.serial_no} has ${credits} alert credits remaining. Please recharge to continue uninterrupted alerts.`,
-        pingme_plan_renewal: `Hello ${t.owner_name || "Customer"}, your PingMe subscription for ${t.serial_no} expires on ${exp}. Renew soon to keep your QR tag active.`,
-        pingme_service_notice: `Hello ${t.owner_name || "Customer"}, important service update regarding your PingMe Tag ${t.serial_no} (${t.vehicle_or_item || ""}).`
-      };
-      document.getElementById("waPreviewBox").value = previews[tpl] || "";
+      document.getElementById("waPreviewBox").value = `⚡ PINGME ALERT\nHello ${t.owner_name || "Customer"},\nYou have received a new alert through PingMe.\n📂 CATEGORY\n${categoryStr}\n📩 ALERT MESSAGE\nAdmin Direct Test Alert\n📍 ADDITIONAL INFORMATION\nDirect notification from admin panel\n━━━━━━━━━━━━━━━━━━\n💬 You can reply directly to this WhatsApp message.\nONE SCAN. INSTANT CONNECTION.`;
     }
 
     async function submitDirectWhatsAppApi() {
@@ -1411,7 +1335,7 @@
       const t = tags.find(x => String(x.id) === String(id));
       if (!t || !t.owner_whatsapp) return toast("Selected customer has no registered WhatsApp number");
 
-      const templateName = document.getElementById("waTemplateSelect").value;
+      const templateName = document.getElementById("waTemplateSelect").value; // pingme_instant_alert
       const variables = [
         document.getElementById("waVarName").value.trim(),
         document.getElementById("waVarTag").value.trim(),
@@ -1496,9 +1420,7 @@
       `).join("") || `<p class="text-xs text-slate-400">No direct WhatsApp API messages sent yet.</p>`;
     }
 
-    // =========================================================
-    // ADD CREDITS — CUSTOM CREDIT LOTS & EXPIRY MANAGEMENT
-    // =========================================================
+    // ADD CREDITS
     function openAddCreditsModal(preselectTagId) {
       toggleMobileDrawer(false);
       if (!tags.length) return toast("No customers available");
@@ -1560,7 +1482,6 @@
       btn.textContent = "Saving Credit Lot...";
 
       try {
-        // Calls dedicated per-lot endpoint; falls back gracefully to update-tag if Worker isn't updated yet
         let res = await fetch(`${API_BASE}/api/admin/add-credits`, {
           method: "POST",
           headers: authHeaders(),
@@ -1599,9 +1520,6 @@
       }
     }
 
-    // =========================================================
-    // CUSTOMER CRUD, QR GENERATION & ACTIONS
-    // =========================================================
     async function createCustomer() {
       const payload = {
         owner_name: document.getElementById("fName").value.trim(),
