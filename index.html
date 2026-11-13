@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <meta name="theme-color" content="#08142b" />
+  <meta name="theme-color" content="#071226" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>PingMe — One Scan. Instant Connection.</title>
@@ -35,7 +35,61 @@
       user-select: none;
     }
 
-    /* Responsive App Shell: Full-bleed on Mobile, Wide Balanced Card on Desktop */
+    /* 1.6-Second HD 3D Brand Splash Screen */
+    #splashScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(56, 189, 248, 0.28) 0%, rgba(168, 85, 247, 0.22) 38%, transparent 70%),
+        linear-gradient(180deg, #071226 0%, #0b1d3a 52%, #180f38 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1), transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    #splashScreen.splash-hide {
+      opacity: 0;
+      transform: scale(1.04);
+      pointer-events: none;
+    }
+    .splash-logo-card {
+      background: #ffffff;
+      border-radius: 32px;
+      padding: 20px 28px;
+      box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.65),
+        0 0 45px rgba(56, 189, 248, 0.42),
+        inset 0 -4px 0 rgba(148, 163, 184, 0.35);
+      animation: splashPop 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    @keyframes splashPop {
+      0% { opacity: 0; transform: scale(0.84) translateY(14px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .splash-bar {
+      width: 150px;
+      height: 5px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.16);
+      overflow: hidden;
+      margin-top: 22px;
+    }
+    .splash-bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 9999px;
+      background: linear-gradient(90deg, #38bdf8 0%, #818cf8 50%, #ec4899 100%);
+      animation: loadFill 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    @keyframes loadFill {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+
+    /* Mobile Single-Screen Fit (100dvh) + Desktop Wide Dashboard */
     .app-shell {
       width: 100%;
       min-height: 100dvh;
@@ -44,8 +98,18 @@
       flex-direction: column;
       position: relative;
       overflow-x: hidden;
-      padding-bottom: calc(44px + env(safe-area-inset-bottom));
+      padding-bottom: calc(28px + env(safe-area-inset-bottom));
       transition: background 0.25s ease;
+    }
+
+    @media (max-width: 767px) {
+      .app-shell {
+        height: 100dvh;
+        max-height: 100dvh;
+        overflow-y: auto;
+        justify-content: space-between;
+        padding-bottom: calc(26px + env(safe-area-inset-bottom));
+      }
     }
 
     @media (min-width: 768px) {
@@ -66,13 +130,11 @@
       }
     }
 
-    /* Screen 1 Light-Lavender/Sky Premium Theme */
     .theme-light {
       background: linear-gradient(180deg, #dbeafe 0%, #eef2ff 24%, #f5f3ff 65%, #ede9fe 100%);
       color: #0f172a;
     }
 
-    /* Screens 2, 3, 4 Deep Navy / Electric Blue / Magenta Theme */
     .theme-dark {
       background:
         radial-gradient(circle at 50% 22%, rgba(56, 189, 248, 0.24) 0%, rgba(168, 85, 247, 0.16) 35%, transparent 65%),
@@ -85,7 +147,7 @@
       position: sticky;
       top: 0;
       z-index: 30;
-      padding-top: max(10px, env(safe-area-inset-top));
+      padding-top: max(6px, env(safe-area-inset-top));
       transition: background 0.25s ease, border-color 0.25s ease;
     }
     @media (min-width: 768px) {
@@ -96,7 +158,7 @@
       }
     }
     .theme-light .app-header {
-      background: rgba(219, 234, 254, 0.9);
+      background: rgba(219, 234, 254, 0.92);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(59, 130, 246, 0.14);
@@ -110,42 +172,42 @@
 
     .brand-pill {
       background: #ffffff;
-      border-radius: 0 24px 24px 0;
-      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.16), inset 0 -2px 0 rgba(148, 163, 184, 0.25);
+      border-radius: 0 20px 20px 0;
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.14), inset 0 -2px 0 rgba(148, 163, 184, 0.25);
     }
 
     .lang-pill {
       background: linear-gradient(180deg, #162b4d 0%, #0c1930 100%);
       border: 1.5px solid rgba(56, 189, 248, 0.45);
-      box-shadow: 0 6px 16px rgba(8, 20, 43, 0.25);
+      box-shadow: 0 4px 12px rgba(8, 20, 43, 0.22);
       color: #ffffff;
     }
 
     .tagline-pill {
       background: linear-gradient(90deg, #4338ca 0%, #7e22ce 52%, #db2777 100%);
-      box-shadow: 0 6px 18px rgba(126, 34, 206, 0.32);
+      box-shadow: 0 4px 14px rgba(126, 34, 206, 0.28);
     }
 
     .cat-card {
       background: #ffffff;
       border: 2px solid #e2e8f0;
-      border-radius: 18px;
-      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08), inset 0 -3px 0 rgba(203, 213, 225, 0.6);
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.07), inset 0 -2px 0 rgba(203, 213, 225, 0.6);
       transition: transform 0.14s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.2s ease, box-shadow 0.2s ease;
     }
     .cat-card:active { transform: scale(0.95); }
     .cat-card.active {
       background: linear-gradient(180deg, #ecfeff 0%, #cffafe 100%);
-      border: 2.5px solid #06b6d4;
-      box-shadow: 0 8px 22px rgba(6, 182, 212, 0.28), inset 0 -3px 0 rgba(6, 182, 212, 0.35);
+      border: 2px solid #06b6d4;
+      box-shadow: 0 6px 16px rgba(6, 182, 212, 0.24), inset 0 -2px 0 rgba(6, 182, 212, 0.35);
     }
 
     .tpl-pill {
       background: #ffffff;
       border: 1.5px solid #cbd5e1;
-      border-radius: 14px;
+      border-radius: 12px;
       color: #1e293b;
-      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.05);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
       transition: transform 0.12s ease, border-color 0.18s ease, background 0.18s ease;
     }
     .tpl-pill:active { transform: scale(0.985); }
@@ -153,19 +215,19 @@
       background: linear-gradient(90deg, #cffafe 0%, #e0f2fe 100%);
       border: 2px solid #06b6d4;
       color: #0f172a;
-      box-shadow: 0 5px 14px rgba(6, 182, 212, 0.22);
+      box-shadow: 0 4px 12px rgba(6, 182, 212, 0.2);
     }
 
     .surface-card {
       background: #ffffff;
       border: 1.5px solid #cbd5e1;
-      border-radius: 16px;
-      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+      border-radius: 14px;
+      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.05);
     }
 
     .btn-send-alert {
       background: linear-gradient(90deg, #0ea5e9 0%, #6366f1 48%, #ec4899 100%);
-      box-shadow: 0 10px 26px rgba(236, 72, 153, 0.38), inset 0 2px 0 rgba(255, 255, 255, 0.35), inset 0 -4px 0 rgba(131, 24, 67, 0.35);
+      box-shadow: 0 8px 22px rgba(236, 72, 153, 0.36), inset 0 2px 0 rgba(255, 255, 255, 0.35), inset 0 -3px 0 rgba(131, 24, 67, 0.35);
       transition: transform 0.14s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
     }
     .btn-send-alert:active { transform: scale(0.97); }
@@ -211,15 +273,15 @@
 
     @keyframes mascotFloat {
       0%, 100% { transform: translateY(0px) scale(1); }
-      50% { transform: translateY(-4px) scale(1.015); }
+      50% { transform: translateY(-3px) scale(1.012); }
     }
     .mascot-float {
       animation: mascotFloat 3s ease-in-out infinite;
     }
 
     .sprite-box {
-      width: 152px;
-      height: 152px;
+      width: 148px;
+      height: 148px;
       border-radius: 9999px;
       overflow: hidden;
       position: relative;
@@ -240,67 +302,102 @@
   </style>
 </head>
 <body>
+
+  <!-- ========================================== -->
+  <!-- 1.6-SECOND HD 3D BRAND SPLASH SCREEN       -->
+  <!-- ========================================== -->
+  <div id="splashScreen" aria-hidden="true">
+    <div class="splash-logo-card flex flex-col items-center">
+      <img src="assets/pingme-logo.png" alt="PingMe — One Scan. Instant Connection."
+           class="h-20 sm:h-24 w-auto max-w-[260px] object-contain" />
+    </div>
+    <div class="mt-5 tagline-pill px-4 py-1.5 rounded-full">
+      <span class="text-xs font-extrabold tracking-widest text-white uppercase">ONE SCAN. INSTANT CONNECTION.</span>
+    </div>
+    <div class="splash-bar">
+      <div class="splash-bar-fill"></div>
+    </div>
+  </div>
+
   <div id="appShell" class="app-shell theme-light">
 
     <!-- STICKY TOP APP HEADER -->
-    <header class="app-header pr-4 md:pr-6 pb-2.5 flex items-center justify-between gap-2">
-      <div class="brand-pill pl-3.5 pr-5 py-1.5 flex items-center">
+    <header class="app-header pr-3.5 md:pr-6 pb-1.5 md:pb-2.5 flex items-center justify-between gap-2">
+      <div class="brand-pill pl-3 pr-4 py-1 md:py-1.5 flex items-center">
         <img src="assets/pingme-logo.png" alt="PingMe — One Scan. Instant Connection."
-             class="h-10 sm:h-11 md:h-12 w-auto max-w-[185px] object-contain" />
+             class="h-8 sm:h-10 md:h-12 w-auto max-w-[165px] md:max-w-[185px] object-contain" />
       </div>
 
       <button id="langToggle" onclick="toggleLanguage()"
-        class="lang-pill px-3.5 py-2 rounded-full text-xs sm:text-sm font-bold flex items-center gap-1.5 active:scale-95 transition shrink-0">
-        <span class="text-cyan-300 text-base leading-none">🌐</span>
+        class="lang-pill px-3 py-1.5 md:px-3.5 md:py-2 rounded-full text-xs sm:text-sm font-bold flex items-center gap-1.5 active:scale-95 transition shrink-0">
+        <span class="text-cyan-300 text-sm md:text-base leading-none">🌐</span>
         <span id="langLabel">English | தமிழ்</span>
       </button>
     </header>
 
     <!-- ========================================== -->
     <!-- SCREEN 1: WELCOME & SEND ALERT             -->
-    <!-- Responsive: Single column on mobile, 2-column split on desktop -->
+    <!-- Compact single-screen mobile fit + 2-column desktop view -->
     <!-- ========================================== -->
-    <main id="screen1" class="px-4 md:px-7 pt-3 md:pt-5 pb-4 grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-7 items-start">
+    <main id="screen1" class="flex-1 flex flex-col justify-between px-3.5 md:px-7 pt-1.5 md:pt-5 pb-2 md:pb-4 md:grid md:grid-cols-12 md:gap-7 md:items-start">
 
-      <!-- LEFT COLUMN (Welcome, Mascot, Supporting Icons, Category Selector) -->
-      <div class="md:col-span-5 space-y-3.5">
-        <div class="text-center md:text-left space-y-1.5">
-          <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-indigo-950/10 border border-indigo-900/15 text-indigo-950 text-[11px] font-extrabold uppercase tracking-wider">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-            <span id="tagBadge">LIVE TAG</span>
-          </div>
-          <h1 id="heroTitle" class="text-[26px] sm:text-[30px] font-extrabold text-[#111d4a] tracking-tight leading-tight">
-            Welcome to <span class="text-[#1d4ed8]">PingMe!</span>
-          </h1>
-          <div class="inline-block tagline-pill px-4 py-1 rounded-full">
-            <p id="heroTagline" class="text-[11px] sm:text-xs font-extrabold tracking-widest text-white uppercase">
-              ONE SCAN. INSTANT CONNECTION.
-            </p>
-          </div>
-        </div>
-
-        <!-- Pingy Welcome Mascot + 5 Supporting Icons -->
-        <div class="flex items-center justify-between gap-2 pt-0.5">
-          <div class="flex-1 flex items-center justify-center md:justify-start">
+      <!-- LEFT / TOP SECTION (Hero Row + Category Selector) -->
+      <div class="md:col-span-5 space-y-2 md:space-y-3.5">
+        <!-- Compact Side-by-Side Hero on Mobile, Stacked on Desktop -->
+        <div class="flex md:flex-col items-center justify-between gap-2 bg-white/55 md:bg-transparent rounded-2xl p-2 md:p-0 border border-white/70 md:border-0">
+          <!-- Left: Pingy Mascot + QR Tag -->
+          <div class="flex items-center gap-2 md:w-full md:justify-between">
             <img src="assets/Pingy_Welcome_Reference.png" alt="PingMe Mascot with Universal QR Tag"
-                 class="w-full max-w-[235px] sm:max-w-[260px] h-auto object-contain rounded-2xl mascot-float drop-shadow-[0_12px_20px_rgba(30,58,138,0.22)]" />
+                 class="w-24 h-24 sm:w-28 sm:h-28 md:w-full md:max-w-[255px] md:h-auto object-contain rounded-xl mascot-float drop-shadow-[0_8px_14px_rgba(30,58,138,0.2)] shrink-0" />
+
+            <!-- Mobile Title & Tagline next to Pingy -->
+            <div class="md:hidden text-left min-w-0">
+              <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-indigo-950/10 text-indigo-950 text-[10px] font-extrabold uppercase tracking-wider">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                <span id="tagBadgeMobile">LIVE TAG</span>
+              </div>
+              <h1 id="heroTitleMobile" class="text-[21px] font-extrabold text-[#111d4a] tracking-tight leading-tight mt-0.5">
+                Welcome to <span class="text-[#1d4ed8]">PingMe!</span>
+              </h1>
+              <div class="inline-block tagline-pill px-2.5 py-0.5 rounded-full mt-1">
+                <p id="heroTaglineMobile" class="text-[9.5px] font-extrabold tracking-wider text-white uppercase">
+                  ONE SCAN. INSTANT CONNECTION.
+                </p>
+              </div>
+            </div>
           </div>
 
-          <!-- 5 Supporting Icons (Auto-hides broken img if not yet uploaded) -->
-          <div class="flex flex-col gap-1.5 shrink-0">
-            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white/95 p-1 shadow-md border border-slate-200/90 flex items-center justify-center" title="Car">
+          <!-- Desktop-Only Heading (hidden on mobile because shown above) -->
+          <div class="hidden md:block text-left space-y-1.5 order-first w-full">
+            <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-indigo-950/10 border border-indigo-900/15 text-indigo-950 text-[11px] font-extrabold uppercase tracking-wider">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+              <span id="tagBadge">LIVE TAG</span>
+            </div>
+            <h1 id="heroTitle" class="text-[30px] font-extrabold text-[#111d4a] tracking-tight leading-tight">
+              Welcome to <span class="text-[#1d4ed8]">PingMe!</span>
+            </h1>
+            <div class="inline-block tagline-pill px-4 py-1 rounded-full">
+              <p id="heroTagline" class="text-xs font-extrabold tracking-widest text-white uppercase">
+                ONE SCAN. INSTANT CONNECTION.
+              </p>
+            </div>
+          </div>
+
+          <!-- 5 Supporting 3D Icons (Compact Vertical Strip on Mobile & Desktop) -->
+          <div class="flex flex-col gap-1 shrink-0">
+            <div class="w-6 h-6 md:w-10 md:h-10 rounded-lg bg-white p-0.5 md:p-1 shadow-sm border border-slate-200 flex items-center justify-center" title="Car">
               <img src="assets/support-car-3d.png" alt="" onerror="this.src='assets/icon-vehicle.png'" class="w-full h-full object-contain" />
             </div>
-            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white/95 p-1 shadow-md border border-slate-200/90 flex items-center justify-center" title="Bike">
+            <div class="w-6 h-6 md:w-10 md:h-10 rounded-lg bg-white p-0.5 md:p-1 shadow-sm border border-slate-200 flex items-center justify-center" title="Bike">
               <img src="assets/support-bike-3d.png" alt="" onerror="this.src='assets/car-bike-3d.png'" class="w-full h-full object-contain" />
             </div>
-            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white/95 p-1 shadow-md border border-slate-200/90 flex items-center justify-center" title="Keys">
+            <div class="w-6 h-6 md:w-10 md:h-10 rounded-lg bg-white p-0.5 md:p-1 shadow-sm border border-slate-200 flex items-center justify-center" title="Keys">
               <img src="assets/support-keys-3d.png" alt="" onerror="this.src='assets/icon-keys-luggage.png'" class="w-full h-full object-contain" />
             </div>
-            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white/95 p-1 shadow-md border border-slate-200/90 flex items-center justify-center" title="Luggage">
+            <div class="w-6 h-6 md:w-10 md:h-10 rounded-lg bg-white p-0.5 md:p-1 shadow-sm border border-slate-200 flex items-center justify-center" title="Luggage">
               <img src="assets/support-luggage-3d.png" alt="" onerror="this.src='assets/luggage-keys-3d.png'" class="w-full h-full object-contain" />
             </div>
-            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white/95 p-1 shadow-md border border-slate-200/90 flex items-center justify-center" title="Parcel">
+            <div class="w-6 h-6 md:w-10 md:h-10 rounded-lg bg-white p-0.5 md:p-1 shadow-sm border border-slate-200 flex items-center justify-center" title="Parcel">
               <img src="assets/support-parcel-3d.png" alt="" onerror="this.src='assets/icon-other.png'" class="w-full h-full object-contain" />
             </div>
           </div>
@@ -308,44 +405,44 @@
 
         <!-- Category Selection (3 Categories) -->
         <div>
-          <div class="flex items-center gap-2 mb-2">
-            <span class="w-5 h-5 rounded-md bg-blue-600 text-white text-xs font-extrabold flex items-center justify-center shadow-sm">❖</span>
-            <h2 id="lblCategory" class="text-[15px] sm:text-base font-extrabold text-[#111d4a]">Choose a Category</h2>
+          <div class="flex items-center gap-1.5 mb-1.5">
+            <span class="w-4 h-4 md:w-5 md:h-5 rounded bg-blue-600 text-white text-[10px] md:text-xs font-extrabold flex items-center justify-center">❖</span>
+            <h2 id="lblCategory" class="text-[13px] md:text-base font-extrabold text-[#111d4a]">Choose a Category</h2>
           </div>
 
-          <div class="grid grid-cols-3 gap-2.5">
+          <div class="grid grid-cols-3 gap-2 md:gap-2.5">
             <button type="button" onclick="selectCategory('vehicle')" id="cat-vehicle"
-              class="cat-card active relative py-2.5 px-2 flex flex-col items-center gap-1">
-              <span id="check-vehicle" class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-emerald-500 text-white text-xs font-extrabold flex items-center justify-center shadow-md border-2 border-white">✓</span>
-              <img src="assets/icon-vehicle.png" alt="Vehicle" class="w-11 h-11 sm:w-12 sm:h-12 object-contain rounded-xl" />
-              <span id="txtCatVehicle" class="text-[13px] font-extrabold text-slate-900 leading-tight text-center">Vehicle</span>
+              class="cat-card active relative py-1.5 md:py-2.5 px-1.5 flex flex-col items-center gap-0.5 md:gap-1">
+              <span id="check-vehicle" class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-emerald-500 text-white text-[10px] font-extrabold flex items-center justify-center shadow border-2 border-white">✓</span>
+              <img src="assets/icon-vehicle.png" alt="Vehicle" class="w-8 h-8 md:w-12 md:h-12 object-contain rounded-lg" />
+              <span id="txtCatVehicle" class="text-xs md:text-[13px] font-extrabold text-slate-900 leading-tight text-center">Vehicle</span>
             </button>
 
             <button type="button" onclick="selectCategory('lost')" id="cat-lost"
-              class="cat-card relative py-2.5 px-2 flex flex-col items-center gap-1">
-              <span id="check-lost" class="hidden absolute -top-2 -right-2 w-6 h-6 rounded-full bg-emerald-500 text-white text-xs font-extrabold flex items-center justify-center shadow-md border-2 border-white">✓</span>
-              <img src="assets/icon-lostfound.png" alt="Lost & Found" class="w-11 h-11 sm:w-12 sm:h-12 object-contain rounded-xl" />
-              <span id="txtCatLost" class="text-[13px] font-extrabold text-slate-900 leading-tight text-center">Lost &amp; Found</span>
+              class="cat-card relative py-1.5 md:py-2.5 px-1.5 flex flex-col items-center gap-0.5 md:gap-1">
+              <span id="check-lost" class="hidden absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-emerald-500 text-white text-[10px] font-extrabold flex items-center justify-center shadow border-2 border-white">✓</span>
+              <img src="assets/icon-lostfound.png" alt="Lost & Found" class="w-8 h-8 md:w-12 md:h-12 object-contain rounded-lg" />
+              <span id="txtCatLost" class="text-xs md:text-[13px] font-extrabold text-slate-900 leading-tight text-center">Lost &amp; Found</span>
             </button>
 
             <button type="button" onclick="selectCategory('other')" id="cat-other"
-              class="cat-card relative py-2.5 px-2 flex flex-col items-center gap-1">
-              <span id="check-other" class="hidden absolute -top-2 -right-2 w-6 h-6 rounded-full bg-emerald-500 text-white text-xs font-extrabold flex items-center justify-center shadow-md border-2 border-white">✓</span>
-              <img src="assets/icon-other.png" alt="Other" class="w-11 h-11 sm:w-12 sm:h-12 object-contain rounded-xl" />
-              <span id="txtCatOther" class="text-[13px] font-extrabold text-slate-900 leading-tight text-center">Other</span>
+              class="cat-card relative py-1.5 md:py-2.5 px-1.5 flex flex-col items-center gap-0.5 md:gap-1">
+              <span id="check-other" class="hidden absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-emerald-500 text-white text-[10px] font-extrabold flex items-center justify-center shadow border-2 border-white">✓</span>
+              <img src="assets/icon-other.png" alt="Other" class="w-8 h-8 md:w-12 md:h-12 object-contain rounded-lg" />
+              <span id="txtCatOther" class="text-xs md:text-[13px] font-extrabold text-slate-900 leading-tight text-center">Other</span>
             </button>
           </div>
         </div>
       </div>
 
-      <!-- RIGHT COLUMN (Message Templates, Custom Note, Attachments, SEND ALERT) -->
-      <div class="md:col-span-7 space-y-3.5">
+      <!-- RIGHT / BOTTOM SECTION (Templates, Custom Note, Attachments, SEND ALERT) -->
+      <div class="md:col-span-7 space-y-2 md:space-y-3.5">
         <!-- Default Templates -->
         <div>
-          <div class="flex items-center justify-between mb-2">
-            <div class="flex items-center gap-2">
-              <span class="w-5 h-5 rounded-md bg-indigo-600 text-white text-xs font-extrabold flex items-center justify-center shadow-sm">💬</span>
-              <h2 class="text-[15px] sm:text-base font-extrabold text-[#111d4a]">
+          <div class="flex items-center justify-between mb-1.5">
+            <div class="flex items-center gap-1.5">
+              <span class="w-4 h-4 md:w-5 md:h-5 rounded bg-indigo-600 text-white text-[10px] md:text-xs font-extrabold flex items-center justify-center">💬</span>
+              <h2 class="text-[13px] md:text-base font-extrabold text-[#111d4a]">
                 <span id="lblMessage">Select a Message</span>
                 <span id="lblActiveCatTag" class="text-[#2563eb]">(Vehicle)</span>
               </h2>
@@ -356,85 +453,84 @@
             </button>
           </div>
 
-          <div id="reasonsContainer" class="space-y-2"></div>
+          <div id="reasonsContainer" class="space-y-1.5 md:space-y-2"></div>
         </div>
 
         <!-- Custom Message (Optional) -->
-        <div class="surface-card p-3">
+        <div class="surface-card p-2 md:p-3">
           <div class="flex items-center justify-between mb-1">
-            <label id="lblNote" for="customNote" class="text-sm font-extrabold text-[#111d4a]">
+            <label id="lblNote" for="customNote" class="text-xs md:text-sm font-extrabold text-[#111d4a]">
               ✍️ Add a Message (Optional)
             </label>
-            <span id="charCount" class="text-xs font-bold text-slate-500">0 / 160</span>
+            <span id="charCount" class="text-[11px] font-bold text-slate-500">0 / 160</span>
           </div>
-          <textarea id="customNote" rows="2" maxlength="160" oninput="updateCharCount()"
+          <input type="text" id="customNote" maxlength="160" oninput="updateCharCount()"
             placeholder="Type additional details here..."
-            class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-base text-slate-900 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:bg-white resize-none"></textarea>
+            class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-1.5 md:py-2 text-base text-slate-900 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:bg-white" />
         </div>
 
         <!-- Optional Attachments -->
-        <div class="grid grid-cols-2 gap-2.5">
-          <label class="surface-card p-2.5 flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition">
-            <img src="assets/icon-camera.png" alt="Attach Photo" class="w-7 h-7 object-contain shrink-0" />
+        <div class="grid grid-cols-2 gap-2">
+          <label class="surface-card p-2 md:p-2.5 flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition">
+            <img src="assets/icon-camera.png" alt="Attach Photo" class="w-6 h-6 md:w-7 md:h-7 object-contain shrink-0" />
             <div class="text-left leading-tight">
-              <div id="txtAttachPhoto" class="text-xs sm:text-[13px] font-extrabold text-[#111d4a]">ATTACH PHOTO</div>
-              <div id="subAttachPhoto" class="text-[11px] font-semibold text-slate-500">(Optional)</div>
+              <div id="txtAttachPhoto" class="text-[11px] sm:text-xs font-extrabold text-[#111d4a]">ATTACH PHOTO</div>
+              <div id="subAttachPhoto" class="text-[10px] font-semibold text-slate-500">(Optional)</div>
             </div>
             <input type="file" id="photoInput" accept="image/*" capture="environment" class="hidden" onchange="handlePhoto(event)" />
           </label>
 
           <button type="button" onclick="attachLocation()" id="locBtn"
-            class="surface-card p-2.5 flex items-center justify-center gap-2 active:scale-95 transition">
-            <div class="w-7 h-7 rounded-xl bg-pink-100 text-pink-600 text-base flex items-center justify-center shrink-0">
+            class="surface-card p-2 md:p-2.5 flex items-center justify-center gap-2 active:scale-95 transition">
+            <div class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-pink-100 text-pink-600 text-sm md:text-base flex items-center justify-center shrink-0">
               📍
             </div>
             <div class="text-left leading-tight">
-              <div id="txtShareLocation" class="text-xs sm:text-[13px] font-extrabold text-[#111d4a]">SHARE LOCATION</div>
-              <div id="subShareLocation" class="text-[11px] font-semibold text-slate-500">(Optional)</div>
+              <div id="txtShareLocation" class="text-[11px] sm:text-xs font-extrabold text-[#111d4a]">SHARE LOCATION</div>
+              <div id="subShareLocation" class="text-[10px] font-semibold text-slate-500">(Optional)</div>
             </div>
           </button>
         </div>
 
         <!-- Attachment Previews -->
-        <div id="attachmentPreviews" class="hidden space-y-2">
-          <div id="photoPreviewCard" class="hidden surface-card p-2.5 flex items-center justify-between gap-3">
-            <div class="flex items-center gap-2.5 min-w-0">
-              <img id="photoThumb" src="" alt="Attached preview" class="w-11 h-11 rounded-xl object-cover border border-slate-300 shrink-0" />
+        <div id="attachmentPreviews" class="hidden space-y-1.5">
+          <div id="photoPreviewCard" class="hidden surface-card p-2 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <img id="photoThumb" src="" alt="Attached preview" class="w-9 h-9 rounded-lg object-cover border border-slate-300 shrink-0" />
               <div class="min-w-0">
                 <div class="text-xs font-extrabold text-emerald-700">✓ Photo Attached</div>
-                <div class="text-[11px] text-slate-500 truncate">Ready to send with alert</div>
               </div>
             </div>
             <button type="button" onclick="removePhoto()"
-              class="px-2.5 py-1.5 rounded-lg bg-rose-100 text-rose-700 text-xs font-extrabold active:scale-95">
+              class="px-2 py-1 rounded-lg bg-rose-100 text-rose-700 text-xs font-extrabold active:scale-95">
               ✕ Remove
             </button>
           </div>
 
-          <div id="locPreviewCard" class="hidden surface-card p-2.5 flex items-center justify-between gap-3">
-            <div class="flex items-center gap-2.5 min-w-0">
-              <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 text-base flex items-center justify-center shrink-0">📍</div>
+          <div id="locPreviewCard" class="hidden surface-card p-2 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 text-sm flex items-center justify-center shrink-0">📍</div>
               <div class="min-w-0">
-                <div class="text-xs font-extrabold text-emerald-700">✓ GPS Location Attached</div>
-                <div id="locCoordsText" class="text-[11px] text-slate-500 truncate">Coordinates ready</div>
+                <div class="text-xs font-extrabold text-emerald-700">✓ Location Attached</div>
+                <div id="locCoordsText" class="text-[10px] text-slate-500 truncate">Coordinates ready</div>
               </div>
             </div>
             <button type="button" onclick="removeLocation()"
-              class="px-2.5 py-1.5 rounded-lg bg-rose-100 text-rose-700 text-xs font-extrabold active:scale-95">
+              class="px-2 py-1 rounded-lg bg-rose-100 text-rose-700 text-xs font-extrabold active:scale-95">
               ✕ Remove
             </button>
           </div>
         </div>
 
         <!-- Main Button: SEND ALERT -->
-        <div class="pt-0.5 space-y-2">
+        <div class="space-y-1.5">
           <button type="button" id="sendBtn" onclick="sendAlert()"
-            class="btn-send-alert w-full py-3.5 rounded-full font-extrabold text-lg text-white tracking-wide flex items-center justify-center gap-2.5">
-            <span class="text-xl">➤</span>
+            class="btn-send-alert w-full py-3 md:py-3.5 rounded-full font-extrabold text-base md:text-lg text-white tracking-wide flex items-center justify-center gap-2">
+            <span class="text-lg md:text-xl">➤</span>
             <span id="txtSendBtn">SEND ALERT</span>
           </button>
 
-          <div id="footerPrivacy" class="flex items-center justify-center gap-2.5 text-xs font-bold text-slate-700">
+          <div id="footerPrivacy" class="flex items-center justify-center gap-2 text-[11px] md:text-xs font-bold text-slate-700">
             <span class="flex items-center gap-1"><span class="text-emerald-600">🛡️</span> Private</span>
             <span class="text-slate-400">|</span>
             <span class="flex items-center gap-1"><span class="text-indigo-700">🔒</span> Secure</span>
@@ -448,28 +544,28 @@
     <!-- ========================================== -->
     <!-- SCREEN 2: ALERT SENT / WAITING             -->
     <!-- ========================================== -->
-    <section id="screen2" class="hidden px-4 pt-5 pb-4 max-w-md mx-auto w-full flex-1 flex flex-col justify-between space-y-4">
-      <div class="text-center space-y-4">
+    <section id="screen2" class="hidden px-4 pt-3 pb-3 max-w-md mx-auto w-full flex-1 flex flex-col justify-between space-y-3">
+      <div class="text-center space-y-2.5">
         <div>
           <div class="inline-flex items-center justify-center gap-2">
-            <span class="w-8 h-8 rounded-full bg-emerald-500 text-white text-lg font-extrabold flex items-center justify-center shadow-lg">✓</span>
-            <h2 id="waitTitle" class="text-3xl font-extrabold text-white tracking-tight">ALERT SENT!</h2>
+            <span class="w-7 h-7 rounded-full bg-emerald-500 text-white text-base font-extrabold flex items-center justify-center shadow-lg">✓</span>
+            <h2 id="waitTitle" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">ALERT SENT!</h2>
           </div>
-          <p id="waitSubtitle" class="text-base text-slate-200 font-medium mt-1">
+          <p id="waitSubtitle" class="text-sm sm:text-base text-slate-200 font-medium mt-0.5">
             The owner has been notified on WhatsApp.
           </p>
         </div>
 
         <div class="flex flex-col items-center justify-center">
-          <div id="mascotMainWrap" class="w-40 h-40 rounded-full flex items-center justify-center relative">
+          <div id="mascotMainWrap" class="w-36 h-36 sm:w-40 sm:h-40 rounded-full flex items-center justify-center relative">
             <img id="waitMascotPrimary" src="assets/Pingy_Waiting_Reference.png" alt="Pingy Waiting"
-                 class="w-40 h-40 object-contain rounded-full mascot-float drop-shadow-[0_12px_24px_rgba(16,185,129,0.35)]" />
+                 class="w-36 h-36 sm:w-40 sm:h-40 object-contain rounded-full mascot-float drop-shadow-[0_12px_24px_rgba(16,185,129,0.35)]" />
             <div id="waitMascotSprite" class="hidden sprite-box mascot-float">
               <img id="spriteImg" src="assets/Pingy_Expression_Sequence_Reference.png" alt="Pingy Expression" class="sprite-sheet" />
             </div>
           </div>
 
-          <div class="mt-2 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-cyan-400/40 shadow-md">
+          <div class="mt-1.5 inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-900/90 border border-cyan-400/40 shadow-md">
             <span class="flex gap-1">
               <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-bounce"></span>
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-bounce" style="animation-delay:0.15s"></span>
@@ -480,43 +576,43 @@
         </div>
 
         <div class="flex flex-col items-center justify-center">
-          <div class="countdown-ring w-32 h-32 rounded-full flex flex-col items-center justify-center">
-            <span id="countdownNumber" class="text-4xl font-extrabold text-white leading-none">180</span>
-            <span id="txtSecondsUnit" class="text-xs font-extrabold uppercase tracking-widest text-emerald-300 mt-1">SECONDS</span>
+          <div class="countdown-ring w-28 h-28 sm:w-32 sm:h-32 rounded-full flex flex-col items-center justify-center">
+            <span id="countdownNumber" class="text-3xl sm:text-4xl font-extrabold text-white leading-none">180</span>
+            <span id="txtSecondsUnit" class="text-[11px] font-extrabold uppercase tracking-widest text-emerald-300 mt-1">SECONDS</span>
           </div>
         </div>
 
-        <div class="space-y-2 max-w-xs mx-auto">
-          <div class="py-2 px-4 rounded-full bg-slate-900/80 border border-cyan-400/35 text-xs sm:text-sm font-extrabold tracking-wider text-cyan-200 uppercase">
+        <div class="space-y-1.5 max-w-xs mx-auto">
+          <div class="py-1.5 px-4 rounded-full bg-slate-900/80 border border-cyan-400/35 text-xs font-extrabold tracking-wider text-cyan-200 uppercase">
             <span id="txtWaitingReply">WAITING FOR OWNER'S REPLY</span>
           </div>
-          <div id="deliveredIndicator" class="py-2 px-4 rounded-full bg-emerald-500/20 border border-emerald-400/45 text-xs sm:text-sm font-extrabold tracking-wider text-emerald-300 uppercase">
+          <div id="deliveredIndicator" class="py-1.5 px-4 rounded-full bg-emerald-500/20 border border-emerald-400/45 text-xs font-extrabold tracking-wider text-emerald-300 uppercase">
             ✓ <span id="txtDelivered">PRIVATE ALERT DELIVERED</span>
           </div>
         </div>
       </div>
 
-      <div class="space-y-3 pt-2">
+      <div class="space-y-2.5 pt-1">
         <div class="grid grid-cols-3 gap-2.5">
           <button type="button" onclick="openBuyModal()"
-            class="btn-buy btn-3d-tap rounded-2xl py-3 px-2 flex flex-col items-center justify-center gap-1 text-white">
-            <span class="text-2xl">🛒</span>
+            class="btn-buy btn-3d-tap rounded-2xl py-2.5 px-2 flex flex-col items-center justify-center gap-0.5 text-white">
+            <span class="text-xl">🛒</span>
             <span id="txtBtnBuy2" class="text-sm font-extrabold tracking-wide">BUY</span>
           </button>
           <button type="button" onclick="openShareModal()"
-            class="btn-share btn-3d-tap rounded-2xl py-3 px-2 flex flex-col items-center justify-center gap-1 text-white">
-            <span class="text-2xl">🔗</span>
+            class="btn-share btn-3d-tap rounded-2xl py-2.5 px-2 flex flex-col items-center justify-center gap-0.5 text-white">
+            <span class="text-xl">🔗</span>
             <span id="txtBtnShare2" class="text-sm font-extrabold tracking-wide">SHARE</span>
           </button>
           <button type="button" onclick="openReviewPage()"
-            class="btn-review btn-3d-tap rounded-2xl py-3 px-2 flex flex-col items-center justify-center gap-1 text-white">
-            <span class="text-2xl">⭐</span>
+            class="btn-review btn-3d-tap rounded-2xl py-2.5 px-2 flex flex-col items-center justify-center gap-0.5 text-white">
+            <span class="text-xl">⭐</span>
             <span id="txtBtnReview2" class="text-sm font-extrabold tracking-wide">REVIEW</span>
           </button>
         </div>
 
         <button type="button" onclick="finishSession()"
-          class="btn-finish btn-3d-tap w-full py-3.5 rounded-full font-extrabold text-base text-white tracking-wider flex items-center justify-center gap-2">
+          class="btn-finish btn-3d-tap w-full py-3 rounded-full font-extrabold text-base text-white tracking-wider flex items-center justify-center gap-2">
           <span>✕</span>
           <span id="txtFinishBtn2">FINISH</span>
         </button>
@@ -526,24 +622,24 @@
     <!-- ========================================== -->
     <!-- SCREEN 3: OWNER RESPONDED                  -->
     <!-- ========================================== -->
-    <section id="screen3" class="hidden px-4 pt-5 pb-4 max-w-md mx-auto w-full flex-1 flex flex-col justify-between space-y-4">
-      <div class="text-center space-y-4">
+    <section id="screen3" class="hidden px-4 pt-4 pb-3 max-w-md mx-auto w-full flex-1 flex flex-col justify-between space-y-3">
+      <div class="text-center space-y-3">
         <div class="flex justify-center">
           <img src="assets/Pingy_ThumbsUp_Reference.png" alt="Owner Responded"
-               class="w-44 h-44 object-contain rounded-full mascot-float drop-shadow-[0_14px_28px_rgba(16,185,129,0.45)]" />
+               class="w-40 h-40 object-contain rounded-full mascot-float drop-shadow-[0_14px_28px_rgba(16,185,129,0.45)]" />
         </div>
 
-        <div class="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-gradient-to-r from-emerald-500 to-green-600 border-2 border-emerald-200 shadow-lg">
+        <div class="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-gradient-to-r from-emerald-500 to-green-600 border-2 border-emerald-200 shadow-lg">
           <span class="text-xl">💬</span>
           <h2 id="respTitle" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">GREAT NEWS!</h2>
         </div>
 
-        <p id="respSubtitle" class="text-xl font-extrabold text-white">
+        <p id="respSubtitle" class="text-lg sm:text-xl font-extrabold text-white">
           The owner has responded! 🎉
         </p>
 
-        <div class="bg-white rounded-2xl p-4 shadow-xl border-2 border-cyan-300 flex items-center gap-3.5 text-left">
-          <div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white text-2xl flex items-center justify-center shrink-0 shadow-md">
+        <div class="bg-white rounded-2xl p-3.5 shadow-xl border-2 border-cyan-300 flex items-center gap-3 text-left">
+          <div class="w-11 h-11 rounded-2xl bg-indigo-600 text-white text-xl flex items-center justify-center shrink-0 shadow-md">
             💬
           </div>
           <p id="respGuidance" class="text-base font-extrabold text-[#111d4a] leading-snug">
@@ -552,27 +648,27 @@
         </div>
       </div>
 
-      <div class="space-y-3 pt-2">
+      <div class="space-y-2.5 pt-1">
         <div class="grid grid-cols-3 gap-2.5">
           <button type="button" onclick="openBuyModal()"
-            class="btn-buy btn-3d-tap rounded-2xl py-3 px-2 flex flex-col items-center justify-center gap-1 text-white">
-            <span class="text-2xl">🛒</span>
+            class="btn-buy btn-3d-tap rounded-2xl py-2.5 px-2 flex flex-col items-center justify-center gap-0.5 text-white">
+            <span class="text-xl">🛒</span>
             <span id="txtBtnBuy3" class="text-sm font-extrabold tracking-wide">BUY</span>
           </button>
           <button type="button" onclick="openShareModal()"
-            class="btn-share btn-3d-tap rounded-2xl py-3 px-2 flex flex-col items-center justify-center gap-1 text-white">
-            <span class="text-2xl">🔗</span>
+            class="btn-share btn-3d-tap rounded-2xl py-2.5 px-2 flex flex-col items-center justify-center gap-0.5 text-white">
+            <span class="text-xl">🔗</span>
             <span id="txtBtnShare3" class="text-sm font-extrabold tracking-wide">SHARE</span>
           </button>
           <button type="button" onclick="openReviewPage()"
-            class="btn-review btn-3d-tap rounded-2xl py-3 px-2 flex flex-col items-center justify-center gap-1 text-white">
-            <span class="text-2xl">⭐</span>
+            class="btn-review btn-3d-tap rounded-2xl py-2.5 px-2 flex flex-col items-center justify-center gap-0.5 text-white">
+            <span class="text-xl">⭐</span>
             <span id="txtBtnReview3" class="text-sm font-extrabold tracking-wide">REVIEW</span>
           </button>
         </div>
 
         <button type="button" onclick="finishSession()"
-          class="btn-finish btn-3d-tap w-full py-3.5 rounded-full font-extrabold text-base text-white tracking-wider flex items-center justify-center gap-2">
+          class="btn-finish btn-3d-tap w-full py-3 rounded-full font-extrabold text-base text-white tracking-wider flex items-center justify-center gap-2">
           <span>✕</span>
           <span id="txtFinishBtn3">FINISH</span>
         </button>
@@ -582,14 +678,14 @@
     <!-- ========================================== -->
     <!-- SCREEN 4: FINISH & THANK YOU               -->
     <!-- ========================================== -->
-    <section id="screen4" class="hidden px-4 pt-6 pb-6 max-w-md mx-auto w-full flex-1 flex flex-col items-center justify-center text-center space-y-5">
+    <section id="screen4" class="hidden px-4 pt-5 pb-5 max-w-md mx-auto w-full flex-1 flex flex-col items-center justify-center text-center space-y-4">
       <img src="assets/Pingy_ThankYou_Reference.png" alt="Thank You from PingMe"
-           class="w-48 h-48 object-contain rounded-full mascot-float drop-shadow-[0_14px_28px_rgba(56,189,248,0.35)]" />
+           class="w-44 h-44 object-contain rounded-full mascot-float drop-shadow-[0_14px_28px_rgba(56,189,248,0.35)]" />
 
-      <div class="space-y-2">
-        <h2 id="tyTitle" class="text-4xl font-extrabold text-white tracking-tight">THANK YOU!</h2>
+      <div class="space-y-1.5">
+        <h2 id="tyTitle" class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">THANK YOU!</h2>
         <div class="h-1.5 w-36 mx-auto rounded-full bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500"></div>
-        <p id="tySubtitle" class="text-lg font-bold text-slate-100 pt-1">
+        <p id="tySubtitle" class="text-base sm:text-lg font-bold text-slate-100 pt-1">
           Thank you for using PingMe Services.
         </p>
       </div>
@@ -736,6 +832,17 @@
       STARTER_KIT_ORDER_MESSAGE: "Hi, I'm interested in ordering the PingMe Starter Kit for ₹599.",
       GOOGLE_REVIEW_URL: ""
     };
+
+    // Hide 1.6-second HD 3D brand splash screen smoothly
+    window.addEventListener("DOMContentLoaded", () => {
+      setTimeout(() => {
+        const splash = document.getElementById("splashScreen");
+        if (splash) {
+          splash.classList.add("splash-hide");
+          setTimeout(() => splash.remove(), 480);
+        }
+      }, 1600);
+    });
 
     const urlParams = new URLSearchParams(window.location.search);
     const TAG_CODE = (urlParams.get("t") || "TEST001").trim();
@@ -885,14 +992,14 @@
         const isSelected = selectedReason === item.text;
         return `
           <button type="button" onclick="toggleTemplate('${item.text.replace(/'/g, "\\'")}')"
-            class="tpl-pill ${isSelected ? "active" : ""} w-full text-left px-3.5 py-2 flex items-center justify-between gap-2.5">
-            <div class="flex items-center gap-2.5 min-w-0">
-              <span class="text-lg shrink-0">${item.icon}</span>
-              <span class="text-[15px] font-bold leading-snug">${item.text}</span>
+            class="tpl-pill ${isSelected ? "active" : ""} w-full text-left px-3 py-1.5 md:py-2 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="text-base md:text-lg shrink-0">${item.icon}</span>
+              <span class="text-[14px] md:text-[15px] font-bold leading-snug">${item.text}</span>
             </div>
             ${isSelected
-              ? '<span class="w-6 h-6 rounded-full bg-emerald-500 text-white text-xs font-extrabold flex items-center justify-center shrink-0">✓</span>'
-              : '<span class="w-5 h-5 rounded-full border border-slate-300 shrink-0"></span>'}
+              ? '<span class="w-5 h-5 md:w-6 md:h-6 rounded-full bg-emerald-500 text-white text-[11px] font-extrabold flex items-center justify-center shrink-0">✓</span>'
+              : '<span class="w-4 h-4 md:w-5 md:h-5 rounded-full border border-slate-300 shrink-0"></span>'}
           </button>
         `;
       }).join("");
@@ -933,7 +1040,9 @@
       }
 
       document.getElementById("heroTitle").innerHTML = t.heroTitleHtml;
+      document.getElementById("heroTitleMobile").innerHTML = t.heroTitleHtml;
       document.getElementById("heroTagline").textContent = t.heroTagline;
+      document.getElementById("heroTaglineMobile").textContent = t.heroTagline;
       document.getElementById("lblCategory").textContent = t.lblCategory;
       document.getElementById("txtCatVehicle").textContent = t.catVehicle;
       document.getElementById("txtCatLost").textContent = t.catLost;
@@ -1257,7 +1366,9 @@
     }
 
     async function loadTagMeta() {
-      document.getElementById("tagBadge").textContent = `TAG • ${TAG_CODE}`;
+      const defaultBadge = `TAG • ${TAG_CODE}`;
+      document.getElementById("tagBadge").textContent = defaultBadge;
+      document.getElementById("tagBadgeMobile").textContent = defaultBadge;
       try {
         const res = await fetch(`${CONFIG.BACKEND_URL}/api/tag?t=${encodeURIComponent(TAG_CODE)}`);
         if (!res.ok) return;
@@ -1265,7 +1376,9 @@
         if (data.tag) {
           const serial = data.tag.serial_no || TAG_CODE;
           const status = (data.tag.effective_status || "ACTIVE").toUpperCase();
-          document.getElementById("tagBadge").textContent = `${serial} • ${status}`;
+          const badgeText = `${serial} • ${status}`;
+          document.getElementById("tagBadge").textContent = badgeText;
+          document.getElementById("tagBadgeMobile").textContent = badgeText;
           if (data.tag.effective_status && data.tag.effective_status.toLowerCase() === "inactive") {
             sessionClosed = true;
             document.getElementById("sendBtn").disabled = true;
