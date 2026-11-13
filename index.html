@@ -3,353 +3,757 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <meta name="theme-color" content="#07131a" />
+  <meta name="theme-color" content="#08142b" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>PingMe — One Scan. Instant Connection.</title>
   <link rel="icon" type="image/png" href="assets/icon-192.png" />
   <link rel="apple-touch-icon" href="assets/icon-512.png" />
+  <meta property="og:title" content="PingMe — One Scan. Instant Connection." />
+  <meta property="og:description" content="Reach the owner privately without sharing phone numbers." />
   <meta property="og:image" content="assets/og-preview.png" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   <style>
     * {
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Plus Jakarta Sans', 'Noto Sans Tamil', -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-tap-highlight-color: transparent;
       box-sizing: border-box;
     }
     html, body {
       margin: 0;
       padding: 0;
-      background: #061017;
+      background: #060e20;
       color: #f8fafc;
       min-height: 100dvh;
       overscroll-behavior-y: none;
     }
-    /* Mobile App Shell */
+    img {
+      image-rendering: -webkit-optimize-contrast;
+      -webkit-user-drag: none;
+      user-select: none;
+    }
+
+    /* Native Mobile App Frame with Bottom Gesture/Nav Bar Clearance */
     .app-shell {
       width: 100%;
-      max-width: 460px;
+      max-width: 440px;
       min-height: 100dvh;
       margin: 0 auto;
-      background: radial-gradient(circle at 50% 0%, #123244 0%, #091822 48%, #050c12 100%);
       display: flex;
       flex-direction: column;
       position: relative;
-      box-shadow: 0 0 60px rgba(0, 0, 0, 0.85);
+      overflow-x: hidden;
+      box-shadow: 0 0 65px rgba(0, 0, 0, 0.85);
+      /* Generous bottom clearance so Android/iOS bottom nav buttons never cover UI */
+      padding-bottom: calc(52px + env(safe-area-inset-bottom));
     }
-    /* Sticky Glass App Header */
+
+    /* Screen 1 Light-Lavender/Sky Premium Theme (Matches Reference Screen 1) */
+    .theme-light {
+      background: linear-gradient(180deg, #dbeafe 0%, #eef2ff 24%, #f5f3ff 65%, #ede9fe 100%);
+      color: #0f172a;
+    }
+
+    /* Screens 2, 3, 4 Deep Navy / Electric Blue / Magenta Theme (Matches Reference Screens 2-4) */
+    .theme-dark {
+      background:
+        radial-gradient(circle at 50% 22%, rgba(56, 189, 248, 0.24) 0%, rgba(168, 85, 247, 0.16) 35%, transparent 65%),
+        linear-gradient(180deg, #071226 0%, #0b1d3a 48%, #10193d 80%, #1a103c 100%);
+      color: #f8fafc;
+    }
+
+    /* Sticky Top App Header */
     .app-header {
       position: sticky;
       top: 0;
       z-index: 30;
-      background: rgba(8, 22, 31, 0.86);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(56, 189, 248, 0.14);
       padding-top: max(12px, env(safe-area-inset-top));
+      transition: background 0.25s ease, border-color 0.25s ease;
     }
-    .glass-card {
-      background: rgba(15, 36, 50, 0.78);
+    .theme-light .app-header {
+      background: rgba(219, 234, 254, 0.88);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(56, 189, 248, 0.16);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.42);
+      border-bottom: 1px solid rgba(59, 130, 246, 0.14);
     }
-    /* Native App Icon Tile Styling */
-    .app-icon-tile {
-      border-radius: 16px;
-      overflow: hidden;
+    .theme-dark .app-header {
+      background: rgba(7, 18, 38, 0.86);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(56, 189, 248, 0.16);
+    }
+
+    /* 3D Brand Logo Pill */
+    .brand-pill {
       background: #ffffff;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+      border-radius: 0 24px 24px 0;
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.18), inset 0 -2px 0 rgba(148, 163, 184, 0.25);
     }
-    .cat-btn {
-      background: rgba(12, 29, 41, 0.9);
-      border: 1.5px solid rgba(148, 163, 184, 0.18);
-      transition: transform 0.15s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+
+    /* Language Toggle Pill */
+    .lang-pill {
+      background: linear-gradient(180deg, #162b4d 0%, #0c1930 100%);
+      border: 1.5px solid rgba(56, 189, 248, 0.45);
+      box-shadow: 0 6px 16px rgba(8, 20, 43, 0.25);
+      color: #ffffff;
     }
-    .cat-btn:active {
-      transform: scale(0.95);
+
+    /* Tagline Banner Pill */
+    .tagline-pill {
+      background: linear-gradient(90deg, #4338ca 0%, #7e22ce 52%, #db2777 100%);
+      box-shadow: 0 6px 18px rgba(126, 34, 206, 0.32);
     }
-    .cat-btn.active {
-      background: linear-gradient(155deg, rgba(16, 185, 129, 0.26), rgba(6, 182, 212, 0.2));
-      border: 2px solid #34d399;
-      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.28);
+
+    /* 3D Category Cards */
+    .cat-card {
+      background: #ffffff;
+      border: 2px solid #e2e8f0;
+      border-radius: 18px;
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08), inset 0 -3px 0 rgba(203, 213, 225, 0.6);
+      transition: transform 0.14s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.2s ease, box-shadow 0.2s ease;
     }
-    .reason-pill {
-      background: rgba(12, 29, 41, 0.88);
-      border: 1.5px solid rgba(148, 163, 184, 0.16);
+    .cat-card:active { transform: scale(0.95); }
+    .cat-card.active {
+      background: linear-gradient(180deg, #ecfeff 0%, #cffafe 100%);
+      border: 2.5px solid #06b6d4;
+      box-shadow: 0 8px 22px rgba(6, 182, 212, 0.28), inset 0 -3px 0 rgba(6, 182, 212, 0.35);
+    }
+
+    /* 3D Template Pills */
+    .tpl-pill {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 14px;
+      color: #1e293b;
+      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.05);
       transition: transform 0.12s ease, border-color 0.18s ease, background 0.18s ease;
     }
-    .reason-pill:active {
-      transform: scale(0.985);
+    .tpl-pill:active { transform: scale(0.985); }
+    .tpl-pill.active {
+      background: linear-gradient(90deg, #cffafe 0%, #e0f2fe 100%);
+      border: 2px solid #06b6d4;
+      color: #0f172a;
+      box-shadow: 0 5px 14px rgba(6, 182, 212, 0.22);
     }
-    .reason-pill.active {
-      background: linear-gradient(90deg, rgba(16, 185, 129, 0.26), rgba(6, 182, 212, 0.2));
-      border: 2px solid #34d399;
-      color: #ffffff;
-      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.18);
+
+    /* Light Surface Input & Attachment Cards */
+    .surface-card {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 16px;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
     }
-    /* Sticky Bottom Action Dock */
-    .bottom-dock {
-      position: sticky;
-      bottom: 0;
-      z-index: 30;
-      background: linear-gradient(to top, #050c12 72%, rgba(5, 12, 18, 0.92) 90%, rgba(5, 12, 18, 0) 100%);
-      padding-bottom: max(14px, env(safe-area-inset-bottom));
-    }
-    .send-btn {
-      background: linear-gradient(95deg, #10b981 0%, #06b6d4 100%);
-      box-shadow: 0 10px 28px rgba(16, 185, 129, 0.42);
+
+    /* Primary Gradient 3D SEND ALERT Button */
+    .btn-send-alert {
+      background: linear-gradient(90deg, #0ea5e9 0%, #6366f1 48%, #ec4899 100%);
+      box-shadow: 0 10px 26px rgba(236, 72, 153, 0.38), inset 0 2px 0 rgba(255, 255, 255, 0.35), inset 0 -4px 0 rgba(131, 24, 67, 0.35);
       transition: transform 0.14s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
     }
-    .send-btn:active { transform: scale(0.97); }
-    .send-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-    .pulse-ring {
-      animation: pulseRing 2s infinite;
+    .btn-send-alert:active { transform: scale(0.97); }
+    .btn-send-alert:disabled { opacity: 0.65; cursor: not-allowed; }
+
+    /* 3D Action Buttons: BUY / SHARE / REVIEW */
+    .btn-buy {
+      background: linear-gradient(180deg, #f43f5e 0%, #db2777 55%, #9d174d 100%);
+      border: 1.5px solid #f9a8d4;
+      box-shadow: 0 8px 20px rgba(219, 39, 119, 0.42), inset 0 2px 0 rgba(255, 255, 255, 0.4);
     }
-    @keyframes pulseRing {
-      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.55); }
-      70% { box-shadow: 0 0 0 16px rgba(16, 185, 129, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    .btn-share {
+      background: linear-gradient(180deg, #38bdf8 0%, #0284c7 55%, #075985 100%);
+      border: 1.5px solid #bae6fd;
+      box-shadow: 0 8px 20px rgba(2, 132, 199, 0.42), inset 0 2px 0 rgba(255, 255, 255, 0.4);
     }
-    @keyframes floatSlow {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-4px); }
+    .btn-review {
+      background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 55%, #b45309 100%);
+      border: 1.5px solid #fde68a;
+      box-shadow: 0 8px 20px rgba(245, 158, 11, 0.42), inset 0 2px 0 rgba(255, 255, 255, 0.45);
     }
-    .animate-float {
-      animation: floatSlow 3.2s ease-in-out infinite;
+    .btn-3d-tap {
+      transition: transform 0.14s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .btn-3d-tap:active { transform: scale(0.95); }
+
+    /* 3D FINISH Button */
+    .btn-finish {
+      background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 55%, #1e3a8a 100%);
+      border: 1.5px solid #93c5fd;
+      box-shadow: 0 8px 22px rgba(29, 78, 216, 0.45), inset 0 2px 0 rgba(255, 255, 255, 0.35);
+    }
+
+    /* Countdown Neon Emerald Ring */
+    .countdown-ring {
+      background: radial-gradient(circle, #06182c 58%, #042f2e 100%);
+      border: 6px solid #10b981;
+      box-shadow: 0 0 30px rgba(16, 185, 129, 0.5), inset 0 0 18px rgba(16, 185, 129, 0.35);
+      animation: ringPulse 2s infinite;
+    }
+    @keyframes ringPulse {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.55), inset 0 0 16px rgba(16, 185, 129, 0.35); }
+      70% { box-shadow: 0 0 0 14px rgba(16, 185, 129, 0), inset 0 0 16px rgba(16, 185, 129, 0.35); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0), inset 0 0 16px rgba(16, 185, 129, 0.35); }
+    }
+
+    /* Mascot Gentle Float & Expression Transition */
+    @keyframes mascotFloat {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-4px) scale(1.015); }
+    }
+    .mascot-float {
+      animation: mascotFloat 3s ease-in-out infinite;
+    }
+
+    /* Sprite Frame Cropping for Pingy_Expression_Sequence_Reference.png (4 poses side-by-side) */
+    .sprite-box {
+      width: 152px;
+      height: 152px;
+      border-radius: 9999px;
+      overflow: hidden;
+      position: relative;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.38) 0%, rgba(168, 85, 247, 0.22) 60%, transparent 100%);
+      border: 2.5px solid rgba(56, 189, 248, 0.45);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+    }
+    .sprite-box img.sprite-sheet {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 400%;
+      height: 100%;
+      max-width: none;
+      object-fit: cover;
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
     }
   </style>
 </head>
 <body>
-  <div class="app-shell">
+  <div id="appShell" class="app-shell theme-light">
 
-    <!-- STICKY TOP APP BAR -->
-    <header class="app-header px-4 pb-3 flex items-center justify-between gap-2">
-      <!-- Crisp HD Brand Logo Pill -->
-      <div class="flex items-center gap-2.5 min-w-0">
-        <div class="bg-white/95 rounded-2xl px-2.5 py-1.5 shadow-md border border-emerald-400/40 shrink-0 flex items-center justify-center">
-          <img src="assets/pingme-logo.png" alt="PingMe — One Scan. Instant Connection."
-               class="h-10 sm:h-11 w-auto max-w-[175px] object-contain" />
-        </div>
+    <!-- ========================================== -->
+    <!-- STICKY TOP APP HEADER                      -->
+    <!-- ========================================== -->
+    <header class="app-header pr-4 pb-2.5 flex items-center justify-between gap-2">
+      <!-- Official PingMe Logo (Unmodified) -->
+      <div class="brand-pill pl-3.5 pr-5 py-1.5 flex items-center">
+        <img src="assets/pingme-logo.png" alt="PingMe — One Scan. Instant Connection."
+             class="h-11 sm:h-12 w-auto max-w-[185px] object-contain" />
       </div>
 
-      <!-- Language Switcher Pill -->
+      <!-- Language Selector -->
       <button id="langToggle" onclick="toggleLanguage()"
-        class="shrink-0 px-3.5 py-2 rounded-full glass-card text-xs sm:text-sm font-bold text-white border border-cyan-400/30 active:scale-95 transition flex items-center gap-1.5">
-        <span>🌐</span>
-        <span>English | தமிழ்</span>
+        class="lang-pill px-3.5 py-2 rounded-full text-xs sm:text-sm font-bold flex items-center gap-1.5 active:scale-95 transition shrink-0">
+        <span class="text-cyan-300 text-base leading-none">🌐</span>
+        <span id="langLabel">English | தமிழ்</span>
       </button>
     </header>
 
     <!-- ========================================== -->
-    <!-- SCREEN 1: SCANNER ALERT INTERFACE          -->
+    <!-- SCREEN 1: WELCOME & SEND ALERT             -->
     <!-- ========================================== -->
-    <main id="screen1" class="flex-1 flex flex-col justify-between">
-      <div class="px-4 pt-4 pb-6 space-y-5">
+    <main id="screen1" class="px-4 pt-3 pb-4 space-y-4">
 
-        <!-- Hero Card -->
-        <div class="glass-card rounded-3xl p-4 sm:p-5 relative overflow-hidden flex items-center justify-between gap-3.5">
-          <div class="text-left flex-1 min-w-0">
-            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-xs font-extrabold uppercase tracking-wider mb-2">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-              <span id="tagBadge">LIVE TAG</span>
-            </div>
-            <h1 id="heroTitle" class="text-2xl sm:text-[26px] font-extrabold text-white tracking-tight leading-tight">
-              Welcome to PingMe!
-            </h1>
-            <p id="heroSubtitle" class="text-sm sm:text-[15px] font-medium text-slate-200 mt-1 leading-snug">
-              Reach the owner. Privately.
-            </p>
-          </div>
+      <!-- Welcome Heading & Tagline -->
+      <div class="text-center space-y-1.5">
+        <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-indigo-950/10 border border-indigo-900/15 text-indigo-950 text-[11px] font-extrabold uppercase tracking-wider">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+          <span id="tagBadge">LIVE TAG</span>
+        </div>
+        <h1 id="heroTitle" class="text-[28px] sm:text-[31px] font-extrabold text-[#111d4a] tracking-tight leading-tight">
+          Welcome to <span class="text-[#1d4ed8]">PingMe!</span>
+        </h1>
+        <div class="inline-block tagline-pill px-4 py-1 rounded-full">
+          <p id="heroTagline" class="text-[11px] sm:text-xs font-extrabold tracking-widest text-white uppercase">
+            ONE SCAN. INSTANT CONNECTION.
+          </p>
+        </div>
+      </div>
 
-          <!-- HD Hero Illustration Tile -->
-          <div class="app-icon-tile w-24 h-24 sm:w-28 sm:h-28 shrink-0 p-1.5 flex items-center justify-center animate-float">
-            <img id="heroArt" src="assets/hero-vehicle.png" alt="PingMe Category" class="w-full h-full object-contain rounded-xl" />
-          </div>
+      <!-- Hero Visual: Pingy Welcome Mascot + Universal QR Tag + 5 Supporting 3D Icons -->
+      <div class="relative flex items-center justify-between gap-1.5 pt-1 pb-1">
+        <!-- Pingy Welcome Mascot with Thumbs-Up & Universal QR Tag -->
+        <div class="flex-1 flex items-center justify-center relative">
+          <img src="assets/Pingy_Welcome_Reference.png" alt="PingMe Mascot with Universal QR Tag"
+               class="w-full max-w-[265px] sm:max-w-[285px] h-auto object-contain rounded-2xl mascot-float drop-shadow-[0_12px_20px_rgba(30,58,138,0.22)]" />
         </div>
 
-        <!-- Category Selector -->
-        <div>
-          <label id="lblCategory" class="block text-xs sm:text-[13px] font-extrabold uppercase tracking-wider text-cyan-300 mb-2.5">
-            Choose a Category
-          </label>
-          <div class="grid grid-cols-3 gap-3">
-            <button type="button" onclick="selectCategory('vehicle')" id="cat-vehicle"
-              class="cat-btn active rounded-2xl py-3.5 px-2 flex flex-col items-center gap-2">
-              <div class="app-icon-tile w-14 h-14 sm:w-16 sm:h-16 p-1 flex items-center justify-center">
-                <img src="assets/icon-vehicle.png" alt="Vehicle" class="w-full h-full object-contain rounded-xl" />
-              </div>
-              <span id="txtCatVehicle" class="text-xs sm:text-[13px] font-extrabold tracking-wide text-white text-center leading-tight">
-                VEHICLE
-              </span>
-            </button>
-
-            <button type="button" onclick="selectCategory('lost')" id="cat-lost"
-              class="cat-btn rounded-2xl py-3.5 px-2 flex flex-col items-center gap-2">
-              <div class="app-icon-tile w-14 h-14 sm:w-16 sm:h-16 p-1 flex items-center justify-center">
-                <img src="assets/icon-lostfound.png" alt="Lost & Found" class="w-full h-full object-contain rounded-xl" />
-              </div>
-              <span id="txtCatLost" class="text-xs sm:text-[13px] font-extrabold tracking-wide text-white text-center leading-tight">
-                LOST & FOUND
-              </span>
-            </button>
-
-            <button type="button" onclick="selectCategory('other')" id="cat-other"
-              class="cat-btn rounded-2xl py-3.5 px-2 flex flex-col items-center gap-2">
-              <div class="app-icon-tile w-14 h-14 sm:w-16 sm:h-16 p-1 flex items-center justify-center">
-                <img src="assets/icon-other.png" alt="Other" class="w-full h-full object-contain rounded-xl" />
-              </div>
-              <span id="txtCatOther" class="text-xs sm:text-[13px] font-extrabold tracking-wide text-white text-center leading-tight">
-                OTHER
-              </span>
-            </button>
+        <!-- 5 Supporting 3D Icons Column (Car, Bike, Keys, Luggage, Parcel) -->
+        <div class="flex flex-col gap-1.5 shrink-0 pr-0.5">
+          <div class="w-11 h-11 rounded-xl bg-white/95 p-1 shadow-md border border-slate-200/90 flex items-center justify-center" title="Car">
+            <img src="assets/support-car-3d.png" alt="Car" class="w-full h-full object-contain" />
+          </div>
+          <div class="w-11 h-11 rounded-xl bg-white/95 p-1 shadow-md border border-slate-200/90 flex items-center justify-center" title="Bike">
+            <img src="assets/support-bike-3d.png" alt="Bike" class="w-full h-full object-contain" />
+          </div>
+          <div class="w-11 h-11 rounded-xl bg-white/95 p-1 shadow-md border border-slate-200/90 flex items-center justify-center" title="Keys">
+            <img src="assets/support-keys-3d.png" alt="Keys" class="w-full h-full object-contain" />
+          </div>
+          <div class="w-11 h-11 rounded-xl bg-white/95 p-1 shadow-md border border-slate-200/90 flex items-center justify-center" title="Luggage">
+            <img src="assets/support-luggage-3d.png" alt="Luggage" class="w-full h-full object-contain" />
+          </div>
+          <div class="w-11 h-11 rounded-xl bg-white/95 p-1 shadow-md border border-slate-200/90 flex items-center justify-center" title="Parcel">
+            <img src="assets/support-parcel-3d.png" alt="Parcel" class="w-full h-full object-contain" />
           </div>
         </div>
+      </div>
 
-        <!-- Preset Reasons -->
-        <div>
-          <label id="lblMessage" class="block text-xs sm:text-[13px] font-extrabold uppercase tracking-wider text-cyan-300 mb-2.5">
-            Select a Message
-          </label>
-          <div id="reasonsContainer" class="space-y-2.5"></div>
+      <!-- Category Selection (3 Categories) -->
+      <div>
+        <div class="flex items-center gap-2 mb-2">
+          <span class="w-5 h-5 rounded-md bg-blue-600 text-white text-xs font-extrabold flex items-center justify-center shadow-sm">❖</span>
+          <h2 id="lblCategory" class="text-[15px] sm:text-base font-extrabold text-[#111d4a]">Choose a Category</h2>
         </div>
 
-        <!-- Optional Note -->
-        <div class="glass-card rounded-2xl p-3.5">
-          <div class="flex items-center justify-between mb-2">
-            <label id="lblNote" class="text-sm font-bold text-amber-300">✍️ Add a Message (Optional)</label>
-            <span id="charCount" class="text-xs font-semibold text-slate-400">0/160</span>
+        <div class="grid grid-cols-3 gap-2.5">
+          <!-- Vehicle -->
+          <button type="button" onclick="selectCategory('vehicle')" id="cat-vehicle"
+            class="cat-card active relative py-3 px-2 flex flex-col items-center gap-1.5">
+            <span id="check-vehicle" class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-emerald-500 text-white text-xs font-extrabold flex items-center justify-center shadow-md border-2 border-white">✓</span>
+            <img src="assets/icon-vehicle.png" alt="Vehicle" class="w-12 h-12 sm:w-14 sm:h-14 object-contain rounded-xl" />
+            <span id="txtCatVehicle" class="text-[13px] sm:text-sm font-extrabold text-slate-900 leading-tight text-center">Vehicle</span>
+          </button>
+
+          <!-- Lost & Found -->
+          <button type="button" onclick="selectCategory('lost')" id="cat-lost"
+            class="cat-card relative py-3 px-2 flex flex-col items-center gap-1.5">
+            <span id="check-lost" class="hidden absolute -top-2 -right-2 w-6 h-6 rounded-full bg-emerald-500 text-white text-xs font-extrabold flex items-center justify-center shadow-md border-2 border-white">✓</span>
+            <img src="assets/icon-lostfound.png" alt="Lost & Found" class="w-12 h-12 sm:w-14 sm:h-14 object-contain rounded-xl" />
+            <span id="txtCatLost" class="text-[13px] sm:text-sm font-extrabold text-slate-900 leading-tight text-center">Lost &amp; Found</span>
+          </button>
+
+          <!-- Other -->
+          <button type="button" onclick="selectCategory('other')" id="cat-other"
+            class="cat-card relative py-3 px-2 flex flex-col items-center gap-1.5">
+            <span id="check-other" class="hidden absolute -top-2 -right-2 w-6 h-6 rounded-full bg-emerald-500 text-white text-xs font-extrabold flex items-center justify-center shadow-md border-2 border-white">✓</span>
+            <img src="assets/icon-other.png" alt="Other" class="w-12 h-12 sm:w-14 sm:h-14 object-contain rounded-xl" />
+            <span id="txtCatOther" class="text-[13px] sm:text-sm font-extrabold text-slate-900 leading-tight text-center">Other</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Default Templates -->
+      <div>
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span class="w-5 h-5 rounded-md bg-indigo-600 text-white text-xs font-extrabold flex items-center justify-center shadow-sm">💬</span>
+            <h2 class="text-[15px] sm:text-base font-extrabold text-[#111d4a]">
+              <span id="lblMessage">Select a Message</span>
+              <span id="lblActiveCatTag" class="text-[#2563eb]">(Vehicle)</span>
+            </h2>
           </div>
-          <textarea id="customNote" rows="2" maxlength="160" oninput="updateCharCount()"
-            placeholder="Type specific details, e.g. 'Parked near gate 3'"
-            class="w-full bg-slate-950/70 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-emerald-400 resize-none"></textarea>
-        </div>
-
-        <!-- Optional Photo & Location Row -->
-        <div class="grid grid-cols-2 gap-3">
-          <label class="glass-card rounded-2xl p-3.5 flex items-center justify-between cursor-pointer active:scale-95 transition">
-            <div class="flex items-center gap-2.5 overflow-hidden">
-              <div class="app-icon-tile w-9 h-9 p-1 shrink-0 flex items-center justify-center">
-                <img src="assets/icon-camera.png" alt="Photo" class="w-full h-full object-contain" />
-              </div>
-              <span id="photoLabel" class="text-xs sm:text-sm font-bold text-white truncate">Attach Photo</span>
-            </div>
-            <span id="photoBadge" class="text-[11px] font-extrabold px-2 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 shrink-0">+ ADD</span>
-            <input type="file" id="photoInput" accept="image/*" capture="environment" class="hidden" onchange="handlePhoto(event)" />
-          </label>
-
-          <button type="button" onclick="attachLocation()" id="locBtn"
-            class="glass-card rounded-2xl p-3.5 flex items-center justify-between active:scale-95 transition">
-            <div class="flex items-center gap-2.5 overflow-hidden">
-              <div class="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-400/30 shrink-0 flex items-center justify-center text-lg">
-                📍
-              </div>
-              <span id="locLabel" class="text-xs sm:text-sm font-bold text-white truncate">Share GPS</span>
-            </div>
-            <span id="locBadge" class="text-[11px] font-extrabold px-2 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 shrink-0">+ ADD</span>
+          <button type="button" id="clearTplBtn" onclick="clearTemplateSelection()"
+            class="hidden text-xs font-bold text-rose-600 underline">
+            Clear
           </button>
         </div>
 
+        <div id="reasonsContainer" class="space-y-2"></div>
       </div>
 
-      <!-- STICKY BOTTOM APP DOCK -->
-      <div class="bottom-dock px-4 pt-3">
-        <button type="button" id="sendBtn" onclick="sendAlert()"
-          class="send-btn w-full py-4 rounded-2xl font-extrabold text-base text-slate-950 tracking-wide flex items-center justify-center gap-2.5">
-          <img src="assets/mascot-airplane-3d.png" alt="" class="w-7 h-7 object-contain rounded-lg bg-white/90 p-0.5" />
-          <span id="txtSendBtn">SEND ALERT PRIVATELY</span>
+      <!-- Custom Message (Optional) -->
+      <div class="surface-card p-3.5">
+        <div class="flex items-center justify-between mb-1.5">
+          <label id="lblNote" for="customNote" class="text-sm font-extrabold text-[#111d4a]">
+            ✍️ Add a Message (Optional)
+          </label>
+          <span id="charCount" class="text-xs font-bold text-slate-500">0 / 160</span>
+        </div>
+        <textarea id="customNote" rows="2" maxlength="160" oninput="updateCharCount()"
+          placeholder="Type additional details here..."
+          class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-base text-slate-900 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:bg-white resize-none"></textarea>
+      </div>
+
+      <!-- Optional Attachments: ATTACH PHOTO & SHARE LOCATION -->
+      <div class="grid grid-cols-2 gap-2.5">
+        <!-- Attach Photo Button -->
+        <label class="surface-card p-3 flex items-center justify-center gap-2.5 cursor-pointer active:scale-95 transition">
+          <img src="assets/icon-camera.png" alt="Attach Photo" class="w-8 h-8 object-contain shrink-0" />
+          <div class="text-left leading-tight">
+            <div id="txtAttachPhoto" class="text-xs sm:text-[13px] font-extrabold text-[#111d4a]">ATTACH PHOTO</div>
+            <div id="subAttachPhoto" class="text-[11px] font-semibold text-slate-500">(Optional)</div>
+          </div>
+          <input type="file" id="photoInput" accept="image/*" capture="environment" class="hidden" onchange="handlePhoto(event)" />
+        </label>
+
+        <!-- Share Location Button -->
+        <button type="button" onclick="attachLocation()" id="locBtn"
+          class="surface-card p-3 flex items-center justify-center gap-2.5 active:scale-95 transition">
+          <div class="w-8 h-8 rounded-xl bg-pink-100 text-pink-600 text-lg flex items-center justify-center shrink-0">
+            📍
+          </div>
+          <div class="text-left leading-tight">
+            <div id="txtShareLocation" class="text-xs sm:text-[13px] font-extrabold text-[#111d4a]">SHARE LOCATION</div>
+            <div id="subShareLocation" class="text-[11px] font-semibold text-slate-500">(Optional)</div>
+          </div>
         </button>
-        <p id="footerPrivacy" class="text-center text-xs text-slate-400 font-semibold mt-2.5">
-          🔒 Private • Secure • No Number Shared
-        </p>
+      </div>
+
+      <!-- Attachment Previews with Remove Controls -->
+      <div id="attachmentPreviews" class="hidden space-y-2">
+        <!-- Photo Preview -->
+        <div id="photoPreviewCard" class="hidden surface-card p-2.5 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <img id="photoThumb" src="" alt="Attached preview" class="w-12 h-12 rounded-xl object-cover border border-slate-300 shrink-0" />
+            <div class="min-w-0">
+              <div class="text-xs font-extrabold text-emerald-700">✓ Photo Attached</div>
+              <div class="text-[11px] text-slate-500 truncate">Ready to send with alert</div>
+            </div>
+          </div>
+          <button type="button" onclick="removePhoto()"
+            class="px-2.5 py-1.5 rounded-lg bg-rose-100 text-rose-700 text-xs font-extrabold active:scale-95">
+            ✕ Remove
+          </button>
+        </div>
+
+        <!-- Location Preview -->
+        <div id="locPreviewCard" class="hidden surface-card p-2.5 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 text-lg flex items-center justify-center shrink-0">📍</div>
+            <div class="min-w-0">
+              <div class="text-xs font-extrabold text-emerald-700">✓ GPS Location Attached</div>
+              <div id="locCoordsText" class="text-[11px] text-slate-500 truncate">Coordinates ready</div>
+            </div>
+          </div>
+          <button type="button" onclick="removeLocation()"
+            class="px-2.5 py-1.5 rounded-lg bg-rose-100 text-rose-700 text-xs font-extrabold active:scale-95">
+            ✕ Remove
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Button: SEND ALERT -->
+      <div class="pt-1 space-y-2.5">
+        <button type="button" id="sendBtn" onclick="sendAlert()"
+          class="btn-send-alert w-full py-4 rounded-full font-extrabold text-lg text-white tracking-wide flex items-center justify-center gap-2.5">
+          <span class="text-xl">➤</span>
+          <span id="txtSendBtn">SEND ALERT</span>
+        </button>
+
+        <!-- Trust Footer -->
+        <div id="footerPrivacy" class="flex items-center justify-center gap-2.5 text-xs font-bold text-slate-700 pt-0.5">
+          <span class="flex items-center gap-1"><span class="text-emerald-600">🛡️</span> Private</span>
+          <span class="text-slate-400">|</span>
+          <span class="flex items-center gap-1"><span class="text-indigo-700">🔒</span> Secure</span>
+          <span class="text-slate-400">|</span>
+          <span class="flex items-center gap-1"><span class="text-slate-700">📵</span> No Number Shared</span>
+        </div>
       </div>
     </main>
 
     <!-- ========================================== -->
-    <!-- SCREEN 2: LIVE WAITING & OWNER REPLY ROOM  -->
+    <!-- SCREEN 2: ALERT SENT / WAITING             -->
     <!-- ========================================== -->
-    <section id="screen2" class="hidden flex-1 px-4 py-5 flex flex-col justify-between">
-      <div class="glass-card rounded-3xl p-5 text-center space-y-4 relative overflow-hidden">
-        <!-- Confetti Burst on Live Reply -->
-        <img id="confettiImg" src="assets/confetti-burst.png" alt="" class="hidden w-44 h-24 object-contain mx-auto -mb-2 pointer-events-none" />
-
-        <!-- Mascot Status Card -->
-        <div class="flex justify-center">
-          <div class="app-icon-tile w-28 h-28 p-1.5 flex items-center justify-center animate-float">
-            <img id="waitMascot" src="assets/boy-waiting.png" alt="Status Mascot" class="w-full h-full object-contain rounded-2xl" />
-          </div>
-        </div>
-
+    <section id="screen2" class="hidden px-4 pt-4 pb-4 flex-1 flex flex-col justify-between space-y-4">
+      <div class="text-center space-y-4">
+        <!-- Heading -->
         <div>
-          <h2 id="waitTitle" class="text-2xl font-extrabold text-white">Alerting Owner...</h2>
-          <p id="waitSubtitle" class="text-sm text-slate-300 mt-1">The owner has been notified privately on WhatsApp.</p>
-        </div>
-
-        <!-- Countdown Circle -->
-        <div id="timerBox" class="flex flex-col items-center justify-center py-2">
-          <div class="w-28 h-28 rounded-full border-4 border-emerald-400/90 bg-slate-900/90 flex flex-col items-center justify-center pulse-ring">
-            <span id="countdownText" class="text-2xl font-extrabold text-emerald-300">180s</span>
-            <span id="txtRemaining" class="text-[10px] uppercase tracking-widest text-slate-400 font-extrabold mt-0.5">REMAINING</span>
+          <div class="inline-flex items-center justify-center gap-2">
+            <span class="w-8 h-8 rounded-full bg-emerald-500 text-white text-lg font-extrabold flex items-center justify-center shadow-lg">✓</span>
+            <h2 id="waitTitle" class="text-3xl font-extrabold text-white tracking-tight">ALERT SENT!</h2>
           </div>
-          <div class="mt-3.5 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/35 text-amber-300 text-xs font-extrabold uppercase tracking-wider">
-            <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
-            <span id="liveStatusText">WAITING FOR LIVE REPLY...</span>
-          </div>
+          <p id="waitSubtitle" class="text-base text-slate-200 font-medium mt-1">
+            The owner has been notified on WhatsApp.
+          </p>
         </div>
 
-        <!-- LIVE OWNER REPLY CARD -->
-        <div id="ownerReplyBox" class="hidden bg-emerald-500/15 border-2 border-emerald-400 rounded-2xl p-4 text-left space-y-1.5">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-300 flex items-center gap-1.5">
-              <span>💬</span> <span id="txtReplyHeader">Owner Replied Live!</span>
-            </span>
-            <span id="replyTimeText" class="text-xs text-emerald-200/80">Just now</span>
-          </div>
-          <p id="ownerReplyText" class="text-base font-bold text-white leading-relaxed break-words"></p>
-        </div>
-
-        <!-- Status Pill -->
-        <div class="py-2.5 px-3 rounded-xl bg-emerald-500/15 border border-emerald-400/35 text-emerald-300 text-xs sm:text-sm font-extrabold">
-          ✓ <span id="txtDelivered">PRIVATE ALERT DELIVERED</span>
-        </div>
-
-        <!-- Promo & Close Actions -->
-        <div class="space-y-3 pt-1 text-left">
-          <a href="https://wa.me/919840548224?text=Hi!%20I%20just%20scanned%20a%20PingMe%20QR%20tag%20and%20want%20to%20order%20one%20for%20myself." target="_blank"
-             class="block glass-card rounded-2xl p-3.5 hover:border-emerald-400/50 active:scale-98 transition">
-            <div class="flex items-center justify-between gap-3">
-              <div class="flex items-center gap-3">
-                <div class="app-icon-tile w-12 h-12 p-1 shrink-0 flex items-center justify-center">
-                  <img src="assets/boy-share.png" alt="Get PingMe" class="w-full h-full object-contain rounded-xl" />
-                </div>
-                <div>
-                  <div class="text-sm font-extrabold text-white">Get Your Own Smart QR Tag</div>
-                  <div class="text-xs text-slate-300">For Car • Bike • Keys • Luggage & More</div>
-                </div>
-              </div>
-              <span class="text-emerald-400 font-extrabold text-xl">›</span>
+        <!-- Animated Pingy Mascot (Periodic Expression Changes) -->
+        <div class="flex flex-col items-center justify-center">
+          <div id="mascotMainWrap" class="w-40 h-40 rounded-full flex items-center justify-center relative">
+            <img id="waitMascotPrimary" src="assets/Pingy_Waiting_Reference.png" alt="Pingy Waiting"
+                 class="w-40 h-40 object-contain rounded-full mascot-float drop-shadow-[0_12px_24px_rgba(16,185,129,0.35)]" />
+            <!-- Sprite Frame Container for Expression Sequence -->
+            <div id="waitMascotSprite" class="hidden sprite-box mascot-float">
+              <img id="spriteImg" src="assets/Pingy_Expression_Sequence_Reference.png" alt="Pingy Expression" class="sprite-sheet" />
             </div>
-          </a>
+          </div>
 
-          <button type="button" onclick="closeSession()"
-            class="w-full py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 active:scale-98 text-white font-extrabold text-sm tracking-wide transition">
-            ✓ <span id="txtCloseBtn">Close Session</span>
-          </button>
+          <!-- Friendly Mascot Status Pill -->
+          <div class="mt-2 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-cyan-400/40 shadow-md">
+            <span class="flex gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-bounce"></span>
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-bounce" style="animation-delay:0.15s"></span>
+              <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-bounce" style="animation-delay:0.3s"></span>
+            </span>
+            <span id="mascotMoodText" class="text-xs sm:text-sm font-bold text-white">PingMe is on the job! 😊</span>
+          </div>
+        </div>
+
+        <!-- Seconds-Only Countdown Circle -->
+        <div class="flex flex-col items-center justify-center">
+          <div class="countdown-ring w-32 h-32 rounded-full flex flex-col items-center justify-center">
+            <span id="countdownNumber" class="text-4xl font-extrabold text-white leading-none">180</span>
+            <span id="txtSecondsUnit" class="text-xs font-extrabold uppercase tracking-widest text-emerald-300 mt-1">SECONDS</span>
+          </div>
+        </div>
+
+        <!-- Status Indicators -->
+        <div class="space-y-2 max-w-xs mx-auto">
+          <div class="py-2 px-4 rounded-full bg-slate-900/80 border border-cyan-400/35 text-xs sm:text-sm font-extrabold tracking-wider text-cyan-200 uppercase">
+            <span id="txtWaitingReply">WAITING FOR OWNER'S REPLY</span>
+          </div>
+          <div id="deliveredIndicator" class="py-2 px-4 rounded-full bg-emerald-500/20 border border-emerald-400/45 text-xs sm:text-sm font-extrabold tracking-wider text-emerald-300 uppercase">
+            ✓ <span id="txtDelivered">PRIVATE ALERT DELIVERED</span>
+          </div>
         </div>
       </div>
 
-      <p class="text-center text-xs text-slate-400 font-semibold pt-4">
-        🔒 Private • Secure • No Number Shared
+      <!-- Three Customer Action Buttons + FINISH -->
+      <div class="space-y-3 pt-2">
+        <div class="grid grid-cols-3 gap-2.5">
+          <button type="button" onclick="openBuyModal()"
+            class="btn-buy btn-3d-tap rounded-2xl py-3 px-2 flex flex-col items-center justify-center gap-1 text-white">
+            <span class="text-2xl">🛒</span>
+            <span id="txtBtnBuy2" class="text-sm font-extrabold tracking-wide">BUY</span>
+          </button>
+          <button type="button" onclick="openShareModal()"
+            class="btn-share btn-3d-tap rounded-2xl py-3 px-2 flex flex-col items-center justify-center gap-1 text-white">
+            <span class="text-2xl">🔗</span>
+            <span id="txtBtnShare2" class="text-sm font-extrabold tracking-wide">SHARE</span>
+          </button>
+          <button type="button" onclick="openReviewPage()"
+            class="btn-review btn-3d-tap rounded-2xl py-3 px-2 flex flex-col items-center justify-center gap-1 text-white">
+            <span class="text-2xl">⭐</span>
+            <span id="txtBtnReview2" class="text-sm font-extrabold tracking-wide">REVIEW</span>
+          </button>
+        </div>
+
+        <button type="button" onclick="finishSession()"
+          class="btn-finish btn-3d-tap w-full py-3.5 rounded-full font-extrabold text-base text-white tracking-wider flex items-center justify-center gap-2">
+          <span>✕</span>
+          <span id="txtFinishBtn2">FINISH</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- SCREEN 3: OWNER RESPONDED                  -->
+    <!-- ========================================== -->
+    <section id="screen3" class="hidden px-4 pt-4 pb-4 flex-1 flex flex-col justify-between space-y-4">
+      <div class="text-center space-y-4">
+        <!-- Pingy Happy Celebration / Thumbs-Up -->
+        <div class="flex justify-center">
+          <img src="assets/Pingy_ThumbsUp_Reference.png" alt="Owner Responded"
+               class="w-44 h-44 object-contain rounded-full mascot-float drop-shadow-[0_14px_28px_rgba(16,185,129,0.45)]" />
+        </div>
+
+        <!-- GREAT NEWS! Banner -->
+        <div class="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-gradient-to-r from-emerald-500 to-green-600 border-2 border-emerald-200 shadow-lg">
+          <span class="text-xl">💬</span>
+          <h2 id="respTitle" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">GREAT NEWS!</h2>
+        </div>
+
+        <p id="respSubtitle" class="text-xl font-extrabold text-white">
+          The owner has responded! 🎉
+        </p>
+
+        <!-- Clean Guidance Card (No private WhatsApp message exposed publicly) -->
+        <div class="bg-white rounded-2xl p-4 shadow-xl border-2 border-cyan-300 flex items-center gap-3.5 text-left">
+          <div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white text-2xl flex items-center justify-center shrink-0 shadow-md">
+            💬
+          </div>
+          <p id="respGuidance" class="text-base font-extrabold text-[#111d4a] leading-snug">
+            You can now continue your conversation directly on WhatsApp.
+          </p>
+        </div>
+      </div>
+
+      <!-- Three Customer Action Buttons + FINISH -->
+      <div class="space-y-3 pt-2">
+        <div class="grid grid-cols-3 gap-2.5">
+          <button type="button" onclick="openBuyModal()"
+            class="btn-buy btn-3d-tap rounded-2xl py-3 px-2 flex flex-col items-center justify-center gap-1 text-white">
+            <span class="text-2xl">🛒</span>
+            <span id="txtBtnBuy3" class="text-sm font-extrabold tracking-wide">BUY</span>
+          </button>
+          <button type="button" onclick="openShareModal()"
+            class="btn-share btn-3d-tap rounded-2xl py-3 px-2 flex flex-col items-center justify-center gap-1 text-white">
+            <span class="text-2xl">🔗</span>
+            <span id="txtBtnShare3" class="text-sm font-extrabold tracking-wide">SHARE</span>
+          </button>
+          <button type="button" onclick="openReviewPage()"
+            class="btn-review btn-3d-tap rounded-2xl py-3 px-2 flex flex-col items-center justify-center gap-1 text-white">
+            <span class="text-2xl">⭐</span>
+            <span id="txtBtnReview3" class="text-sm font-extrabold tracking-wide">REVIEW</span>
+          </button>
+        </div>
+
+        <button type="button" onclick="finishSession()"
+          class="btn-finish btn-3d-tap w-full py-3.5 rounded-full font-extrabold text-base text-white tracking-wider flex items-center justify-center gap-2">
+          <span>✕</span>
+          <span id="txtFinishBtn3">FINISH</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- SCREEN 4: FINISH & THANK YOU               -->
+    <!-- ========================================== -->
+    <section id="screen4" class="hidden px-4 pt-6 pb-6 flex-1 flex flex-col items-center justify-center text-center space-y-5">
+      <!-- Pingy Thank You Mascot -->
+      <img src="assets/Pingy_ThankYou_Reference.png" alt="Thank You from PingMe"
+           class="w-48 h-48 object-contain rounded-full mascot-float drop-shadow-[0_14px_28px_rgba(56,189,248,0.35)]" />
+
+      <div class="space-y-2">
+        <h2 id="tyTitle" class="text-4xl font-extrabold text-white tracking-tight">THANK YOU!</h2>
+        <div class="h-1.5 w-36 mx-auto rounded-full bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500"></div>
+        <p id="tySubtitle" class="text-lg font-bold text-slate-100 pt-1">
+          Thank you for using PingMe Services.
+        </p>
+      </div>
+
+      <div class="w-full bg-white rounded-2xl p-4 shadow-xl border-2 border-emerald-300 flex items-center gap-3.5 text-left">
+        <span class="w-10 h-10 rounded-full bg-emerald-500 text-white text-xl font-extrabold flex items-center justify-center shrink-0 shadow">✓</span>
+        <p id="tyClosedText" class="text-base font-extrabold text-[#111d4a] leading-snug">
+          Your session has been successfully closed.
+        </p>
+      </div>
+
+      <p id="tyWish" class="text-lg font-bold text-cyan-200 pt-1">
+        Have a wonderful day! 😊
       </p>
     </section>
+
+    <!-- ========================================== -->
+    <!-- MODAL 1: BUY — PINGME STARTER KIT (₹599)   -->
+    <!-- ========================================== -->
+    <div id="buyModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-end sm:items-center justify-center p-3">
+      <div class="w-full max-w-[430px] max-h-[88dvh] overflow-y-auto rounded-3xl bg-gradient-to-b from-[#0c1e3e] to-[#081226] border-2 border-cyan-400/40 p-5 text-white shadow-2xl space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="px-3 py-1 rounded-full bg-pink-500/20 border border-pink-400/40 text-pink-300 text-xs font-extrabold uppercase tracking-wider">
+            Official Starter Pack
+          </span>
+          <button type="button" onclick="closeBuyModal()"
+            class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white font-extrabold text-base flex items-center justify-center">
+            ✕
+          </button>
+        </div>
+
+        <!-- Product Title & Price -->
+        <div class="text-center space-y-2">
+          <h3 id="kitProductName" class="text-2xl font-extrabold tracking-tight text-amber-300">PINGME STARTER KIT</h3>
+          <div class="flex items-center justify-center gap-3">
+            <img src="assets/qr-tag-mockup.png" alt="PingMe Starter Kit" class="w-24 h-24 object-contain rounded-2xl bg-white p-1.5 shadow-lg" />
+            <div class="text-left">
+              <div id="kitPriceDisplay" class="text-4xl font-extrabold text-white">₹599</div>
+              <div id="kitDeliveryNote" class="text-sm font-bold text-emerald-300">Including Free Delivery</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Physical Kit Contents -->
+        <div class="rounded-2xl bg-white/10 border border-white/15 p-4 space-y-2">
+          <h4 class="text-base font-extrabold text-cyan-300">Physical Kit Contents:</h4>
+          <ul id="kitPhysicalList" class="space-y-1.5 text-base font-semibold text-white">
+            <li class="flex items-center gap-2"><span class="text-emerald-400 font-extrabold">✓</span> 2 Car QR Holders</li>
+            <li class="flex items-center gap-2"><span class="text-emerald-400 font-extrabold">✓</span> 2 Bike QR Stickers</li>
+            <li class="flex items-center gap-2"><span class="text-emerald-400 font-extrabold">✓</span> 2 Acrylic QR Keychains</li>
+            <li class="flex items-center gap-2"><span class="text-emerald-400 font-extrabold">✓</span> 3 Reusable Plastic QR Tags</li>
+            <li class="flex items-center gap-2"><span class="text-emerald-400 font-extrabold">✓</span> 3 QR Stickers for Plastic Tags</li>
+          </ul>
+        </div>
+
+        <!-- Included Benefits -->
+        <div class="rounded-2xl bg-white/10 border border-white/15 p-4 space-y-2">
+          <h4 class="text-base font-extrabold text-amber-300">Included Benefits:</h4>
+          <ul id="kitBenefitsList" class="space-y-1.5 text-base font-semibold text-white">
+            <li class="flex items-center gap-2"><span class="text-cyan-300">★</span> 250 WhatsApp Alert Credits FREE</li>
+            <li class="flex items-center gap-2"><span class="text-amber-300">★</span> 1-Year Subscription FREE</li>
+            <li class="flex items-center gap-2"><span class="text-emerald-300">ℹ️</span> WhatsApp Activation Required after delivery</li>
+            <li class="flex items-center gap-2"><span class="text-pink-300">🛡️</span> No App Required for Scanners</li>
+          </ul>
+        </div>
+
+        <!-- ORDER NOW Button -->
+        <button type="button" onclick="orderStarterKitWhatsApp()"
+          class="w-full py-4 rounded-full bg-gradient-to-r from-amber-400 via-orange-500 to-pink-600 text-slate-950 font-extrabold text-lg tracking-wide shadow-xl active:scale-95 transition flex items-center justify-center gap-2">
+          <span>🛒</span>
+          <span>ORDER NOW</span>
+        </button>
+
+        <button type="button" onclick="closeBuyModal()"
+          class="w-full py-2.5 text-center text-sm font-bold text-slate-300 hover:text-white">
+          ← Back to Waiting Screen
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 2: SHARE PINGME                      -->
+    <!-- ========================================== -->
+    <div id="shareModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-end sm:items-center justify-center p-3">
+      <div class="w-full max-w-[430px] rounded-3xl bg-gradient-to-b from-[#0c1e3e] to-[#081226] border-2 border-cyan-400/40 p-5 text-white shadow-2xl space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xl font-extrabold text-white">Share PingMe</h3>
+          <button type="button" onclick="closeShareModal()"
+            class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white font-extrabold flex items-center justify-center">
+            ✕
+          </button>
+        </div>
+
+        <p class="text-base text-slate-200 leading-relaxed">
+          Protect your car, bike, keys, and luggage with a smart PingMe QR tag — reach owners privately without exposing phone numbers!
+        </p>
+
+        <div class="rounded-xl bg-slate-900/90 border border-slate-700 p-3 flex items-center justify-between gap-2">
+          <span id="shareUrlPreview" class="text-sm font-bold text-cyan-300 truncate">https://pingmeconnect.in</span>
+          <button type="button" onclick="copyShareLink()" id="copyLinkBtn"
+            class="px-3 py-1.5 rounded-lg bg-cyan-500 text-slate-950 text-xs font-extrabold shrink-0 active:scale-95">
+            Copy Link
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <button type="button" onclick="shareViaWhatsApp()"
+            class="py-3.5 rounded-2xl bg-emerald-500 text-slate-950 font-extrabold text-sm flex items-center justify-center gap-2 active:scale-95">
+            <span>💬</span> WhatsApp
+          </button>
+          <button type="button" onclick="shareViaNative()"
+            class="py-3.5 rounded-2xl bg-indigo-500 text-white font-extrabold text-sm flex items-center justify-center gap-2 active:scale-95">
+            <span>📤</span> More Options
+          </button>
+        </div>
+
+        <button type="button" onclick="closeShareModal()"
+          class="w-full py-2 text-center text-sm font-bold text-slate-300 hover:text-white">
+          ← Back
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 3: REVIEW CONFIG NOTICE (FALLBACK)   -->
+    <!-- ========================================== -->
+    <div id="reviewNoticeModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+      <div class="w-full max-w-[390px] rounded-3xl bg-gradient-to-b from-[#0c1e3e] to-[#081226] border-2 border-amber-400/50 p-5 text-center text-white shadow-2xl space-y-3">
+        <div class="text-4xl">⭐</div>
+        <h3 class="text-xl font-extrabold text-amber-300">Google Review</h3>
+        <p class="text-base text-slate-200 leading-relaxed">
+          Our official Google Business Review page will open here as soon as the review link is configured. Thank you for supporting PingMe!
+        </p>
+        <button type="button" onclick="document.getElementById('reviewNoticeModal').classList.add('hidden')"
+          class="w-full py-3 rounded-full bg-amber-400 text-slate-950 font-extrabold text-base active:scale-95">
+          OK, Back
+        </button>
+      </div>
+    </div>
 
   </div>
 
   <script>
-    const BACKEND_URL = "https://pingme-api.pingmeconnect.workers.dev";
+    // =========================================================================
+    // CONFIGURABLE SETTINGS (Edit these anytime without touching UI layout)
+    // =========================================================================
+    const CONFIG = {
+      BACKEND_URL: "https://pingme-api.pingmeconnect.workers.dev",
+      PUBLIC_SITE_URL: "https://pingmeconnect.in",
+      // Set your official WhatsApp ordering number (country code + digits, no '+' sign)
+      WHATSAPP_ORDER_NUMBER: "",
+      STARTER_KIT_ORDER_MESSAGE: "Hi, I'm interested in ordering the PingMe Starter Kit for ₹599.",
+      // Set your official Google Business Review URL once finalized (leave "" until ready)
+      GOOGLE_REVIEW_URL: ""
+    };
+
     const urlParams = new URLSearchParams(window.location.search);
     const TAG_CODE = (urlParams.get("t") || "TEST001").trim();
 
@@ -359,138 +763,196 @@
     let photoBase64 = null;
     let locationUrl = null;
     let currentSessionId = null;
+    let sessionClosed = false;
+    let alertDelivered = false;
     let countdownTimer = null;
     let replyPollTimer = null;
+    let mascotAnimTimer = null;
+    let mascotStep = 0;
     let secondsLeft = 180;
 
-    const categoryHeroAssets = {
-      vehicle: "assets/hero-vehicle.png",
-      lost: "assets/luggage-keys-3d.png",
-      other: "assets/hero-checklist.png"
-    };
-
+    // 4 Approved Default Templates per Category (English & Tamil)
     const i18n = {
       en: {
-        heroTitle: "Welcome to PingMe!",
-        heroSubtitle: "Reach the owner. Privately.",
+        heroTitleHtml: 'Welcome to <span class="text-[#1d4ed8]">PingMe!</span>',
+        heroTagline: "ONE SCAN. INSTANT CONNECTION.",
         lblCategory: "Choose a Category",
-        catVehicle: "VEHICLE",
-        catLost: "LOST & FOUND",
-        catOther: "OTHER",
+        catVehicle: "Vehicle",
+        catLost: "Lost & Found",
+        catOther: "Other",
+        catTags: { vehicle: "(Vehicle)", lost: "(Lost & Found)", other: "(Other)" },
         lblMessage: "Select a Message",
         lblNote: "✍️ Add a Message (Optional)",
-        notePlaceholder: "Type specific details, e.g. 'Parked near gate 3'",
-        photoLabel: "Attach Photo",
-        locLabel: "Share GPS",
-        sendBtn: "SEND ALERT PRIVATELY",
-        sending: "SENDING ALERT...",
-        waitTitle: "Alerting Owner...",
-        waitSubtitle: "The owner has been notified privately on WhatsApp.",
-        remaining: "REMAINING",
-        waitingReply: "WAITING FOR LIVE REPLY...",
-        replyHeader: "Owner Replied Live!",
+        notePlaceholder: "Type additional details here...",
+        attachPhoto: "ATTACH PHOTO",
+        shareLocation: "SHARE LOCATION",
+        optionalText: "(Optional)",
+        sendBtn: "SEND ALERT",
+        sending: "SENDING...",
+        waitTitle: "ALERT SENT!",
+        waitSubtitle: "The owner has been notified on WhatsApp.",
+        secondsUnit: "SECONDS",
+        waitingReply: "WAITING FOR OWNER'S REPLY",
         delivered: "PRIVATE ALERT DELIVERED",
-        closeBtn: "Close Session",
-        footer: "🔒 Private • Secure • No Number Shared",
-        reasons: {
+        btnBuy: "BUY",
+        btnShare: "SHARE",
+        btnReview: "REVIEW",
+        btnFinish: "FINISH",
+        respTitle: "GREAT NEWS!",
+        respSubtitle: "The owner has responded! 🎉",
+        respGuidance: "You can now continue your conversation directly on WhatsApp.",
+        tyTitle: "THANK YOU!",
+        tySubtitle: "Thank you for using PingMe Services.",
+        tyClosedText: "Your session has been successfully closed.",
+        tyWish: "Have a wonderful day! 😊",
+        moods: [
+          "PingMe is on the job! 😊",
+          "Your alert is delivered! 📲",
+          "Waiting for a little hello! 👋",
+          "Stay tuned! 👍"
+        ],
+        templates: {
           vehicle: [
-            "🚗 Your vehicle is blocking my way",
-            "💡 Lights / Alarm left ON",
-            "🅿️ No-parking zone alert — please move",
-            "⚠️ Vehicle window / door is open"
+            { icon: "🚗", text: "Your vehicle is blocking my way." },
+            { icon: "💡", text: "Lights / Alarm left ON." },
+            { icon: "🅿️", text: "No-parking zone alert — please move." },
+            { icon: "⚠️", text: "Vehicle window / door is open." }
           ],
           lost: [
-            "🎒 Found your lost bag / item",
-            "🔑 Found your keys / wallet",
-            "📱 Found your phone / gadget",
-            "🐾 Found your pet — safe with me"
+            { icon: "🔑", text: "I found your keys." },
+            { icon: "🎒", text: "I found your bag / belongings." },
+            { icon: "📦", text: "You left something behind." },
+            { icon: "💬", text: "I need to contact you regarding your belongings." }
           ],
           other: [
-            "📦 Delivery / Courier waiting at gate",
-            "🏠 Urgent message regarding your property",
-            "👋 Need to speak with you briefly"
+            { icon: "📦", text: "Your delivery / courier has arrived." },
+            { icon: "👤", text: "Someone is looking for you." },
+            { icon: "🔔", text: "I need your attention." },
+            { icon: "✉️", text: "I have an important message for you." }
           ]
         }
       },
       ta: {
-        heroTitle: "PingMe-க்கு நல்வரவு!",
-        heroSubtitle: "உரிமையாளரைத் தொடர்பு கொள்ளுங்கள். தனிப்பட்ட முறையில்.",
+        heroTitleHtml: '<span class="text-[#1d4ed8]">PingMe</span>-க்கு நல்வரவு!',
+        heroTagline: "ஒரே ஸ்கேன். உடனடி தொடர்பு.",
         lblCategory: "வகையைத் தேர்ந்தெடுக்கவும்",
         catVehicle: "வாகனம்",
         catLost: "தொலைந்த பொருள்",
         catOther: "மற்றவை",
+        catTags: { vehicle: "(வாகனம்)", lost: "(தொலைந்த பொருள்)", other: "(மற்றவை)" },
         lblMessage: "செய்தியைத் தேர்ந்தெடுக்கவும்",
-        lblNote: "✍️ கூடுதல் தகவல் (விருப்பம்)",
-        notePlaceholder: "குறிப்பிட்ட விவரங்களை உள்ளிடவும்...",
-        photoLabel: "புகைப்படம் இணை",
-        locLabel: "இடம் பகிர்",
-        sendBtn: "தனிப்பட்ட அலர்ட் அனுப்பு",
-        sending: "அலர்ட் அனுப்பப்படுகிறது...",
-        waitTitle: "உரிமையாளருக்கு தகவல் அனுப்பப்பட்டது...",
-        waitSubtitle: "WhatsApp மூலம் உடனடி தகவல் அனுப்பப்பட்டுள்ளது.",
-        remaining: "வினாடிகள்",
-        waitingReply: "உரிமையாளர் பதிலுக்காக காத்திருக்கிறது...",
-        replyHeader: "உரிமையாளர் பதில் அனுப்பியுள்ளார்!",
+        lblNote: "✍️ கூடுதல் செய்தி (விருப்பம்)",
+        notePlaceholder: "கூடுதல் விவரங்களை இங்கே தட்டச்சு செய்யவும்...",
+        attachPhoto: "புகைப்படம் இணை",
+        shareLocation: "இடம் பகிர்",
+        optionalText: "(விருப்பம்)",
+        sendBtn: "அலர்ட் அனுப்பு",
+        sending: "அனுப்பப்படுகிறது...",
+        waitTitle: "அலர்ட் அனுப்பப்பட்டது!",
+        waitSubtitle: "உரிமையாளருக்கு WhatsApp மூலம் தகவல் அனுப்பப்பட்டுள்ளது.",
+        secondsUnit: "வினாடிகள்",
+        waitingReply: "உரிமையாளர் பதிலுக்காக காத்திருக்கிறது",
         delivered: "தனிப்பட்ட அலர்ட் சென்றடைந்தது",
-        closeBtn: "மூடு",
-        footer: "🔒 பாதுகாப்பானது • எண் பகிரப்படாது",
-        reasons: {
+        btnBuy: "வாங்க",
+        btnShare: "பகிர்",
+        btnReview: "மதிப்பீடு",
+        btnFinish: "முடி",
+        respTitle: "நற்செய்தி!",
+        respSubtitle: "உரிமையாளர் பதிலளித்துள்ளார்! 🎉",
+        respGuidance: "நீங்கள் இப்போது நேரடியாக WhatsApp-ல் உரையாடலைத் தொடரலாம்.",
+        tyTitle: "நன்றி!",
+        tySubtitle: "PingMe சேவையைப் பயன்படுத்தியதற்கு நன்றி.",
+        tyClosedText: "உங்கள் அமர்வு வெற்றிகரமாக மூடப்பட்டது.",
+        tyWish: "இனிய நாளாக அமையட்டும்! 😊",
+        moods: [
+          "PingMe பணியில் உள்ளது! 😊",
+          "உங்கள் அலர்ட் சென்றடைந்தது! 📲",
+          "உரிமையாளர் பதிலுக்காக காத்திருக்கிறது! 👋",
+          "இணைந்திருங்கள்! 👍"
+        ],
+        templates: {
           vehicle: [
-            "🚗 உங்கள் வாகனம் வழியை மறைக்கிறது",
-            "💡 வாகனத்தின் விளக்கு / அலாரம் எரிகிறது",
-            "🅿️ நோ-பார்க்கிங் பகுதி — தயவுசெய்து நகர்த்தவும்",
-            "⚠️ வாகனத்தின் கதவு / ஜன்னல் திறந்துள்ளது"
+            { icon: "🚗", text: "உங்கள் வாகனம் என் வழியை மறைக்கிறது." },
+            { icon: "💡", text: "விளக்குகள் / அலாரம் எரிந்து கொண்டிருக்கிறது." },
+            { icon: "🅿️", text: "நோ-பார்க்கிங் பகுதி எச்சரிக்கை — தயவுசெய்து நகர்த்தவும்." },
+            { icon: "⚠️", text: "வாகனத்தின் ஜன்னல் / கதவு திறந்துள்ளது." }
           ],
           lost: [
-            "🎒 உங்கள் பை / பொருள் கிடைத்துள்ளது",
-            "🔑 உங்கள் சாவி / பர்ஸ் கிடைத்துள்ளது",
-            "📱 உங்கள் மொபைல் / பொருள் கிடைத்துள்ளது",
-            "🐾 உங்கள் செல்லப்பிராணி பாதுகாப்பாக உள்ளது"
+            { icon: "🔑", text: "உங்கள் சாவியை நான் கண்டெடுத்தேன்." },
+            { icon: "🎒", text: "உங்கள் பை / பொருட்களை நான் கண்டெடுத்தேன்." },
+            { icon: "📦", text: "நீங்கள் ஒரு பொருளை விட்டுச் சென்றுள்ளீர்கள்." },
+            { icon: "💬", text: "உங்கள் பொருட்கள் தொடர்பாக உங்களைத் தொடர்பு கொள்ள வேண்டும்." }
           ],
           other: [
-            "📦 டெலிவரி / கொரியர் வாசலில் காத்திருக்கிறது",
-            "🏠 அவசரத் தகவல் தெரிவிக்க வேண்டும்",
-            "👋 உங்களிடம் சிறிது பேச வேண்டும்"
+            { icon: "📦", text: "உங்கள் டெலிவரி / கொரியர் வந்துள்ளது." },
+            { icon: "👤", text: "ஒருவர் உங்களைத் தேடுகிறார்." },
+            { icon: "🔔", text: "உங்கள் கவனம் தேவைப்படுகிறது." },
+            { icon: "✉️", text: "உங்களுக்கு ஒரு முக்கியமான செய்தி உள்ளது." }
           ]
         }
       }
     };
 
-    function renderReasons() {
-      const list = i18n[currentLang].reasons[currentCategory];
-      if (!list.includes(selectedReason)) selectedReason = list[0];
+    function renderTemplates() {
+      const list = i18n[currentLang].templates[currentCategory];
       const container = document.getElementById("reasonsContainer");
-      container.innerHTML = list.map(r => `
-        <button type="button" onclick="selectReason('${r.replace(/'/g, "\\'")}')"
-          class="reason-pill ${selectedReason === r ? "active" : ""} w-full text-left px-4 py-3.5 rounded-2xl text-sm sm:text-[15px] font-bold text-slate-100 flex items-center justify-between gap-2">
-          <span class="leading-snug">${r}</span>
-          ${selectedReason === r ? '<span class="text-emerald-400 text-sm shrink-0">●</span>' : ''}
-        </button>
-      `).join("");
+      document.getElementById("lblActiveCatTag").textContent = i18n[currentLang].catTags[currentCategory];
+      document.getElementById("clearTplBtn").classList.toggle("hidden", !selectedReason);
+
+      container.innerHTML = list.map(item => {
+        const isSelected = selectedReason === item.text;
+        return `
+          <button type="button" onclick="toggleTemplate('${item.text.replace(/'/g, "\\'")}')"
+            class="tpl-pill ${isSelected ? "active" : ""} w-full text-left px-3.5 py-2.5 flex items-center justify-between gap-2.5">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <span class="text-lg shrink-0">${item.icon}</span>
+              <span class="text-[15px] font-bold leading-snug">${item.text}</span>
+            </div>
+            ${isSelected
+              ? '<span class="w-6 h-6 rounded-full bg-emerald-500 text-white text-xs font-extrabold flex items-center justify-center shrink-0">✓</span>'
+              : '<span class="w-5 h-5 rounded-full border border-slate-300 shrink-0"></span>'}
+          </button>
+        `;
+      }).join("");
     }
 
     function selectCategory(cat) {
       currentCategory = cat;
       ["vehicle", "lost", "other"].forEach(c => {
         document.getElementById(`cat-${c}`).classList.toggle("active", c === cat);
+        document.getElementById(`check-${c}`).classList.toggle("hidden", c !== cat);
       });
-      const heroArt = document.getElementById("heroArt");
-      if (heroArt && categoryHeroAssets[cat]) {
-        heroArt.src = categoryHeroAssets[cat];
+      // Default to first template if previous selection belonged to another category
+      const list = i18n[currentLang].templates[cat];
+      if (!list.some(t => t.text === selectedReason)) {
+        selectedReason = list[0].text;
       }
-      renderReasons();
+      renderTemplates();
     }
 
-    function selectReason(reason) {
-      selectedReason = reason;
-      renderReasons();
+    function toggleTemplate(text) {
+      selectedReason = (selectedReason === text) ? "" : text;
+      renderTemplates();
+    }
+
+    function clearTemplateSelection() {
+      selectedReason = "";
+      renderTemplates();
     }
 
     function toggleLanguage() {
+      const prevList = i18n[currentLang].templates[currentCategory];
+      const prevIdx = prevList.findIndex(t => t.text === selectedReason);
+
       currentLang = currentLang === "en" ? "ta" : "en";
       const t = i18n[currentLang];
-      document.getElementById("heroTitle").textContent = t.heroTitle;
-      document.getElementById("heroSubtitle").textContent = t.heroSubtitle;
+
+      if (prevIdx >= 0) {
+        selectedReason = t.templates[currentCategory][prevIdx].text;
+      }
+
+      document.getElementById("heroTitle").innerHTML = t.heroTitleHtml;
+      document.getElementById("heroTagline").textContent = t.heroTagline;
       document.getElementById("lblCategory").textContent = t.lblCategory;
       document.getElementById("txtCatVehicle").textContent = t.catVehicle;
       document.getElementById("txtCatLost").textContent = t.catLost;
@@ -498,23 +960,44 @@
       document.getElementById("lblMessage").textContent = t.lblMessage;
       document.getElementById("lblNote").textContent = t.lblNote;
       document.getElementById("customNote").placeholder = t.notePlaceholder;
-      if (!photoBase64) document.getElementById("photoLabel").textContent = t.photoLabel;
-      if (!locationUrl) document.getElementById("locLabel").textContent = t.locLabel;
+      document.getElementById("txtAttachPhoto").textContent = t.attachPhoto;
+      document.getElementById("subAttachPhoto").textContent = t.optionalText;
+      document.getElementById("txtShareLocation").textContent = t.shareLocation;
+      document.getElementById("subShareLocation").textContent = t.optionalText;
       document.getElementById("txtSendBtn").textContent = t.sendBtn;
       document.getElementById("waitTitle").textContent = t.waitTitle;
       document.getElementById("waitSubtitle").textContent = t.waitSubtitle;
-      document.getElementById("txtRemaining").textContent = t.remaining;
-      document.getElementById("liveStatusText").textContent = t.waitingReply;
-      document.getElementById("txtReplyHeader").textContent = t.replyHeader;
+      document.getElementById("txtSecondsUnit").textContent = t.secondsUnit;
+      document.getElementById("txtWaitingReply").textContent = t.waitingReply;
       document.getElementById("txtDelivered").textContent = t.delivered;
-      document.getElementById("txtCloseBtn").textContent = t.closeBtn;
-      document.getElementById("footerPrivacy").textContent = t.footer;
-      renderReasons();
+      document.getElementById("txtBtnBuy2").textContent = t.btnBuy;
+      document.getElementById("txtBtnShare2").textContent = t.btnShare;
+      document.getElementById("txtBtnReview2").textContent = t.btnReview;
+      document.getElementById("txtFinishBtn2").textContent = t.btnFinish;
+      document.getElementById("respTitle").textContent = t.respTitle;
+      document.getElementById("respSubtitle").textContent = t.respSubtitle;
+      document.getElementById("respGuidance").textContent = t.respGuidance;
+      document.getElementById("txtBtnBuy3").textContent = t.btnBuy;
+      document.getElementById("txtBtnShare3").textContent = t.btnShare;
+      document.getElementById("txtBtnReview3").textContent = t.btnReview;
+      document.getElementById("txtFinishBtn3").textContent = t.btnFinish;
+      document.getElementById("tyTitle").textContent = t.tyTitle;
+      document.getElementById("tySubtitle").textContent = t.tySubtitle;
+      document.getElementById("tyClosedText").textContent = t.tyClosedText;
+      document.getElementById("tyWish").textContent = t.tyWish;
+      document.getElementById("mascotMoodText").textContent = t.moods[mascotStep % t.moods.length];
+
+      renderTemplates();
     }
 
     function updateCharCount() {
       const len = document.getElementById("customNote").value.length;
-      document.getElementById("charCount").textContent = `${len}/160`;
+      document.getElementById("charCount").textContent = `${len} / 160`;
+    }
+
+    function refreshAttachmentContainer() {
+      const hasAny = Boolean(photoBase64 || locationUrl);
+      document.getElementById("attachmentPreviews").classList.toggle("hidden", !hasAny);
     }
 
     function handlePhoto(event) {
@@ -530,13 +1013,22 @@
           canvas.width = img.width * scale;
           canvas.height = img.height * scale;
           canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
-          photoBase64 = canvas.toDataURL("image/jpeg", 0.65);
-          document.getElementById("photoLabel").textContent = "Photo Attached";
-          document.getElementById("photoBadge").textContent = "✓ READY";
+          photoBase64 = canvas.toDataURL("image/jpeg", 0.68);
+
+          document.getElementById("photoThumb").src = photoBase64;
+          document.getElementById("photoPreviewCard").classList.remove("hidden");
+          refreshAttachmentContainer();
         };
         img.src = e.target.result;
       };
       reader.readAsDataURL(file);
+    }
+
+    function removePhoto() {
+      photoBase64 = null;
+      document.getElementById("photoInput").value = "";
+      document.getElementById("photoPreviewCard").classList.add("hidden");
+      refreshAttachmentContainer();
     }
 
     function attachLocation() {
@@ -544,35 +1036,72 @@
         alert("GPS location is not supported on this browser.");
         return;
       }
-      document.getElementById("locBadge").textContent = "...";
+      document.getElementById("subShareLocation").textContent = "Locating...";
       navigator.geolocation.getCurrentPosition(
         (pos) => {
-          locationUrl = `https://maps.google.com/?q=${pos.coords.latitude.toFixed(6)},${pos.coords.longitude.toFixed(6)}`;
-          document.getElementById("locLabel").textContent = "GPS Attached";
-          document.getElementById("locBadge").textContent = "✓ READY";
+          const lat = pos.coords.latitude.toFixed(6);
+          const lng = pos.coords.longitude.toFixed(6);
+          locationUrl = `https://maps.google.com/?q=${lat},${lng}`;
+          document.getElementById("subShareLocation").textContent = "✓ Added";
+          document.getElementById("locCoordsText").textContent = `${lat}, ${lng}`;
+          document.getElementById("locPreviewCard").classList.remove("hidden");
+          refreshAttachmentContainer();
         },
         () => {
-          document.getElementById("locBadge").textContent = "+ ADD";
-          alert("Unable to fetch GPS. Please allow location access or send without GPS.");
+          document.getElementById("subShareLocation").textContent = i18n[currentLang].optionalText;
+          alert("Location permission denied or unavailable. You can still send the alert without location.");
         },
         { enableHighAccuracy: true, timeout: 8000 }
       );
     }
 
+    function removeLocation() {
+      locationUrl = null;
+      document.getElementById("subShareLocation").textContent = i18n[currentLang].optionalText;
+      document.getElementById("locPreviewCard").classList.add("hidden");
+      refreshAttachmentContainer();
+    }
+
+    function switchToDarkScreen(screenId) {
+      const shell = document.getElementById("appShell");
+      shell.classList.remove("theme-light");
+      shell.classList.add("theme-dark");
+      ["screen1", "screen2", "screen3", "screen4"].forEach(id => {
+        document.getElementById(id).classList.toggle("hidden", id !== screenId);
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
     async function sendAlert() {
+      if (sessionClosed) {
+        alert("This session has already been closed.");
+        return;
+      }
+
+      const customMsg = document.getElementById("customNote").value.trim();
+      const effectiveReason = selectedReason || customMsg;
+
+      if (!effectiveReason) {
+        alert(currentLang === "ta"
+          ? "தயவுசெய்து ஒரு செய்தியைத் தேர்ந்தெடுக்கவும் அல்லது உள்ளிடவும்."
+          : "Please select a message template or type your message.");
+        return;
+      }
+
       const btn = document.getElementById("sendBtn");
       const txt = document.getElementById("txtSendBtn");
       btn.disabled = true;
       txt.textContent = i18n[currentLang].sending;
 
       try {
-        const res = await fetch(`${BACKEND_URL}/api/alert`, {
+        const res = await fetch(`${CONFIG.BACKEND_URL}/api/alert`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             tag_code: TAG_CODE,
-            reason: selectedReason,
-            custom_message: document.getElementById("customNote").value.trim(),
+            category: currentCategory,
+            reason: effectiveReason,
+            custom_message: selectedReason ? customMsg : "",
             location_url: locationUrl,
             photo_data: photoBase64
           })
@@ -587,89 +1116,197 @@
         }
 
         currentSessionId = data.session_id;
-        openWaitingRoom();
+        alertDelivered = true;
+        document.getElementById("deliveredIndicator").classList.remove("hidden");
+        startWaitingScreen();
       } catch (err) {
-        alert("Network error connecting to PingMe server. Please check your internet.");
+        alert("Network error connecting to PingMe server. Please check your connection.");
         btn.disabled = false;
         txt.textContent = i18n[currentLang].sendBtn;
       }
     }
 
-    function openWaitingRoom() {
-      document.getElementById("screen1").classList.add("hidden");
-      document.getElementById("screen2").classList.remove("hidden");
-      document.getElementById("waitMascot").src = "assets/boy-waiting.png";
-      document.getElementById("confettiImg").classList.add("hidden");
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    function startWaitingScreen() {
+      switchToDarkScreen("screen2");
       secondsLeft = 180;
-      document.getElementById("countdownText").textContent = `${secondsLeft}s`;
+      document.getElementById("countdownNumber").textContent = String(secondsLeft);
 
+      // Start periodic Pingy mascot expression animation
+      mascotStep = 0;
+      updateMascotExpression();
+      mascotAnimTimer = setInterval(() => {
+        mascotStep++;
+        updateMascotExpression();
+      }, 3200);
+
+      // Preserve existing 180-second seconds-only countdown logic
       countdownTimer = setInterval(() => {
         secondsLeft--;
         if (secondsLeft <= 0) {
+          secondsLeft = 0;
+          document.getElementById("countdownNumber").textContent = "0";
           clearInterval(countdownTimer);
           clearInterval(replyPollTimer);
-          document.getElementById("countdownText").textContent = "0s";
-          document.getElementById("liveStatusText").textContent = "SESSION WINDOW ENDED";
-          document.getElementById("waitMascot").src = "assets/boy-sad.png";
+          document.getElementById("txtWaitingReply").textContent =
+            currentLang === "ta" ? "காத்திருப்பு நேரம் முடிந்தது" : "WAITING WINDOW ENDED";
           return;
         }
-        document.getElementById("countdownText").textContent = `${secondsLeft}s`;
+        document.getElementById("countdownNumber").textContent = String(secondsLeft);
       }, 1000);
 
+      // Poll existing session reply mechanism
       if (currentSessionId) {
         replyPollTimer = setInterval(pollForOwnerReply, 3000);
       }
     }
 
+    function updateMascotExpression() {
+      const moods = i18n[currentLang].moods;
+      document.getElementById("mascotMoodText").textContent = moods[mascotStep % moods.length];
+
+      const primary = document.getElementById("waitMascotPrimary");
+      const spriteWrap = document.getElementById("waitMascotSprite");
+      const spriteImg = document.getElementById("spriteImg");
+
+      // Cycle across Pingy_Waiting_Reference.png and the 4 poses in Pingy_Expression_Sequence_Reference.png
+      const frame = mascotStep % 5;
+      if (frame === 0) {
+        primary.classList.remove("hidden");
+        spriteWrap.classList.add("hidden");
+      } else {
+        primary.classList.add("hidden");
+        spriteWrap.classList.remove("hidden");
+        const poseIndex = frame - 1; // 0: Waving, 1: Checking Phone, 2: Thumbs-up/Wink, 3: Looking Around
+        spriteImg.style.transform = `translateX(-${poseIndex * 25}%)`;
+      }
+    }
+
     async function pollForOwnerReply() {
-      if (!currentSessionId) return;
+      if (!currentSessionId || sessionClosed) return;
       try {
-        const res = await fetch(`${BACKEND_URL}/api/session?id=${encodeURIComponent(currentSessionId)}`);
+        const res = await fetch(`${CONFIG.BACKEND_URL}/api/session?id=${encodeURIComponent(currentSessionId)}`);
         if (!res.ok) return;
         const data = await res.json();
         const session = data.session;
 
-        if (session && session.owner_reply) {
+        // Trigger Screen 3 immediately when actual owner reply is detected
+        if (session && (session.owner_reply || session.status === "replied")) {
           clearInterval(replyPollTimer);
           clearInterval(countdownTimer);
-          document.getElementById("timerBox").classList.add("hidden");
-          document.getElementById("waitMascot").src = "assets/boy-happy.png";
-          document.getElementById("confettiImg").classList.remove("hidden");
-          document.getElementById("waitTitle").textContent = i18n[currentLang].replyHeader;
-          document.getElementById("ownerReplyText").textContent = session.owner_reply;
-          document.getElementById("ownerReplyBox").classList.remove("hidden");
+          clearInterval(mascotAnimTimer);
+          switchToDarkScreen("screen3");
         }
       } catch (_) {}
     }
 
-    async function closeSession() {
+    async function finishSession() {
       clearInterval(countdownTimer);
       clearInterval(replyPollTimer);
+      clearInterval(mascotAnimTimer);
+      closeBuyModal();
+      closeShareModal();
+
+      if (sessionClosed) return;
+      sessionClosed = true;
+
+      // Disable Screen 1 submit button so closed sessions cannot submit again
+      const sendBtn = document.getElementById("sendBtn");
+      if (sendBtn) sendBtn.disabled = true;
+
       if (currentSessionId) {
-        fetch(`${BACKEND_URL}/api/session/close`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ session_id: currentSessionId })
-        }).catch(() => {});
+        try {
+          await fetch(`${CONFIG.BACKEND_URL}/api/session/close`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ session_id: currentSessionId })
+          });
+        } catch (_) {}
       }
-      window.location.reload();
+
+      switchToDarkScreen("screen4");
+    }
+
+    // Optional Customer Actions (Never reset countdown or create new sessions)
+    function openBuyModal() {
+      document.getElementById("buyModal").classList.remove("hidden");
+    }
+    function closeBuyModal() {
+      document.getElementById("buyModal").classList.add("hidden");
+    }
+    function orderStarterKitWhatsApp() {
+      const encoded = encodeURIComponent(CONFIG.STARTER_KIT_ORDER_MESSAGE);
+      const phone = (CONFIG.WHATSAPP_ORDER_NUMBER || "").replace(/\D/g, "");
+      const waUrl = phone
+        ? `https://wa.me/${phone}?text=${encoded}`
+        : `https://wa.me/?text=${encoded}`;
+      window.open(waUrl, "_blank", "noopener");
+    }
+
+    function openShareModal() {
+      document.getElementById("shareUrlPreview").textContent = CONFIG.PUBLIC_SITE_URL;
+      document.getElementById("shareModal").classList.remove("hidden");
+    }
+    function closeShareModal() {
+      document.getElementById("shareModal").classList.add("hidden");
+    }
+    function copyShareLink() {
+      navigator.clipboard?.writeText(CONFIG.PUBLIC_SITE_URL);
+      const btn = document.getElementById("copyLinkBtn");
+      btn.textContent = "✓ Copied";
+      setTimeout(() => { btn.textContent = "Copy Link"; }, 2000);
+    }
+    function shareViaWhatsApp() {
+      const msg = encodeURIComponent(`Check out PingMe — Smart QR Tags for Car, Bike, Keys & Luggage! One Scan. Instant Connection: ${CONFIG.PUBLIC_SITE_URL}`);
+      window.open(`https://wa.me/?text=${msg}`, "_blank", "noopener");
+    }
+    async function shareViaNative() {
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: "PingMe — One Scan. Instant Connection.",
+            text: "Smart QR tags to reach owners privately without sharing phone numbers.",
+            url: CONFIG.PUBLIC_SITE_URL
+          });
+        } catch (_) {}
+      } else {
+        copyShareLink();
+      }
+    }
+
+    function openReviewPage() {
+      const url = (CONFIG.GOOGLE_REVIEW_URL || "").trim();
+      if (url && /^https?:\/\//i.test(url)) {
+        window.open(url, "_blank", "noopener");
+      } else {
+        document.getElementById("reviewNoticeModal").classList.remove("hidden");
+      }
     }
 
     async function loadTagMeta() {
       document.getElementById("tagBadge").textContent = `TAG • ${TAG_CODE}`;
       try {
-        const res = await fetch(`${BACKEND_URL}/api/tag?t=${encodeURIComponent(TAG_CODE)}`);
+        const res = await fetch(`${CONFIG.BACKEND_URL}/api/tag?t=${encodeURIComponent(TAG_CODE)}`);
         if (!res.ok) return;
         const data = await res.json();
         if (data.tag) {
-          document.getElementById("tagBadge").textContent = `${data.tag.serial_no || TAG_CODE} • ${data.tag.effective_status.toUpperCase()}`;
-          if (data.tag.tag_type) selectCategory(data.tag.tag_type === "lost" ? "lost" : data.tag.tag_type === "other" ? "other" : "vehicle");
+          const serial = data.tag.serial_no || TAG_CODE;
+          const status = (data.tag.effective_status || "ACTIVE").toUpperCase();
+          document.getElementById("tagBadge").textContent = `${serial} • ${status}`;
+          if (data.tag.effective_status && data.tag.effective_status.toLowerCase() === "inactive") {
+            sessionClosed = true;
+            document.getElementById("sendBtn").disabled = true;
+          }
+          if (data.tag.tag_type) {
+            const mapped = data.tag.tag_type === "lost" ? "lost" : data.tag.tag_type === "other" ? "other" : "vehicle";
+            selectCategory(mapped);
+          }
         }
       } catch (_) {}
     }
 
-    renderReasons();
+    // Initialize default selection
+    selectedReason = i18n.en.templates.vehicle[0].text;
+    renderTemplates();
     loadTagMeta();
   </script>
 </body>
