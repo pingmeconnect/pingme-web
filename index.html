@@ -77,7 +77,7 @@
     .tagline-pill { background: linear-gradient(90deg, #4338ca 0%, #7e22ce 52%, #db2777 100%); box-shadow: 0 4px 14px rgba(126, 34, 206, 0.28); }
 
     .pingy-hero-frame { overflow: hidden; border-radius: 22px; background: radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.18) 0%, rgba(56, 189, 248, 0.12) 65%, transparent 100%); border: 1.5px solid rgba(255, 255, 255, 0.9); }
-    .pingy-hero-frame img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; transform: none; }
+    .pingy-hero-frame img { width: 100%; height: 100%; object-fit: cover; object-position: center; transform: scale(1.08); }
 
     .cat-card { background: #ffffff; border: 2px solid #cbd5e1; border-radius: 16px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08); transition: transform 0.14s ease; }
     .cat-card:active { transform: scale(0.96); }
@@ -97,296 +97,21 @@
     .countdown-ring { background: radial-gradient(circle, #06182c 58%, #042f2e 100%); border: 6px solid #10b981; box-shadow: 0 0 30px rgba(16, 185, 129, 0.5); }
     @keyframes mascotFloat { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-4px); } }
     .mascot-float { animation: mascotFloat 3s ease-in-out infinite; }
-  
-    /* ==========================================================
-       PINGME MOBILE APP FIT — single viewport, no page scrolling
-       Keeps the original HTML, assets, and JavaScript behaviour.
-       ========================================================== */
-    @media (max-width: 767px) {
-      html, body {
-        width: 100%;
-        height: 100%;
-        min-height: 0;
-        overflow: hidden;
-      }
-
-      body {
-        height: 100vh;
-        height: 100dvh;
-        padding: 0;
-      }
-
-      .app-shell {
-        width: 100%;
-        height: 100vh;
-        height: 100dvh;
-        min-height: 0;
-        overflow: hidden;
-        padding-bottom: env(safe-area-inset-bottom);
-      }
-
-      .app-header {
-        position: relative;
-        top: auto;
-        flex: 0 0 auto;
-        min-height: 44px;
-        padding: max(5px, env(safe-area-inset-top)) 12px 5px;
-      }
-
-      .brand-pill {
-        padding-top: 4px;
-        padding-bottom: 4px;
-      }
-
-      .brand-pill img { height: 31px; }
-
-      .lang-pill {
-        padding: 6px 10px;
-        font-size: 10px;
-      }
-
-      /* Six main areas fit into the height available below the header. */
-      #screen1 {
-        display: grid !important;
-        flex: 1 1 auto;
-        width: 100%;
-        height: 0;
-        min-height: 0;
-        overflow: hidden;
-        grid-template-rows:
-          auto
-          minmax(58px, 13dvh)
-          auto
-          minmax(0, 1fr)
-          auto
-          auto;
-        align-content: stretch;
-        justify-content: stretch;
-        gap: clamp(3px, 0.65dvh, 7px);
-        padding: clamp(5px, 1dvh, 9px) 11px max(6px, env(safe-area-inset-bottom));
-      }
-
-      /* Remove Tailwind space-y margins; grid gap controls spacing. */
-      #screen1 > :not([hidden]) ~ :not([hidden]) {
-        margin-top: 0 !important;
-      }
-
-      #screen1 > div { min-height: 0; }
-
-      #screen1 > div:first-child {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 2px;
-      }
-
-      #screen1 > div:first-child .inline-flex {
-        padding: 2px 8px;
-        font-size: 8px;
-      }
-
-      #screen1 h1 {
-        font-size: clamp(17px, 4.8vw, 22px);
-        line-height: 1.12;
-      }
-
-      #screen1 > div:first-child .tagline-pill { padding: 3px 10px; }
-
-      #screen1 > div:first-child .tagline-pill p {
-        font-size: 7px;
-        line-height: 1.15;
-      }
-
-      .pingy-hero-frame {
-        width: 100%;
-        height: 100%;
-        min-height: 0;
-        max-height: 13dvh;
-        border-radius: 14px;
-      }
-
-      .pingy-hero-frame img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-        object-position: center;
-        transform: none;
-      }
-
-      #screen1 > div:nth-of-type(2) h2,
-      #screen1 > div:nth-of-type(3) h2 {
-        font-size: 10px;
-        line-height: 1.15;
-        margin: 0 0 4px !important;
-      }
-
-      #screen1 > div:nth-of-type(2) .grid { gap: 6px; }
-
-      .cat-card {
-        min-height: 0;
-        padding: 4px 2px !important;
-        gap: 2px !important;
-        border-radius: 11px;
-      }
-
-      .cat-card img {
-        width: 25px;
-        height: 25px;
-      }
-
-      .cat-card > span:last-child {
-        font-size: 9px;
-        line-height: 1.1;
-        text-align: center;
-      }
-
-      .cat-card > span:first-child {
-        width: 16px;
-        height: 16px;
-        font-size: 8px;
-      }
-
-      #screen1 > div:nth-of-type(3) {
-        display: flex;
-        flex-direction: column;
-        min-height: 0;
-        overflow: hidden;
-      }
-
-      #reasonsContainer {
-        display: flex;
-        flex: 1 1 auto;
-        flex-direction: column;
-        min-height: 0;
-        gap: 3px !important;
-        overflow: hidden;
-      }
-
-      #reasonsContainer > button {
-        display: flex;
-        flex: 1 1 0;
-        align-items: center;
-        min-height: 0;
-        padding: 4px 7px !important;
-        font-size: clamp(8px, 2.55vw, 10px) !important;
-        line-height: 1.15;
-        border-radius: 9px;
-        overflow: hidden;
-      }
-
-      #reasonsContainer > button > div {
-        min-width: 0;
-        gap: 5px;
-      }
-
-      #reasonsContainer > button > div > span:last-child {
-        min-width: 0;
-        overflow-wrap: anywhere;
-      }
-
-      #reasonsContainer > button > span:last-child {
-        flex: 0 0 16px;
-        width: 16px;
-        height: 16px;
-      }
-
-      .surface-card {
-        min-height: 0;
-        padding: 6px !important;
-        gap: 5px !important;
-        border-radius: 11px;
-      }
-
-      #customNote {
-        min-height: 29px;
-        padding: 5px 8px !important;
-        font-size: 10px !important;
-        border-radius: 8px;
-      }
-
-      .surface-card .grid { gap: 5px; }
-
-      .surface-card label,
-      .surface-card button {
-        min-height: 28px;
-        padding: 5px 2px !important;
-        font-size: 8px !important;
-        line-height: 1.1;
-        border-radius: 8px;
-        white-space: nowrap;
-      }
-
-      #attachmentBadge {
-        padding: 3px 5px;
-        font-size: 8px;
-      }
-
-      #sendBtn {
-        flex: 0 0 auto;
-        min-height: 36px;
-        padding: 8px 10px !important;
-        font-size: 12px !important;
-        border-radius: 11px;
-      }
-
-      /* Waiting/reply/thank-you screens remain usable on smaller phones. */
-      #screen2, #screen3, #screen4 {
-        min-height: 0;
-        overflow-y: auto;
-        overscroll-behavior: contain;
-        padding-bottom: max(14px, env(safe-area-inset-bottom));
-      }
+    .tpl-pill { min-height: 50px; }
+    .countdown-ring { border-color: #22d3ee; }
+    .rating-star { line-height: 1; background: transparent; border: 0; }
+    button:disabled { opacity: .65; cursor: wait; }
+    @media (max-width: 390px) {
+      #screen1 { padding: 12px; gap: 9px; }
+      .pingy-hero-frame { height: 125px; }
+      .cat-card { padding-top: 7px; padding-bottom: 7px; }
+      .cat-card img { width: 30px; height: 30px; }
+      .tpl-pill { min-height: 42px; padding: 9px !important; font-size: 14px !important; }
     }
-
-    /* Compact tuning for short-height phones. */
-    @media (max-width: 767px) and (max-height: 700px) {
-      #screen1 {
-        grid-template-rows:
-          auto
-          minmax(42px, 10dvh)
-          auto
-          minmax(0, 1fr)
-          auto
-          auto;
-        gap: 3px;
-        padding: 4px 9px max(5px, env(safe-area-inset-bottom));
-      }
-
-      #screen1 h1 { font-size: 17px; }
-      #screen1 > div:first-child .tagline-pill p { font-size: 7px; }
-      .cat-card img { width: 22px; height: 22px; }
-
-      #reasonsContainer { gap: 2px !important; }
-      #reasonsContainer > button {
-        padding: 3px 6px !important;
-        font-size: 8px !important;
-      }
-
-      .surface-card {
-        padding: 4px !important;
-        gap: 3px !important;
-      }
-
-      #customNote {
-        min-height: 26px;
-        padding: 4px 7px !important;
-      }
-
-      .surface-card label,
-      .surface-card button {
-        min-height: 25px;
-        padding: 3px 2px !important;
-        font-size: 7px !important;
-      }
-
-      #sendBtn {
-        min-height: 33px;
-        padding: 6px 8px !important;
-        font-size: 11px !important;
-      }
+    @media (prefers-reduced-motion: reduce) {
+      .mascot-float, .animate-ping { animation: none !important; }
+      * { scroll-behavior: auto !important; }
     }
-
   </style>
 </head>
 <body>
@@ -414,14 +139,8 @@
 
     <!-- SCREEN 1: WELCOME & SEND ALERT -->
     <main id="screen1" class="flex-1 flex flex-col justify-between p-4 space-y-3">
-      <div class="flex flex-col items-center text-center space-y-1.5">
-        <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 text-xs font-extrabold uppercase">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> <span id="tagBadge">LIVE TAG</span>
-        </div>
-        <h1 class="text-2xl sm:text-3xl font-black text-[#111d4a] tracking-tight">Welcome to <span class="text-[#1d4ed8]">PingMe!</span></h1>
-        <div class="tagline-pill px-4 py-1 rounded-full">
-          <p class="text-[11px] font-extrabold tracking-widest text-white uppercase">ONE SCAN. INSTANT CONNECTION.</p>
-        </div>
+      <div class="flex flex-col items-center text-center space-y-2">
+        <h1 class="text-3xl sm:text-4xl font-black text-[#111d4a] tracking-tight" data-i18n="welcomeTitle">LET'S CONNECT!</h1>
       </div>
 
       <!-- Hero Mascot with Cap -->
@@ -431,121 +150,143 @@
 
       <!-- Categories (Big & Bold for All Ages) -->
       <div>
-        <h2 class="text-sm font-extrabold text-[#111d4a] mb-1.5">Choose a Category</h2>
+        <h2 class="text-base font-extrabold text-[#111d4a] mb-1.5" data-i18n="chooseCategory">Choose a Category</h2>
         <div class="grid grid-cols-3 gap-2.5">
-          <button type="button" onclick="selectCategory('vehicle')" id="cat-vehicle" class="cat-card active py-2.5 px-2 flex flex-col items-center gap-1">
+          <button type="button" onclick="selectCategory('vehicle')" id="cat-vehicle" class="cat-card active relative py-2.5 px-2 flex flex-col items-center gap-1">
             <span id="check-vehicle" class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 text-white text-[10px] font-bold flex items-center justify-center">✓</span>
             <img src="assets/icon-vehicle.png" alt="" class="w-9 h-9 object-contain" />
-            <span class="text-xs font-extrabold text-slate-900">Vehicle</span>
+            <span class="text-sm font-extrabold text-slate-900" data-i18n="vehicle">Vehicle</span>
           </button>
           <button type="button" onclick="selectCategory('lost')" id="cat-lost" class="cat-card py-2.5 px-2 flex flex-col items-center gap-1 relative">
             <span id="check-lost" class="hidden absolute -top-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 text-white text-[10px] font-bold flex items-center justify-center">✓</span>
             <img src="assets/icon-lostfound.png" alt="" class="w-9 h-9 object-contain" />
-            <span class="text-xs font-extrabold text-slate-900">Lost & Found</span>
+            <span class="text-sm font-extrabold text-slate-900" data-i18n="lostFound">Lost &amp; Found</span>
           </button>
           <button type="button" onclick="selectCategory('other')" id="cat-other" class="cat-card py-2.5 px-2 flex flex-col items-center gap-1 relative">
             <span id="check-other" class="hidden absolute -top-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 text-white text-[10px] font-bold flex items-center justify-center">✓</span>
             <img src="assets/icon-other.png" alt="" class="w-9 h-9 object-contain" />
-            <span class="text-xs font-extrabold text-slate-900">Other</span>
+            <span class="text-sm font-extrabold text-slate-900" data-i18n="other">Other</span>
           </button>
         </div>
       </div>
 
       <!-- Templates -->
       <div>
-        <h2 class="text-sm font-extrabold text-[#111d4a] mb-1.5">Select a Message</h2>
+        <h2 class="text-base font-extrabold text-[#111d4a] mb-1.5" data-i18n="selectMessage">Select a Message</h2>
         <div id="reasonsContainer" class="space-y-2"></div>
       </div>
 
       <!-- Custom Note & Attachments -->
       <div class="surface-card p-3 space-y-2.5">
-        <input type="text" id="customNote" maxlength="160" placeholder="Type custom message here..." class="w-full bg-slate-50 border-2 border-slate-300 rounded-xl px-3.5 py-2.5 text-sm font-bold text-slate-900 focus:outline-none focus:border-cyan-500" />
+        <input type="text" id="customNote" maxlength="160" placeholder="Add details (optional)..." data-i18n-placeholder="customPlaceholder" class="w-full bg-slate-50 border-2 border-slate-300 rounded-xl px-3.5 py-3 text-base font-bold text-slate-900 focus:outline-none focus:border-cyan-500" />
         <div class="grid grid-cols-2 gap-2">
-          <label class="p-2 rounded-xl bg-slate-100 border border-slate-300 flex items-center justify-center gap-2 cursor-pointer font-extrabold text-xs text-slate-800">
-            <span>📷</span> ATTACH PHOTO
+          <label class="p-3 rounded-xl bg-slate-100 border-2 border-slate-300 flex items-center justify-center gap-2 cursor-pointer font-extrabold text-sm text-slate-800">
+            <span>📷</span> <span data-i18n="addPhoto">ADD PHOTO</span>
             <input type="file" id="photoInput" accept="image/*" class="hidden" onchange="handlePhoto(event)" />
           </label>
-          <button type="button" onclick="attachLocation()" class="p-2 rounded-xl bg-slate-100 border border-slate-300 flex items-center justify-center gap-2 font-extrabold text-xs text-slate-800">
-            <span>📍</span> SHARE LOCATION
+          <button type="button" onclick="attachLocation()" id="locationBtn" class="p-3 rounded-xl bg-slate-100 border-2 border-slate-300 flex items-center justify-center gap-2 font-extrabold text-sm text-slate-800">
+            <span>📍</span> <span data-i18n="addLocation">ADD LOCATION</span>
           </button>
         </div>
-        <div id="attachmentBadge" class="hidden text-xs font-extrabold text-emerald-700 bg-emerald-50 p-2 rounded-xl text-center">✓ Attachment Ready</div>
+        <div id="photoStatus" class="hidden text-sm font-extrabold text-emerald-700 bg-emerald-50 p-2 rounded-xl text-center"></div>
+        <div id="locationStatus" class="hidden text-sm font-extrabold text-emerald-700 bg-emerald-50 p-2 rounded-xl text-center"></div>
       </div>
 
-      <button type="button" id="sendBtn" onclick="sendAlert()" class="btn-send-alert w-full py-4 rounded-2xl font-black text-base text-white tracking-wider flex items-center justify-center gap-2 shadow-xl">
-        <span>➤</span> <span id="txtSendBtn">SEND ALERT</span>
+      <button type="button" id="sendBtn" onclick="sendAlert()" class="btn-send-alert w-full py-4 rounded-2xl font-black text-lg text-white tracking-wider flex items-center justify-center gap-2 shadow-xl">
+        <span>➤</span> <span id="txtSendBtn" data-i18n="sendAlert">SEND ALERT</span>
       </button>
     </main>
 
-    <!-- SCREEN 2: WAITING & 180s TIMER -->
-    <section id="screen2" class="hidden p-4 flex-1 flex flex-col justify-between space-y-4">
-      <div class="text-center space-y-3">
-        <div class="inline-flex items-center gap-2 bg-emerald-500 text-white px-4 py-1.5 rounded-full font-extrabold text-sm shadow">
-          <span>✓</span> ALERT SENT TO WHATSAPP!
+    <!-- SCREEN 2: PING SENT -->
+    <section id="screen2" class="hidden p-4 flex-1 flex flex-col items-center justify-between text-center space-y-4">
+      <div class="w-full space-y-3">
+        <div class="inline-flex items-center gap-2 bg-emerald-500 text-white px-5 py-2 rounded-full font-black text-lg shadow-lg">
+          <span>✓</span> <span data-i18n="pingSent">PING SENT!</span>
         </div>
-        <div class="w-36 h-36 mx-auto rounded-full flex items-center justify-center">
-          <img src="assets/Pingy_Waiting_Reference.png" alt="" class="w-36 h-36 object-contain mascot-float" />
+        <p class="text-lg sm:text-xl font-extrabold text-white" data-i18n="waitingReply">Waiting for owner's reply...</p>
+        <div class="w-40 h-40 mx-auto flex items-center justify-center">
+          <img src="assets/Pingy_Waiting_Reference.png" alt="PingMe mascot" class="w-40 h-40 object-contain mascot-float" />
         </div>
-        <div class="countdown-ring w-32 h-32 mx-auto rounded-full flex flex-col items-center justify-center">
-          <span id="countdownNumber" class="text-4xl font-black text-white">180</span>
-          <span class="text-[10px] font-extrabold text-emerald-300 uppercase tracking-widest mt-0.5">SECONDS</span>
-        </div>
-        <div class="p-3 rounded-2xl bg-slate-900/90 border border-cyan-400/40 text-xs font-bold text-white">
-          ⏳ Waiting for owner's WhatsApp reply...
+        <div class="countdown-ring w-40 h-40 mx-auto rounded-full flex flex-col items-center justify-center">
+          <span id="countdownNumber" class="text-6xl font-black text-white leading-none">180</span>
+          <span class="text-base font-extrabold text-emerald-300 uppercase tracking-widest mt-1" data-i18n="seconds">SECONDS</span>
         </div>
       </div>
-      <div class="space-y-3">
-        <div class="grid grid-cols-3 gap-2">
-          <button onclick="openBuyModal()" class="btn-buy py-3 rounded-2xl font-extrabold text-xs text-white flex flex-col items-center gap-1"><span>🛒</span> BUY</button>
-          <button onclick="openShareModal()" class="btn-share py-3 rounded-2xl font-extrabold text-xs text-white flex flex-col items-center gap-1"><span>🔗</span> SHARE</button>
-          <button onclick="openReviewPage()" class="btn-review py-3 rounded-2xl font-extrabold text-xs text-white flex flex-col items-center gap-1"><span>⭐</span> REVIEW</button>
+      <div class="w-full space-y-3">
+        <div class="bg-white rounded-2xl border-2 border-cyan-300 p-4 text-slate-900 shadow-xl min-h-[116px] flex flex-col items-center justify-center">
+          <div class="text-sm font-black text-indigo-700 mb-1">💡 <span data-i18n="pingmeTip">PINGME TIP</span> <span id="tipCounter" class="text-slate-500">1/9</span></div>
+          <p id="tipText" class="text-lg sm:text-xl font-extrabold leading-snug">Your phone number stays private.</p>
         </div>
-        <button onclick="finishSession()" class="btn-finish w-full py-3.5 rounded-2xl font-black text-sm text-white">✕ FINISH &amp; CLOSE SESSION</button>
+        <p class="text-sm font-bold text-cyan-100" data-i18n="privateNumber">🔒 Your phone number stays private.</p>
       </div>
     </section>
 
-    <!-- SCREEN 3: OWNER RESPONDED -->
-    <section id="screen3" class="hidden p-4 flex-1 flex flex-col justify-between space-y-4">
-      <div class="text-center space-y-3">
+    <!-- SCREEN 3: OWNER REPLIED -->
+    <section id="screen3" class="hidden p-5 flex-1 flex flex-col items-center justify-between text-center space-y-5">
+      <div class="w-full space-y-4">
         <div class="w-40 h-40 mx-auto">
-          <img src="assets/Pingy_ThumbsUp_Reference.png" alt="" class="w-40 h-40 object-contain mascot-float" />
+          <img src="assets/Pingy_ThumbsUp_Reference.png" alt="PingMe mascot" class="w-40 h-40 object-contain mascot-float" />
         </div>
-        <div class="bg-emerald-600 text-white px-5 py-2 rounded-full font-black text-lg shadow-lg">GREAT NEWS! 🎉</div>
-        <div id="ownerReplyBox" class="bg-white rounded-2xl p-4 shadow-xl border-2 border-cyan-300 text-slate-900 font-bold text-sm text-left">
-          <p id="respGuidance">The owner has responded on WhatsApp!</p>
+        <div class="bg-emerald-600 text-white px-5 py-3 rounded-full font-black text-2xl shadow-lg" data-i18n="greatNews">GREAT NEWS!</div>
+        <p id="replySubtext" class="text-lg font-extrabold text-cyan-100" data-i18n="ownerReplied">The owner replied.</p>
+        <div id="ownerReplyBox" class="bg-white rounded-2xl p-5 shadow-xl border-2 border-cyan-300 text-slate-900 font-extrabold text-xl text-left">
+          <p id="respGuidance">The owner has replied on WhatsApp.</p>
+          <p id="replyTime" class="text-xs font-bold text-slate-500 text-right mt-3"></p>
         </div>
+        <div id="replyReceivedBadge" class="inline-flex bg-emerald-100 text-emerald-800 px-4 py-2 rounded-full font-extrabold text-base">✓ <span data-i18n="replyReceived">Reply received!</span></div>
       </div>
-      <div class="space-y-3">
-        <div class="grid grid-cols-3 gap-2">
-          <button onclick="openBuyModal()" class="btn-buy py-3 rounded-2xl font-extrabold text-xs text-white flex flex-col items-center gap-1"><span>🛒</span> BUY</button>
-          <button onclick="openShareModal()" class="btn-share py-3 rounded-2xl font-extrabold text-xs text-white flex flex-col items-center gap-1"><span>🔗</span> SHARE</button>
-          <button onclick="openReviewPage()" class="btn-review py-3 rounded-2xl font-extrabold text-xs text-white flex flex-col items-center gap-1"><span>⭐</span> REVIEW</button>
-        </div>
-        <button onclick="finishSession()" class="btn-finish w-full py-3.5 rounded-2xl font-black text-sm text-white">✕ FINISH &amp; CLOSE SESSION</button>
+      <button onclick="finishSession()" id="closeSessionBtn" class="btn-buy w-full py-4 rounded-2xl font-black text-xl text-white shadow-xl" data-i18n="closeSession">✕ CLOSE SESSION</button>
+    </section>
+
+    <!-- SCREEN 4: SESSION CLOSED -->
+    <section id="screen4" class="hidden p-5 flex-1 flex flex-col items-center justify-center text-center space-y-4">
+      <img src="assets/Pingy_ThankYou_Reference.png" alt="PingMe mascot" class="w-36 h-36 object-contain mascot-float" />
+      <div class="bg-emerald-600 text-white px-6 py-3 rounded-full font-black text-2xl shadow-lg" data-i18n="allDone">✓ ALL DONE!</div>
+      <h2 class="text-xl font-extrabold text-white" data-i18n="sessionClosed">Your session is safely closed.</h2>
+      <p class="text-sm font-bold text-cyan-100" data-i18n="noMoreMessages">No more messages will be sent for this alert.</p>
+      <div class="w-full space-y-3 pt-2">
+        <button onclick="openBuyModal()" class="btn-buy w-full py-3.5 rounded-2xl font-black text-lg text-white">🛒 <span data-i18n="buyPingMe">BUY PINGME</span> ›</button>
+        <button onclick="openShareModal()" class="btn-share w-full py-3.5 rounded-2xl font-black text-lg text-white">🔗 <span data-i18n="referFriend">REFER A FRIEND</span> ›</button>
+        <button onclick="openReviewModal()" class="btn-review w-full py-3.5 rounded-2xl font-black text-lg text-white">⭐ <span data-i18n="rateUs">RATE US</span> ›</button>
+        <button onclick="finishDone()" class="btn-finish w-full py-3.5 rounded-2xl font-black text-lg text-white">✓ <span data-i18n="done">DONE</span></button>
       </div>
     </section>
 
-    <!-- SCREEN 4: THANK YOU & PERMANENT LOCK -->
-    <section id="screen4" class="hidden p-6 flex-1 flex flex-col items-center justify-center text-center space-y-5">
-      <img src="assets/Pingy_ThankYou_Reference.png" alt="" class="w-40 h-40 object-contain mascot-float" />
-      <h2 class="text-3xl font-black text-white">THANK YOU!</h2>
-      <div class="w-full bg-white rounded-2xl p-4 shadow-xl border-2 border-emerald-400 text-left space-y-1">
-        <div class="font-extrabold text-slate-900 text-sm flex items-center gap-2"><span>🔒</span> Session Permanently Locked &amp; Closed</div>
-        <p class="text-xs font-bold text-slate-600">You cannot return to the alert screen or send duplicate messages in this session.</p>
-      </div>
-      <p class="text-xs font-bold text-cyan-200">Scan QR code again to start a new session.</p>
-    </section>
-
-    <!-- BUY MODAL -->
-    <div id="buyModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 flex items-center justify-center p-4">
-      <div class="w-full max-w-sm rounded-3xl bg-[#081226] border-2 border-cyan-400 p-5 text-white space-y-4 shadow-2xl">
-        <div class="flex justify-between items-center"><h3 class="font-black text-amber-300 text-lg">PINGME STARTER KIT</h3><button onclick="closeBuyModal(); finishSession();" class="text-white font-bold">✕</button></div>
-        <div class="text-3xl font-black text-white">₹599 <span class="text-xs text-emerald-400 font-bold">Free Delivery</span></div>
-        <p class="text-xs text-slate-300">2 Car Holders, 2 Bike Stickers, 2 Acrylic Keychains, 3 Plastic Tags, 250 Free Credits &amp; 1-Yr Subscription.</p>
-        <button onclick="orderStarterKitWhatsApp()" class="w-full py-3.5 rounded-2xl bg-amber-400 text-slate-950 font-black text-sm shadow-lg">🛒 ORDER VIA PINGME WHATSAPP</button>
+    <!-- BUY PRODUCT MODAL -->
+    <div id="buyModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 flex items-center justify-center p-4">
+      <div class="w-full max-w-sm rounded-3xl bg-white border-2 border-cyan-300 p-5 text-slate-900 space-y-4 shadow-2xl max-h-[90dvh] overflow-y-auto">
+        <div class="flex justify-between items-center"><h3 class="font-black text-indigo-900 text-xl" data-i18n="productTitle">PINGME SMART CONNECT KIT</h3><button onclick="closeBuyModal()" class="text-slate-700 text-2xl font-black" aria-label="Close">×</button></div>
+        <div class="rounded-2xl bg-gradient-to-br from-blue-100 via-white to-fuchsia-100 p-4 text-center">
+          <img src="assets/pingme-logo.png" alt="PingMe" class="h-14 mx-auto object-contain mb-2">
+          <div class="text-3xl font-black text-indigo-900">₹599</div>
+          <div class="text-sm font-bold text-emerald-700" data-i18n="kitPriceNote">One-time kit price</div>
+        </div>
+        <p class="text-base font-extrabold text-slate-800" data-i18n="kitIntro">Everything you need to connect through one QR.</p>
+        <ul class="space-y-2 text-sm font-bold text-slate-700">
+          <li>✓ <span data-i18n="kitItem1">QR stickers for vehicle and other uses</span></li>
+          <li>✓ <span data-i18n="kitItem2">QR keychains and reusable tags</span></li>
+          <li>✓ <span data-i18n="kitItem3">Starter credits included</span></li>
+          <li>✓ <span data-i18n="kitItem4">1-year subscription included</span></li>
+        </ul>
+        <button onclick="orderStarterKitWhatsApp()" class="w-full py-4 rounded-2xl bg-emerald-600 text-white font-black text-lg shadow-lg">🟢 <span data-i18n="orderWhatsApp">ORDER ON WHATSAPP</span></button>
       </div>
     </div>
-  </div>
+
+    <!-- RATE US MODAL: feedback is sent to the PingMe WhatsApp business number -->
+    <div id="reviewModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 flex items-center justify-center p-4">
+      <div class="w-full max-w-sm rounded-3xl bg-white border-2 border-amber-300 p-5 text-slate-900 space-y-4 shadow-2xl">
+        <div class="flex justify-between items-center"><h3 class="font-black text-indigo-900 text-xl" data-i18n="rateTitle">RATE YOUR EXPERIENCE</h3><button onclick="closeReviewModal()" class="text-slate-700 text-2xl font-black" aria-label="Close">×</button></div>
+        <div class="flex justify-center gap-2" id="starPicker">
+          <button type="button" onclick="setRating(1)" class="rating-star text-4xl" aria-label="1 star">☆</button>
+          <button type="button" onclick="setRating(2)" class="rating-star text-4xl" aria-label="2 stars">☆</button>
+          <button type="button" onclick="setRating(3)" class="rating-star text-4xl" aria-label="3 stars">☆</button>
+          <button type="button" onclick="setRating(4)" class="rating-star text-4xl" aria-label="4 stars">☆</button>
+          <button type="button" onclick="setRating(5)" class="rating-star text-4xl" aria-label="5 stars">☆</button>
+        </div>
+        <textarea id="reviewText" rows="3" maxlength="300" placeholder="Your feedback (optional)..." data-i18n-placeholder="reviewPlaceholder" class="w-full border-2 border-slate-300 rounded-xl p-3 text-base"></textarea>
+        <button onclick="submitReview()" class="w-full py-3.5 rounded-2xl bg-amber-500 text-white font-black text-lg" data-i18n="sendFeedback">SEND FEEDBACK</button>
+      </div>
+    </div>
 
   <script>
     const CONFIG = {
@@ -555,11 +296,6 @@
       STARTER_KIT_ORDER_MESSAGE: "Hi, I'm interested in ordering the PingMe Starter Kit for ₹599."
     };
 
-    window.addEventListener("DOMContentLoaded", () => {
-      setTimeout(() => { const s = document.getElementById("splashScreen"); if(s) { s.classList.add("splash-hide"); setTimeout(() => s.remove(), 480); } }, 1600);
-      if (sessionStorage.getItem("pingme_session_closed") === "true") switchToDarkScreen("screen4");
-    });
-
     const urlParams = new URLSearchParams(window.location.search);
     const TAG_CODE = (urlParams.get("t") || "TEST001").trim();
 
@@ -568,39 +304,161 @@
     let selectedReason = "";
     let photoBase64 = null;
     let locationUrl = null;
+    let gpsCoords = null;
     let currentSessionId = null;
     let sessionClosed = false;
+    let timerInterval = null;
+    let pollInterval = null;
+    let tipInterval = null;
+    let secondsLeft = 180;
+    let tipIndex = 0;
+    let selectedRating = 0;
+    let replyShown = false;
+
+    const tips = [
+      "Your phone number stays private.",
+      "PingMe works for vehicles, keys and bags.",
+      "One QR can connect people in many situations.",
+      "A photo can help explain the issue clearly.",
+      "Share your location when it helps the owner.",
+      "PingMe can be used for parcels and luggage too.",
+      "The owner can reply directly through WhatsApp.",
+      "Your alert is linked to this QR tag.",
+      "Thanks for trying PingMe. Stay connected!"
+    ];
+
+    const uiText = {
+      en: {
+        welcomeTitle:"LET'S CONNECT!", chooseCategory:"Choose a Category", selectMessage:"Select a Message",
+        vehicle:"Vehicle", lostFound:"Lost & Found", other:"Other", customPlaceholder:"Add details (optional)...",
+        addPhoto:"ADD PHOTO", addLocation:"ADD LOCATION", sendAlert:"SEND ALERT", pingSent:"PING SENT!",
+        waitingReply:"Waiting for owner's reply...", seconds:"SECONDS", pingmeTip:"PINGME TIP",
+        privateNumber:"🔒 Your phone number stays private.", greatNews:"GREAT NEWS!",
+        ownerReplied:"The owner replied.", replyReceived:"Reply received!", closeSession:"✕ CLOSE SESSION",
+        allDone:"✓ ALL DONE!", sessionClosed:"Your session is safely closed.", noMoreMessages:"No more messages will be sent for this alert.",
+        buyPingMe:"BUY PINGME", referFriend:"REFER A FRIEND", rateUs:"RATE US", done:"DONE",
+        productTitle:"PINGME SMART CONNECT KIT", kitPriceNote:"One-time kit price",
+        kitIntro:"Everything you need to connect through one QR.",
+        kitItem1:"QR stickers for vehicle and other uses", kitItem2:"QR keychains and reusable tags",
+        kitItem3:"Starter credits included", kitItem4:"1-year subscription included",
+        orderWhatsApp:"ORDER ON WHATSAPP", rateTitle:"RATE YOUR EXPERIENCE",
+        reviewPlaceholder:"Your feedback (optional)...", sendFeedback:"SEND FEEDBACK",
+        photoAdded:"✓ Photo selected", locationAdded:"✓ Location captured",
+        noReply:"No reply received within 180 seconds.", closeAfterTimeout:"CLOSE SESSION",
+        photoError:"Could not read this photo. Please try another image.",
+        locationError:"Could not get your location. Please allow location access and try again.",
+        chooseMessage:"Please select a message or enter your own details.",
+        networkError:"Network error. Please try again.", ratingRequired:"Please select a star rating.",
+        reviewThanks:"Thank you! Your feedback message is ready in WhatsApp."
+      },
+      ta: {
+        welcomeTitle:"இணைவோம்!", chooseCategory:"வகையைத் தேர்வு செய்யவும்", selectMessage:"செய்தியைத் தேர்வு செய்யவும்",
+        vehicle:"வாகனம்", lostFound:"தொலைந்தது / கிடைத்தது", other:"மற்றவை", customPlaceholder:"கூடுதல் விவரம் (விருப்பம்)...",
+        addPhoto:"புகைப்படம் சேர்க்க", addLocation:"இருப்பிடத்தைப் பகிர", sendAlert:"அறிவிப்பை அனுப்பு",
+        pingSent:"அறிவிப்பு அனுப்பப்பட்டது!", waitingReply:"உரிமையாளரின் பதிலுக்காக காத்திருக்கிறது...",
+        seconds:"விநாடிகள்", pingmeTip:"PINGME குறிப்பு", privateNumber:"🔒 உங்கள் தொலைபேசி எண் தனிப்பட்டதாக இருக்கும்.",
+        greatNews:"மகிழ்ச்சியான செய்தி!", ownerReplied:"உரிமையாளர் பதிலளித்துள்ளார்.", replyReceived:"பதில் கிடைத்தது!",
+        closeSession:"✕ அமர்வை முடிக்கவும்", allDone:"✓ முடிந்தது!", sessionClosed:"உங்கள் அமர்வு பாதுகாப்பாக முடிக்கப்பட்டது.",
+        noMoreMessages:"இந்த அறிவிப்பிற்கு இனி செய்திகள் அனுப்பப்படாது.", buyPingMe:"PINGME வாங்க", referFriend:"நண்பருக்கு பகிர",
+        rateUs:"மதிப்பிடுங்கள்", done:"முடிந்தது", productTitle:"PINGME ஸ்மார்ட் கனெக்ட் கிட்",
+        kitPriceNote:"ஒருமுறை செலுத்தும் விலை", kitIntro:"ஒரே QR மூலம் இணைக்க தேவையான அனைத்தும்.",
+        kitItem1:"வாகனம் மற்றும் பிற பயன்பாடுகளுக்கான QR ஸ்டிக்கர்கள்", kitItem2:"QR கீசெயின்கள் மற்றும் மீண்டும் பயன்படுத்தும் டேக்குகள்",
+        kitItem3:"தொடக்க கிரெடிட்கள் சேர்க்கப்பட்டுள்ளன", kitItem4:"1 ஆண்டு சந்தா சேர்க்கப்பட்டுள்ளது",
+        orderWhatsApp:"WHATSAPP மூலம் ஆர்டர்", rateTitle:"உங்கள் அனுபவத்தை மதிப்பிடுங்கள்",
+        reviewPlaceholder:"உங்கள் கருத்து (விருப்பம்)...", sendFeedback:"கருத்தை அனுப்பு",
+        photoAdded:"✓ புகைப்படம் தேர்ந்தெடுக்கப்பட்டது", locationAdded:"✓ இருப்பிடம் பெறப்பட்டது",
+        noReply:"180 விநாடிகளில் பதில் கிடைக்கவில்லை.", closeAfterTimeout:"அமர்வை முடிக்கவும்",
+        photoError:"புகைப்படத்தைப் படிக்க முடியவில்லை. வேறு படத்தைத் தேர்வு செய்யவும்.",
+        locationError:"இருப்பிடத்தைப் பெற முடியவில்லை. அனுமதி வழங்கி மீண்டும் முயற்சிக்கவும்.",
+        chooseMessage:"செய்தியைத் தேர்வு செய்யவும் அல்லது உங்கள் விவரத்தை உள்ளிடவும்.",
+        networkError:"இணைப்பு பிழை. மீண்டும் முயற்சிக்கவும்.", ratingRequired:"ஒரு நட்சத்திர மதிப்பீட்டைத் தேர்வு செய்யவும்.",
+        reviewThanks:"நன்றி! உங்கள் கருத்தை WhatsApp மூலம் அனுப்பலாம்."
+      }
+    };
 
     const i18n = {
       en: {
         templates: {
-          vehicle: [{ icon: "🚗", text: "Your vehicle is blocking my way." }, { icon: "💡", text: "Lights / Alarm left ON." }, { icon: "🅿️", text: "No-parking zone alert — please move." }, { icon: "⚠️", text: "Vehicle window / door is open." }],
-          lost: [{ icon: "🔑", text: "I found your keys." }, { icon: "🎒", text: "I found your bag / belongings." }, { icon: "📦", text: "You left something behind." }, { icon: "💬", text: "I need to contact you regarding your belongings." }],
-          other: [{ icon: "📦", text: "Your delivery / courier has arrived." }, { icon: "👤", text: "Someone is looking for you." }, { icon: "🔔", text: "I need your attention." }, { icon: "✉️", text: "I have an important message for you." }]
+          vehicle: [
+            {icon:"🚗",text:"Blocking my way"},
+            {icon:"💡",text:"Alarm / Lights ON"},
+            {icon:"🅿️",text:"Parking issue"},
+            {icon:"⚠️",text:"Vehicle issue"}
+          ],
+          lost: [
+            {icon:"🔑",text:"I found your keys."},
+            {icon:"🎒",text:"I found your bag."},
+            {icon:"📦",text:"You left something behind."},
+            {icon:"💬",text:"Please contact me about your belongings."}
+          ],
+          other: [
+            {icon:"📦",text:"Your delivery has arrived."},
+            {icon:"👤",text:"Someone is looking for you."},
+            {icon:"🔔",text:"I need your attention."},
+            {icon:"✉️",text:"I have an important message."}
+          ]
         }
       },
       ta: {
         templates: {
-          vehicle: [{ icon: "🚗", text: "உங்கள் வாகனம் என் வழியை மறைக்கிறது." }, { icon: "💡", text: "விளக்குகள் / அலாரம் எரிந்து கொண்டிருக்கிறது." }, { icon: "🅿️", text: "நோ-பார்க்கிங் பகுதி எச்சரிக்கை — தயவுசெய்து நகர்த்தவும்." }, { icon: "⚠️", text: "வாகனத்தின் ஜன்னல் / கதவு திறந்துள்ளது." }],
-          lost: [{ icon: "🔑", text: "உங்கள் சாவியை நான் கண்டெடுத்தேன்." }, { icon: "🎒", text: "உங்கள் பை / பொருட்களை நான் கண்டெடுத்தேன்." }, { icon: "📦", text: "நீங்கள் ஒரு பொருளை விட்டுச் சென்றுள்ளீர்கள்." }, { icon: "💬", text: "உங்கள் பொருட்கள் தொடர்பாக உங்களைத் தொடர்பு கொள்ள வேண்டும்." }],
-          other: [{ icon: "📦", text: "உங்கள் டெலிவரி / கொரியர் வந்துள்ளது." }, { icon: "👤", text: "ஒருவர் உங்களைத் தேடுகிறார்." }, { icon: "🔔", text: "உங்கள் கவனம் தேவைப்படுகிறது." }, { icon: "✉️", text: "உங்களுக்கு ஒரு முக்கியமான செய்தி உள்ளது." }]
+          vehicle: [
+            {icon:"🚗",text:"என் வழியை மறைக்கிறது"},
+            {icon:"💡",text:"அலாரம் / விளக்குகள் எரிகின்றன"},
+            {icon:"🅿️",text:"பார்க்கிங் பிரச்சினை"},
+            {icon:"⚠️",text:"வாகனத்தில் பிரச்சினை"}
+          ],
+          lost: [
+            {icon:"🔑",text:"உங்கள் சாவி கிடைத்துள்ளது."},
+            {icon:"🎒",text:"உங்கள் பை கிடைத்துள்ளது."},
+            {icon:"📦",text:"ஒரு பொருளை விட்டுச் சென்றுள்ளீர்கள்."},
+            {icon:"💬",text:"உங்கள் பொருள் பற்றி என்னைத் தொடர்பு கொள்ளவும்."}
+          ],
+          other: [
+            {icon:"📦",text:"உங்கள் பார்சல் வந்துள்ளது."},
+            {icon:"👤",text:"ஒருவர் உங்களைத் தேடுகிறார்."},
+            {icon:"🔔",text:"உங்கள் கவனம் தேவை."},
+            {icon:"✉️",text:"ஒரு முக்கிய செய்தி உள்ளது."}
+          ]
         }
       }
     };
 
+    function applyLanguage() {
+      const dict = uiText[currentLang];
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (dict[key]) el.textContent = dict[key];
+      });
+      document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+        const key = el.getAttribute("data-i18n-placeholder");
+        if (dict[key]) el.placeholder = dict[key];
+      });
+      document.getElementById("langLabel").textContent = currentLang === "en" ? "English | தமிழ்" : "தமிழ் | English";
+      renderTemplates();
+      updateAttachmentLabels();
+    }
+
+    function updateAttachmentLabels() {
+      const d = uiText[currentLang];
+      const photoStatus = document.getElementById("photoStatus");
+      const locationStatus = document.getElementById("locationStatus");
+      if (photoBase64) { photoStatus.textContent = d.photoAdded; photoStatus.classList.remove("hidden"); }
+      if (locationUrl) { locationStatus.textContent = d.locationAdded; locationStatus.classList.remove("hidden"); }
+    }
+
     function renderTemplates() {
       const list = i18n[currentLang].templates[currentCategory];
-      document.getElementById("reasonsContainer").innerHTML = list.map(item => `
-        <button type="button" onclick="toggleTemplate('${item.text.replace(/'/g, "\\'")}')" class="tpl-pill ${selectedReason === item.text ? "active" : ""} w-full text-left p-3 flex items-center justify-between gap-2 font-bold text-sm">
-          <div class="flex items-center gap-2"><span class="text-lg">${item.icon}</span><span>${item.text}</span></div>
-          ${selectedReason === item.text ? '<span class="w-5 h-5 rounded-full bg-cyan-600 text-white text-xs font-bold flex items-center justify-center">✓</span>' : ''}
-        </button>
-      `).join("");
+      document.getElementById("reasonsContainer").innerHTML = list.map((item, index) => `
+        <button type="button" data-template-index="${index}" onclick="toggleTemplate(${index})"
+          class="tpl-pill ${selectedReason === item.text ? "active" : ""} w-full text-left p-3 flex items-center justify-between gap-2 font-extrabold text-base">
+          <span class="flex items-center gap-3"><span class="text-2xl">${item.icon}</span><span>${item.text}</span></span>
+          ${selectedReason === item.text ? '<span class="w-6 h-6 shrink-0 rounded-full bg-emerald-600 text-white text-sm font-black flex items-center justify-center">✓</span>' : ''}
+        </button>`).join("");
     }
 
     function selectCategory(cat) {
       currentCategory = cat;
-      ["vehicle", "lost", "other"].forEach(c => {
+      ["vehicle","lost","other"].forEach(c => {
         document.getElementById(`cat-${c}`).classList.toggle("active", c === cat);
         document.getElementById(`check-${c}`).classList.toggle("hidden", c !== cat);
       });
@@ -608,71 +466,229 @@
       renderTemplates();
     }
 
-    function toggleTemplate(text) { selectedReason = (selectedReason === text) ? "" : text; renderTemplates(); }
-    function toggleLanguage() { currentLang = currentLang === "en" ? "ta" : "en"; renderTemplates(); }
+    function toggleTemplate(index) {
+      const item = i18n[currentLang].templates[currentCategory][index];
+      selectedReason = selectedReason === item.text ? "" : item.text;
+      renderTemplates();
+    }
+
+    function toggleLanguage() {
+      currentLang = currentLang === "en" ? "ta" : "en";
+      const currentIndex = i18n[currentLang].templates[currentCategory].findIndex(x => x.text === selectedReason);
+      selectedReason = currentIndex >= 0 ? i18n[currentLang].templates[currentCategory][currentIndex].text : i18n[currentLang].templates[currentCategory][0].text;
+      applyLanguage();
+    }
 
     function handlePhoto(e) {
-      const f = e.target.files[0]; if(!f) return;
-      const r = new FileReader();
-      r.onload = function(evt) { photoBase64 = evt.target.result; document.getElementById("attachmentBadge").classList.remove("hidden"); };
-      r.readAsDataURL(f);
-    }
-    function attachLocation() {
-      if(!navigator.geolocation) return alert("Not supported");
-      navigator.geolocation.getCurrentPosition(p => {
-        locationUrl = `https://maps.google.com/?q=${p.coords.latitude},${p.coords.longitude}`;
-        document.getElementById("attachmentBadge").classList.remove("hidden");
-      });
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith("image/")) { alert("Please select an image."); return; }
+      const reader = new FileReader();
+      reader.onload = ev => {
+        photoBase64 = ev.target.result;
+        updateAttachmentLabels();
+      };
+      reader.onerror = () => alert(uiText[currentLang].photoError);
+      reader.readAsDataURL(file);
     }
 
-    function switchToDarkScreen(id) {
-      const sh = document.getElementById("appShell"); sh.classList.remove("theme-light"); sh.classList.add("theme-dark");
-      ["screen1", "screen2", "screen3", "screen4"].forEach(s => document.getElementById(s).classList.toggle("hidden", s !== id));
+    function attachLocation() {
+      if (!navigator.geolocation) { alert(uiText[currentLang].locationError); return; }
+      const btn = document.getElementById("locationBtn");
+      btn.disabled = true;
+      navigator.geolocation.getCurrentPosition(
+        p => {
+          gpsCoords = { latitude: p.coords.latitude, longitude: p.coords.longitude };
+          locationUrl = `https://maps.google.com/?q=${p.coords.latitude},${p.coords.longitude}`;
+          updateAttachmentLabels();
+          btn.disabled = false;
+        },
+        () => { alert(uiText[currentLang].locationError); btn.disabled = false; },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+      );
+    }
+
+    function switchToScreen(id) {
+      const shell = document.getElementById("appShell");
+      shell.classList.toggle("theme-light", id === "screen1");
+      shell.classList.toggle("theme-dark", id !== "screen1");
+      ["screen1","screen2","screen3","screen4"].forEach(s => {
+        document.getElementById(s).classList.toggle("hidden", s !== id);
+      });
+      window.scrollTo({top:0,behavior:"instant"});
+    }
+
+    function stopWaitingTimers() {
+      if (timerInterval) clearInterval(timerInterval);
+      if (pollInterval) clearInterval(pollInterval);
+      if (tipInterval) clearInterval(tipInterval);
+      timerInterval = pollInterval = tipInterval = null;
+    }
+
+    function showTip() {
+      document.getElementById("tipText").textContent = tips[tipIndex];
+      document.getElementById("tipCounter").textContent = `${tipIndex + 1}/${tips.length}`;
+      tipIndex = (tipIndex + 1) % tips.length;
+    }
+
+    function startWaitingExperience() {
+      secondsLeft = 180;
+      tipIndex = 0;
+      replyShown = false;
+      document.getElementById("countdownNumber").textContent = "180";
+      showTip();
+      tipInterval = setInterval(showTip, 20000);
+      timerInterval = setInterval(() => {
+        secondsLeft = Math.max(0, secondsLeft - 1);
+        document.getElementById("countdownNumber").textContent = String(secondsLeft);
+        if (secondsLeft <= 0) {
+          stopWaitingTimers();
+          showTimeoutState();
+        }
+      }, 1000);
+      pollInterval = setInterval(checkOwnerReply, 3000);
+    }
+
+    async function checkOwnerReply() {
+      if (!currentSessionId || replyShown || sessionClosed) return;
+      try {
+        const response = await fetch(`${CONFIG.BACKEND_URL}/api/session?id=${encodeURIComponent(currentSessionId)}`);
+        if (!response.ok) return;
+        const result = await response.json();
+        if (result.session && (result.session.owner_reply || result.session.session_status === "replied")) {
+          replyShown = true;
+          stopWaitingTimers();
+          const reply = result.session.owner_reply || (currentLang === "ta" ? "உரிமையாளர் பதிலளித்துள்ளார்." : "The owner has replied.");
+          document.getElementById("respGuidance").textContent = `“${reply}”`;
+          document.getElementById("replyTime").textContent = result.session.replied_at ? new Date(result.session.replied_at).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}) : "";
+          document.getElementById("replySubtext").textContent = uiText[currentLang].ownerReplied;
+          document.getElementById("replyReceivedBadge").classList.remove("hidden");
+          switchToScreen("screen3");
+        }
+      } catch (err) {
+        // Keep polling through temporary network interruptions.
+      }
+    }
+
+    function showTimeoutState() {
+      document.getElementById("respGuidance").textContent = uiText[currentLang].noReply;
+      document.getElementById("replyTime").textContent = "";
+      document.getElementById("replySubtext").textContent = uiText[currentLang].noReply;
+      document.getElementById("replyReceivedBadge").classList.add("hidden");
+      document.getElementById("closeSessionBtn").textContent = uiText[currentLang].closeAfterTimeout;
+      switchToScreen("screen3");
     }
 
     async function sendAlert() {
-      if(sessionClosed || sessionStorage.getItem("pingme_session_closed") === "true") return;
-      const reason = selectedReason || document.getElementById("customNote").value.trim();
-      if(!reason) return alert("Please select a message.");
-      const btn = document.getElementById("sendBtn"); btn.disabled = true;
+      if (sessionClosed || sessionStorage.getItem("pingme_session_closed") === "true") return;
+      const customMessage = document.getElementById("customNote").value.trim();
+      const reason = selectedReason || customMessage;
+      if (!reason) { alert(uiText[currentLang].chooseMessage); return; }
+
+      const btn = document.getElementById("sendBtn");
+      if (btn.disabled) return;
+      btn.disabled = true;
+      btn.innerHTML = `<span>⏳</span> ${currentLang === "ta" ? "அனுப்புகிறது..." : "SENDING..."}`;
 
       try {
-        const res = await fetch(`${CONFIG.BACKEND_URL}/api/alert`, {
-          method: "POST", headers: {"Content-Type": "application/json"},
-          body: JSON.stringify({ tag_code: TAG_CODE, category: currentCategory, reason, location_url: locationUrl, photo_data: photoBase64 })
+        const response = await fetch(`${CONFIG.BACKEND_URL}/api/alert`, {
+          method: "POST",
+          headers: {"Content-Type":"application/json"},
+          body: JSON.stringify({
+            tag_code: TAG_CODE,
+            category: currentCategory,
+            reason,
+            custom_message: customMessage,
+            location_url: locationUrl,
+            gps_lat: gpsCoords ? gpsCoords.latitude : null,
+            gps_lng: gpsCoords ? gpsCoords.longitude : null,
+            photo_data: photoBase64,
+            photo_attached: !!photoBase64,
+            location_attached: !!locationUrl
+          })
         });
-        const data = await res.json();
-        if(!res.ok || !data.success) { alert(data.error || "Failed"); btn.disabled = false; return; }
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+          alert(data.error || "Failed to send alert.");
+          btn.disabled = false;
+          btn.innerHTML = `➤ <span data-i18n="sendAlert">${uiText[currentLang].sendAlert}</span>`;
+          return;
+        }
         currentSessionId = data.session_id;
-        switchToDarkScreen("screen2");
-        let t = 180;
-        const timer = setInterval(() => { t--; document.getElementById("countdownNumber").textContent = Math.max(0, t); if(t<=0) clearInterval(timer); }, 1000);
-        setInterval(async () => {
-          const poll = await fetch(`${CONFIG.BACKEND_URL}/api/session?id=${currentSessionId}`);
-          const pd = await poll.json();
-          if(pd.session && (pd.session.owner_reply || pd.session.session_status === "replied")) {
-            if(pd.session.owner_reply) document.getElementById("respGuidance").textContent = `Owner's Reply: "${pd.session.owner_reply}"`;
-            switchToDarkScreen("screen3");
-          }
-        }, 3000);
-      } catch(e) { alert("Network error"); btn.disabled = false; }
+        switchToScreen("screen2");
+        startWaitingExperience();
+      } catch (err) {
+        alert(uiText[currentLang].networkError);
+        btn.disabled = false;
+        btn.innerHTML = `➤ <span data-i18n="sendAlert">${uiText[currentLang].sendAlert}</span>`;
+      }
     }
 
     async function finishSession() {
-      if(sessionClosed) return; sessionClosed = true; sessionStorage.setItem("pingme_session_closed", "true");
-      closeBuyModal(); document.getElementById("shareModal")?.classList.add("hidden"); document.getElementById("reviewNoticeModal")?.classList.add("hidden");
-      if(currentSessionId) { await fetch(`${CONFIG.BACKEND_URL}/api/session/close`, { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({ session_id: currentSessionId }) }).catch(()=>{}); }
-      switchToDarkScreen("screen4");
+      if (sessionClosed) return;
+      sessionClosed = true;
+      stopWaitingTimers();
+      sessionStorage.setItem("pingme_session_closed", "true");
+      if (currentSessionId) {
+        try {
+          await fetch(`${CONFIG.BACKEND_URL}/api/session/close`, {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({session_id:currentSessionId})
+          });
+        } catch (err) {}
+      }
+      switchToScreen("screen4");
+    }
+
+    function finishDone() {
+      // Keep the closed state on this tab; a fresh QR scan in a new session starts a new flow.
+      document.getElementById("appShell").setAttribute("data-session-finished","true");
+      document.getElementById("doneMessage")?.focus();
     }
 
     function openBuyModal() { document.getElementById("buyModal").classList.remove("hidden"); }
     function closeBuyModal() { document.getElementById("buyModal").classList.add("hidden"); }
-    function orderStarterKitWhatsApp() { window.open(`https://wa.me/${CONFIG.WHATSAPP_ORDER_NUMBER}?text=${encodeURIComponent(CONFIG.STARTER_KIT_ORDER_MESSAGE)}`, "_blank"); finishSession(); }
-    function openShareModal() { window.open(`https://wa.me/?text=${encodeURIComponent("Check out PingMe: " + CONFIG.PUBLIC_SITE_URL)}`, "_blank"); finishSession(); }
-    function openReviewPage() { alert("Review page coming soon!"); finishSession(); }
 
-    selectedReason = i18n.en.templates.vehicle[0].text;
-    renderTemplates();
+    function orderStarterKitWhatsApp() {
+      const message = "Hi, I'm interested in ordering the PingMe Smart Connect Kit priced at ₹599. Please share the details.";
+      window.open(`https://wa.me/${CONFIG.WHATSAPP_ORDER_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
+    }
+
+    function openShareModal() {
+      const message = "Check out PingMe – One Scan. Instant Connection! " + CONFIG.PUBLIC_SITE_URL;
+      window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
+    }
+
+    function openReviewModal() { selectedRating = 0; paintStars(); document.getElementById("reviewText").value = ""; document.getElementById("reviewModal").classList.remove("hidden"); }
+    function closeReviewModal() { document.getElementById("reviewModal").classList.add("hidden"); }
+    function setRating(value) { selectedRating = value; paintStars(); }
+    function paintStars() {
+      document.querySelectorAll(".rating-star").forEach((star, index) => {
+        star.textContent = index < selectedRating ? "★" : "☆";
+        star.style.color = index < selectedRating ? "#f59e0b" : "#94a3b8";
+      });
+    }
+    function submitReview() {
+      if (!selectedRating) { alert(uiText[currentLang].ratingRequired); return; }
+      const feedback = document.getElementById("reviewText").value.trim();
+      const message = `PingMe feedback: ${selectedRating}/5 stars${feedback ? " — " + feedback : ""}`;
+      window.open(`https://wa.me/${CONFIG.WHATSAPP_ORDER_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
+      closeReviewModal();
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      setTimeout(() => {
+        const splash = document.getElementById("splashScreen");
+        if (splash) { splash.classList.add("splash-hide"); setTimeout(() => splash.remove(), 480); }
+      }, 1600);
+      selectedReason = i18n.en.templates.vehicle[0].text;
+      applyLanguage();
+      if (sessionStorage.getItem("pingme_session_closed") === "true") {
+        sessionClosed = true;
+        switchToScreen("screen4");
+      }
+    });
   </script>
 </body>
 </html>
