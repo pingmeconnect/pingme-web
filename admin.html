@@ -39,6 +39,11 @@
       color: #0f172a; font-size: 14px; outline: none; transition: border-color 0.2s;
     }
     .pm-input:focus, .pm-select:focus, .pm-textarea:focus { border-color: #6366f1; background: #ffffff; }
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(6px);
+      display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px;
+    }
+    .modal-backdrop.open { display: flex; }
   </style>
 </head>
 <body class="p-3 sm:p-6">
@@ -112,7 +117,7 @@
         </div>
       </header>
 
-      <!-- 4 TOP STAT CARDS (ALWAYS VISIBLE) -->
+      <!-- 4 TOP STAT CARDS -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div class="saas-card p-4 flex items-center gap-4">
           <div class="w-12 h-12 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-xl font-bold">👥</div>
@@ -175,7 +180,7 @@
         </div>
 
         <div class="saas-card p-5 space-y-4">
-          <h3 class="font-extrabold text-slate-900 text-base">👥 Recent Registered Customers</h3>
+          <h3 class="font-extrabold text-slate-900 text-base">👥 Recent Registered Customers (Click row to view profile)</h3>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-sm">
               <thead class="bg-slate-100 text-slate-700 text-xs uppercase font-extrabold">
@@ -192,7 +197,7 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h3 class="font-extrabold text-slate-900 text-base">👥 All Registered Customers Database</h3>
-            <p class="text-xs text-slate-500">Complete list of customer accounts, validity windows, and controls.</p>
+            <p class="text-xs text-slate-500">Click any customer row to open full profile, QR code, and edit controls.</p>
           </div>
           <input type="search" id="tableSearch" oninput="renderTable()" placeholder="Search name, mobile, ID..." class="pm-input !py-2 sm:w-72" />
         </div>
@@ -241,12 +246,61 @@
     </main>
   </div>
 
+  <!-- ================= CUSTOMER PROFILE & QR MODAL ================= -->
+  <div id="customerModal" class="modal-backdrop">
+    <div class="saas-card bg-white max-w-xl w-full p-6 space-y-4 max-h-[90dvh] overflow-y-auto relative shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div>
+          <h3 id="mCustTitle" class="font-black text-lg text-slate-900">Customer Profile</h3>
+          <p id="mCustIdSub" class="text-xs text-indigo-600 font-extrabold">PM000249</p>
+        </div>
+        <button onclick="closeCustomerModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-700 font-bold flex items-center justify-center">✕</button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+        <!-- QR Code Card -->
+        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col items-center justify-center text-center space-y-2">
+          <div id="modalQrBox" class="bg-white p-2 rounded-xl shadow border"></div>
+          <div id="modalQrCaption" class="text-xs font-extrabold text-slate-800"></div>
+          <div class="grid grid-cols-2 gap-1.5 w-full pt-1">
+            <button onclick="alert('Downloading QR PNG...')" class="py-1.5 rounded-lg bg-indigo-600 text-white text-[11px] font-bold">⬇ PNG</button>
+            <button onclick="alert('URL Copied!')" class="py-1.5 rounded-lg bg-slate-200 text-slate-800 text-[11px] font-bold">📋 Copy URL</button>
+          </div>
+        </div>
+
+        <!-- Details & Stats -->
+        <div class="space-y-2.5 text-xs">
+          <div class="grid grid-cols-2 gap-2">
+            <div class="p-2.5 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-900">
+              <div class="text-slate-500 text-[10px]">Active Credits</div>
+              <div id="mModalCredits" class="text-base font-black">360</div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-900">
+              <div class="text-slate-500 text-[10px]">Total Scans</div>
+              <div id="mModalScans" class="text-base font-black">3</div>
+            </div>
+          </div>
+          <div><label class="block font-bold text-slate-700 mb-1">Name</label><input type="text" id="editName" class="pm-input !py-2" /></div>
+          <div><label class="block font-bold text-slate-700 mb-1">Mobile</label><input type="text" id="editMobile" class="pm-input !py-2" /></div>
+          <div><label class="block font-bold text-slate-700 mb-1">Expiry Date</label><input type="text" id="editExpiry" class="pm-input !py-2" /></div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+        <button onclick="saveCustomerEdits()" class="py-2.5 px-5 rounded-xl bg-indigo-600 text-white font-extrabold text-xs shadow">Save Changes</button>
+        <button onclick="closeCustomerModal()" class="py-2.5 px-4 rounded-xl bg-slate-200 text-slate-700 font-bold text-xs">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     let customers = [
-      { id: "PM000249", name: "Karthik R", mobile: "919876543210", email: "karthik@email.com", credits: 360, expiry: "13 Nov 2027", status: "Active" },
-      { id: "PM000248", name: "Priya S", mobile: "919840277123", email: "priya@email.com", credits: 120, expiry: "10 Feb 2027", status: "Active" },
-      { id: "PM000247", name: "Senthil Kumar", mobile: "919962133445", email: "senthil@email.com", credits: 0, expiry: "07 Nov 2026", status: "Inactive" }
+      { id: "PM000249", name: "Karthik R", mobile: "919876543210", email: "karthik@email.com", credits: 360, expiry: "13 Nov 2027", status: "Active", scans: 3 },
+      { id: "PM000248", name: "Priya S", mobile: "919840277123", email: "priya@email.com", credits: 120, expiry: "10 Feb 2027", status: "Active", scans: 1 },
+      { id: "PM000247", name: "Senthil Kumar", mobile: "919962133445", email: "senthil@email.com", credits: 0, expiry: "07 Nov 2026", status: "Inactive", scans: 8 }
     ];
+
+    let selectedCustId = null;
 
     function doLogin() {
       const pass = document.getElementById("passInput").value.trim();
@@ -272,13 +326,14 @@
       document.getElementById("statActiveQrs").textContent = customers.filter(c => c.status === "Active").length;
       document.getElementById("statCredits").textContent = customers.reduce((sum, c) => sum + c.credits, 0).toLocaleString();
       renderTable();
-      generateQrBox("https://pingmeconnect.in/?t=PM000249");
+      generateQrBox("https://pingmeconnect.in/?t=PM000249", "qrBox");
     }
 
-    function generateQrBox(text) {
-      const box = document.getElementById("qrBox");
+    function generateQrBox(text, elementId) {
+      const box = document.getElementById(elementId);
+      if (!box) return;
       box.innerHTML = "";
-      new QRCode(box, { text: text, width: 140, height: 140, correctLevel: QRCode.CorrectLevel.H });
+      new QRCode(box, { text: text, width: 130, height: 130, correctLevel: QRCode.CorrectLevel.H });
     }
 
     function renderTable() {
@@ -286,26 +341,61 @@
       const filtered = customers.filter(c => c.name.toLowerCase().includes(q) || c.mobile.includes(q) || c.id.toLowerCase().includes(q));
       
       const rowsHtml = filtered.map(c => `
-        <tr class="hover:bg-slate-50 transition">
+        <tr class="hover:bg-slate-50 transition cursor-pointer" onclick="openCustomerModal('${c.id}')">
           <td class="p-3 font-extrabold text-indigo-600">${c.id}</td>
           <td class="p-3"><div class="font-extrabold text-slate-900">${c.name}</div><div class="text-[11px] text-slate-500">+${c.mobile}</div></td>
           <td class="p-3 font-extrabold text-amber-600">${c.credits}</td>
           <td class="p-3 text-slate-600">${c.expiry}</td>
-          <td class="p-3">
+          <td class="p-3" onclick="event.stopPropagation()">
             <select onchange="toggleStatus('${c.id}', this.value)" class="text-xs font-bold px-2 py-1 rounded-lg border ${c.status === 'Active' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-700 border-rose-200'}">
               <option value="Active" ${c.status === 'Active' ? 'selected' : ''}>Active</option>
               <option value="Inactive" ${c.status === 'Inactive' ? 'selected' : ''}>Inactive</option>
             </select>
           </td>
-          <td class="p-3 text-right space-x-1">
-            <button onclick="alert('Viewing profile for ${c.name}')" class="px-2 py-1 rounded bg-indigo-50 text-indigo-600 font-bold">👁️</button>
-            <button onclick="alert('Opening WhatsApp sender for ${c.mobile}')" class="px-2 py-1 rounded bg-emerald-50 text-emerald-600 font-bold">💬</button>
+          <td class="p-3 text-right space-x-1" onclick="event.stopPropagation()">
+            <button onclick="openCustomerModal('${c.id}')" class="px-2 py-1 rounded bg-indigo-50 text-indigo-600 font-bold" title="View Profile & QR">👁️</button>
+            <button onclick="alert('Opening WhatsApp sender for ${c.mobile}')" class="px-2 py-1 rounded bg-emerald-50 text-emerald-600 font-bold" title="Send WhatsApp">💬</button>
           </td>
         </tr>
       `).join("");
 
       document.getElementById("customerTableBody").innerHTML = rowsHtml;
       document.getElementById("dashTableBody").innerHTML = rowsHtml;
+    }
+
+    function openCustomerModal(id) {
+      const c = customers.find(x => x.id === id);
+      if (!c) return;
+      selectedCustId = id;
+
+      document.getElementById("mCustTitle").textContent = c.name;
+      document.getElementById("mCustIdSub.textContent") = c.id;
+      document.getElementById("mModalCredits").textContent = c.credits;
+      document.getElementById("mModalScans").textContent = c.scans;
+      document.getElementById("editName").value = c.name;
+      document.getElementById("editMobile").value = c.mobile;
+      document.getElementById("editExpiry").value = c.expiry;
+      document.getElementById("modalQrCaption").textContent = `${c.id} • ${c.name}`;
+
+      generateQrBox(`https://pingmeconnect.in/?t=${c.id}`, "modalQrBox");
+      document.getElementById("customerModal").classList.add("open");
+    }
+
+    function closeCustomerModal() {
+      document.getElementById("customerModal").classList.remove("open");
+      selectedCustId = null;
+    }
+
+    function saveCustomerEdits() {
+      const c = customers.find(x => x.id === selectedCustId);
+      if (!c) return;
+      c.name = document.getElementById("editName").value.trim();
+      c.mobile = document.getElementById("editMobile").value.trim();
+      c.expiry = document.getElementById("editExpiry").value.trim();
+
+      closeCustomerModal();
+      initDashboard();
+      alert("Customer details updated successfully!");
     }
 
     function toggleStatus(id, newStatus) {
@@ -319,14 +409,14 @@
       if (!name || !mobile) return alert("Name and Mobile Number are required!");
 
       const nextId = "PM000" + (250 + customers.length);
-      customers.unshift({ id: nextId, name, mobile, email: document.getElementById("regEmail").value.trim() || "N/A", credits: 360, expiry: "14 Nov 2027", status: "Inactive" });
+      customers.unshift({ id: nextId, name, mobile, email: document.getElementById("regEmail").value.trim() || "N/A", credits: 360, expiry: "14 Nov 2027", status: "Inactive", scans: 0 });
 
       document.getElementById("regName").value = "";
       document.getElementById("regMobile").value = "";
       document.getElementById("regEmail").value = "";
       document.getElementById("regAddress").value = "";
 
-      generateQrBox(`https://pingmeconnect.in/?t=${nextId}`);
+      generateQrBox(`https://pingmeconnect.in/?t=${nextId}`, "qrBox");
       document.getElementById("qrCaption").textContent = `${nextId} • ${name}`;
       initDashboard();
       alert(`Customer ${name} registered successfully with 360 default credits and Inactive status!`);
