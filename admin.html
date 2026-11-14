@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PingMe Admin Panel — SaaS Dashboard</title>
+  <title>PingMe Admin Panel — Customer Management Centre</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -82,10 +82,10 @@
         </div>
 
         <nav class="space-y-1">
-          <button class="nav-btn active" onclick="switchTab('dashboard', this)"><span>📊</span> Dashboard</button>
-          <button class="nav-btn" onclick="switchTab('customers', this)"><span>👥</span> Customers</button>
+          <button class="nav-btn" onclick="switchTab('dashboard', this)"><span>📊</span> Dashboard</button>
+          <button class="nav-btn active" onclick="switchTab('customers', this)"><span>👥</span> Customers</button>
           <button class="nav-btn" onclick="switchTab('logs', this)"><span>📷</span> Scan Logs</button>
-          <button class="nav-btn" onclick="switchTab('messages', this)"><span>💬</span> Send WhatsApp</button>
+          <button class="nav-btn" onclick="switchTab('messages', this)"><span>💬</span> WhatsApp Messages</button>
           <button class="nav-btn" onclick="switchTab('settings', this)"><span>⚙️</span> Settings</button>
         </nav>
       </div>
@@ -104,14 +104,14 @@
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-extrabold text-lg">👑</div>
           <div>
-            <h1 class="text-lg font-extrabold text-slate-900">Admin Control Center</h1>
-            <p class="text-xs text-slate-500">Manage customers, active QR codes, credits, and instant WhatsApp alerts.</p>
+            <h1 class="text-lg font-extrabold text-slate-900">PingMe Admin Panel — Customer Management</h1>
+            <p class="text-xs text-slate-500">Manage all registered customers, view profiles, QR codes, and instant WhatsApp alerts.</p>
           </div>
         </div>
         <div class="flex items-center gap-3">
           <div class="text-right hidden sm:block">
             <div class="text-xs font-bold text-slate-900">Welcome, Admin</div>
-            <div class="text-[10px] text-slate-500">Superuser Access</div>
+            <div class="text-[10px] text-slate-500">Premium SaaS</div>
           </div>
           <button onclick="logout()" class="px-3.5 py-1.5 rounded-xl bg-rose-50 text-rose-600 border border-rose-200 text-xs font-extrabold hover:bg-rose-100">Exit</button>
         </div>
@@ -122,14 +122,14 @@
         <div class="saas-card p-4 flex items-center gap-4">
           <div class="w-12 h-12 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-xl font-bold">👥</div>
           <div>
-            <div id="statTotalCust" class="text-2xl font-extrabold text-slate-900">0</div>
+            <div id="statTotalCust" class="text-2xl font-extrabold text-slate-900">248</div>
             <div class="text-xs font-bold text-slate-500">Total Customers</div>
           </div>
         </div>
         <div class="saas-card p-4 flex items-center gap-4">
           <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl font-bold">QR</div>
           <div>
-            <div id="statActiveQrs" class="text-2xl font-extrabold text-slate-900">0</div>
+            <div id="statActiveQrs" class="text-2xl font-extrabold text-slate-900">196</div>
             <div class="text-xs font-bold text-slate-500">Active QR Codes</div>
           </div>
         </div>
@@ -137,170 +137,210 @@
           <div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl font-bold">📷</div>
           <div>
             <div id="statScans" class="text-2xl font-extrabold text-slate-900">37</div>
-            <div class="text-xs font-bold text-slate-500">Scans Today</div>
+            <div class="text-xs font-bold text-slate-500">Scans Today[cite: 16]</div>
           </div>
         </div>
         <div class="saas-card p-4 flex items-center gap-4">
           <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl font-bold">🪙</div>
           <div>
-            <div id="statCredits" class="text-2xl font-extrabold text-slate-900">0</div>
+            <div id="statCredits" class="text-2xl font-extrabold text-slate-900">8,420</div>
             <div class="text-xs font-bold text-slate-500">Credits Left</div>
           </div>
         </div>
       </div>
 
       <!-- ================= TAB 1: DASHBOARD ================= -->
-      <div id="tab-dashboard" class="space-y-6">
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-          <div class="md:col-span-7 saas-card p-5 space-y-4">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 class="font-extrabold text-slate-900 flex items-center gap-2"><span>👤+</span> Register New Customer &amp; Generate QR</h3>
-              <span class="text-[11px] font-extrabold bg-indigo-50 text-indigo-600 px-2.5 py-0.5 rounded-full">Default: 360 Credits</span>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div><label class="block text-xs font-bold text-slate-700 mb-1">Customer Name *</label><input type="text" id="regName" class="pm-input" placeholder="Karthik R" /></div>
-              <div><label class="block text-xs font-bold text-slate-700 mb-1">Mobile Number *</label><input type="tel" id="regMobile" class="pm-input" placeholder="919876543210" /></div>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div><label class="block text-xs font-bold text-slate-700 mb-1">Email ID (Optional)</label><input type="email" id="regEmail" class="pm-input" placeholder="karthik@email.com" /></div>
-              <div><label class="block text-xs font-bold text-slate-700 mb-1">Address (Optional)</label><input type="text" id="regAddress" class="pm-input" placeholder="Chennai, Tamil Nadu" /></div>
-            </div>
-            <button onclick="registerCustomer()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-extrabold text-sm shadow-lg active:scale-95 transition">⚡ Generate QR &amp; Register Customer</button>
-          </div>
-
-          <div class="md:col-span-5 saas-card p-5 flex flex-col items-center justify-center text-center space-y-3 bg-gradient-to-b from-white to-slate-50/50">
-            <div class="text-xs font-extrabold text-emerald-600 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">✓ QR Code Generated Ready</div>
-            <div id="qrBox" class="bg-white p-3 rounded-2xl shadow-md border border-slate-200"></div>
-            <div id="qrCaption" class="text-xs font-bold text-slate-700">PM000249 • Karthik R</div>
-            <div class="grid grid-cols-2 gap-2 w-full pt-1">
-              <button onclick="alert('Downloading PNG...')" class="py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold">⬇ Download PNG</button>
-              <button onclick="alert('URL Copied!')" class="py-2 rounded-xl bg-slate-200 text-slate-800 text-xs font-bold">📋 Copy URL</button>
-            </div>
-          </div>
+      <div id="tab-dashboard" class="hidden space-y-6">
+        <div class="saas-card p-6 text-center space-y-2">
+          <h2 class="text-xl font-black text-slate-900">Welcome to PingMe Admin Center</h2>
+          <p class="text-xs text-slate-500">Use the <span class="text-indigo-600 font-bold">Customers</span> tab on the left to select any customer with one click and manage their profile[cite: 16].</p>
         </div>
+      </div>
 
+      <!-- ================= TAB 2: CUSTOMERS (PRIMARY VIEW) ================= -->
+      <div id="tab-customers" class="space-y-4">
         <div class="saas-card p-5 space-y-4">
-          <h3 class="font-extrabold text-slate-900 text-base">👥 Recent Registered Customers (Click row to view profile &amp; QR)</h3>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h3 class="font-extrabold text-slate-900 text-base">👥 Customers</h3>
+              <p class="text-xs text-slate-500">Manage all registered customers[cite: 16]. Click any row to open the complete customer profile popup.</p>
+            </div>
+            <input type="search" id="tableSearch" oninput="renderTable()" placeholder="Search by Name, Mobile or ID..." class="pm-input !py-2 sm:w-80" />
+          </div>
+
           <div class="overflow-x-auto">
             <table class="w-full text-left text-sm">
               <thead class="bg-slate-100 text-slate-700 text-xs uppercase font-extrabold">
-                <tr><th class="p-3 rounded-l-xl">Customer ID</th><th class="p-3">Name &amp; Mobile</th><th class="p-3">Credits</th><th class="p-3">Expiry Date</th><th class="p-3">Status</th><th class="p-3 rounded-r-xl text-right">Actions</th></tr>
+                <tr>
+                  <th class="p-3 rounded-l-xl">Customer ID</th>
+                  <th class="p-3">Name</th>
+                  <th class="p-3">Mobile Number</th>
+                  <th class="p-3">Credits</th>
+                  <th class="p-3">Expiry Date</th>
+                  <th class="p-3">Status</th>
+                  <th class="p-3 rounded-r-xl text-right">Actions</th>
+                </tr>
               </thead>
-              <tbody id="dashTableBody" class="divide-y divide-slate-100 text-xs font-semibold text-slate-800"></tbody>
+              <tbody id="customerTableBody" class="divide-y divide-slate-100 text-xs font-semibold text-slate-800">
+                <!-- Dynamically populated -->
+              </tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <!-- ================= TAB 2: CUSTOMERS ================= -->
-      <div id="tab-customers" class="hidden saas-card p-5 space-y-4">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <h3 class="font-extrabold text-slate-900 text-base">👥 All Registered Customers Database</h3>
-            <p class="text-xs text-slate-500">Click any customer row to open full profile, QR code, and edit controls.</p>
-          </div>
-          <input type="search" id="tableSearch" oninput="renderTable()" placeholder="Search name, mobile, ID..." class="pm-input !py-2 sm:w-72" />
-        </div>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm">
-            <thead class="bg-slate-100 text-slate-700 text-xs uppercase font-extrabold">
-              <tr><th class="p-3 rounded-l-xl">Customer ID</th><th class="p-3">Name &amp; Mobile</th><th class="p-3">Credits</th><th class="p-3">Expiry Date</th><th class="p-3">Status</th><th class="p-3 rounded-r-xl text-right">Actions</th></tr>
-            </thead>
-            <tbody id="customerTableBody" class="divide-y divide-slate-100 text-xs font-semibold text-slate-800"></tbody>
-          </table>
-        </div>
-      </div>
-
       <!-- ================= TAB 3: SCAN LOGS ================= -->
       <div id="tab-logs" class="hidden saas-card p-5 space-y-4">
-        <h3 class="font-extrabold text-slate-900 text-base">📷 Live QR Scan &amp; Alert Logs</h3>
-        <p class="text-xs text-slate-500">Real-time record of all QR scans, reasons, and locations.</p>
-        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-700 flex items-center justify-between">
-          <div><span class="font-extrabold text-slate-900">PM000249 • Karthik R</span> — Wrong Parking</div>
-          <div class="text-emerald-600 font-extrabold">✓ WhatsApp Delivered • 13 Nov 2026, 04:20 PM</div>
-        </div>
+        <h3 class="font-extrabold text-slate-900 text-base">📷 Scan Logs</h3>
+        <p class="text-xs text-slate-500">Real-time scan logs and alert histories.</p>
       </div>
 
-      <!-- ================= TAB 4: SEND WHATSAPP ================= -->
+      <!-- ================= TAB 4: WHATSAPP MESSAGES ================= -->
       <div id="tab-messages" class="hidden saas-card p-5 space-y-4">
-        <h3 class="font-extrabold text-slate-900 text-base">💬 Send Direct WhatsApp Message</h3>
-        <p class="text-xs text-slate-500">Dispatch approved `pingme_instant_alert` templates instantly.</p>
-        <div class="space-y-3 max-w-lg">
-          <div><label class="block text-xs font-bold text-slate-700 mb-1">Select Customer</label><select id="waCustomer" class="pm-select"><option>PM000249 — Karthik R</option></select></div>
-          <div><label class="block text-xs font-bold text-slate-700 mb-1">Template Name</label><input type="text" class="pm-input" value="pingme_instant_alert (en_US)" readonly /></div>
-          <div><label class="block text-xs font-bold text-slate-700 mb-1">Custom Note / Message</label><textarea rows="3" class="pm-textarea" placeholder="Type direct message..."></textarea></div>
-          <button onclick="alert('Message sent successfully via Meta Cloud API!')" class="py-3 px-6 rounded-xl bg-emerald-600 text-white font-extrabold text-xs">➤ Send WhatsApp Message</button>
-        </div>
+        <h3 class="font-extrabold text-slate-900 text-base">💬 WhatsApp Messages</h3>
+        <p class="text-xs text-slate-500">Manage approved `pingme_instant_alert` templates and reminders.</p>
       </div>
 
       <!-- ================= TAB 5: SETTINGS ================= -->
       <div id="tab-settings" class="hidden saas-card p-5 space-y-4">
-        <h3 class="font-extrabold text-slate-900 text-base">⚙️ System Configuration</h3>
-        <p class="text-xs text-slate-500">Cloudflare worker endpoints and backup management.</p>
-        <div class="space-y-3 max-w-lg">
-          <div><label class="block text-xs font-bold text-slate-700 mb-1">Cloudflare API Endpoint</label><input type="text" class="pm-input" value="https://pingme-api.pingmeconnect.workers.dev" readonly /></div>
-          <button onclick="alert('Settings saved successfully!')" class="py-3 px-6 rounded-xl bg-indigo-600 text-white font-extrabold text-xs">Save Configuration</button>
-        </div>
+        <h3 class="font-extrabold text-slate-900 text-base">⚙️ Settings &amp; Security</h3>
+        <p class="text-xs text-slate-500">Configure backups, Cloudflare endpoints, and system parameters.</p>
       </div>
 
     </main>
   </div>
 
-  <!-- ================= CUSTOMER PROFILE & QR MODAL ================= -->
+  <!-- ================= COMPLETE CUSTOMER PROFILE & QR MODAL (MATCHING REFERENCE) ================= -->
   <div id="customerModal" class="modal-backdrop">
-    <div class="saas-card bg-white max-w-xl w-full p-6 space-y-4 max-h-[90dvh] overflow-y-auto relative shadow-2xl">
+    <div class="saas-card bg-white max-w-3xl w-full p-6 space-y-5 max-h-[92dvh] overflow-y-auto relative shadow-2xl">
+      
+      <!-- Modal Header -->
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <div>
-          <h3 id="mCustTitle" class="font-black text-lg text-slate-900">Customer Profile</h3>
-          <p id="mCustIdSub" class="text-xs text-indigo-600 font-extrabold">PM000249</p>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg">👤</div>
+          <div>
+            <h3 class="font-black text-lg text-slate-900">Customer Profile</h3>
+            <p class="text-xs text-slate-500">View, edit and manage customer details[cite: 16]</p>
+          </div>
         </div>
-        <button onclick="closeCustomerModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-700 font-bold flex items-center justify-center">✕</button>
+        <button onclick="closeCustomerModal()" class="w-9 h-9 rounded-full bg-slate-100 text-slate-700 font-bold flex items-center justify-center hover:bg-slate-200 transition">✕</button>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
-        <!-- QR Code Card -->
-        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col items-center justify-center text-center space-y-2">
-          <div id="modalQrBox" class="bg-white p-2 rounded-xl shadow border"></div>
-          <div id="modalQrCaption" class="text-xs font-extrabold text-slate-800"></div>
-          <div class="grid grid-cols-2 gap-1.5 w-full pt-1">
-            <button onclick="alert('Downloading QR PNG...')" class="py-1.5 rounded-lg bg-indigo-600 text-white text-[11px] font-bold">⬇ PNG</button>
-            <button onclick="alert('URL Copied!')" class="py-1.5 rounded-lg bg-slate-200 text-slate-800 text-[11px] font-bold">📋 Copy URL</button>
+      <!-- Modal Body Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+        
+        <!-- Left Column: QR Code & Quick Actions -->
+        <div class="md:col-span-5 bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col items-center text-center space-y-3">
+          <div id="modalQrBox" class="bg-white p-3 rounded-xl shadow border"></div>
+          <div id="modalQrIdCaption" class="text-xs font-black text-indigo-600 tracking-wider">PM000248</div>
+          
+          <div class="grid grid-cols-2 gap-2 w-full pt-1">
+            <button onclick="alert('Downloading high-res PNG...')" class="py-2 rounded-xl bg-indigo-600 text-white text-xs font-extrabold flex items-center justify-center gap-1 shadow">⬇ Download PNG</button>
+            <button onclick="alert('Downloading formatted PDF with scanning instructions...')" class="py-2 rounded-xl bg-rose-600 text-white text-xs font-extrabold flex items-center justify-center gap-1 shadow">📄 Download PDF</button>
+            <button onclick="alert('Secure QR URL Copied!')" class="py-2 rounded-xl bg-slate-200 text-slate-800 text-xs font-extrabold flex items-center justify-center gap-1">📋 Copy URL</button>
+            <button onclick="alert('Share link generated!')" class="py-2 rounded-xl bg-purple-600 text-white text-xs font-extrabold flex items-center justify-center gap-1">📤 Share QR</button>
           </div>
         </div>
 
-        <!-- Details & Stats -->
-        <div class="space-y-2.5 text-xs">
-          <div class="grid grid-cols-2 gap-2">
-            <div class="p-2.5 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-900">
-              <div class="text-slate-500 text-[10px]">Active Credits</div>
-              <div id="mModalCredits" class="text-base font-black">360</div>
+        <!-- Right Column: Details & Editable Fields -->
+        <div class="md:col-span-7 space-y-4">
+          <div class="flex items-center justify-between bg-indigo-50/60 p-3 rounded-2xl border border-indigo-100">
+            <div>
+              <div class="text-[10px] text-slate-500 font-bold uppercase">Customer ID (Protected)</div>
+              <div id="mCustId" class="text-sm font-black text-indigo-900">PM000248</div>
             </div>
-            <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-900">
-              <div class="text-slate-500 text-[10px]">Total Scans</div>
-              <div id="mModalScans" class="text-base font-black">3</div>
+            <button onclick="toggleEditMode()" id="editToggleBtn" class="px-3 py-1.5 rounded-xl bg-indigo-600 text-white text-xs font-extrabold shadow">✏️ Edit Details</button>
+          </div>
+
+          <!-- Stats Row -->
+          <div class="grid grid-cols-3 gap-2">
+            <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-900 text-center">
+              <div class="text-slate-500 text-[10px] font-bold">Credits Available</div>
+              <div id="mCredits" class="text-base font-black">360</div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-purple-50 border border-purple-100 text-purple-900 text-center">
+              <div class="text-slate-500 text-[10px] font-bold">Total Scans</div>
+              <div id="mScans" class="text-base font-black">37</div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-sky-50 border border-sky-100 text-sky-900 text-center">
+              <div class="text-slate-500 text-[10px] font-bold">WhatsApp Usage</div>
+              <div id="mWaUsage" class="text-base font-black">24</div>
             </div>
           </div>
-          <div><label class="block font-bold text-slate-700 mb-1">Name</label><input type="text" id="editName" class="pm-input !py-2" /></div>
-          <div><label class="block font-bold text-slate-700 mb-1">Mobile</label><input type="text" id="editMobile" class="pm-input !py-2" /></div>
-          <div><label class="block font-bold text-slate-700 mb-1">Expiry Date</label><input type="text" id="editExpiry" class="pm-input !py-2" /></div>
+
+          <!-- Form Fields -->
+          <div class="space-y-2.5 text-xs">
+            <div><label class="block font-bold text-slate-700 mb-0.5">Name</label><input type="text" id="mName" class="pm-input !py-2" disabled /></div>
+            <div><label class="block font-bold text-slate-700 mb-0.5">Mobile Number</label><input type="text" id="mMobile" class="pm-input !py-2" disabled /></div>
+            <div><label class="block font-bold text-slate-700 mb-0.5">Email ID</label><input type="text" id="mEmail" class="pm-input !py-2" disabled /></div>
+            <div><label class="block font-bold text-slate-700 mb-0.5">Address</label><input type="text" id="mAddress" class="pm-input !py-2" disabled /></div>
+          </div>
+
+          <!-- Dates & Status Master Control -->
+          <div class="grid grid-cols-2 gap-2 text-xs pt-1">
+            <div><label class="block font-bold text-slate-500 mb-0.5">Registered Date</label><input type="text" id="mRegDate" class="pm-input !py-2 bg-slate-100 text-slate-500" disabled /></div>
+            <div><label class="block font-bold text-slate-700 mb-0.5">Expiry Date</label><input type="text" id="mExpiry" class="pm-input !py-2" disabled /></div>
+          </div>
+
+          <!-- Account Status Master Control -->
+          <div class="pt-1">
+            <label class="block font-bold text-slate-700 mb-1 text-xs">Account Status Master Control</label>
+            <div class="grid grid-cols-2 gap-2">
+              <button type="button" id="btnActive" onclick="setAccountStatus('Active')" class="py-2.5 rounded-xl border-2 font-black text-xs flex items-center justify-center gap-1.5 transition bg-emerald-50 text-emerald-700 border-emerald-400">🟢 ACTIVE</button>
+              <button type="button" id="btnInactive" onclick="setAccountStatus('Inactive')" class="py-2.5 rounded-xl border-2 font-black text-xs flex items-center justify-center gap-1.5 transition bg-white text-slate-400 border-slate-200">🔴 INACTIVE</button>
+            </div>
+          </div>
+
+          <!-- WhatsApp Quick Message Buttons -->
+          <div class="pt-2 space-y-2 border-t border-slate-100">
+            <label class="block font-bold text-slate-700 text-xs">WhatsApp Actions — Send Message to Customer</label>
+            <div class="grid grid-cols-3 gap-1.5">
+              <button onclick="loadWaTemplate('activation')" class="p-2 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-700 font-extrabold text-[11px] text-left">🚀 Activation Message</button>
+              <button onclick="loadWaTemplate('credit')" class="p-2 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 font-extrabold text-[11px] text-left">🪙 Credit Reminder</button>
+              <button onclick="loadWaTemplate('low')" class="p-2 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 font-extrabold text-[11px] text-left">⚠️ Low Credits</button>
+              <button onclick="loadWaTemplate('expiry')" class="p-2 rounded-xl bg-purple-50 border border-purple-200 text-purple-800 font-extrabold text-[11px] text-left">📅 Expiry Reminder</button>
+              <button onclick="loadWaTemplate('renewal')" class="p-2 rounded-xl bg-sky-50 border border-sky-200 text-sky-800 font-extrabold text-[11px] text-left">🔄 Renewal / Recharge</button>
+              <button onclick="loadWaTemplate('custom')" class="p-2 rounded-xl bg-slate-100 border border-slate-300 text-slate-800 font-extrabold text-[11px] text-left">✍️ Custom Message</button>
+            </div>
+            <div>
+              <textarea id="waPreview" rows="3" class="pm-textarea text-xs" placeholder="Message preview / edit before sending..."></textarea>
+            </div>
+            <button onclick="sendWhatsAppQuickMessage()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow">
+              <span>💬</span> Open WhatsApp to Send
+            </button>
+          </div>
+
+          <!-- Credit Management Controls -->
+          <div class="pt-2 space-y-2 border-t border-slate-100">
+            <label class="block font-bold text-slate-700 text-xs">Credit &amp; Expiry Management</label>
+            <div class="grid grid-cols-3 gap-2">
+              <button onclick="adjustCredits(50)" class="py-2 rounded-xl bg-emerald-100 text-emerald-800 font-extrabold text-xs">+ Add Credits</button>
+              <button onclick="adjustCredits(-50)" class="py-2 rounded-xl bg-rose-100 text-rose-800 font-extrabold text-xs">- Deduct Credits</button>
+              <button onclick="extendExpiry()" class="py-2 rounded-xl bg-indigo-100 text-indigo-800 font-extrabold text-xs">📅 Extend +1 Year</button>
+            </div>
+          </div>
+
         </div>
       </div>
 
-      <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
-        <button onclick="saveCustomerEdits()" class="py-2.5 px-5 rounded-xl bg-indigo-600 text-white font-extrabold text-xs shadow">Save Changes</button>
-        <button onclick="closeCustomerModal()" class="py-2.5 px-4 rounded-xl bg-slate-200 text-slate-700 font-bold text-xs">Cancel</button>
+      <!-- Modal Footer Actions -->
+      <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+        <button onclick="saveCustomerEdits()" class="py-3 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-lg">💾 Save Changes</button>
+        <button onclick="closeCustomerModal()" class="py-3 px-5 rounded-xl bg-slate-200 text-slate-700 font-bold text-xs">Cancel</button>
       </div>
+
     </div>
   </div>
 
   <script>
     let customers = [
-      { id: "PM000249", name: "Karthik R", mobile: "919876543210", email: "karthik@email.com", credits: 360, expiry: "13 Nov 2027", status: "Active", scans: 3 },
-      { id: "PM000248", name: "Priya S", mobile: "919840277123", email: "priya@email.com", credits: 120, expiry: "10 Feb 2027", status: "Active", scans: 1 },
-      { id: "PM000247", name: "Senthil Kumar", mobile: "919962133445", email: "senthil@email.com", credits: 0, expiry: "07 Nov 2026", status: "Inactive", scans: 8 }
+      { id: "PM000248", name: "Priya S", mobile: "+91 91840 277123", email: "priya.s@gmail.com", address: "No. 12, Lake View Street, Chennai - 600042", credits: 360, scans: 37, waUsage: 24, regDate: "10 Feb 2025", expiry: "10 Feb 2027", status: "Active" },
+      { id: "PM000247", name: "Karthik R", mobile: "+91 91876 543210", email: "karthik@email.com", address: "No. 45, Anna Nagar, Chennai - 600040", credits: 120, scans: 12, waUsage: 8, regDate: "15 Mar 2025", expiry: "15 Mar 2027", status: "Active" },
+      { id: "PM000246", name: "Meena V", mobile: "+91 91944 399887", email: "meena@email.com", address: "No. 8, Gandhi Road, Madambakkam, Chennai", credits: 0, scans: 4, waUsage: 2, regDate: "05 Nov 2024", expiry: "05 Nov 2026", status: "Inactive" }
     ];
 
-    let selectedCustId = null;
+    let selectedCust = null;
+    let isEditMode = false;
 
     function doLogin() {
       const pass = document.getElementById("passInput").value.trim();
@@ -322,18 +362,7 @@
     });
 
     function initDashboard() {
-      document.getElementById("statTotalCust").textContent = customers.length;
-      document.getElementById("statActiveQrs").textContent = customers.filter(c => c.status === "Active").length;
-      document.getElementById("statCredits").textContent = customers.reduce((sum, c) => sum + c.credits, 0).toLocaleString();
       renderTable();
-      generateQrBox("https://pingmeconnect.in/?t=PM000249", "qrBox");
-    }
-
-    function generateQrBox(text, elementId) {
-      const box = document.getElementById(elementId);
-      if (!box) return;
-      box.innerHTML = "";
-      new QRCode(box, { text: text, width: 130, height: 130, correctLevel: QRCode.CorrectLevel.H });
     }
 
     function renderTable() {
@@ -343,85 +372,137 @@
       const rowsHtml = filtered.map(c => `
         <tr class="hover:bg-slate-50 transition cursor-pointer" onclick="openCustomerModal('${c.id}')">
           <td class="p-3 font-extrabold text-indigo-600">${c.id}</td>
-          <td class="p-3"><div class="font-extrabold text-slate-900">${c.name}</div><div class="text-[11px] text-slate-500">+${c.mobile}</div></td>
+          <td class="p-3 font-extrabold text-slate-900">${c.name}</td>
+          <td class="p-3 text-slate-600">${c.mobile}</td>
           <td class="p-3 font-extrabold text-amber-600">${c.credits}</td>
           <td class="p-3 text-slate-600">${c.expiry}</td>
           <td class="p-3" onclick="event.stopPropagation()">
-            <select onchange="toggleStatus('${c.id}', this.value)" class="text-xs font-bold px-2 py-1 rounded-lg border ${c.status === 'Active' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-700 border-rose-200'}">
-              <option value="Active" ${c.status === 'Active' ? 'selected' : ''}>Active</option>
-              <option value="Inactive" ${c.status === 'Inactive' ? 'selected' : ''}>Inactive</option>
-            </select>
+            <span class="px-2.5 py-1 rounded-full text-xs font-extrabold ${c.status === 'Active' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">${c.status}</span>
           </td>
           <td class="p-3 text-right space-x-1" onclick="event.stopPropagation()">
-            <button onclick="openCustomerModal('${c.id}')" class="px-2 py-1 rounded bg-indigo-50 text-indigo-600 font-bold" title="View Profile & QR">👁️</button>
-            <button onclick="alert('Opening WhatsApp sender for ${c.mobile}')" class="px-2 py-1 rounded bg-emerald-50 text-emerald-600 font-bold" title="Send WhatsApp">💬</button>
+            <button onclick="openCustomerModal('${c.id}')" class="px-2.5 py-1.5 rounded-xl bg-indigo-50 text-indigo-600 font-extrabold text-xs">👁️ View</button>
           </td>
         </tr>
       `).join("");
 
-      const dashBody = document.getElementById("dashTableBody");
-      const custBody = document.getElementById("customerTableBody");
-      if (dashBody) dashBody.innerHTML = rowsHtml;
-      if (custBody) custBody.innerHTML = rowsHtml;
+      const body = document.getElementById("customerTableBody");
+      if (body) body.innerHTML = rowsHtml;
     }
 
     function openCustomerModal(id) {
       const c = customers.find(x => x.id === id);
       if (!c) return;
-      selectedCustId = id;
+      selectedCust = c;
+      isEditMode = false;
+      setEditFieldsState(false);
 
-      document.getElementById("mCustTitle").textContent = c.name;
+      document.getElementById("mCustId").textContent = c.id;
       document.getElementById("mCustIdSub").textContent = c.id;
-      document.getElementById("mModalCredits").textContent = c.credits;
-      document.getElementById("mModalScans").textContent = c.scans;
-      document.getElementById("editName").value = c.name;
-      document.getElementById("editMobile").value = c.mobile;
-      document.getElementById("editExpiry").value = c.expiry;
-      document.getElementById("modalQrCaption").textContent = `${c.id} • ${c.name}`;
+      document.getElementById("mCredits").textContent = c.credits;
+      document.getElementById("mScans").textContent = c.scans;
+      document.getElementById("mWaUsage").textContent = c.waUsage;
 
+      document.getElementById("mName").value = c.name;
+      document.getElementById("mMobile").value = c.mobile;
+      document.getElementById("mEmail").value = c.email;
+      document.getElementById("mAddress").value = c.address;
+      document.getElementById("mRegDate").value = c.regDate;
+      document.getElementById("mExpiry").value = c.expiry;
+
+      updateStatusButtons(c.status);
       generateQrBox(`https://pingmeconnect.in/?t=${c.id}`, "modalQrBox");
+      document.getElementById("modalQrIdCaption").textContent = c.id;
+
       document.getElementById("customerModal").classList.add("open");
     }
 
     function closeCustomerModal() {
       document.getElementById("customerModal").classList.remove("open");
-      selectedCustId = null;
+      selectedCust = null;
+    }
+
+    function toggleEditMode() {
+      isEditMode = !isEditMode;
+      setEditFieldsState(isEditMode);
+      document.getElementById("editToggleBtn").textContent = isEditMode ? "🔒 Lock Details" : "✏️ Edit Details";
+    }
+
+    function setEditFieldsState(enabled) {
+      document.getElementById("mName").disabled = !enabled;
+      document.getElementById("mMobile").disabled = !enabled;
+      document.getElementById("mEmail").disabled = !enabled;
+      document.getElementById("mAddress").disabled = !enabled;
+      document.getElementById("mExpiry").disabled = !enabled;
+    }
+
+    function setAccountStatus(status) {
+      if (!selectedCust) return;
+      selectedCust.status = status;
+      updateStatusButtons(status);
+    }
+
+    function updateStatusButtons(status) {
+      const activeBtn = document.getElementById("btnActive");
+      const inactiveBtn = document.getElementById("btnInactive");
+      if (status === "Active") {
+        activeBtn.className = "py-2.5 rounded-xl border-2 font-black text-xs flex items-center justify-center gap-1.5 transition bg-emerald-50 text-emerald-700 border-emerald-400";
+        inactiveBtn.className = "py-2.5 rounded-xl border-2 font-black text-xs flex items-center justify-center gap-1.5 transition bg-white text-slate-400 border-slate-200";
+      } else {
+        activeBtn.className = "py-2.5 rounded-xl border-2 font-black text-xs flex items-center justify-center gap-1.5 transition bg-white text-slate-400 border-slate-200";
+        inactiveBtn.className = "py-2.5 rounded-xl border-2 font-black text-xs flex items-center justify-center gap-1.5 transition bg-rose-50 text-rose-700 border-rose-400";
+      }
+    }
+
+    function loadWaTemplate(type) {
+      if (!selectedCust) return;
+      let msg = "";
+      if (type === 'activation') msg = `Hi ${selectedCust.name},\nYour PingMe account (${selectedCust.id}) has been activated successfully! You can now use your QR code for instant alerts.\nPingMe — One Scan. Instant Connection.`;
+      else if (type === 'credit') msg = `Hi ${selectedCust.name},\nYour PingMe account has ${selectedCust.credits} credits remaining. Stay connected!`;
+      else if (type === 'low') msg = `Hi ${selectedCust.name},\nYour PingMe credit balance is running low. Please recharge soon to avoid interruption.`;
+      else if (type === 'expiry') msg = `Hi ${selectedCust.name},\nYour PingMe subscription expires on ${selectedCust.expiry}. Renew today!`;
+      else if (type === 'renewal') msg = `Hi ${selectedCust.name},\nClick here to renew your PingMe plan and continue receiving instant vehicle & asset alerts.`;
+      else if (type === 'custom') msg = `Hi ${selectedCust.name},\n`;
+      document.getElementById("waPreview").value = msg;
+    }
+
+    function sendWhatsAppQuickMessage() {
+      if (!selectedCust) return;
+      const text = encodeURIComponent(document.getElementById("waPreview").value);
+      const cleanPhone = selectedCust.mobile.replace(/\D/g, "");
+      window.open(`https://wa.me/${cleanPhone}?text=${text}`, "_blank");
+    }
+
+    function adjustCredits(amt) {
+      if (!selectedCust) return;
+      selectedCust.credits = Math.max(0, selectedCust.credits + amt);
+      document.getElementById("mCredits").textContent = selectedCust.credits;
+    }
+
+    function extendExpiry() {
+      if (!selectedCust) return;
+      selectedCust.expiry = "10 Feb 2028";
+      document.getElementById("mExpiry").value = selectedCust.expiry;
+      alert("Validity extended by 1 year!");
     }
 
     function saveCustomerEdits() {
-      const c = customers.find(x => x.id === selectedCustId);
-      if (!c) return;
-      c.name = document.getElementById("editName").value.trim();
-      c.mobile = document.getElementById("editMobile").value.trim();
-      c.expiry = document.getElementById("editExpiry").value.trim();
+      if (!selectedCust) return;
+      selectedCust.name = document.getElementById("mName").value.trim();
+      selectedCust.mobile = document.getElementById("mMobile").value.trim();
+      selectedCust.email = document.getElementById("mEmail").value.trim();
+      selectedCust.address = document.getElementById("mAddress").value.trim();
+      selectedCust.expiry = document.getElementById("mExpiry").value.trim();
 
       closeCustomerModal();
-      initDashboard();
-      alert("Customer details updated successfully!");
+      renderTable();
+      alert("Customer profile updated successfully!");
     }
 
-    function toggleStatus(id, newStatus) {
-      const cust = customers.find(c => c.id === id);
-      if (cust) { cust.status = newStatus; initDashboard(); }
-    }
-
-    function registerCustomer() {
-      const name = document.getElementById("regName").value.trim();
-      const mobile = document.getElementById("regMobile").value.trim();
-      if (!name || !mobile) return alert("Name and Mobile Number are required!");
-
-      const nextId = "PM000" + (250 + customers.length);
-      customers.unshift({ id: nextId, name, mobile, email: document.getElementById("regEmail").value.trim() || "N/A", credits: 360, expiry: "14 Nov 2027", status: "Inactive", scans: 0 });
-
-      document.getElementById("regName").value = "";
-      document.getElementById("regMobile").value = "";
-      document.getElementById("regEmail").value = "";
-      document.getElementById("regAddress").value = "";
-
-      generateQrBox(`https://pingmeconnect.in/?t=${nextId}`, "qrBox");
-      document.getElementById("qrCaption").textContent = `${nextId} • ${name}`;
-      initDashboard();
-      alert(`Customer ${name} registered successfully with 360 default credits and Inactive status!`);
+    function generateQrBox(text, elementId) {
+      const box = document.getElementById(elementId);
+      if (!box) return;
+      box.innerHTML = "";
+      new QRCode(box, { text: text, width: 140, height: 140, correctLevel: QRCode.CorrectLevel.H });
     }
 
     function switchTab(tab, btn) {
