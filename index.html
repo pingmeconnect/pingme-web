@@ -112,6 +112,38 @@
       .mascot-float, .animate-ping { animation: none !important; }
       * { scroll-behavior: auto !important; }
     }
+
+    /* LOCKED APPROVED PINGME LOOK — dark neon journey with a bright report form */
+    .app-shell.theme-dark { background: radial-gradient(circle at 50% 8%, #173b79 0%, #071a3b 42%, #080d25 100%); color:#fff; }
+    .theme-dark .app-header { background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(239,246,255,.96)); border-bottom:2px solid rgba(56,189,248,.35); }
+    .brand-pill { border-radius:18px; box-shadow:0 5px 18px rgba(15,23,42,.16); }
+    .brand-tagline { margin:2px 0 0 10px; color:#10265b; font-size:9px; font-weight:900; letter-spacing:.055em; }
+    .lang-pill { background:linear-gradient(110deg,#063b70,#101b55); border:1.5px solid #38bdf8; }
+    #screen1 { background:linear-gradient(180deg,#f8fbff 0%,#eaf3ff 55%,#f8f5ff 100%); color:#0b1b43; border-radius:0 0 28px 28px; }
+    #screen1 h2 { color:#10265b !important; }
+    #screen1 .welcome-heading h1 { display:inline-block; padding:7px 22px; color:#fff; border-radius:999px; background:linear-gradient(100deg,#4338ca 0%,#8b2bd0 52%,#ec168b 100%); box-shadow:0 7px 18px rgba(147,51,234,.32); font-style:italic; }
+    #screen1 .welcome-heading p { margin-top:5px; color:#172554; font-weight:800; font-size:14px; }
+    #screen1 .pingy-hero-frame { border:1.5px solid rgba(56,189,248,.45); background:radial-gradient(circle at 50% 50%,#dbeafe 0%,#e9d5ff 72%); }
+    #screen1 .cat-card { background:linear-gradient(180deg,#fff,#f4f8ff); border:1.5px solid #cbd5e1; color:#102044; box-shadow:0 5px 14px rgba(15,23,42,.09); }
+    #screen1 .cat-card span:not([id^="check-"]) { color:#102044 !important; }
+    #screen1 .cat-card.active { background:linear-gradient(180deg,#e0fbff,#c8f4ff); border:2px solid #06b6d4; box-shadow:0 0 0 2px rgba(6,182,212,.12),0 7px 18px rgba(6,182,212,.2); }
+    #screen1 .tpl-pill { background:linear-gradient(180deg,#fff,#f6f9ff); color:#101b37; border:1.5px solid #cbd5e1; box-shadow:0 3px 10px rgba(15,23,42,.07); }
+    #screen1 .tpl-pill.active { background:linear-gradient(90deg,#d9fbff,#e5f2ff); color:#0b1b43; border:2px solid #0891b2; }
+    #screen1 .surface-card { background:linear-gradient(180deg,#fff,#f5f8ff); border:1.5px solid #cbd5e1; }
+    #screen1 #customNote { background:#fff; color:#102044; border-color:#cbd5e1; }
+    #screen1 label, #screen1 #locationBtn { background:linear-gradient(180deg,#fff,#edf4ff); color:#102044; border:1.5px solid #cbd5e1; }
+    #screen1 .btn-send-alert { background:linear-gradient(100deg,#08b9ed 0%,#5145e8 52%,#ec2798 100%); box-shadow:0 9px 22px rgba(90,75,230,.35); border:1px solid rgba(255,255,255,.7); }
+    #screen2, #screen3, #screen4 { background:radial-gradient(circle at 50% 25%,rgba(30,108,220,.28),transparent 48%),linear-gradient(180deg,#08275a 0%,#071a3e 52%,#100d35 100%); color:#fff; }
+    #screen2 .bg-white, #screen3 .bg-white { background:linear-gradient(180deg,#fff,#edf6ff) !important; }
+    #screen2 .countdown-ring { background:radial-gradient(circle,#08204a 57%,#101849 100%); border:7px solid transparent; background-image:linear-gradient(#08204a,#08204a),linear-gradient(135deg,#22d3ee,#6366f1,#ec4899); background-origin:border-box; background-clip:padding-box,border-box; box-shadow:0 0 28px rgba(34,211,238,.35); }
+    #screen3 #ownerReplyBox { background:linear-gradient(180deg,#fff,#edf6ff); border:2px solid #67e8f9; }
+    #screen4 .btn-buy { background:linear-gradient(100deg,#f72585,#c026d3); }
+    #screen4 .btn-share { background:linear-gradient(100deg,#0ea5e9,#2563eb); }
+    #screen4 .btn-review { background:linear-gradient(100deg,#fbbf24,#ea580c); }
+    #screen4 .btn-finish { background:linear-gradient(100deg,#0ea5e9,#4338ca); }
+    #buyModal > div, #reviewModal > div { max-height:90dvh; overflow-y:auto; }
+    @media (min-width:768px) { .app-shell { max-width:460px; min-height:860px; } }
+    @media (max-width:390px) { #screen1 { border-radius:0 0 24px 24px; } .brand-tagline { font-size:8px; } }
   </style>
 </head>
 <body>
@@ -126,11 +158,14 @@
     </div>
   </div>
 
-  <div id="appShell" class="app-shell theme-light">
+  <div id="appShell" class="app-shell theme-dark">
     <!-- HEADER -->
     <header class="app-header px-4 pb-3 flex items-center justify-between gap-2">
-      <div class="brand-pill pl-3 pr-4 py-1.5 flex items-center">
-        <img src="assets/pingme-logo.png" alt="PingMe" class="h-9 w-auto object-contain" />
+      <div class="brand-stack flex flex-col items-start">
+        <div class="brand-pill pl-3 pr-4 py-1.5 flex items-center">
+          <img src="assets/pingme-logo.png" alt="PingMe" class="h-9 w-auto object-contain" />
+        </div>
+        <span class="brand-tagline">ONE SCAN. INSTANT CONNECTION.</span>
       </div>
       <button onclick="toggleLanguage()" class="lang-pill px-3.5 py-2 rounded-full text-xs font-bold flex items-center gap-1.5 active:scale-95 transition">
         <span class="text-cyan-300">🌐</span> <span id="langLabel">English | தமிழ்</span>
@@ -139,13 +174,13 @@
 
     <!-- SCREEN 1: WELCOME & SEND ALERT -->
     <main id="screen1" class="flex-1 flex flex-col justify-between p-4 space-y-3">
-      <div class="flex flex-col items-center text-center space-y-2">
-        <h1 class="text-3xl sm:text-4xl font-black text-[#111d4a] tracking-tight" data-i18n="welcomeTitle">LET'S CONNECT!</h1>
-      </div>
-
-      <!-- Hero Mascot with Cap -->
+      <!-- Approved welcome illustration -->
       <div class="pingy-hero-frame w-full h-[180px] sm:h-[200px] mascot-float">
         <img src="assets/Pingy_Welcome_Reference.png" alt="PingMe" />
+      </div>
+      <div class="welcome-heading text-center">
+        <h1 class="text-3xl sm:text-4xl font-black tracking-tight" data-i18n="welcomeTitle">LET'S CONNECT!</h1>
+        <p data-i18n="welcomeSubtitle">Reach the owner with one scan.</p>
       </div>
 
       <!-- Categories (Big & Bold for All Ages) -->
@@ -329,7 +364,7 @@
 
     const uiText = {
       en: {
-        welcomeTitle:"LET'S CONNECT!", chooseCategory:"Choose a Category", selectMessage:"Select a Message",
+        welcomeTitle:"LET'S CONNECT!", welcomeSubtitle:"Reach the owner with one scan.", chooseCategory:"Choose a Category", selectMessage:"Select a Message",
         vehicle:"Vehicle", lostFound:"Lost & Found", other:"Other", customPlaceholder:"Add details (optional)...",
         addPhoto:"ADD PHOTO", addLocation:"ADD LOCATION", sendAlert:"SEND ALERT", pingSent:"PING SENT!",
         waitingReply:"Waiting for owner's reply...", seconds:"SECONDS", pingmeTip:"PINGME TIP",
@@ -352,7 +387,7 @@
         reviewThanks:"Thank you! Your feedback message is ready in WhatsApp."
       },
       ta: {
-        welcomeTitle:"இணைவோம்!", chooseCategory:"வகையைத் தேர்வு செய்யவும்", selectMessage:"செய்தியைத் தேர்வு செய்யவும்",
+        welcomeTitle:"இணைவோம்!", welcomeSubtitle:"ஒரே ஸ்கேன் மூலம் உரிமையாளரை அணுகுங்கள்.", chooseCategory:"வகையைத் தேர்வு செய்யவும்", selectMessage:"செய்தியைத் தேர்வு செய்யவும்",
         vehicle:"வாகனம்", lostFound:"தொலைந்தது / கிடைத்தது", other:"மற்றவை", customPlaceholder:"கூடுதல் விவரம் (விருப்பம்)...",
         addPhoto:"புகைப்படம் சேர்க்க", addLocation:"இருப்பிடத்தைப் பகிர", sendAlert:"அறிவிப்பை அனுப்பு",
         pingSent:"அறிவிப்பு அனுப்பப்பட்டது!", waitingReply:"உரிமையாளரின் பதிலுக்காக காத்திருக்கிறது...",
@@ -510,8 +545,8 @@
 
     function switchToScreen(id) {
       const shell = document.getElementById("appShell");
-      shell.classList.toggle("theme-light", id === "screen1");
-      shell.classList.toggle("theme-dark", id !== "screen1");
+      shell.classList.remove("theme-light");
+      shell.classList.add("theme-dark");
       ["screen1","screen2","screen3","screen4"].forEach(s => {
         document.getElementById(s).classList.toggle("hidden", s !== id);
       });
