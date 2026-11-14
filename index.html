@@ -171,11 +171,17 @@
     .waiting-state { align-items:center; text-align:center; justify-content:space-around; }
     .status-pill { display:inline-flex; align-items:center; justify-content:center; gap:9px; padding:10px 23px; border-radius:999px; color:white; font-size:clamp(20px,5vw,27px); font-weight:1000; letter-spacing:.01em; border:2px solid #a7f3d0; box-shadow:0 0 12px rgba(34,197,94,.7),inset 0 0 10px rgba(255,255,255,.12); }
     .success-pill { background:linear-gradient(180deg,#20d34d,#087b29); }
+    .waiting-status-pill { animation:statusPulse 2.8s ease-in-out infinite; }
+    @keyframes statusPulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.025); } }
     .timeout-pill { background:linear-gradient(180deg,#ff347d,#bd124d); border-color:#fbcfe8; box-shadow:0 0 14px rgba(236,72,153,.65); }
     .status-subtitle { font-size:20px; font-weight:900; margin-top:-10px; }
-    .waiting-visual { display:flex; align-items:center; justify-content:center; gap:4px; width:100%; }
-    .waiting-mascot { width:45%; max-width:190px; height:180px; object-fit:contain; }
-    .countdown-ring { width:146px; height:146px; flex:0 0 146px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-radius:50%; background:radial-gradient(circle,#081a42 57%,#10133d 100%); border:7px solid transparent; background-image:linear-gradient(#081a42,#081a42),linear-gradient(135deg,#22d3ee,#6366f1,#ec4899); background-origin:border-box; background-clip:padding-box,border-box; box-shadow:0 0 25px rgba(34,211,238,.42),0 0 24px rgba(217,70,239,.25); }
+    .waiting-visual { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; }
+    .waiting-mascot { width:45%; max-width:190px; height:170px; object-fit:cover; object-position:center; border-radius:22px; filter:drop-shadow(0 8px 18px rgba(34,211,238,.22)); animation:pingyCheer 2.2s ease-in-out infinite; }
+    .countdown-ring { width:146px; height:146px; flex:0 0 146px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-radius:50%; background:radial-gradient(circle,#081a42 57%,#10133d 100%); border:7px solid transparent; background-image:linear-gradient(#081a42,#081a42),linear-gradient(135deg,#22d3ee,#6366f1,#ec4899); background-origin:border-box; background-clip:padding-box,border-box; box-shadow:0 0 25px rgba(34,211,238,.42),0 0 24px rgba(217,70,239,.25); animation:timerGlow 2.4s ease-in-out infinite; }
+    .tip-card { transition:opacity .22s ease, transform .22s ease; }
+    .tip-card.tip-refresh { opacity:.25; transform:translateY(5px) scale(.985); }
+    @keyframes pingyCheer { 0%,100% { transform:translateY(0) rotate(0deg) scale(1); } 35% { transform:translateY(-7px) rotate(-1.5deg) scale(1.025); } 70% { transform:translateY(-2px) rotate(1deg) scale(1.01); } }
+    @keyframes timerGlow { 0%,100% { box-shadow:0 0 18px rgba(34,211,238,.35),0 0 18px rgba(217,70,239,.18); } 50% { box-shadow:0 0 32px rgba(34,211,238,.65),0 0 30px rgba(217,70,239,.42); } }
     .countdown-ring span { font-size:56px; font-weight:1000; line-height:1; }
     .countdown-ring small { font-size:14px; font-weight:1000; letter-spacing:.06em; }
     .tip-card { width:100%; display:flex; align-items:center; justify-content:center; gap:10px; padding:13px 15px; background:linear-gradient(90deg,#fff,#eaf5ff); color:#10265b; border-radius:18px; box-shadow:0 5px 16px rgba(0,0,0,.22); text-align:left; }
@@ -328,11 +334,11 @@
     <!-- SCREEN 2: ONE DYNAMIC STATUS SCREEN (WAITING / REPLY / TIMEOUT / DONE) -->
     <section id="screen2" class="hidden flex-1 status-screen">
       <div id="waitingState" class="status-state waiting-state">
-        <div class="status-pill success-pill">✓ <span data-i18n="pingSent">PING SENT!</span></div>
+        <div class="status-pill success-pill waiting-status-pill">✓ <span data-i18n="pingSent">PING SENT!</span></div>
         <p class="status-subtitle" data-i18n="waitingReply">Waiting for reply...</p>
         <div class="waiting-visual">
           <img src="assets/Pingy_Waiting_Reference.png" alt="PingMe mascot waiting" class="waiting-mascot mascot-float" />
-          <div class="countdown-ring"><span id="countdownNumber">180</span><small data-i18n="seconds">SECONDS</small></div>
+          <div class="countdown-ring" id="countdownRing"><span id="countdownNumber">180</span><small data-i18n="seconds">SECONDS</small></div>
         </div>
         <div class="tip-card"><span class="tip-icon">💡</span><div><strong data-i18n="pingmeTip">PINGME TIP</strong><p id="tipText">Your number stays private.</p></div></div>
       </div>
@@ -432,6 +438,9 @@
     let sessionClosed = false;
     let timerInterval = null;
     let pollInterval = null;
+    let pingmeAudioContext = null;
+    let pingmeReplyAlertPlayed = false;
+
     let tipInterval = null;
     let secondsLeft = 180;
     let tipIndex = 0;
@@ -439,13 +448,15 @@
     let replyShown = false;
 
     const tips = [
-      "Your number stays private.",
-      "One QR. Many uses.",
-      "A photo helps explain the issue.",
-      "Share your location when needed.",
-      "For vehicles, keys and bags.",
-      "The owner can reply on WhatsApp."
+      "Pingy is keeping an eye out. 👀",
+      "Relax! Your number stays private. 🔒",
+      "One scan done. Pingy is on the case! 😄",
+      "Your keys called. They love QR tags! 🔑",
+      "Take a tiny break. We've got the waiting covered. ☕",
+      "No need to refresh. PingMe is checking for replies. 📲",
+      "Pingy is quicker than searching under the sofa! 🛋️"
     ];
+    const tipIcons = ["👀", "🔒", "😄", "🔑", "☕", "📲", "🛋️"];
 
     const uiText = {
       en: {
@@ -648,27 +659,43 @@
     }
 
     function showTip() {
-      document.getElementById("tipText").textContent = tips[tipIndex];
-      document.getElementById("tipCounter").textContent = `${tipIndex + 1}/${tips.length}`;
-      tipIndex = (tipIndex + 1) % tips.length;
+      const tipText = document.getElementById("tipText");
+      const tipIcon = document.querySelector(".tip-icon");
+      const tipCard = document.querySelector(".tip-card");
+      if (!tipText || !tips.length) return;
+
+      if (tipCard) tipCard.classList.add("tip-refresh");
+      window.setTimeout(() => {
+        tipText.textContent = tips[tipIndex];
+        if (tipIcon) tipIcon.textContent = tipIcons[tipIndex] || "💡";
+        if (tipCard) tipCard.classList.remove("tip-refresh");
+        tipIndex = (tipIndex + 1) % tips.length;
+      }, 180);
     }
 
     function startWaitingExperience() {
+      stopWaitingTimers();
       secondsLeft = 180;
       tipIndex = 0;
       replyShown = false;
-      document.getElementById("countdownNumber").textContent = "180";
-      showTip();
-      tipInterval = setInterval(showTip, 20000);
+      const countdown = document.getElementById("countdownNumber");
+      if (countdown) countdown.textContent = "180";
+
+      // Start the countdown and reply polling before rotating the first tip.
+      // This prevents a missing optional UI element from stopping the whole waiting flow.
       timerInterval = setInterval(() => {
         secondsLeft = Math.max(0, secondsLeft - 1);
-        document.getElementById("countdownNumber").textContent = String(secondsLeft);
+        if (countdown) countdown.textContent = String(secondsLeft);
         if (secondsLeft <= 0) {
-          stopWaitingTimers();
+          if (timerInterval) clearInterval(timerInterval);
+          timerInterval = null;
           showTimeoutState();
         }
       }, 1000);
-      pollInterval = setInterval(checkOwnerReply, 3000);
+
+      pollInterval = setInterval(checkOwnerReply, 2500);
+      showTip();
+      tipInterval = setInterval(showTip, 8000);
     }
 
     function showStatusState(state) {
@@ -676,6 +703,88 @@
         document.getElementById(id).classList.toggle("hidden", id !== state);
       });
       switchToScreen("screen2");
+    }
+
+
+    // PingMe Signature Alert: browser-native speech + the same two-note chime.
+    // Audio is primed by the user's SEND ALERT tap; playback is attempted once per reply.
+    function primePingMeAudio() {
+      try {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+        if (!pingmeAudioContext) pingmeAudioContext = new AudioContextClass();
+        if (pingmeAudioContext.state === "suspended") pingmeAudioContext.resume();
+        const buffer = pingmeAudioContext.createBuffer(1, 1, 22050);
+        const source = pingmeAudioContext.createBufferSource();
+        source.buffer = buffer;
+        source.connect(pingmeAudioContext.destination);
+        source.start(0);
+      } catch (err) {}
+    }
+
+    function playPingMeSignatureChime() {
+      try {
+        const ctx = pingmeAudioContext;
+        if (!ctx || ctx.state !== "running") return;
+        const now = ctx.currentTime + 0.04;
+        const master = ctx.createGain();
+        master.gain.setValueAtTime(0.0001, now);
+        master.gain.linearRampToValueAtTime(0.16, now + 0.035);
+        master.gain.setValueAtTime(0.16, now + 0.18);
+        master.gain.exponentialRampToValueAtTime(0.0001, now + 1.25);
+        master.connect(ctx.destination);
+
+        [[880, 0.00, 0.28], [1174.66, 0.22, 0.95]].forEach(([frequency, offset, duration]) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(frequency, now + offset);
+          gain.gain.setValueAtTime(0.0001, now + offset);
+          gain.gain.linearRampToValueAtTime(0.75, now + offset + 0.025);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + offset + duration);
+          osc.connect(gain);
+          gain.connect(master);
+          osc.start(now + offset);
+          osc.stop(now + offset + duration + 0.03);
+        });
+      } catch (err) {}
+    }
+
+    function playPingMeReplyAlert() {
+      if (pingmeReplyAlertPlayed) return;
+      pingmeReplyAlertPlayed = true;
+
+      // Gentle vibration; support varies by browser/device and silent-mode settings.
+      try {
+        if (navigator.vibrate) navigator.vibrate([180, 90, 180]);
+      } catch (err) {}
+
+      const phrase = currentLang === "ta"
+        ? "புதிய PingMe பதில் வந்துள்ளது!"
+        : "You've got a new PingMe reply!";
+
+      if ("speechSynthesis" in window && "SpeechSynthesisUtterance" in window) {
+        try {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(phrase);
+          utterance.lang = currentLang === "ta" ? "ta-IN" : "en-IN";
+          utterance.rate = 0.96;
+          utterance.pitch = 1.04;
+          utterance.volume = 1;
+          const voices = window.speechSynthesis.getVoices();
+          const preferred = voices.find(v =>
+            currentLang === "ta"
+              ? /^ta(-|$)/i.test(v.lang)
+              : /^en(-IN|-GB|-US)?$/i.test(v.lang) || /^en-IN$/i.test(v.lang)
+          );
+          if (preferred) utterance.voice = preferred;
+          utterance.onend = playPingMeSignatureChime;
+          utterance.onerror = playPingMeSignatureChime;
+          window.speechSynthesis.speak(utterance);
+          return;
+        } catch (err) {}
+      }
+      playPingMeSignatureChime();
     }
 
     async function checkOwnerReply() {
@@ -687,6 +796,7 @@
         if (result.session && (result.session.owner_reply || result.session.session_status === "replied")) {
           replyShown = true;
           stopWaitingTimers();
+          playPingMeReplyAlert();
           const reply = result.session.owner_reply || (currentLang === "ta" ? "பதில் வந்துவிட்டது!" : "The owner has replied.");
           document.getElementById("respGuidance").textContent = reply;
           document.getElementById("replyTime").textContent = result.session.replied_at ? new Date(result.session.replied_at).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}) : "";
@@ -727,6 +837,7 @@
 
     async function sendAlert() {
       if (sessionClosed || sessionStorage.getItem("pingme_session_closed") === "true") return;
+      primePingMeAudio();
       const customMessage = document.getElementById("customNote").value.trim();
       const reason = selectedReason || customMessage;
       if (!reason) { alert(uiText[currentLang].chooseMessage); return; }
