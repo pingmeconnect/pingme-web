@@ -40,41 +40,23 @@
     }
     .pm-input:focus, .pm-select:focus, .pm-textarea:focus { border-color: #6366f1; background: #ffffff; }
     .modal-backdrop {
-      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(6px);
-      display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px;
+      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(6px);
+      display: none; align-items: center; justify-content: center; z-index: 999; padding: 16px;
     }
-    .modal-backdrop.open { display: flex; }
+    .modal-backdrop.open { display: flex !important; }
   </style>
 </head>
 <body class="p-3 sm:p-6">
 
-  <!-- ADMIN LOGIN VIEW -->
-  <div id="loginView" class="max-w-md mx-auto py-20">
-    <div class="saas-card p-8 space-y-5 bg-white shadow-xl text-center">
-      <div class="flex justify-center mb-2">
-        <div class="bg-slate-900 px-4 py-2 rounded-2xl border border-indigo-500/30">
-          <img src="assets/pingme-logo.png" alt="PingMe" class="h-10 object-contain" />
-        </div>
-      </div>
-      <h1 class="text-2xl font-extrabold text-slate-900">Admin Panel Login</h1>
-      <p class="text-xs text-slate-500">Secure Customer &amp; QR Management SaaS</p>
-      <div>
-        <label class="block text-xs font-bold text-slate-700 mb-1 text-left">Admin Password</label>
-        <input type="password" id="passInput" class="pm-input" placeholder="Enter admin password" onkeyup="if(event.key==='Enter') doLogin()" />
-      </div>
-      <button onclick="doLogin()" class="w-full py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold shadow-lg transition">Unlock Dashboard</button>
-    </div>
-  </div>
-
-  <!-- MAIN SAAS DASHBOARD VIEW -->
-  <div id="appView" class="hidden max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+  <!-- MAIN SAAS DASHBOARD VIEW (UNLOCKED DIRECTLY) -->
+  <div id="appView" class="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
     
     <!-- SIDEBAR -->
     <aside class="lg:col-span-3 sidebar rounded-3xl p-4 min-h-[calc(100dvh-48px)] flex flex-col justify-between shadow-2xl">
       <div class="space-y-6">
         <div class="flex items-center gap-3 px-2 pt-2">
           <div class="bg-white px-3 py-1.5 rounded-2xl shadow-md border border-slate-200">
-            <img src="assets/pingme-logo.png" alt="PingMe" class="h-8 object-contain" />
+            <span class="font-black text-indigo-600 text-lg">PingMe</span>
           </div>
           <div>
             <div class="text-[10px] text-indigo-300 font-extrabold uppercase tracking-widest">ONE SCAN. INSTANT CONNECTION.</div>
@@ -82,22 +64,13 @@
         </div>
 
         <nav class="space-y-1">
-          <button class="nav-btn" onclick="switchTab('dashboard', this)"><span>📊</span> Dashboard</button>
-          <button class="nav-btn" onclick="switchTab('add', this)"><span>👤+</span> Add New Customer</button>
-          <button class="nav-btn active" onclick="switchTab('customers', this)"><span>👥</span> Customers</button>
-          <button class="nav-btn" onclick="switchTab('logs', this)"><span>📷</span> Scan Logs</button>
-          <button class="nav-btn" onclick="switchTab('whatsapp', this)"><span>💬</span> WhatsApp Messages</button>
-          <button class="nav-btn" onclick="switchTab('credits', this)"><span>🪙</span> Credits &amp; Validity</button>
-          <button class="nav-btn" onclick="switchTab('subscription', this)"><span>📅</span> Subscription</button>
-          <button class="nav-btn" onclick="switchTab('reports', this)"><span>📈</span> Reports</button>
-          <button class="nav-btn" onclick="switchTab('backup', this)"><span>💾</span> Backup &amp; Security</button>
-          <button class="nav-btn" onclick="switchTab('settings', this)"><span>⚙️</span> Settings</button>
+          <button class="nav-btn active"><span>👥</span> Customers Management</button>
         </nav>
       </div>
 
       <div class="p-3 rounded-2xl bg-white/5 border border-white/10 text-xs space-y-1">
         <div class="font-bold text-emerald-400 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> System Online</div>
-        <div class="text-slate-400 text-[11px]">Cloudflare &amp; Supabase active[cite: 16].</div>
+        <div class="text-slate-400 text-[11px]">Direct Standalone Mode Active.</div>
       </div>
     </aside>
 
@@ -109,16 +82,9 @@
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-extrabold text-lg">👑</div>
           <div>
-            <h1 class="text-lg font-extrabold text-slate-900">PingMe Admin Panel — Customer Management</h1>
-            <p class="text-xs text-slate-500">Manage all registered customers, view profiles, QR codes, and instant WhatsApp alerts[cite: 16].</p>
+            <h1 class="text-lg font-extrabold text-slate-900">PingMe Admin Panel — Customer Management Centre</h1>
+            <p class="text-xs text-slate-500">Click any customer row below to instantly open their profile popup.</p>
           </div>
-        </div>
-        <div class="flex items-center gap-3">
-          <div class="text-right hidden sm:block">
-            <div class="text-xs font-bold text-slate-900">Welcome, Admin</div>
-            <div class="text-[10px] text-indigo-600 font-extrabold">Premium SaaS[cite: 16]</div>
-          </div>
-          <button onclick="logout()" class="px-3.5 py-1.5 rounded-xl bg-rose-50 text-rose-600 border border-rose-200 text-xs font-extrabold hover:bg-rose-100">Exit</button>
         </div>
       </header>
 
@@ -127,76 +93,62 @@
         <div class="saas-card p-4 flex items-center gap-4">
           <div class="w-12 h-12 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-xl font-bold">👥</div>
           <div>
-            <div id="statTotalCust" class="text-2xl font-extrabold text-slate-900">248</div>
-            <div class="text-xs font-bold text-slate-500">Total Customers[cite: 16]</div>
+            <div class="text-2xl font-extrabold text-slate-900">3</div>
+            <div class="text-xs font-bold text-slate-500">Total Customers</div>
           </div>
         </div>
         <div class="saas-card p-4 flex items-center gap-4">
           <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl font-bold">QR</div>
           <div>
-            <div id="statActiveQrs" class="text-2xl font-extrabold text-slate-900">196</div>
+            <div class="text-2xl font-extrabold text-slate-900">2</div>
             <div class="text-xs font-bold text-slate-500">Active QR Codes</div>
           </div>
         </div>
         <div class="saas-card p-4 flex items-center gap-4">
           <div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl font-bold">📷</div>
           <div>
-            <div id="statScans" class="text-2xl font-extrabold text-slate-900">37</div>
-            <div class="text-xs font-bold text-slate-500">Scans Today[cite: 16]</div>
+            <div class="text-2xl font-extrabold text-slate-900">37</div>
+            <div class="text-xs font-bold text-slate-500">Scans Today</div>
           </div>
         </div>
         <div class="saas-card p-4 flex items-center gap-4">
           <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl font-bold">🪙</div>
           <div>
-            <div id="statCredits" class="text-2xl font-extrabold text-slate-900">8,420</div>
+            <div class="text-2xl font-extrabold text-slate-900">8,420</div>
             <div class="text-xs font-bold text-slate-500">Credits Left</div>
           </div>
         </div>
       </div>
 
-      <!-- TAB VIEWS -->
-      <div id="tab-dashboard" class="hidden saas-card p-6 space-y-4"><h2 class="text-xl font-black text-slate-900">Dashboard Overview</h2></div>
-      <div id="tab-add" class="hidden saas-card p-6 space-y-4"><h2 class="text-xl font-black text-slate-900">Add New Customer</h2></div>
-
-      <!-- PRIMARY CUSTOMERS TAB -->
-      <div id="tab-customers" class="space-y-4">
-        <div class="saas-card p-5 space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <h3 class="font-extrabold text-slate-900 text-base">👥 Customers</h3>
-              <p class="text-xs text-slate-500">Manage all registered customers[cite: 16]. Click any row to open the complete customer profile popup.</p>
-            </div>
-            <input type="search" id="tableSearch" oninput="renderTable()" placeholder="Search by Name, Mobile or ID..." class="pm-input !py-2 sm:w-80" />
+      <!-- PRIMARY CUSTOMERS TABLE -->
+      <div class="saas-card p-5 space-y-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="font-extrabold text-slate-900 text-base">👥 Registered Customers</h3>
+            <p class="text-xs text-slate-500">Click any customer row to open profile popup.</p>
           </div>
+          <button onclick="openCustomerModal('PM000248')" class="px-4 py-2 rounded-xl bg-indigo-600 text-white font-extrabold text-xs shadow">Test Popup Modal</button>
+        </div>
 
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm">
-              <thead class="bg-slate-100 text-slate-700 text-xs uppercase font-extrabold">
-                <tr>
-                  <th class="p-3 rounded-l-xl">Customer ID</th>
-                  <th class="p-3">Name</th>
-                  <th class="p-3">Mobile Number</th>
-                  <th class="p-3">Credits</th>
-                  <th class="p-3">Expiry Date</th>
-                  <th class="p-3">Status</th>
-                  <th class="p-3 rounded-r-xl text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="customerTableBody" class="divide-y divide-slate-100 text-xs font-semibold text-slate-800">
-                <!-- Populated dynamically -->
-              </tbody>
-            </table>
-          </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-slate-100 text-slate-700 text-xs uppercase font-extrabold">
+              <tr>
+                <th class="p-3 rounded-l-xl">Customer ID</th>
+                <th class="p-3">Name</th>
+                <th class="p-3">Mobile Number</th>
+                <th class="p-3">Credits</th>
+                <th class="p-3">Expiry Date</th>
+                <th class="p-3">Status</th>
+                <th class="p-3 rounded-r-xl text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="customerTableBody" class="divide-y divide-slate-100 text-xs font-semibold text-slate-800">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
         </div>
       </div>
-
-      <div id="tab-logs" class="hidden saas-card p-6 space-y-4"><h2 class="text-xl font-black text-slate-900">Scan Logs</h2></div>
-      <div id="tab-whatsapp" class="hidden saas-card p-6 space-y-4"><h2 class="text-xl font-black text-slate-900">WhatsApp Messages</h2></div>
-      <div id="tab-credits" class="hidden saas-card p-6 space-y-4"><h2 class="text-xl font-black text-slate-900">Credits &amp; Validity</h2></div>
-      <div id="tab-subscription" class="hidden saas-card p-6 space-y-4"><h2 class="text-xl font-black text-slate-900">Subscription</h2></div>
-      <div id="tab-reports" class="hidden saas-card p-6 space-y-4"><h2 class="text-xl font-black text-slate-900">Reports</h2></div>
-      <div id="tab-backup" class="hidden saas-card p-6 space-y-4"><h2 class="text-xl font-black text-slate-900">Backup &amp; Security</h2></div>
-      <div id="tab-settings" class="hidden saas-card p-6 space-y-4"><h2 class="text-xl font-black text-slate-900">Settings</h2></div>
 
     </main>
   </div>
@@ -208,8 +160,8 @@
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg">👤</div>
           <div>
-            <h3 class="font-black text-lg text-slate-900">Customer Profile</h3>
-            <p class="text-xs text-slate-500">View, edit and manage customer details[cite: 16]</p>
+            <h3 class="font-black text-lg text-slate-900">Customer Profile &amp; QR Center</h3>
+            <p class="text-xs text-slate-500">View, edit and manage customer details</p>
           </div>
         </div>
         <button onclick="closeCustomerModal()" class="w-9 h-9 rounded-full bg-slate-100 text-slate-700 font-bold flex items-center justify-center hover:bg-slate-200 transition">✕</button>
@@ -217,7 +169,7 @@
 
       <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
         <div class="md:col-span-5 bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col items-center text-center space-y-3">
-          <div id="modalQrBox" class="bg-white p-3 rounded-xl shadow border"></div>
+          <div id="modalQrBox" class="bg-white p-3 rounded-xl shadow border flex items-center justify-center"></div>
           <div id="modalQrIdCaption" class="text-xs font-black text-indigo-600 tracking-wider">PM000248</div>
           <div class="grid grid-cols-2 gap-2 w-full pt-1">
             <button onclick="alert('Downloading PNG...')" class="py-2 rounded-xl bg-indigo-600 text-white text-xs font-extrabold">⬇ PNG</button>
@@ -265,17 +217,6 @@
               <button type="button" id="btnInactive" onclick="setAccountStatus('Inactive')" class="py-2 rounded-xl border-2 font-black text-xs bg-white text-slate-400 border-slate-200">🔴 INACTIVE</button>
             </div>
           </div>
-
-          <div class="pt-2 space-y-1.5 border-t border-slate-100">
-            <label class="block font-bold text-slate-700 text-xs">WhatsApp Quick Actions</label>
-            <div class="grid grid-cols-3 gap-1">
-              <button onclick="loadWaTemplate('activation')" class="p-1.5 rounded bg-indigo-50 text-indigo-700 font-extrabold text-[10px]">🚀 Activation</button>
-              <button onclick="loadWaTemplate('credit')" class="p-1.5 rounded bg-amber-50 text-amber-800 font-extrabold text-[10px]">🪙 Credits</button>
-              <button onclick="loadWaTemplate('low')" class="p-1.5 rounded bg-rose-50 text-rose-800 font-extrabold text-[10px]">⚠️ Low</button>
-            </div>
-            <textarea id="waPreview" rows="2" class="pm-textarea text-xs" placeholder="Message preview..."></textarea>
-            <button onclick="sendWhatsAppQuickMessage()" class="w-full py-2 rounded-xl bg-emerald-600 text-white font-extrabold text-xs">💬 Open WhatsApp</button>
-          </div>
         </div>
       </div>
 
@@ -287,56 +228,38 @@
   </div>
 
   <script>
-    let customers = [
-      { id: "PM000248", name: "Priya S", mobile: "+91 91840 277123", email: "priya.s@gmail.com", address: "No. 12, Lake View Street, Chennai", credits: 360, scans: 37, waUsage: 24, regDate: "10 Feb 2025", expiry: "10 Feb 2027", status: "Active" },
-      { id: "PM000247", name: "Karthik R", mobile: "+91 91876 543210", email: "karthik@email.com", address: "No. 45, Anna Nagar, Chennai", credits: 120, scans: 12, waUsage: 8, regDate: "15 Mar 2025", expiry: "15 Mar 2027", status: "Active" },
-      { id: "PM000246", name: "Meena V", mobile: "+91 91944 399887", email: "meena@email.com", address: "No. 8, Gandhi Road, Chennai", credits: 0, scans: 4, waUsage: 2, regDate: "05 Nov 2024", expiry: "05 Nov 2026", status: "Inactive" }
+    const customers = [
+      { id: "PM000248", name: "Priya S", mobile: "+91 91840 277123", email: "priya.s@gmail.com", address: "No. 12, Lake View Street, Chennai", credits: 360, scans: 37, waUsage: 24, expiry: "10 Feb 2027", status: "Active" },
+      { id: "PM000247", name: "Karthik R", mobile: "+91 91876 543210", email: "karthik@email.com", address: "No. 45, Anna Nagar, Chennai", credits: 120, scans: 12, waUsage: 8, expiry: "15 Mar 2027", status: "Active" },
+      { id: "PM000246", name: "Meena V", mobile: "+91 91944 399887", email: "meena@email.com", address: "No. 8, Gandhi Road, Chennai", credits: 0, scans: 4, waUsage: 2, expiry: "05 Nov 2026", status: "Inactive" }
     ];
 
     let selectedCust = null;
     let isEditMode = false;
 
-    function doLogin() {
-      const pass = document.getElementById("passInput").value.trim();
-      if (!pass) return alert("Please enter password");
-      localStorage.setItem("pm_pass", pass);
-      document.getElementById("loginView").classList.add("hidden");
-      document.getElementById("appView").classList.remove("hidden");
-      renderTable();
-    }
-
-    function logout() { localStorage.removeItem("pm_pass"); location.reload(); }
-
     window.addEventListener("DOMContentLoaded", () => {
-      if (localStorage.getItem("pm_pass")) {
-        document.getElementById("loginView").classList.add("hidden");
-        document.getElementById("appView").classList.remove("hidden");
-      }
       renderTable();
     });
 
     function renderTable() {
-      const q = (document.getElementById("tableSearch")?.value || "").toLowerCase();
-      const filtered = customers.filter(c => c.name.toLowerCase().includes(q) || c.mobile.includes(q) || c.id.toLowerCase().includes(q));
+      const body = document.getElementById("customerTableBody");
+      if (!body) return;
       
-      const rowsHtml = filtered.map(c => `
+      body.innerHTML = customers.map(c => `
         <tr class="hover:bg-slate-50 transition cursor-pointer" onclick="openCustomerModal('${c.id}')">
           <td class="p-3 font-extrabold text-indigo-600">${c.id}</td>
           <td class="p-3 font-extrabold text-slate-900">${c.name}</td>
           <td class="p-3 text-slate-600">${c.mobile}</td>
           <td class="p-3 font-extrabold text-amber-600">${c.credits}</td>
           <td class="p-3 text-slate-600">${c.expiry}</td>
-          <td class="p-3" onclick="event.stopPropagation()">
+          <td class="p-3">
             <span class="px-2.5 py-1 rounded-full text-xs font-extrabold ${c.status === 'Active' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">${c.status}</span>
           </td>
-          <td class="p-3 text-right" onclick="event.stopPropagation()">
-            <button onclick="openCustomerModal('${c.id}')" class="px-3.5 py-1.5 rounded-xl bg-indigo-50 text-indigo-600 font-extrabold text-xs hover:bg-indigo-100 transition">View</button>
+          <td class="p-3 text-right">
+            <button onclick="event.stopPropagation(); openCustomerModal('${c.id}');" class="px-3.5 py-1.5 rounded-xl bg-indigo-50 text-indigo-600 font-extrabold text-xs hover:bg-indigo-100 transition">View</button>
           </td>
         </tr>
       `).join("");
-
-      const body = document.getElementById("customerTableBody");
-      if (body) body.innerHTML = rowsHtml;
     }
 
     function openCustomerModal(id) {
@@ -355,12 +278,14 @@
       document.getElementById("mMobile").value = c.mobile;
       document.getElementById("mEmail").value = c.email;
       document.getElementById("mAddress").value = c.address;
-      document.getElementById("mExpiry").value = c.expiry;
 
       updateStatusButtons(c.status);
-      generateQrBox(`https://pingmeconnect.in/?t=${c.id}`, "modalQrBox");
+      
+      const qrBox = document.getElementById("modalQrBox");
+      qrBox.innerHTML = "";
+      new QRCode(qrBox, { text: `https://pingmeconnect.in/?t=${c.id}`, width: 130, height: 130, correctLevel: QRCode.CorrectLevel.H });
+      
       document.getElementById("modalQrIdCaption").textContent = c.id;
-
       document.getElementById("customerModal").classList.add("open");
     }
 
@@ -380,7 +305,6 @@
       document.getElementById("mMobile").disabled = !enabled;
       document.getElementById("mEmail").disabled = !enabled;
       document.getElementById("mAddress").disabled = !enabled;
-      document.getElementById("mExpiry").disabled = !enabled;
     }
 
     function setAccountStatus(status) {
@@ -401,48 +325,16 @@
       }
     }
 
-    function loadWaTemplate(type) {
-      if (!selectedCust) return;
-      let msg = "";
-      if (type === 'activation') msg = `Hi ${selectedCust.name},\nYour PingMe account (${selectedCust.id}) has been activated successfully!`;
-      else if (type === 'credit') msg = `Hi ${selectedCust.name},\nYour PingMe account has ${selectedCust.credits} credits remaining.`;
-      else if (type === 'low') msg = `Hi ${selectedCust.name},\nYour PingMe credit balance is running low.`;
-      document.getElementById("waPreview").value = msg;
-    }
-
-    function sendWhatsAppQuickMessage() {
-      if (!selectedCust) return;
-      const text = encodeURIComponent(document.getElementById("waPreview").value);
-      window.open(`https://wa.me/${selectedCust.mobile.replace(/\D/g, "")}?text=${text}`, "_blank");
-    }
-
     function saveCustomerEdits() {
       if (!selectedCust) return;
       selectedCust.name = document.getElementById("mName").value.trim();
       selectedCust.mobile = document.getElementById("mMobile").value.trim();
       selectedCust.email = document.getElementById("mEmail").value.trim();
       selectedCust.address = document.getElementById("mAddress").value.trim();
-      selectedCust.expiry = document.getElementById("mExpiry").value.trim();
 
       closeCustomerModal();
       renderTable();
       alert("Customer profile updated successfully!");
-    }
-
-    function generateQrBox(text, elementId) {
-      const box = document.getElementById(elementId);
-      if (!box) return;
-      box.innerHTML = "";
-      new QRCode(box, { text: text, width: 140, height: 140, correctLevel: QRCode.CorrectLevel.H });
-    }
-
-    function switchTab(tab, btn) {
-      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
-      if (btn) btn.classList.add("active");
-      ["dashboard", "add", "customers", "logs", "whatsapp", "credits", "subscription", "reports", "backup", "settings"].forEach(t => {
-        const el = document.getElementById("tab-" + t);
-        if (el) el.classList.toggle("hidden", t !== tab);
-      });
     }
   </script>
 </body>
