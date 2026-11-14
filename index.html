@@ -112,38 +112,6 @@
       .mascot-float, .animate-ping { animation: none !important; }
       * { scroll-behavior: auto !important; }
     }
-
-    /* LOCKED APPROVED PINGME LOOK — dark neon journey with a bright report form */
-    .app-shell.theme-dark { background: radial-gradient(circle at 50% 8%, #173b79 0%, #071a3b 42%, #080d25 100%); color:#fff; }
-    .theme-dark .app-header { background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(239,246,255,.96)); border-bottom:2px solid rgba(56,189,248,.35); }
-    .brand-pill { border-radius:18px; box-shadow:0 5px 18px rgba(15,23,42,.16); }
-    .brand-tagline { margin:2px 0 0 10px; color:#10265b; font-size:9px; font-weight:900; letter-spacing:.055em; }
-    .lang-pill { background:linear-gradient(110deg,#063b70,#101b55); border:1.5px solid #38bdf8; }
-    #screen1 { background:linear-gradient(180deg,#f8fbff 0%,#eaf3ff 55%,#f8f5ff 100%); color:#0b1b43; border-radius:0 0 28px 28px; }
-    #screen1 h2 { color:#10265b !important; }
-    #screen1 .welcome-heading h1 { display:inline-block; padding:7px 22px; color:#fff; border-radius:999px; background:linear-gradient(100deg,#4338ca 0%,#8b2bd0 52%,#ec168b 100%); box-shadow:0 7px 18px rgba(147,51,234,.32); font-style:italic; }
-    #screen1 .welcome-heading p { margin-top:5px; color:#172554; font-weight:800; font-size:14px; }
-    #screen1 .pingy-hero-frame { border:1.5px solid rgba(56,189,248,.45); background:radial-gradient(circle at 50% 50%,#dbeafe 0%,#e9d5ff 72%); }
-    #screen1 .cat-card { background:linear-gradient(180deg,#fff,#f4f8ff); border:1.5px solid #cbd5e1; color:#102044; box-shadow:0 5px 14px rgba(15,23,42,.09); }
-    #screen1 .cat-card span:not([id^="check-"]) { color:#102044 !important; }
-    #screen1 .cat-card.active { background:linear-gradient(180deg,#e0fbff,#c8f4ff); border:2px solid #06b6d4; box-shadow:0 0 0 2px rgba(6,182,212,.12),0 7px 18px rgba(6,182,212,.2); }
-    #screen1 .tpl-pill { background:linear-gradient(180deg,#fff,#f6f9ff); color:#101b37; border:1.5px solid #cbd5e1; box-shadow:0 3px 10px rgba(15,23,42,.07); }
-    #screen1 .tpl-pill.active { background:linear-gradient(90deg,#d9fbff,#e5f2ff); color:#0b1b43; border:2px solid #0891b2; }
-    #screen1 .surface-card { background:linear-gradient(180deg,#fff,#f5f8ff); border:1.5px solid #cbd5e1; }
-    #screen1 #customNote { background:#fff; color:#102044; border-color:#cbd5e1; }
-    #screen1 label, #screen1 #locationBtn { background:linear-gradient(180deg,#fff,#edf4ff); color:#102044; border:1.5px solid #cbd5e1; }
-    #screen1 .btn-send-alert { background:linear-gradient(100deg,#08b9ed 0%,#5145e8 52%,#ec2798 100%); box-shadow:0 9px 22px rgba(90,75,230,.35); border:1px solid rgba(255,255,255,.7); }
-    #screen2, #screen3, #screen4 { background:radial-gradient(circle at 50% 25%,rgba(30,108,220,.28),transparent 48%),linear-gradient(180deg,#08275a 0%,#071a3e 52%,#100d35 100%); color:#fff; }
-    #screen2 .bg-white, #screen3 .bg-white { background:linear-gradient(180deg,#fff,#edf6ff) !important; }
-    #screen2 .countdown-ring { background:radial-gradient(circle,#08204a 57%,#101849 100%); border:7px solid transparent; background-image:linear-gradient(#08204a,#08204a),linear-gradient(135deg,#22d3ee,#6366f1,#ec4899); background-origin:border-box; background-clip:padding-box,border-box; box-shadow:0 0 28px rgba(34,211,238,.35); }
-    #screen3 #ownerReplyBox { background:linear-gradient(180deg,#fff,#edf6ff); border:2px solid #67e8f9; }
-    #screen4 .btn-buy { background:linear-gradient(100deg,#f72585,#c026d3); }
-    #screen4 .btn-share { background:linear-gradient(100deg,#0ea5e9,#2563eb); }
-    #screen4 .btn-review { background:linear-gradient(100deg,#fbbf24,#ea580c); }
-    #screen4 .btn-finish { background:linear-gradient(100deg,#0ea5e9,#4338ca); }
-    #buyModal > div, #reviewModal > div { max-height:90dvh; overflow-y:auto; }
-    @media (min-width:768px) { .app-shell { max-width:460px; min-height:860px; } }
-    @media (max-width:390px) { #screen1 { border-radius:0 0 24px 24px; } .brand-tagline { font-size:8px; } }
   </style>
 </head>
 <body>
@@ -158,14 +126,11 @@
     </div>
   </div>
 
-  <div id="appShell" class="app-shell theme-dark">
+  <div id="appShell" class="app-shell theme-light">
     <!-- HEADER -->
     <header class="app-header px-4 pb-3 flex items-center justify-between gap-2">
-      <div class="brand-stack flex flex-col items-start">
-        <div class="brand-pill pl-3 pr-4 py-1.5 flex items-center">
-          <img src="assets/pingme-logo.png" alt="PingMe" class="h-9 w-auto object-contain" />
-        </div>
-        <span class="brand-tagline">ONE SCAN. INSTANT CONNECTION.</span>
+      <div class="brand-pill pl-3 pr-4 py-1.5 flex items-center">
+        <img src="assets/pingme-logo.png" alt="PingMe" class="h-9 w-auto object-contain" />
       </div>
       <button onclick="toggleLanguage()" class="lang-pill px-3.5 py-2 rounded-full text-xs font-bold flex items-center gap-1.5 active:scale-95 transition">
         <span class="text-cyan-300">🌐</span> <span id="langLabel">English | தமிழ்</span>
@@ -174,13 +139,13 @@
 
     <!-- SCREEN 1: WELCOME & SEND ALERT -->
     <main id="screen1" class="flex-1 flex flex-col justify-between p-4 space-y-3">
-      <!-- Approved welcome illustration -->
+      <div class="flex flex-col items-center text-center space-y-2">
+        <h1 class="text-3xl sm:text-4xl font-black text-[#111d4a] tracking-tight" data-i18n="welcomeTitle">LET'S CONNECT!</h1>
+      </div>
+
+      <!-- Hero Mascot with Cap -->
       <div class="pingy-hero-frame w-full h-[180px] sm:h-[200px] mascot-float">
         <img src="assets/Pingy_Welcome_Reference.png" alt="PingMe" />
-      </div>
-      <div class="welcome-heading text-center">
-        <h1 class="text-3xl sm:text-4xl font-black tracking-tight" data-i18n="welcomeTitle">LET'S CONNECT!</h1>
-        <p data-i18n="welcomeSubtitle">Reach the owner with one scan.</p>
       </div>
 
       <!-- Categories (Big & Bold for All Ages) -->
@@ -238,7 +203,7 @@
         <div class="inline-flex items-center gap-2 bg-emerald-500 text-white px-5 py-2 rounded-full font-black text-lg shadow-lg">
           <span>✓</span> <span data-i18n="pingSent">PING SENT!</span>
         </div>
-        <p class="text-lg sm:text-xl font-extrabold text-white" data-i18n="waitingReply">Waiting for owner's reply...</p>
+        <p class="text-lg sm:text-xl font-extrabold text-white" data-i18n="waitingReply">Waiting for reply...</p>
         <div class="w-40 h-40 mx-auto flex items-center justify-center">
           <img src="assets/Pingy_Waiting_Reference.png" alt="PingMe mascot" class="w-40 h-40 object-contain mascot-float" />
         </div>
@@ -250,9 +215,9 @@
       <div class="w-full space-y-3">
         <div class="bg-white rounded-2xl border-2 border-cyan-300 p-4 text-slate-900 shadow-xl min-h-[116px] flex flex-col items-center justify-center">
           <div class="text-sm font-black text-indigo-700 mb-1">💡 <span data-i18n="pingmeTip">PINGME TIP</span> <span id="tipCounter" class="text-slate-500">1/9</span></div>
-          <p id="tipText" class="text-lg sm:text-xl font-extrabold leading-snug">Your phone number stays private.</p>
+          <p id="tipText" class="text-lg sm:text-xl font-extrabold leading-snug">Your number stays private.</p>
         </div>
-        <p class="text-sm font-bold text-cyan-100" data-i18n="privateNumber">🔒 Your phone number stays private.</p>
+        <p class="text-sm font-bold text-cyan-100" data-i18n="privateNumber">🔒 Your number stays private.</p>
       </div>
     </section>
 
@@ -263,9 +228,9 @@
           <img src="assets/Pingy_ThumbsUp_Reference.png" alt="PingMe mascot" class="w-40 h-40 object-contain mascot-float" />
         </div>
         <div class="bg-emerald-600 text-white px-5 py-3 rounded-full font-black text-2xl shadow-lg" data-i18n="greatNews">GREAT NEWS!</div>
-        <p id="replySubtext" class="text-lg font-extrabold text-cyan-100" data-i18n="ownerReplied">The owner replied.</p>
+        <p id="replySubtext" class="text-lg font-extrabold text-cyan-100" data-i18n="ownerReplied">Owner replied!</p>
         <div id="ownerReplyBox" class="bg-white rounded-2xl p-5 shadow-xl border-2 border-cyan-300 text-slate-900 font-extrabold text-xl text-left">
-          <p id="respGuidance">The owner has replied on WhatsApp.</p>
+          <p id="respGuidance">Owner replied!</p>
           <p id="replyTime" class="text-xs font-bold text-slate-500 text-right mt-3"></p>
         </div>
         <div id="replyReceivedBadge" class="inline-flex bg-emerald-100 text-emerald-800 px-4 py-2 rounded-full font-extrabold text-base">✓ <span data-i18n="replyReceived">Reply received!</span></div>
@@ -277,12 +242,12 @@
     <section id="screen4" class="hidden p-5 flex-1 flex flex-col items-center justify-center text-center space-y-4">
       <img src="assets/Pingy_ThankYou_Reference.png" alt="PingMe mascot" class="w-36 h-36 object-contain mascot-float" />
       <div class="bg-emerald-600 text-white px-6 py-3 rounded-full font-black text-2xl shadow-lg" data-i18n="allDone">✓ ALL DONE!</div>
-      <h2 class="text-xl font-extrabold text-white" data-i18n="sessionClosed">Your session is safely closed.</h2>
-      <p class="text-sm font-bold text-cyan-100" data-i18n="noMoreMessages">No more messages will be sent for this alert.</p>
+      <h2 class="text-xl font-extrabold text-white" data-i18n="sessionClosed">Session closed.</h2>
+      <p class="text-sm font-bold text-cyan-100" data-i18n="noMoreMessages">This alert is closed.</p>
       <div class="w-full space-y-3 pt-2">
-        <button onclick="openBuyModal()" class="btn-buy w-full py-3.5 rounded-2xl font-black text-lg text-white">🛒 <span data-i18n="buyPingMe">BUY PINGME</span> ›</button>
-        <button onclick="openShareModal()" class="btn-share w-full py-3.5 rounded-2xl font-black text-lg text-white">🔗 <span data-i18n="referFriend">REFER A FRIEND</span> ›</button>
-        <button onclick="openReviewModal()" class="btn-review w-full py-3.5 rounded-2xl font-black text-lg text-white">⭐ <span data-i18n="rateUs">RATE US</span> ›</button>
+        <button onclick="openBuyModal()" class="btn-buy w-full py-3.5 rounded-2xl font-black text-lg text-white">🛒 <span data-i18n="buyPingMe">BUY</span> ›</button>
+        <button onclick="openShareModal()" class="btn-share w-full py-3.5 rounded-2xl font-black text-lg text-white">🔗 <span data-i18n="referFriend">SHARE</span> ›</button>
+        <button onclick="openReviewModal()" class="btn-review w-full py-3.5 rounded-2xl font-black text-lg text-white">⭐ <span data-i18n="rateUs">RATE</span> ›</button>
         <button onclick="finishDone()" class="btn-finish w-full py-3.5 rounded-2xl font-black text-lg text-white">✓ <span data-i18n="done">DONE</span></button>
       </div>
     </section>
@@ -294,23 +259,23 @@
         <div class="rounded-2xl bg-gradient-to-br from-blue-100 via-white to-fuchsia-100 p-4 text-center">
           <img src="assets/pingme-logo.png" alt="PingMe" class="h-14 mx-auto object-contain mb-2">
           <div class="text-3xl font-black text-indigo-900">₹599</div>
-          <div class="text-sm font-bold text-emerald-700" data-i18n="kitPriceNote">One-time kit price</div>
+          <div class="text-sm font-bold text-emerald-700" data-i18n="kitPriceNote">One-time price</div>
         </div>
-        <p class="text-base font-extrabold text-slate-800" data-i18n="kitIntro">Everything you need to connect through one QR.</p>
+        <p class="text-base font-extrabold text-slate-800" data-i18n="kitIntro">Connect with one QR.</p>
         <ul class="space-y-2 text-sm font-bold text-slate-700">
           <li>✓ <span data-i18n="kitItem1">QR stickers for vehicle and other uses</span></li>
           <li>✓ <span data-i18n="kitItem2">QR keychains and reusable tags</span></li>
           <li>✓ <span data-i18n="kitItem3">Starter credits included</span></li>
           <li>✓ <span data-i18n="kitItem4">1-year subscription included</span></li>
         </ul>
-        <button onclick="orderStarterKitWhatsApp()" class="w-full py-4 rounded-2xl bg-emerald-600 text-white font-black text-lg shadow-lg">🟢 <span data-i18n="orderWhatsApp">ORDER ON WHATSAPP</span></button>
+        <button onclick="orderStarterKitWhatsApp()" class="w-full py-4 rounded-2xl bg-emerald-600 text-white font-black text-lg shadow-lg">🟢 <span data-i18n="orderWhatsApp">ORDER VIA WHATSAPP</span></button>
       </div>
     </div>
 
-    <!-- RATE US MODAL: feedback is sent to the PingMe WhatsApp business number -->
+    <!-- RATE MODAL: feedback is sent to the PingMe WhatsApp business number -->
     <div id="reviewModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 flex items-center justify-center p-4">
       <div class="w-full max-w-sm rounded-3xl bg-white border-2 border-amber-300 p-5 text-slate-900 space-y-4 shadow-2xl">
-        <div class="flex justify-between items-center"><h3 class="font-black text-indigo-900 text-xl" data-i18n="rateTitle">RATE YOUR EXPERIENCE</h3><button onclick="closeReviewModal()" class="text-slate-700 text-2xl font-black" aria-label="Close">×</button></div>
+        <div class="flex justify-between items-center"><h3 class="font-black text-indigo-900 text-xl" data-i18n="rateTitle">RATE</h3><button onclick="closeReviewModal()" class="text-slate-700 text-2xl font-black" aria-label="Close">×</button></div>
         <div class="flex justify-center gap-2" id="starPicker">
           <button type="button" onclick="setRating(1)" class="rating-star text-4xl" aria-label="1 star">☆</button>
           <button type="button" onclick="setRating(2)" class="rating-star text-4xl" aria-label="2 stars">☆</button>
@@ -318,7 +283,7 @@
           <button type="button" onclick="setRating(4)" class="rating-star text-4xl" aria-label="4 stars">☆</button>
           <button type="button" onclick="setRating(5)" class="rating-star text-4xl" aria-label="5 stars">☆</button>
         </div>
-        <textarea id="reviewText" rows="3" maxlength="300" placeholder="Your feedback (optional)..." data-i18n-placeholder="reviewPlaceholder" class="w-full border-2 border-slate-300 rounded-xl p-3 text-base"></textarea>
+        <textarea id="reviewText" rows="3" maxlength="300" placeholder="Feedback (optional)..." data-i18n-placeholder="reviewPlaceholder" class="w-full border-2 border-slate-300 rounded-xl p-3 text-base"></textarea>
         <button onclick="submitReview()" class="w-full py-3.5 rounded-2xl bg-amber-500 text-white font-black text-lg" data-i18n="sendFeedback">SEND FEEDBACK</button>
       </div>
     </div>
@@ -351,33 +316,33 @@
     let replyShown = false;
 
     const tips = [
-      "Your phone number stays private.",
-      "PingMe works for vehicles, keys and bags.",
-      "One QR can connect people in many situations.",
-      "A photo can help explain the issue clearly.",
-      "Share your location when it helps the owner.",
-      "PingMe can be used for parcels and luggage too.",
-      "The owner can reply directly through WhatsApp.",
-      "Your alert is linked to this QR tag.",
-      "Thanks for trying PingMe. Stay connected!"
+      "Your number stays private.",
+      "For vehicles, keys and bags.",
+      "One QR. Many uses.",
+      "A photo helps explain the issue.",
+      "Share your location when needed.",
+      "Use PingMe for parcels and luggage.",
+      "The owner can reply on WhatsApp.",
+      "Your alert is linked to this QR.",
+      "Thanks for using PingMe!"
     ];
 
     const uiText = {
       en: {
-        welcomeTitle:"LET'S CONNECT!", welcomeSubtitle:"Reach the owner with one scan.", chooseCategory:"Choose a Category", selectMessage:"Select a Message",
+        welcomeTitle:"LET'S CONNECT!", chooseCategory:"Choose a Category", selectMessage:"Select a Message",
         vehicle:"Vehicle", lostFound:"Lost & Found", other:"Other", customPlaceholder:"Add details (optional)...",
         addPhoto:"ADD PHOTO", addLocation:"ADD LOCATION", sendAlert:"SEND ALERT", pingSent:"PING SENT!",
-        waitingReply:"Waiting for owner's reply...", seconds:"SECONDS", pingmeTip:"PINGME TIP",
-        privateNumber:"🔒 Your phone number stays private.", greatNews:"GREAT NEWS!",
-        ownerReplied:"The owner replied.", replyReceived:"Reply received!", closeSession:"✕ CLOSE SESSION",
-        allDone:"✓ ALL DONE!", sessionClosed:"Your session is safely closed.", noMoreMessages:"No more messages will be sent for this alert.",
-        buyPingMe:"BUY PINGME", referFriend:"REFER A FRIEND", rateUs:"RATE US", done:"DONE",
-        productTitle:"PINGME SMART CONNECT KIT", kitPriceNote:"One-time kit price",
-        kitIntro:"Everything you need to connect through one QR.",
+        waitingReply:"Waiting for reply...", seconds:"SECONDS", pingmeTip:"PINGME TIP",
+        privateNumber:"🔒 Your number stays private.", greatNews:"GREAT NEWS!",
+        ownerReplied:"Owner replied!", replyReceived:"Reply received!", closeSession:"✕ CLOSE SESSION",
+        allDone:"✓ ALL DONE!", sessionClosed:"Session closed.", noMoreMessages:"This alert is closed.",
+        buyPingMe:"BUY", referFriend:"SHARE", rateUs:"RATE", done:"DONE",
+        productTitle:"PINGME SMART CONNECT KIT", kitPriceNote:"One-time price",
+        kitIntro:"Connect with one QR.",
         kitItem1:"QR stickers for vehicle and other uses", kitItem2:"QR keychains and reusable tags",
         kitItem3:"Starter credits included", kitItem4:"1-year subscription included",
-        orderWhatsApp:"ORDER ON WHATSAPP", rateTitle:"RATE YOUR EXPERIENCE",
-        reviewPlaceholder:"Your feedback (optional)...", sendFeedback:"SEND FEEDBACK",
+        orderWhatsApp:"ORDER VIA WHATSAPP", rateTitle:"RATE",
+        reviewPlaceholder:"Feedback (optional)...", sendFeedback:"SEND FEEDBACK",
         photoAdded:"✓ Photo selected", locationAdded:"✓ Location captured",
         noReply:"No reply received within 180 seconds.", closeAfterTimeout:"CLOSE SESSION",
         photoError:"Could not read this photo. Please try another image.",
@@ -387,20 +352,20 @@
         reviewThanks:"Thank you! Your feedback message is ready in WhatsApp."
       },
       ta: {
-        welcomeTitle:"இணைவோம்!", welcomeSubtitle:"ஒரே ஸ்கேன் மூலம் உரிமையாளரை அணுகுங்கள்.", chooseCategory:"வகையைத் தேர்வு செய்யவும்", selectMessage:"செய்தியைத் தேர்வு செய்யவும்",
+        welcomeTitle:"இணைவோம்!", chooseCategory:"வகையைத் தேர்வு செய்யவும்", selectMessage:"செய்தியைத் தேர்வு செய்யவும்",
         vehicle:"வாகனம்", lostFound:"தொலைந்தது / கிடைத்தது", other:"மற்றவை", customPlaceholder:"கூடுதல் விவரம் (விருப்பம்)...",
         addPhoto:"புகைப்படம் சேர்க்க", addLocation:"இருப்பிடத்தைப் பகிர", sendAlert:"அறிவிப்பை அனுப்பு",
-        pingSent:"அறிவிப்பு அனுப்பப்பட்டது!", waitingReply:"உரிமையாளரின் பதிலுக்காக காத்திருக்கிறது...",
-        seconds:"விநாடிகள்", pingmeTip:"PINGME குறிப்பு", privateNumber:"🔒 உங்கள் தொலைபேசி எண் தனிப்பட்டதாக இருக்கும்.",
-        greatNews:"மகிழ்ச்சியான செய்தி!", ownerReplied:"உரிமையாளர் பதிலளித்துள்ளார்.", replyReceived:"பதில் கிடைத்தது!",
-        closeSession:"✕ அமர்வை முடிக்கவும்", allDone:"✓ முடிந்தது!", sessionClosed:"உங்கள் அமர்வு பாதுகாப்பாக முடிக்கப்பட்டது.",
-        noMoreMessages:"இந்த அறிவிப்பிற்கு இனி செய்திகள் அனுப்பப்படாது.", buyPingMe:"PINGME வாங்க", referFriend:"நண்பருக்கு பகிர",
-        rateUs:"மதிப்பிடுங்கள்", done:"முடிந்தது", productTitle:"PINGME ஸ்மார்ட் கனெக்ட் கிட்",
-        kitPriceNote:"ஒருமுறை செலுத்தும் விலை", kitIntro:"ஒரே QR மூலம் இணைக்க தேவையான அனைத்தும்.",
+        pingSent:"அறிவிப்பு அனுப்பப்பட்டது!", waitingReply:"பதிலுக்காக காத்திருக்கிறது...",
+        seconds:"விநாடிகள்", pingmeTip:"PINGME குறிப்பு", privateNumber:"🔒 உங்கள் எண் தனிப்பட்டது.",
+        greatNews:"மகிழ்ச்சியான செய்தி!", ownerReplied:"உரிமையாளர் பதிலளித்தார்!", replyReceived:"பதில் கிடைத்தது!",
+        closeSession:"✕ அமர்வை முடிக்கவும்", allDone:"✓ முடிந்தது!", sessionClosed:"அமர்வு முடிந்தது.",
+        noMoreMessages:"இந்த அறிவிப்பு முடிந்தது.", buyPingMe:"வாங்க", referFriend:"பகிர்",
+        rateUs:"மதிப்பிடு", done:"முடிந்தது", productTitle:"PINGME ஸ்மார்ட் கனெக்ட் கிட்",
+        kitPriceNote:"ஒருமுறை விலை", kitIntro:"ஒரே QR மூலம் இணையுங்கள்.",
         kitItem1:"வாகனம் மற்றும் பிற பயன்பாடுகளுக்கான QR ஸ்டிக்கர்கள்", kitItem2:"QR கீசெயின்கள் மற்றும் மீண்டும் பயன்படுத்தும் டேக்குகள்",
         kitItem3:"தொடக்க கிரெடிட்கள் சேர்க்கப்பட்டுள்ளன", kitItem4:"1 ஆண்டு சந்தா சேர்க்கப்பட்டுள்ளது",
-        orderWhatsApp:"WHATSAPP மூலம் ஆர்டர்", rateTitle:"உங்கள் அனுபவத்தை மதிப்பிடுங்கள்",
-        reviewPlaceholder:"உங்கள் கருத்து (விருப்பம்)...", sendFeedback:"கருத்தை அனுப்பு",
+        orderWhatsApp:"WHATSAPP ஆர்டர்", rateTitle:"மதிப்பிடு",
+        reviewPlaceholder:"கருத்து (விருப்பம்)...", sendFeedback:"கருத்தை அனுப்பு",
         photoAdded:"✓ புகைப்படம் தேர்ந்தெடுக்கப்பட்டது", locationAdded:"✓ இருப்பிடம் பெறப்பட்டது",
         noReply:"180 விநாடிகளில் பதில் கிடைக்கவில்லை.", closeAfterTimeout:"அமர்வை முடிக்கவும்",
         photoError:"புகைப்படத்தைப் படிக்க முடியவில்லை. வேறு படத்தைத் தேர்வு செய்யவும்.",
@@ -545,8 +510,8 @@
 
     function switchToScreen(id) {
       const shell = document.getElementById("appShell");
-      shell.classList.remove("theme-light");
-      shell.classList.add("theme-dark");
+      shell.classList.toggle("theme-light", id === "screen1");
+      shell.classList.toggle("theme-dark", id !== "screen1");
       ["screen1","screen2","screen3","screen4"].forEach(s => {
         document.getElementById(s).classList.toggle("hidden", s !== id);
       });
