@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="theme-color" content="#071226" />
+  <meta name="apple-mobile-web-app-title" content="PingMe" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="./assets/icon-192.png" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>PingMe — One Scan. Instant Connection.</title>
@@ -329,6 +332,145 @@
       #replyState .action-button, #timeoutState .action-button { min-height:51px; }
     }
 
+
+    /* Post-submit states restyled to match the supplied PingMe reference. */
+    #screen2 { position:relative; overflow:hidden; min-height:calc(100dvh - 88px); padding:14px 14px 22px; background:radial-gradient(ellipse at 48% 32%,rgba(12,75,162,.68) 0%,rgba(6,28,74,.72) 45%,transparent 72%),linear-gradient(180deg,#06183a 0%,#081a43 55%,#11123f 100%); }
+    #screen2::before { background:radial-gradient(ellipse at 12% 91%,rgba(0,206,255,.32),transparent 36%),radial-gradient(ellipse at 88% 96%,rgba(193,52,255,.30),transparent 39%); }
+    #screen2::after { content:""; position:absolute; z-index:0; pointer-events:none; inset:auto -8% -18px; height:106px; background:linear-gradient(168deg,transparent 25%,rgba(0,168,255,.42) 26%,rgba(0,107,213,.72) 55%,rgba(78,37,180,.85) 100%); clip-path:polygon(0 43%,18% 21%,39% 45%,59% 55%,81% 24%,100% 38%,100% 100%,0 100%); }
+    #screen2 > .status-state { z-index:1; }
+    #waitingState { min-height:640px; justify-content:space-around; gap:12px; padding:10px 0 24px; }
+    #waitingState .status-pill { padding:9px 22px; font-size:clamp(20px,5vw,27px); }
+    #waitingState .waiting-visual { gap:2px; }
+    #waitingState .waiting-mascot { width:49%; max-width:215px; height:190px; object-fit:contain; border-radius:0; }
+    #waitingState .countdown-ring { width:142px; height:142px; flex-basis:142px; }
+    #waitingState .waiting-connection-art { width:100%; min-height:82px; margin:2px 0 0; padding:4px 14px 5px; border:0; border-radius:0; background:transparent; box-shadow:none; }
+    #waitingState .waiting-connection-art::before { left:18%; right:18%; top:27px; height:3px; background:linear-gradient(90deg,#19c8ff,#8c79ff,#ef58d5); box-shadow:0 0 12px #569bff99; }
+    #waitingState .connection-step { position:relative; z-index:1; display:flex; min-width:62px; flex-direction:column; align-items:center; gap:6px; color:#eaf5ff; }
+    #waitingState .connection-node { position:static; width:48px; height:48px; border-radius:50%; background:linear-gradient(145deg,#047bbd,#292a98 78%); border:2px solid #53d6ff; box-shadow:0 0 15px #22c5ff88,inset 0 1px 5px #fff6; font-style:normal; }
+    #waitingState .connection-step small { font-size:10px; line-height:1.1; font-weight:900; letter-spacing:.04em; white-space:nowrap; }
+    #waitingState .connection-node::after { content:none !important; }
+    #waitingState .tip-card { border:1px solid #d9e9f7; }
+    #replyState, #timeoutState { min-height:640px; justify-content:space-between; gap:10px; padding:5px 0 24px; }
+    #replyState::before, #timeoutState::before { width:300px; height:300px; top:1%; background:radial-gradient(circle,rgba(34,211,238,.18),rgba(99,102,241,.12) 48%,transparent 73%); }
+    #replyState::after, #timeoutState::after { content:none; }
+    #replyState .reply-heading { display:flex; flex:none; flex-direction:column; align-items:center; gap:4px; padding:0; background:none; border:0; box-shadow:none; }
+    .reply-check { width:66px; height:66px; display:flex; align-items:center; justify-content:center; border:4px solid #adff59; border-radius:50%; color:#fff; background:radial-gradient(circle,#78d900 0%,#39ac07 67%,#187b16 100%); font-size:43px; font-weight:1000; line-height:1; box-shadow:0 0 20px #75ef38aa,inset 0 0 9px #fff7; }
+    #replyState .reply-heading .status-pill { margin:0; padding:8px 20px; border:0; border-radius:9px; background:linear-gradient(180deg,#9df421 0%,#54c900 74%,#36a900 100%); box-shadow:0 4px 0 #268300,0 0 17px #70e93288; font-size:clamp(21px,5.3vw,28px); clip-path:polygon(4% 0,96% 0,100% 50%,96% 100%,4% 100%,0 50%); }
+    #replyState .reply-heading p { margin:3px 0 0; font-size:20px; font-weight:900; }
+    #replyState .owner-reply-card { flex:0 0 auto; min-height:138px; padding:13px 14px; border:1px solid #d0dfed; border-radius:19px; background:linear-gradient(180deg,#fff,#eaf4ff); color:#122d5a; box-shadow:0 7px 18px #020b1c66; }
+    #replyState .reply-card-title { margin-bottom:8px; color:#6575a5; }
+    #replyState .whatsapp-dot { background:#167be0; }
+    #replyState .reply-time { margin-left:auto; }
+    #replyState .reply-message { margin:0; min-height:66px; padding:10px 12px; border:1px solid #d3e1ed; border-radius:13px; background:linear-gradient(180deg,#fff,#eef5fc); color:#4b5d79; font-size:17px; line-height:1.35; }
+    #replyState .action-grid, #timeoutState .action-grid { flex:0 0 auto; gap:9px; }
+    #replyState .action-button, #timeoutState .action-button { min-height:57px; border-radius:15px; font-size:17px; }
+    #replyState .action-buy, #timeoutState .action-buy { background:linear-gradient(180deg,#1fc9f7,#138fe5 70%,#1268cb); }
+    #replyState .action-share, #timeoutState .action-share { background:linear-gradient(180deg,#cf49ff,#922ee1 70%,#6824c5); }
+    #replyState .action-rate, #timeoutState .action-rate { background:linear-gradient(180deg,#ffda22,#ffa000 70%,#e87800); }
+    #replyState .action-done, #timeoutState .action-done { background:linear-gradient(180deg,#76e900,#36bd00 70%,#188900); }
+    #replyState .reply-mascot { flex:0 0 auto; width:150px; height:130px; max-width:44%; object-fit:contain; margin:-4px auto -10px; filter:drop-shadow(0 0 14px #24c6ff55); }
+    #timeoutState .timeout-heading { display:flex; flex:none; flex-direction:column; align-items:center; gap:4px; padding:0; background:none; border:0; box-shadow:none; }
+    .timeout-clock { width:68px; height:68px; display:flex; align-items:center; justify-content:center; color:#442b25; font-size:44px; font-weight:1000; border:5px solid #e56752; border-radius:50%; background:radial-gradient(circle at 42% 35%,#fff9dd,#ffdb8a 72%,#f49a55); box-shadow:0 0 18px #fb795566,inset 0 0 8px #fff9; }
+    #timeoutState .timeout-heading .status-pill { margin:0; padding:8px 20px; border:1px solid #ffb6d1; border-radius:999px; background:linear-gradient(180deg,#f75291,#bd205a 75%,#91164b); box-shadow:0 0 17px #f83b83aa; font-size:clamp(22px,5.4vw,29px); }
+    #timeoutState .timeout-heading p { margin:2px 0 0; font-size:17px; font-weight:900; }
+    #timeoutState .timeout-heading .timeout-note { display:none; }
+    .timeout-illustration { flex:0 0 auto; display:flex; align-items:center; justify-content:center; gap:4px; height:166px; }
+    .timeout-mascot { width:60%; max-width:220px; height:166px; object-fit:contain; }
+    .timeout-hourglass { width:30%; max-width:104px; height:112px; object-fit:contain; }
+    .timeout-notice { flex:0 0 auto; display:flex; align-items:center; justify-content:center; gap:9px; min-height:59px; padding:8px 12px; border:1px solid #d4e2ef; border-radius:16px; background:linear-gradient(90deg,#fff,#eaf4ff); color:#263d6a; text-align:center; font-size:14px; font-weight:900; box-shadow:0 5px 15px #020a1c66; }
+    .timeout-notice > span:first-child { color:#249be8; font-size:22px; }
+    @media (max-width:390px) {
+      #screen2 { padding:10px 12px 18px; }
+      #waitingState, #replyState, #timeoutState { min-height:calc(100dvh - 108px); }
+      #waitingState .waiting-mascot { height:160px; }
+      #waitingState .countdown-ring { width:126px; height:126px; flex-basis:126px; }
+      #replyState, #timeoutState { gap:8px; }
+      .reply-check { width:58px; height:58px; font-size:37px; }
+      #replyState .owner-reply-card { min-height:126px; padding:11px 12px; }
+      #replyState .reply-mascot { width:132px; height:105px; }
+      #replyState .action-button, #timeoutState .action-button { min-height:52px; font-size:16px; }
+      .timeout-clock { width:58px; height:58px; font-size:38px; }
+      .timeout-illustration { height:145px; }
+      .timeout-mascot { height:145px; }
+      .timeout-hourglass { height:98px; }
+      .timeout-notice { min-height:52px; font-size:13px; }
+    }
+    @media (max-height:760px) and (max-width:767px) {
+      #waitingState, #replyState, #timeoutState { min-height:600px; }
+      #replyState .reply-mascot { height:92px; }
+      .timeout-illustration, .timeout-mascot { height:130px; }
+    }
+
+    /* PREMIUM PREVIEW REVISION — post-alert states only */
+    #screen2 { background:radial-gradient(ellipse at 50% 22%,rgba(38,105,182,.26),transparent 48%),linear-gradient(180deg,#07182f 0%,#0a1b36 55%,#151538 100%); color:#f7faff; }
+    #screen2::before { background:radial-gradient(ellipse at 8% 94%,rgba(16,180,236,.19),transparent 38%),radial-gradient(ellipse at 92% 96%,rgba(150,72,220,.20),transparent 42%); }
+    #screen2::after { height:92px; background:linear-gradient(168deg,transparent 26%,rgba(22,147,212,.34) 27%,rgba(12,92,170,.62) 58%,rgba(78,46,151,.62) 100%); }
+    #screen2 .status-state { font-family:'Plus Jakarta Sans','Noto Sans Tamil',sans-serif; }
+    #waitingState .status-pill { border:1px solid rgba(213,255,189,.92); border-radius:14px; background:linear-gradient(180deg,#55c957,#248d3d); box-shadow:0 6px 18px rgba(36,180,78,.22); letter-spacing:.035em; }
+    #waitingState .status-subtitle { color:#e4edf8; font-size:18px; font-weight:750; letter-spacing:.01em; }
+    #waitingState .waiting-mascot { filter:drop-shadow(0 14px 22px rgba(0,0,0,.28)); }
+    #waitingState .countdown-ring { border-width:5px; box-shadow:0 0 22px rgba(33,191,222,.22); animation:none; }
+    #waitingState .countdown-ring span { font-size:50px; }
+    #waitingState .tip-card { border:1px solid #dce6ef; border-radius:16px; box-shadow:0 8px 20px rgba(0,0,0,.16); }
+    #waitingState .waiting-connection-art::before { height:2px; opacity:.72; box-shadow:none; }
+    #waitingState .connection-node { background:linear-gradient(145deg,#176d9e,#343b86); border:1px solid rgba(152,220,255,.78); box-shadow:0 5px 14px rgba(0,0,0,.20); }
+    #replyState .reply-check { width:60px; height:60px; border:3px solid #b5e978; background:linear-gradient(145deg,#67c947,#318c34); box-shadow:0 7px 18px rgba(63,181,82,.24); }
+    #replyState .reply-heading .status-pill { border-radius:10px; background:linear-gradient(100deg,#80c83c,#5caa2c); box-shadow:0 4px 10px rgba(52,126,28,.23); clip-path:none; font-size:clamp(20px,5vw,26px); }
+    #replyState .reply-heading p { color:#e7eef9; font-size:18px; }
+    #replyState .owner-reply-card { border-color:#dce7f1; background:linear-gradient(155deg,#fff,#f2f7fc); box-shadow:0 10px 25px rgba(0,0,0,.18); }
+    #replyState .reply-message { background:#f6f9fc; color:#3b4c63; }
+    #replyState .action-button, #timeoutState .action-button { min-height:54px; border-radius:14px; font-size:16px; letter-spacing:.02em; box-shadow:0 6px 13px rgba(0,0,0,.18),inset 0 1px 2px rgba(255,255,255,.32); }
+    #replyState .action-buy, #timeoutState .action-buy { background:linear-gradient(140deg,#27b8df,#2875ca); }
+    #replyState .action-share, #timeoutState .action-share { background:linear-gradient(140deg,#a45add,#7145c0); }
+    #replyState .action-rate, #timeoutState .action-rate { background:linear-gradient(140deg,#f2bd48,#dc861f); }
+    #replyState .action-done, #timeoutState .action-done { background:linear-gradient(140deg,#59bf67,#278a53); }
+    #timeoutState .timeout-clock { width:62px; height:62px; border-width:4px; background:linear-gradient(145deg,#fff0ce,#f5bd78); box-shadow:0 7px 18px rgba(235,123,79,.18); }
+    #timeoutState .timeout-heading .status-pill { background:linear-gradient(100deg,#d84d84,#ae376e); box-shadow:0 6px 16px rgba(211,55,112,.25); }
+    #timeoutState .timeout-heading p { color:#e6eef8; }
+    .timeout-notice { border-color:#dce6ef; box-shadow:0 8px 19px rgba(0,0,0,.16); }
+    #replyState .reply-mascot { filter:drop-shadow(0 12px 20px rgba(0,0,0,.22)); }
+    @media (max-width:390px) { #waitingState .status-subtitle { font-size:17px; } }
+
+    /* Premium first-screen and language-switch polish. */
+    body { background:radial-gradient(ellipse at 50% 3%,#1b4374 0%,#091a31 44%,#050d1b 100%); }
+    .app-shell { background:#f3f7fc; }
+    .app-header { background:linear-gradient(180deg,#fff 0%,#f8fbff 100%) !important; border-bottom:1px solid #e4eaf1 !important; box-shadow:0 5px 18px rgba(22,45,76,.07); }
+    .brand-tagline { color:#263c5a; font-size:9px; font-weight:800; letter-spacing:.055em; }
+    .language-switch { display:flex; align-items:center; gap:3px; padding:4px; min-height:42px; border:1px solid #c9d8e8; border-radius:999px; background:linear-gradient(180deg,#f8fbff,#e8eff7); box-shadow:0 4px 12px rgba(15,40,78,.10),inset 0 1px 0 #fff; }
+    .language-globe { width:24px; color:#138fc5; font-size:20px; line-height:1; text-align:center; }
+    .language-option { min-width:58px; min-height:32px; padding:0 10px; border:0; border-radius:999px; background:transparent; color:#38516d; font-family:inherit; font-size:11px; font-weight:800; cursor:pointer; transition:background .18s ease,color .18s ease,box-shadow .18s ease; }
+    .language-option[aria-pressed="true"] { color:#fff; background:linear-gradient(120deg,#087fbd,#3159aa); box-shadow:0 3px 8px rgba(19,95,163,.24),inset 0 1px 0 rgba(255,255,255,.24); }
+    .language-divider { width:1px; height:18px; background:#c4d0de; }
+    #screen1 { background:linear-gradient(180deg,#f7faff 0%,#eff5fb 55%,#f8f8fc 100%); color:#15283f; gap:11px; }
+    #screen1 .hero-composition { height:154px; border:1px solid rgba(255,255,255,.95); border-radius:22px; background:linear-gradient(112deg,#d7f0ff 0%,#edf1ff 52%,#f8eafa 100%); box-shadow:0 12px 26px rgba(37,73,121,.13),inset 0 1px 0 #fff; }
+    #screen1 .hero-mascot { width:74%; object-position:left center; filter:drop-shadow(0 7px 10px rgba(34,58,90,.16)); }
+    #screen1 .hero-use-cases { right:14px; top:15px; padding:8px 9px; border:1px solid rgba(255,255,255,.78); border-radius:17px; background:rgba(255,255,255,.58); box-shadow:0 6px 16px rgba(48,71,115,.10); }
+    #screen1 .cat-card { min-height:78px; border:1px solid #d6e0eb; border-radius:18px; background:linear-gradient(180deg,#fff,#f6f9fd); color:#1a2d46; box-shadow:0 5px 14px rgba(27,53,86,.08); }
+    #screen1 .cat-card.active { border:1.5px solid #21a9c8; background:linear-gradient(180deg,#f0fdff,#dff7fb); box-shadow:0 0 0 3px rgba(32,169,200,.08),0 8px 17px rgba(32,149,181,.13); }
+    #screen1 .cat-card img { filter:drop-shadow(0 3px 3px rgba(16,37,64,.12)); }
+    #screen1 .cat-card span:last-child { color:#20354e; font-weight:800; }
+    #screen1 .tpl-pill { min-height:46px; border:1px solid #d8e1eb; border-radius:15px; background:linear-gradient(180deg,#fff,#f8fafc); color:#243850; box-shadow:0 3px 9px rgba(24,48,78,.055); transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease; }
+    #screen1 .tpl-pill.active { border:1.5px solid #1799b4; background:linear-gradient(100deg,#e8fbff,#eaf3ff); color:#163554; box-shadow:0 0 0 2px rgba(23,153,180,.07),0 5px 13px rgba(24,93,128,.11); }
+    #screen1 .surface-card { border:1px solid #d8e2ec; border-radius:18px; background:linear-gradient(180deg,#fff,#f8fbfe); box-shadow:0 6px 16px rgba(22,43,70,.07); }
+    #screen1 #customNote { border:1px solid #d3dce7; border-radius:13px; background:#fbfdff; color:#1e334d; }
+    #screen1 label, #screen1 #locationBtn { border:1px solid #d4dee8; border-radius:13px; background:linear-gradient(180deg,#fff,#f0f5fa); color:#29405c; box-shadow:0 2px 6px rgba(22,43,70,.045); }
+    #screen1 .btn-send-alert { min-height:56px; border:1px solid rgba(255,255,255,.72); border-radius:17px; background:linear-gradient(105deg,#058db8 0%,#326ac2 50%,#7656c8 100%); box-shadow:0 9px 21px rgba(46,94,164,.23),inset 0 1px 0 rgba(255,255,255,.25); letter-spacing:.07em; }
+    #screen1 .btn-send-alert:active { transform:translateY(1px) scale(.99); }
+    #screen1 .screen1-footer { color:#445873; }
+    #screen1 .privacy-line { color:#334b65; font-size:11px; }
+    #screen1 .copyright-line { color:#6b7a8e; }
+    @media (max-width:390px) { .language-option { min-width:50px; padding:0 7px; } .language-globe { width:20px; } #screen1 .hero-composition { height:140px; } }
+
+    /* Standalone app presentation on scanner phones. */
+    @media (max-width:767px) {
+      html, body { width:100%; min-height:100%; background:#f3f7fc; }
+      .app-shell { width:100%; max-width:none; min-height:100dvh; padding-bottom:0; border:0; border-radius:0; box-shadow:none; background:#f3f7fc; }
+      .app-header { position:sticky; top:0; min-height:82px; padding:calc(8px + env(safe-area-inset-top)) 12px 8px; z-index:35; }
+      #screen1 { min-height:calc(100dvh - 82px); padding:12px 14px calc(86px + env(safe-area-inset-bottom)); gap:10px; border-radius:0; }
+      #screen1 .btn-send-alert { position:sticky; bottom:calc(10px + env(safe-area-inset-bottom)); z-index:25; margin-top:4px; box-shadow:0 10px 24px rgba(35,89,148,.26),inset 0 1px 0 rgba(255,255,255,.28); }
+      #screen1 .screen1-footer { padding-bottom:env(safe-area-inset-bottom); }
+      #screen2 { min-height:calc(100dvh - 82px); padding-bottom:calc(18px + env(safe-area-inset-bottom)); }
+    }
 </style>
 </head>
 <body>
@@ -352,9 +494,12 @@
         </div>
         <span class="brand-tagline">ONE SCAN. INSTANT CONNECTION.</span>
       </div>
-      <button onclick="toggleLanguage()" class="lang-pill px-3.5 py-2 rounded-full text-xs font-bold flex items-center gap-1.5 active:scale-95 transition">
-        <span class="text-cyan-300">🌐</span> <span id="langLabel">English | தமிழ்</span>
-      </button>
+      <div class="language-switch" role="group" aria-label="Choose language">
+        <span class="language-globe" aria-hidden="true">◎</span>
+        <button type="button" id="langEnglish" class="language-option" onclick="setLanguage('en')" aria-pressed="true">English</button>
+        <span class="language-divider" aria-hidden="true"></span>
+        <button type="button" id="langTamil" class="language-option" onclick="setLanguage('ta')" aria-pressed="false">தமிழ்</button>
+      </div>
     </header>
 
     <!-- SCREEN 1: WELCOME & SEND ALERT -->
@@ -429,19 +574,21 @@
         </div>
         <div class="tip-card"><span class="tip-icon">💡</span><div><strong data-i18n="pingmeTip">PINGME TIP</strong><p id="tipText">Your number stays private.</p></div></div>
         <div class="waiting-connection-art" aria-hidden="true">
-          <span class="connection-node">⌗</span><span class="connection-node">↗</span><span class="connection-node">♥</span>
+          <span class="connection-step"><i class="connection-node">⌗</i><small data-i18n="scanStep">SCAN</small></span>
+          <span class="connection-step"><i class="connection-node">♧</i><small data-i18n="alertStep">ALERT</small></span>
+          <span class="connection-step"><i class="connection-node">☏</i><small data-i18n="replyStep">REPLY</small></span>
         </div>
       </div>
 
       <div id="replyState" class="status-state result-state hidden">
-        <div class="result-mascot-row">
-          <img src="assets/Pingy_ThumbsUp_Reference.png" alt="PingMe mascot giving thumbs up" class="result-mascot mascot-float" />
-          <div class="result-heading"><div class="status-pill success-pill">✓ <span data-i18n="greatNews">GREAT NEWS!</span></div><p data-i18n="ownerReplied">Owner replied!</p></div>
+        <div class="result-heading reply-heading">
+          <div class="reply-check" aria-hidden="true">✓</div>
+          <div class="status-pill success-pill"><span data-i18n="greatNews">GREAT NEWS!</span></div>
+          <p data-i18n="ownerReplied">Owner replied!</p>
         </div>
         <div class="owner-reply-card">
-          <div class="reply-card-title"><span class="whatsapp-dot">☎</span> <span data-i18n="ownerReplyLabel">Owner's Reply</span></div>
+          <div class="reply-card-title"><span class="whatsapp-dot">●</span> <span data-i18n="ownerReplyLabel">Owner's Reply</span><time id="replyTime" class="reply-time"></time></div>
           <p id="respGuidance" class="reply-message">Owner's message will appear here.</p>
-          <time id="replyTime" class="reply-time"></time>
         </div>
         <div class="action-grid">
           <button onclick="openBuyModal()" class="action-button action-buy">🛒 <span data-i18n="buyPingMe">BUY</span></button>
@@ -449,13 +596,21 @@
           <button onclick="openReviewModal()" class="action-button action-rate">★ <span data-i18n="rateUs">RATE</span></button>
           <button onclick="finishSession()" class="action-button action-done">✓ <span data-i18n="done">DONE</span></button>
         </div>
+        <img src="assets/Pingy_ThumbsUp_Reference.png" alt="PingMe mascot giving thumbs up" class="result-mascot reply-mascot mascot-float" />
       </div>
 
       <div id="timeoutState" class="status-state result-state hidden">
-        <div class="result-mascot-row timeout-row">
-          <img src="assets/Pingy_ThankYou_Reference.png" alt="PingMe mascot" class="result-mascot mascot-float" />
-          <div class="result-heading"><div class="status-pill timeout-pill">◷ <span data-i18n="timeUp">TIME'S UP!</span></div><p data-i18n="noReplyShort">No reply yet.</p><p class="timeout-note" data-i18n="sessionEnded">Your session has ended.</p></div>
+        <div class="timeout-heading result-heading">
+          <div class="timeout-clock" aria-hidden="true">◷</div>
+          <div class="status-pill timeout-pill"><span data-i18n="timeUp">TIME'S UP!</span></div>
+          <p data-i18n="noReplyShort">No reply yet.</p>
+          <p class="timeout-note" data-i18n="sessionEnded">Your session has ended.</p>
         </div>
+        <div class="timeout-illustration">
+          <img src="assets/boy-sad.png" alt="PingMe mascot looking concerned" class="timeout-mascot" />
+          <img src="assets/timeout-hourglass.png" alt="3D hourglass" class="timeout-hourglass" />
+        </div>
+        <div class="timeout-notice"><span aria-hidden="true">●</span> <span data-i18n="timeoutHint">You can scan again whenever you need.</span></div>
         <div class="action-grid">
           <button onclick="openBuyModal()" class="action-button action-buy">🛒 <span data-i18n="buyPingMe">BUY</span></button>
           <button onclick="openShareModal()" class="action-button action-share">↗ <span data-i18n="referFriend">SHARE</span></button>
@@ -463,7 +618,6 @@
           <button onclick="finishSession()" class="action-button action-done">✓ <span data-i18n="done">DONE</span></button>
         </div>
       </div>
-
       <div id="doneState" class="status-state done-state hidden">
         <img src="assets/Pingy_ThankYou_Reference.png" alt="Thank you from PingMe" class="done-mascot mascot-float" />
         <div class="status-pill success-pill">✓ <span data-i18n="allDone">ALL DONE!</span></div>
@@ -553,7 +707,7 @@
         welcomeTitle:"LET'S CONNECT!", welcomeSubtitle:"Reach the owner with one scan.", chooseCategory:"Choose a Category", selectMessage:"Select a Message",
         vehicle:"Vehicle", lostFound:"Lost & Found", other:"Other", customPlaceholder:"Add details (optional)...",
         addPhoto:"ADD PHOTO", addLocation:"ADD LOCATION", sendAlert:"SEND ALERT", pingSent:"PING SENT!",
-        waitingReply:"Waiting for reply...", seconds:"SECONDS", pingmeTip:"PINGME TIP",
+        waitingReply:"Waiting for reply...", seconds:"SECONDS", pingmeTip:"PINGME TIP", scanStep:"SCAN", alertStep:"ALERT", replyStep:"REPLY", timeoutHint:"You can scan again whenever you need.",
         privateNumber:"🔒 Your number stays private.", greatNews:"GREAT NEWS!",
         ownerReplied:"Owner replied!", ownerReplyLabel:"Owner's Reply", timeUp:"TIME'S UP!",
         noReplyShort:"No reply yet.", sessionEnded:"Your session has ended.", allDone:"ALL DONE!", sessionClosed:"Session closed.",
@@ -577,7 +731,7 @@
         vehicle:"வாகனம்", lostFound:"தொலைந்தது / கிடைத்தது", other:"மற்றவை", customPlaceholder:"கூடுதல் விவரம் (விருப்பம்)...",
         addPhoto:"புகைப்படம் சேர்க்க", addLocation:"இருப்பிடத்தைப் பகிர", sendAlert:"அறிவிப்பை அனுப்பு",
         pingSent:"அறிவிப்பு அனுப்பப்பட்டது!", waitingReply:"பதிலுக்காக காத்திருக்கிறது...",
-        seconds:"விநாடிகள்", pingmeTip:"PINGME குறிப்பு", privateNumber:"🔒 உங்கள் எண் ரகசியமாக இருக்கும்.",
+        seconds:"விநாடிகள்", pingmeTip:"PINGME குறிப்பு", scanStep:"ஸ்கேன்", alertStep:"அறிவிப்பு", replyStep:"பதில்", timeoutHint:"தேவைப்பட்டால் மீண்டும் ஸ்கேன் செய்யலாம்.", privateNumber:"🔒 உங்கள் எண் ரகசியமாக இருக்கும்.",
         greatNews:"மகிழ்ச்சியான செய்தி!", ownerReplied:"பதில் வந்துவிட்டது!", replyReceived:"பதில் கிடைத்தது!",
         closeSession:"✕ முடிக்கவும்", allDone:"✓ முடிந்தது!", sessionClosed:"அமர்வு முடிந்தது.",
         noMoreMessages:"இந்த அறிவிப்பு முடிந்தது.", buyPingMe:"வாங்க", referFriend:"பகிர்",
@@ -656,7 +810,8 @@
         const key = el.getAttribute("data-i18n-placeholder");
         if (dict[key]) el.placeholder = dict[key];
       });
-      document.getElementById("langLabel").textContent = currentLang === "en" ? "English | தமிழ்" : "தமிழ் | English";
+      document.getElementById("langEnglish").setAttribute("aria-pressed", String(currentLang === "en"));
+      document.getElementById("langTamil").setAttribute("aria-pressed", String(currentLang === "ta"));
       renderTemplates();
       updateAttachmentLabels();
     }
@@ -695,11 +850,17 @@
       renderTemplates();
     }
 
-    function toggleLanguage() {
-      currentLang = currentLang === "en" ? "ta" : "en";
+    function setLanguage(nextLang) {
+      if (nextLang !== "en" && nextLang !== "ta") return;
+      if (nextLang === currentLang) return;
+      currentLang = nextLang;
       const currentIndex = i18n[currentLang].templates[currentCategory].findIndex(x => x.text === selectedReason);
       selectedReason = currentIndex >= 0 ? i18n[currentLang].templates[currentCategory][currentIndex].text : i18n[currentLang].templates[currentCategory][0].text;
       applyLanguage();
+    }
+
+    function toggleLanguage() {
+      setLanguage(currentLang === "en" ? "ta" : "en");
     }
 
     function handlePhoto(e) {
