@@ -278,7 +278,58 @@
       .tip-card { padding:8px 10px; }
     }
 
-  </style>
+  
+    /* PINGME FINAL SECOND-SCREEN VISUAL POLISH v7 — CSS ONLY. First screen and all behavior remain untouched. */
+    #screen2 { position:relative; overflow:hidden; }
+    #screen2::before { content:""; position:absolute; inset:0; pointer-events:none; background:radial-gradient(ellipse at 50% 18%,rgba(28,166,255,.16),transparent 43%),radial-gradient(ellipse at 50% 88%,rgba(155,74,255,.15),transparent 42%); }
+    #screen2 > .status-state { position:relative; z-index:1; }
+
+    /* Waiting: use the lower space for a refined connection journey strip. */
+    #waitingState { justify-content:space-between; gap:14px; padding:9px 0 16px; }
+    #waitingState .waiting-connection-art { width:100%; min-height:82px; margin-top:2px; padding:12px 18px 10px; border-radius:22px; display:flex; align-items:center; justify-content:space-around; position:relative; background:linear-gradient(110deg,rgba(9,145,218,.20),rgba(95,76,219,.24) 52%,rgba(207,67,177,.17)); border:1px solid rgba(125,211,252,.30); box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 9px 24px rgba(0,0,0,.18); }
+    #waitingState .waiting-connection-art::before { content:""; position:absolute; left:20%; right:20%; top:29px; height:2px; background:linear-gradient(90deg,#38bdf8,#a78bfa,#f0abfc); box-shadow:0 0 12px rgba(129,140,248,.65); }
+    #waitingState .connection-node { z-index:1; width:42px; height:42px; display:flex; align-items:center; justify-content:center; border-radius:14px; background:linear-gradient(145deg,rgba(29,78,216,.92),rgba(91,54,180,.94)); border:1px solid rgba(191,219,254,.65); color:#fff; font-size:20px; box-shadow:0 5px 15px rgba(0,0,0,.25),0 0 16px rgba(59,130,246,.25); }
+    #waitingState .connection-node::after { position:absolute; top:60px; color:#dbeafe; font-size:9px; font-weight:900; letter-spacing:.12em; white-space:nowrap; }
+    #waitingState .connection-node:nth-child(1)::after { content:"SCAN"; }
+    #waitingState .connection-node:nth-child(2)::after { content:"ALERT"; }
+    #waitingState .connection-node:nth-child(3)::after { content:"REPLY"; }
+    #waitingState .tip-card { width:100%; box-shadow:0 8px 22px rgba(0,0,0,.18),0 0 18px rgba(56,189,248,.08); }
+    #waitingState .waiting-visual { flex:0 0 auto; }
+
+    /* Reply and timeout: balanced vertical rhythm, premium cards, and a branded footer ribbon. */
+    #replyState, #timeoutState { height:100%; min-height:100%; justify-content:space-between; gap:16px; padding:12px 2px 16px; }
+    #replyState::before, #timeoutState::before { width:310px; height:310px; top:4%; background:radial-gradient(circle,rgba(34,211,238,.20),rgba(99,102,241,.12) 48%,transparent 73%); }
+    #replyState::after, #timeoutState::after { content:"PRIVATE  •  SECURE  •  SIMPLE"; width:100%; height:auto; min-height:42px; position:relative; inset:auto; display:flex; align-items:center; justify-content:center; margin-top:2px; border-radius:15px; border:1px solid rgba(125,211,252,.25); background:linear-gradient(100deg,rgba(14,165,233,.13),rgba(99,102,241,.18),rgba(217,70,239,.12)); color:#cfe8ff; font-size:10px; font-weight:1000; letter-spacing:.18em; box-shadow:inset 0 1px 0 rgba(255,255,255,.08); }
+    #replyState .result-mascot-row, #timeoutState .result-mascot-row { min-height:190px; flex:0 0 auto; }
+    #replyState .owner-reply-card { flex:1 1 auto; min-height:145px; display:flex; flex-direction:column; justify-content:center; }
+    #replyState .reply-message { min-height:64px; display:flex; align-items:center; }
+    #replyState .action-grid, #timeoutState .action-grid { flex:0 0 auto; gap:12px; }
+    #replyState .action-button, #timeoutState .action-button { min-height:64px; font-size:18px; border-radius:19px; }
+    #timeoutState .result-mascot-row { min-height:220px; }
+    #timeoutState .result-heading p { margin-top:12px; }
+    #timeoutState .timeout-note { display:inline-block; padding:9px 13px; border-radius:13px; background:rgba(255,255,255,.08); border:1px solid rgba(196,181,253,.18); }
+    @media (max-width:390px) {
+      #waitingState { gap:11px; padding:7px 0 12px; }
+      #waitingState .waiting-connection-art { min-height:76px; padding-left:12px; padding-right:12px; }
+      #waitingState .connection-node::after { top:57px; }
+      #replyState, #timeoutState { gap:12px; padding:8px 0 11px; }
+      #replyState .result-mascot-row, #timeoutState .result-mascot-row { min-height:150px; }
+      #replyState .owner-reply-card { min-height:125px; }
+      #replyState .action-button, #timeoutState .action-button { min-height:56px; }
+      #replyState::after, #timeoutState::after { min-height:36px; font-size:9px; }
+    }
+    @media (max-height:760px) and (max-width:767px) {
+      #waitingState { gap:8px; }
+      #waitingState .waiting-connection-art { min-height:68px; }
+      #waitingState .connection-node::after { top:53px; }
+      #replyState, #timeoutState { gap:9px; }
+      #replyState .result-mascot-row, #timeoutState .result-mascot-row { min-height:132px; }
+      #replyState .result-mascot, #timeoutState .result-mascot { height:128px; }
+      #replyState .owner-reply-card { min-height:112px; }
+      #replyState .action-button, #timeoutState .action-button { min-height:51px; }
+    }
+
+</style>
 </head>
 <body>
 
