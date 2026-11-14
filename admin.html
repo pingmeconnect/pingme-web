@@ -180,7 +180,7 @@
         </div>
 
         <div class="saas-card p-5 space-y-4">
-          <h3 class="font-extrabold text-slate-900 text-base">👥 Recent Registered Customers (Click row to view profile)</h3>
+          <h3 class="font-extrabold text-slate-900 text-base">👥 Recent Registered Customers (Click row to view profile &amp; QR)</h3>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-sm">
               <thead class="bg-slate-100 text-slate-700 text-xs uppercase font-extrabold">
@@ -359,8 +359,10 @@
         </tr>
       `).join("");
 
-      document.getElementById("customerTableBody").innerHTML = rowsHtml;
-      document.getElementById("dashTableBody").innerHTML = rowsHtml;
+      const dashBody = document.getElementById("dashTableBody");
+      const custBody = document.getElementById("customerTableBody");
+      if (dashBody) dashBody.innerHTML = rowsHtml;
+      if (custBody) custBody.innerHTML = rowsHtml;
     }
 
     function openCustomerModal(id) {
@@ -369,7 +371,7 @@
       selectedCustId = id;
 
       document.getElementById("mCustTitle").textContent = c.name;
-      document.getElementById("mCustIdSub.textContent") = c.id;
+      document.getElementById("mCustIdSub").textContent = c.id;
       document.getElementById("mModalCredits").textContent = c.credits;
       document.getElementById("mModalScans").textContent = c.scans;
       document.getElementById("editName").value = c.name;
