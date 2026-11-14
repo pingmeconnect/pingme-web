@@ -45,13 +45,16 @@
 
   <!-- ADMIN LOGIN VIEW -->
   <div id="loginView" class="max-w-md mx-auto py-20">
-    <div class="saas-card p-8 space-y-5 bg-white shadow-xl">
-      <div class="text-center space-y-1">
-        <h1 class="text-2xl font-extrabold text-slate-900">PingMe Admin Panel</h1>
-        <p class="text-xs text-slate-500">Secure Customer &amp; QR Management SaaS</p>
+    <div class="saas-card p-8 space-y-5 bg-white shadow-xl text-center">
+      <div class="flex justify-center mb-2">
+        <div class="bg-slate-900 px-4 py-2 rounded-2xl border border-indigo-500/30">
+          <img src="assets/pingme-logo.png" alt="PingMe" class="h-10 object-contain" />
+        </div>
       </div>
+      <h1 class="text-2xl font-extrabold text-slate-900">Admin Panel Login</h1>
+      <p class="text-xs text-slate-500">Secure Customer &amp; QR Management SaaS</p>
       <div>
-        <label class="block text-xs font-bold text-slate-700 mb-1">Admin Password</label>
+        <label class="block text-xs font-bold text-slate-700 mb-1 text-left">Admin Password</label>
         <input type="password" id="passInput" class="pm-input" placeholder="Enter admin password" onkeyup="if(event.key==='Enter') doLogin()" />
       </div>
       <button onclick="doLogin()" class="w-full py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold shadow-lg transition">Unlock Dashboard</button>
@@ -61,29 +64,30 @@
   <!-- MAIN SAAS DASHBOARD VIEW -->
   <div id="appView" class="hidden max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
     
-    <!-- SIDEBAR -->
+    <!-- SIDEBAR WITH LOGO & TAGLINE -->
     <aside class="lg:col-span-3 sidebar rounded-3xl p-4 min-h-[calc(100dvh-48px)] flex flex-col justify-between shadow-2xl">
       <div class="space-y-6">
         <div class="flex items-center gap-3 px-2 pt-2">
-          <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-black text-lg">P</div>
+          <div class="bg-white px-3 py-1.5 rounded-2xl shadow-md border border-slate-200">
+            <img src="assets/pingme-logo.png" alt="PingMe" class="h-8 object-contain" />
+          </div>
           <div>
-            <div class="font-extrabold text-white text-base">PingMe</div>
-            <div class="text-[10px] text-indigo-300 font-bold uppercase tracking-wider">Smart QR Connect</div>
+            <div class="text-[10px] text-indigo-300 font-extrabold uppercase tracking-widest">ONE SCAN. INSTANT CONNECTION.</div>
           </div>
         </div>
 
         <nav class="space-y-1">
-          <button class="nav-btn active" onclick="showTab('dashboard')"><span>📊</span> Dashboard</button>
-          <button class="nav-btn" onclick="showTab('customers')"><span>👥</span> Customers</button>
-          <button class="nav-btn" onclick="showTab('logs')"><span>📷</span> Scan Logs</button>
-          <button class="nav-btn" onclick="showTab('messages')"><span>💬</span> Send WhatsApp</button>
-          <button class="nav-btn" onclick="showTab('settings')"><span>⚙️</span> Settings</button>
+          <button class="nav-btn active" onclick="switchTab('dashboard', this)"><span>📊</span> Dashboard</button>
+          <button class="nav-btn" onclick="switchTab('customers', this)"><span>👥</span> Customers</button>
+          <button class="nav-btn" onclick="switchTab('logs', this)"><span>📷</span> Scan Logs</button>
+          <button class="nav-btn" onclick="switchTab('messages', this)"><span>💬</span> Send WhatsApp</button>
+          <button class="nav-btn" onclick="switchTab('settings', this)"><span>⚙️</span> Settings</button>
         </nav>
       </div>
 
-      <div class="p-3 rounded-2xl bg-white/5 border border-white/10 text-xs space-y-2">
+      <div class="p-3 rounded-2xl bg-white/5 border border-white/10 text-xs space-y-1">
         <div class="font-bold text-emerald-400 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> System Online</div>
-        <div class="text-slate-400 text-[11px]">Protected by Cloudflare &amp; Supabase backend.</div>
+        <div class="text-slate-400 text-[11px]">Cloudflare &amp; Supabase active.</div>
       </div>
     </aside>
 
@@ -91,10 +95,13 @@
     <main class="lg:col-span-9 space-y-6">
       
       <!-- TOP HEADER BAR -->
-      <header class="saas-card px-6 py-3 flex items-center justify-between">
-        <div>
-          <h1 class="text-xl font-extrabold text-slate-900">Dashboard Overview</h1>
-          <p class="text-xs text-slate-500">Manage customers, active QRs, credits, and instant alerts.</p>
+      <header class="saas-card px-6 py-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-extrabold text-lg">👑</div>
+          <div>
+            <h1 class="text-lg font-extrabold text-slate-900">Admin Control Center</h1>
+            <p class="text-xs text-slate-500">Manage customers, active QR codes, credits, and instant WhatsApp alerts.</p>
+          </div>
         </div>
         <div class="flex items-center gap-3">
           <div class="text-right hidden sm:block">
@@ -124,7 +131,7 @@
         <div class="saas-card p-4 flex items-center gap-4">
           <div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl font-bold">📷</div>
           <div>
-            <div id="statScans" class="text-2xl font-extrabold text-slate-900">0</div>
+            <div id="statScans" class="text-2xl font-extrabold text-slate-900">37</div>
             <div class="text-xs font-bold text-slate-500">Scans Today</div>
           </div>
         </div>
@@ -220,7 +227,6 @@
   </div>
 
   <script>
-    const API_BASE = "https://pingme-api.pingmeconnect.workers.dev";
     let customers = [
       { id: "PM000249", name: "Karthik R", mobile: "919876543210", email: "karthik@email.com", credits: 360, expiry: "13 Nov 2027", status: "Active" },
       { id: "PM000248", name: "Priya S", mobile: "919840277123", email: "priya@email.com", credits: 120, expiry: "10 Feb 2027", status: "Active" },
@@ -252,7 +258,6 @@
     function initDashboard() {
       document.getElementById("statTotalCust").textContent = customers.length;
       document.getElementById("statActiveQrs").textContent = customers.filter(c => c.status === "Active").length;
-      document.getElementById("statScans").textContent = "37";
       document.getElementById("statCredits").textContent = customers.reduce((sum, c) => sum + c.credits, 0).toLocaleString();
       renderTable();
       generateQrBox("https://pingmeconnect.in/?t=PM000249");
@@ -321,13 +326,14 @@
       document.getElementById("regAddress").value = "";
 
       generateQrBox(`https://pingmeconnect.in/?t=${nextId}`);
-      document.getElementById("qrCaption.textContent") = `${nextId} • ${name}`;
+      document.getElementById("qrCaption").textContent = `${nextId} • ${name}`;
       initDashboard();
       alert(`Customer ${name} registered successfully with 360 default credits and Inactive status!`);
     }
 
-    function showTab(tab) {
-      alert("Switching to tab: " + tab);
+    function switchTab(tab, btn) {
+      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+      if (btn) btn.classList.add("active");
     }
   </script>
 </body>
