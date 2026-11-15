@@ -1,0 +1,46 @@
+{
+  "feature": "PingMe real-life stories",
+  "story_order": [
+    {
+      "name": "Vehicle blocked",
+      "files": [
+        "vehicle_01_blocked.png",
+        "vehicle_02_qr_found.png",
+        "vehicle_03_scan.png",
+        "vehicle_04_alert_sent.png",
+        "vehicle_05_owner_moves.png",
+        "vehicle_06_buy.png"
+      ]
+    },
+    {
+      "name": "Lost & found",
+      "files": [
+        "bag_01_found.png",
+        "bag_02_qr_tag.png",
+        "bag_03_scan.png",
+        "bag_04_alert_sent.png",
+        "bag_05_returned.png",
+        "bag_06_buy.png"
+      ]
+    },
+    {
+      "name": "Lost pet",
+      "files": [
+        "pet_01_family.png",
+        "pet_02_missing.png",
+        "pet_03_found.png",
+        "pet_04_scan.png",
+        "pet_05_owner_alert.png",
+        "pet_06_reunion.png",
+        "pet_07_message.png"
+      ]
+    }
+  ],
+  "captions": "Bilingual captions are embedded in index.html in pingMeStories. English/Tamil follows the app language toggle.",
+  "notes": [
+    "Story images are display-only; they do not create QR codes or send alerts.",
+    "The HOW PINGME WORKS demo is isolated from real alert submission.",
+    "Original admin.html and existing assets are retained.",
+    "The waiting countdown and owner-reply polling remain in the original code; story rotation stops when waiting timers stop."
+  ]
+}
