@@ -863,6 +863,56 @@
   #waitingStoryModule .story-demo-button { min-height:34px !important; }
 }
 
+
+/* FINAL PATCH: natural-size story frames, language-consistent captions and centred WHY PINGME action. */
+#waitingStoryModule { align-items:stretch !important; }
+#waitingStoryModule .story-topline, #waitingStoryModule #storyCount { display:none !important; }
+#waitingStoryModule .story-image-frame {
+  flex:0 0 auto !important;
+  align-self:center !important;
+  display:block !important;
+  position:relative !important;
+  width:auto !important;
+  height:auto !important;
+  max-width:100% !important;
+  min-height:0 !important;
+  margin:0 auto !important;
+  overflow:hidden !important;
+  background:transparent !important;
+  border:0 !important;
+  border-radius:12px !important;
+}
+#waitingStoryModule .story-image-frame::before { display:none !important; content:none !important; }
+#waitingStoryModule .story-image-frame img {
+  display:block !important;
+  width:auto !important;
+  height:auto !important;
+  max-width:100% !important;
+  max-height:min(34vh,285px) !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  margin:0 auto !important;
+  filter:none !important;
+  border-radius:12px !important;
+}
+#waitingStoryModule .story-caption { width:100% !important; text-align:center !important; }
+#waitingStoryModule .story-controls { display:flex !important; flex-direction:column !important; align-items:center !important; justify-content:center !important; gap:8px !important; width:100% !important; }
+#waitingStoryModule .story-controls .story-progress { width:100% !important; flex:0 0 3px !important; }
+#waitingStoryModule .story-demo-button {
+  align-self:center !important; display:inline-flex !important; align-items:center !important; justify-content:center !important;
+  min-height:40px !important; padding:0 24px !important; border-radius:999px !important;
+  border:2px solid rgba(255,255,255,.95) !important;
+  background:linear-gradient(100deg,#06b6d4,#4f46e5 52%,#db2777) !important;
+  color:#fff !important; font-size:14px !important; font-weight:1000 !important;
+  box-shadow:0 0 0 3px rgba(56,189,248,.14),0 7px 20px rgba(79,70,229,.4) !important;
+}
+#waitingStoryModule .story-buy-overlay[hidden] { display:none !important; }
+#waitingStoryModule .story-buy-overlay:not([hidden]) { display:block !important; }
+@media(max-height:700px) {
+  #waitingStoryModule .story-image-frame img { max-height:29vh !important; }
+  #waitingStoryModule .story-demo-button { min-height:35px !important; }
+}
+
 </style>
 </head>
 <body>
@@ -1320,13 +1370,8 @@
     let demoStoryIndex = 0;
     let demoStoryInterval = null;
     function storyText(item){
-      const imageHasTamilText = new Set([
-        "bag_01_found.png","bag_02_qr_tag.png","bag_04_alert_sent.png",
-        "bag_05_returned.png","bag_06_buy.png",
-        "pet_01_family.png","pet_02_missing.png","pet_04_scan.png",
-        "pet_05_owner_alert.png","pet_06_reunion.png","pet_07_message.png"
-      ]).has(item[0]);
-      return (currentLang === "ta" || imageHasTamilText) ? item[3] : item[2];
+      // Captions always follow the language selected in the app.
+      return currentLang === "ta" ? item[3] : item[2];
     }
     function storyLabel(item){
       if(currentLang === "ta") return item[1] === "vehicle" ? "வாகன உதவி" : item[1] === "bag" ? "தொலைந்த பொருள்" : "செல்லப் பிராணி";
@@ -1344,13 +1389,15 @@
         const frame = img.closest(".story-image-frame");
         const module = document.getElementById("waitingStoryModule");
         if(!frame || !module || !img.naturalWidth || !img.naturalHeight) return;
-        const availableWidth = Math.max(120, module.clientWidth - 16);
-        const maxHeight = Math.min(window.innerHeight * 0.36, 320);
+        const availableWidth = Math.max(120, module.clientWidth - 18);
+        const maxHeight = Math.min(window.innerHeight * 0.34, 285);
         const ratio = img.naturalWidth / img.naturalHeight;
-        const displayHeight = Math.min(maxHeight, availableWidth / ratio);
-        const displayWidth = displayHeight * ratio;
+        let displayWidth = Math.min(availableWidth, maxHeight * ratio);
+        let displayHeight = displayWidth / ratio;
         frame.style.width = Math.round(displayWidth) + "px";
         frame.style.height = Math.round(displayHeight) + "px";
+        img.style.width = "100%";
+        img.style.height = "100%";
       };
       img.src = "assets/pingme-stories/" + item[0];
       const frame = img.closest(".story-image-frame");
@@ -1359,7 +1406,7 @@
       img.alt = storyLabel(item);
       cap.textContent = storyText(item);
       const demoButton = document.querySelector("#waitingStoryModule .story-demo-button");
-      if(demoButton) demoButton.textContent = currentLang === "ta" ? "PINGME எப்படி வேலை செய்கிறது?" : "HOW PINGME WORKS";
+      if(demoButton) demoButton.textContent = currentLang === "ta" ? "ஏன் PINGME?" : "WHY PINGME?";
       if(count) count.textContent = (storyIndex+1) + "/" + pingMeStories.length;
       if(fill) fill.style.width = (((storyIndex+1)/pingMeStories.length)*100) + "%";
     }
@@ -1383,7 +1430,7 @@
       document.getElementById("storyDemoImage").alt = storyLabel(item);
       document.getElementById("storyDemoCaption").textContent = storyText(item);
       document.getElementById("storyDemoCount").textContent = (demoStoryIndex+1) + "/" + pingMeStories.length;
-      document.getElementById("storyDemoTitle").textContent = currentLang === "ta" ? "PINGME எப்படி வேலை செய்கிறது?" : "HOW PINGME WORKS";
+      document.getElementById("storyDemoTitle").textContent = currentLang === "ta" ? "ஏன் PINGME?" : "WHY PINGME?";
       document.getElementById("storyDemoNote").textContent = currentLang === "ta" ? "இது ஒரு டெமோ மட்டும். உண்மையான அலர்ட் எதுவும் அனுப்பப்படாது." : "This is a demo only. It will not send an alert or change your current request.";
       document.getElementById("storyDemoNext").textContent = demoStoryIndex === pingMeStories.length-1 ? (currentLang === "ta" ? "முடிக்கவும் ✓" : "FINISH ✓") : (currentLang === "ta" ? "அடுத்து →" : "NEXT →");
     }
