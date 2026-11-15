@@ -383,6 +383,127 @@
       #waitingState .tip-card { min-height:76px; }
     }
 
+
+
+    /* PINGME ROYAL FINISH — responsive layout polish; existing workflow remains unchanged. */
+    .app-shell { min-height:100dvh; }
+    #screen1 { flex:1 1 auto; min-height:0; justify-content:space-between; gap:clamp(8px,1.5vh,14px); }
+    #screen1 > * { flex-shrink:0; }
+    #screen1 .hero-composition {
+      height:clamp(178px,23vh,220px); min-height:168px; flex:0 0 auto; isolation:isolate;
+      background:radial-gradient(circle at 48% 45%,#fff 0%,#e4f6ff 44%,#e8dcff 76%,#ffe8f4 100%);
+      border:1.5px solid rgba(255,255,255,.98);
+      box-shadow:0 10px 28px rgba(26,72,150,.20),inset 0 1px 0 #fff;
+    }
+    #screen1 .hero-composition::before {
+      content:""; position:absolute; inset:9px 10px; border:1px solid rgba(91,104,220,.13);
+      border-radius:17px; pointer-events:none; z-index:0;
+    }
+    #screen1 .hero-mascot {
+      z-index:1; left:3%; bottom:0; width:70%; height:100%; object-fit:contain;
+      object-position:center bottom; transform:none; filter:drop-shadow(0 7px 10px rgba(30,64,130,.16));
+    }
+    #screen1 .hero-use-cases {
+      z-index:2; right:12px; top:50%; transform:translateY(-50%); display:grid;
+      grid-template-columns:repeat(2,46px); gap:9px; font-size:23px; filter:none;
+    }
+    #screen1 .hero-use-cases span {
+      width:46px; height:46px; display:flex; align-items:center; justify-content:center;
+      border-radius:50%; background:linear-gradient(145deg,#fff,#eaf2ff);
+      border:1px solid rgba(99,102,241,.22); box-shadow:0 5px 13px rgba(35,60,130,.15),inset 0 1px 0 #fff;
+    }
+    #screen1 .hero-qr-badge {
+      position:absolute; z-index:3; left:58%; bottom:10px; width:56px; height:66px;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+      border-radius:11px; background:linear-gradient(145deg,#fff,#eff6ff); color:#14316d;
+      border:2px solid #fff; box-shadow:0 7px 17px rgba(20,40,100,.24); transform:rotate(7deg);
+      font-size:8px; font-weight:1000; letter-spacing:.08em;
+    }
+    #screen1 .hero-qr-pattern { font-size:37px; line-height:1; color:#142b63; }
+    #screen1 .category-block, #screen1 .message-block, #screen1 .surface-card,
+    #screen1 #sendBtn, #screen1 .screen1-footer { flex-shrink:0; }
+    #screen1 .category-block { margin-top:0; }
+    #screen1 .cat-card { min-height:76px; }
+    #screen1 .surface-card { padding:9px 10px; }
+    #screen1 #customNote { min-height:40px; }
+    #screen1 .btn-send-alert { min-height:54px; }
+
+    /* Make each status state occupy the available app viewport, removing the empty lower panel. */
+    #screen2 { flex:1 1 auto; min-height:0; padding:clamp(12px,2vh,18px); }
+    #screen2:not(.hidden) { display:flex; }
+    #screen2.hidden { display:none !important; }
+    #screen2 > .status-state:not(.hidden) { display:flex; flex:1 1 auto; width:100%; height:100%; min-height:0; }
+    #screen2 > .status-state.hidden { display:none !important; }
+    #waitingState { justify-content:space-between; min-height:0; gap:clamp(9px,1.7vh,15px); padding:8px 0 12px; }
+    #waitingState .status-subtitle { margin-top:-5px; }
+    #waitingState .waiting-visual { flex:0 0 auto; min-height:clamp(145px,21vh,190px); }
+    #waitingState .waiting-mascot { width:46%; max-width:205px; height:clamp(145px,21vh,190px); object-fit:contain; object-position:center bottom; }
+    #waitingState .countdown-ring { width:clamp(118px,17vh,146px); height:clamp(118px,17vh,146px); flex-basis:clamp(118px,17vh,146px); }
+    #waitingState .tip-card { min-height:84px; }
+    #waitingState .waiting-connection-art { flex:0 0 auto; }
+    #replyState, #timeoutState { height:100%; min-height:0; justify-content:space-between; gap:clamp(10px,1.8vh,17px); padding:8px 2px 12px; }
+    #replyState .result-mascot-row, #timeoutState .result-mascot-row { min-height:clamp(142px,21vh,190px); flex:0 0 auto; }
+    #replyState .result-mascot, #timeoutState .result-mascot { height:clamp(132px,19vh,174px); object-fit:contain; }
+    #replyState .owner-reply-card { flex:1 1 auto; min-height:118px; }
+    #replyState .action-grid, #timeoutState .action-grid { flex:0 0 auto; }
+    #replyState .action-button, #timeoutState .action-button { min-height:clamp(52px,7vh,62px); }
+    #replyState::after, #timeoutState::after { flex:0 0 40px; }
+
+    .reply-card-title { justify-content:space-between; gap:10px; }
+    .reply-card-label { display:inline-flex; align-items:center; gap:8px; min-width:0; }
+    .reply-sound-toggle {
+      flex:0 0 42px; width:42px; height:42px; display:inline-flex; align-items:center; justify-content:center;
+      border-radius:50%; color:#fff; font-size:21px; line-height:1;
+      background:linear-gradient(145deg,#16b86a,#078447); border:2px solid #b8f5d4;
+      box-shadow:0 4px 12px rgba(16,150,90,.24),inset 0 1px 3px rgba(255,255,255,.35);
+      cursor:pointer; transition:transform .16s ease,filter .16s ease;
+    }
+    .reply-sound-toggle:active { transform:scale(.94); }
+    .reply-sound-toggle.is-muted { background:linear-gradient(145deg,#64748b,#334155); border-color:#cbd5e1; box-shadow:0 4px 12px rgba(15,23,42,.18); }
+    .reply-sound-toggle:focus-visible { outline:3px solid #67e8f9; outline-offset:3px; }
+
+    @media (max-width:390px) {
+      #screen1 { gap:7px; padding:9px 11px 8px; }
+      #screen1 .hero-composition { height:clamp(150px,20vh,178px); min-height:148px; }
+      #screen1 .hero-use-cases { right:8px; grid-template-columns:repeat(2,39px); gap:6px; }
+      #screen1 .hero-use-cases span { width:39px; height:39px; font-size:20px; }
+      #screen1 .hero-qr-badge { left:56%; width:48px; height:58px; }
+      #screen1 .hero-qr-pattern { font-size:32px; }
+      #screen1 .cat-card { min-height:66px; }
+      #screen1 .tpl-pill { min-height:34px; }
+      #screen1 .surface-card { padding:7px; }
+      #screen1 .btn-send-alert { min-height:50px; }
+      #screen2 { padding:10px; }
+      #waitingState .tip-card { min-height:74px; padding:10px 11px; }
+      #waitingState .tip-card p { font-size:13px; }
+      #waitingState .waiting-connection-art { min-height:70px; }
+      #replyState, #timeoutState { gap:9px; }
+      #replyState .result-mascot-row, #timeoutState .result-mascot-row { min-height:128px; }
+      #replyState .result-mascot, #timeoutState .result-mascot { height:120px; }
+      #replyState .owner-reply-card { min-height:106px; padding:10px 11px; }
+      #replyState .reply-message { min-height:54px; font-size:16px; }
+      #replyState .action-button, #timeoutState .action-button { min-height:48px; font-size:16px; }
+      #replyState::after, #timeoutState::after { flex-basis:34px; font-size:9px; }
+      .reply-sound-toggle { width:38px; height:38px; flex-basis:38px; }
+    }
+    @media (max-height:700px) and (max-width:767px) {
+      #screen1 .hero-composition { height:138px; min-height:132px; }
+      #screen1 .cat-card { min-height:58px; }
+      #screen1 .btn-send-alert { min-height:46px; }
+      #waitingState { gap:6px; }
+      #waitingState .waiting-visual { min-height:118px; }
+      #waitingState .waiting-mascot { height:118px; }
+      #waitingState .countdown-ring { width:108px; height:108px; flex-basis:108px; }
+      #waitingState .countdown-ring span { font-size:43px; }
+      #waitingState .tip-card { min-height:66px; }
+      #waitingState .waiting-connection-art { min-height:60px; }
+      #replyState, #timeoutState { gap:7px; }
+      #replyState .result-mascot-row, #timeoutState .result-mascot-row { min-height:112px; }
+      #replyState .result-mascot, #timeoutState .result-mascot { height:104px; }
+      #replyState .owner-reply-card { min-height:96px; }
+      #replyState .action-button, #timeoutState .action-button { min-height:44px; }
+    }
+
 </style>
 </head>
 <body>
@@ -415,10 +536,11 @@
     <main id="screen1" class="flex-1 flex flex-col justify-between p-4 space-y-3">
       <!-- Official PingMe welcome mascot artwork -->
       <div class="hero-composition">
-        <img src="assets/Pingy_Welcome_Reference.png" alt="PingMe mascot holding a QR tag" class="hero-mascot" />
+        <img src="assets/Pingy_Waiting_Reference.png" alt="PingMe mascot welcoming you" class="hero-mascot" />
         <div class="hero-use-cases" aria-label="PingMe use cases">
-          <span>🚗</span><span>🏍️</span><span>🧳</span>
+          <span title="Vehicle">🚗</span><span title="Two-wheeler">🏍️</span><span title="Keys">🔑</span><span title="Luggage">🧳</span>
         </div>
+        <div class="hero-qr-badge" aria-hidden="true"><span class="hero-qr-pattern">▦</span><span>ONE QR</span></div>
       </div>
 
       <!-- Category cards are self-explanatory; no extra heading -->
@@ -493,7 +615,10 @@
           <div class="result-heading"><div class="status-pill success-pill">✓ <span data-i18n="greatNews">GREAT NEWS!</span></div><p data-i18n="ownerReplied">Owner replied!</p></div>
         </div>
         <div class="owner-reply-card">
-          <div class="reply-card-title"><span class="whatsapp-dot">☎</span> <span data-i18n="ownerReplyLabel">Owner's Reply</span></div>
+          <div class="reply-card-title">
+            <span class="reply-card-label"><span class="whatsapp-dot">☎</span> <span data-i18n="ownerReplyLabel">Owner's Reply</span></span>
+            <button type="button" id="replySoundToggle" class="reply-sound-toggle" onclick="toggleReplySound()" aria-label="Mute reply audio" aria-pressed="true" title="Sound on">🔊</button>
+          </div>
           <p id="respGuidance" class="reply-message">Owner's message will appear here.</p>
           <time id="replyTime" class="reply-time"></time>
         </div>
@@ -584,6 +709,7 @@
     let pollInterval = null;
     let pingmeAudioContext = null;
     let pingmeReplyAlertPlayed = false;
+    let pingmeSoundEnabled = true;
 
     let tipInterval = null;
     let secondsLeft = 180;
@@ -935,9 +1061,32 @@
       }
     }
 
+    function updateReplySoundButton() {
+      const button = document.getElementById("replySoundToggle");
+      if (!button) return;
+      button.textContent = pingmeSoundEnabled ? "🔊" : "🔇";
+      button.classList.toggle("is-muted", !pingmeSoundEnabled);
+      button.setAttribute("aria-pressed", String(pingmeSoundEnabled));
+      button.setAttribute("aria-label", pingmeSoundEnabled ? "Mute reply audio" : "Turn reply audio on");
+      button.title = pingmeSoundEnabled ? "Sound on — tap to mute" : "Sound off — tap to unmute";
+    }
+
+    function toggleReplySound() {
+      pingmeSoundEnabled = !pingmeSoundEnabled;
+      if (!pingmeSoundEnabled) {
+        try { if ("speechSynthesis" in window) window.speechSynthesis.cancel(); } catch (err) {}
+        try { if (pingmeAudioContext && pingmeAudioContext.state === "running") pingmeAudioContext.suspend(); } catch (err) {}
+      } else {
+        // Enabling sound affects future playback only; it does not unexpectedly replay an old alert.
+        try { if (pingmeAudioContext && pingmeAudioContext.state === "suspended") pingmeAudioContext.resume(); } catch (err) {}
+      }
+      updateReplySoundButton();
+    }
+
     function playPingMeReplyAlert(replyText) {
       if (pingmeReplyAlertPlayed) return;
       pingmeReplyAlertPlayed = true;
+      if (!pingmeSoundEnabled) return;
 
       try { if (navigator.vibrate) navigator.vibrate([180, 90, 180]); } catch (err) {}
       playPingMeSignatureChime();
@@ -953,6 +1102,7 @@
       // Speak the attention announcement first, then automatically read the owner's reply.
       // If browser speech is unavailable or blocked, the chime and on-screen reply still work.
       window.setTimeout(() => {
+        if (!pingmeSoundEnabled) return;
         if (!speakPingMeText(announcement, speakReply)) {
           // The visual reply card and signature chime remain the fallback when speech is unavailable.
         }
@@ -1129,6 +1279,7 @@
       }, 1600);
       selectedReason = i18n.en.templates.vehicle[0].text;
       applyLanguage();
+      updateReplySoundButton();
       if (sessionStorage.getItem("pingme_session_closed") === "true") {
         sessionClosed = true;
         showStatusState("doneState");
