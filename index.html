@@ -504,7 +504,137 @@
       #replyState .action-button, #timeoutState .action-button { min-height:44px; }
     }
 
-</style>
+
+
+    /* PINGME APPROVED ROYAL LAYOUT — final responsive fit overrides */
+    html, body { width:100%; height:100%; min-height:100%; overflow:hidden; }
+    body { display:flex; align-items:center; justify-content:center; padding:0; background:radial-gradient(ellipse at 50% 0%,#173d82 0%,#081a3b 48%,#03091c 100%); }
+    .app-shell { width:min(100%,390px); height:100dvh; min-height:0; max-width:390px; margin:0 auto; overflow:hidden; border-radius:0; display:flex; flex-direction:column; }
+    .app-header { flex:0 0 78px; min-height:78px; padding:7px 14px 6px; }
+    .brand-pill img { height:43px !important; }
+    .brand-tagline { font-size:9px; margin-left:8px; }
+    #screen1 { flex:1 1 auto; height:auto; min-height:0; overflow:hidden; padding:10px 12px 8px; gap:clamp(5px,1.05vh,10px); justify-content:space-between; }
+    #screen1 > * { flex-shrink:0; }
+    #screen1 .hero-composition { height:clamp(150px,20vh,190px); min-height:145px; flex:0 0 auto; position:relative; overflow:hidden; border-radius:22px; background:radial-gradient(circle at 45% 45%,#fff 0%,#e1f5ff 45%,#e9ddff 76%,#ffe8f3 100%); border:1.5px solid #fff; box-shadow:0 9px 25px rgba(26,72,150,.20),inset 0 1px 0 #fff; }
+    #screen1 .hero-composition::before { content:""; position:absolute; inset:8px; border:1px solid rgba(91,104,220,.14); border-radius:16px; pointer-events:none; z-index:0; }
+    #screen1 .hero-mascot { position:absolute; z-index:1; left:1%; bottom:0; width:78%; height:100%; object-fit:contain; object-position:center bottom; transform:none; filter:drop-shadow(0 6px 10px rgba(30,64,130,.14)); }
+    #screen1 .hero-use-cases { position:absolute; z-index:2; right:9px; top:50%; transform:translateY(-50%); display:grid; grid-template-columns:repeat(2,clamp(34px,10vw,43px)); gap:7px; font-size:clamp(18px,5vw,22px); }
+    #screen1 .hero-use-cases span { width:clamp(34px,10vw,43px); height:clamp(34px,10vw,43px); display:flex; align-items:center; justify-content:center; border-radius:50%; background:linear-gradient(145deg,#fff,#eaf2ff); border:1px solid rgba(99,102,241,.22); box-shadow:0 4px 11px rgba(35,60,130,.14),inset 0 1px 0 #fff; }
+    #screen1 .hero-qr-badge { display:none !important; }
+    #screen1 .category-block, #screen1 .message-block, #screen1 .surface-card, #screen1 #sendBtn, #screen1 .screen1-footer { flex-shrink:0; }
+    #screen1 .cat-card { min-height:clamp(62px,8vh,74px); padding:6px 3px; gap:3px; }
+    #screen1 .cat-card img { width:34px; height:32px; }
+    #screen1 .cat-card span:last-child { font-size:12px; }
+    #screen1 #reasonsContainer { gap:5px; }
+    #screen1 .tpl-pill { min-height:clamp(32px,4.5vh,39px); padding:5px 9px !important; font-size:clamp(12px,3.6vw,14px) !important; border-radius:12px; }
+    #screen1 .tpl-pill .text-2xl { font-size:18px; }
+    #screen1 .surface-card { padding:7px 8px; border-radius:14px; }
+    #screen1 #customNote { min-height:36px; padding:7px 10px; font-size:13px; }
+    #screen1 label, #screen1 #locationBtn { min-height:38px; padding:6px 5px; font-size:11px; border-radius:12px; }
+    #screen1 .btn-send-alert { min-height:48px; padding:9px; font-size:18px; border-radius:16px; }
+    #screen1 .screen1-footer { padding:0; line-height:1.15; }
+    #screen1 .privacy-line { font-size:10px; gap:7px; }
+    #screen1 .copyright-line { margin-top:3px; font-size:8px; }
+
+    #screen2 { flex:1 1 auto; height:auto; min-height:0; padding:12px 14px max(12px,env(safe-area-inset-bottom)); overflow:hidden; position:relative; background:radial-gradient(ellipse at 50% 12%,rgba(20,155,255,.30),transparent 39%),radial-gradient(ellipse at 82% 88%,rgba(192,65,255,.24),transparent 43%),linear-gradient(180deg,#061b43 0%,#07183b 54%,#160b3c 100%); }
+    #screen2::before { content:""; position:absolute; inset:0; pointer-events:none; background:radial-gradient(ellipse at 8% 82%,rgba(34,211,238,.12),transparent 35%),radial-gradient(ellipse at 95% 40%,rgba(217,70,239,.12),transparent 35%); }
+    #screen2 > .status-state:not(.hidden) { position:relative; z-index:1; display:flex; flex:1 1 auto; width:100%; height:100%; min-height:0; }
+    #screen2 > .status-state.hidden { display:none !important; }
+    #waitingState { position:relative; align-items:center; text-align:center; justify-content:space-evenly; min-height:0; padding:8px 0 10px; gap:clamp(7px,1.2vh,12px); }
+    #waitingState .status-pill { font-size:clamp(20px,5vw,26px); padding:9px 20px; }
+    #waitingState .status-subtitle { margin:0; font-size:18px; line-height:1.2; }
+    #waitingState .waiting-visual { flex:0 0 auto; width:100%; min-height:clamp(132px,20vh,178px); gap:6px; }
+    #waitingState .waiting-mascot { width:48%; max-width:190px; height:clamp(132px,20vh,178px); object-fit:contain; object-position:center bottom; }
+    #waitingState .countdown-ring { width:clamp(112px,17vh,138px); height:clamp(112px,17vh,138px); flex:0 0 clamp(112px,17vh,138px); }
+    #waitingState .countdown-ring span { font-size:clamp(39px,6vh,52px); }
+    #waitingState .countdown-ring small { font-size:11px; }
+    #waitingState .tip-card { width:100%; min-height:clamp(76px,11vh,94px); padding:10px 12px; border-radius:18px; background:linear-gradient(115deg,#fff 0%,#e5f6ff 52%,#f5eaff 100%); color:#10265b; border:1.5px solid rgba(255,255,255,.95); box-shadow:0 10px 24px rgba(0,0,0,.20),0 0 18px rgba(56,189,248,.14); }
+    #waitingState .tip-icon { width:42px; height:42px; flex:0 0 42px; display:flex; align-items:center; justify-content:center; border-radius:14px; background:linear-gradient(145deg,#dff7ff,#f0e7ff); }
+    #waitingState .tip-card strong { color:#17408a; font-size:12px; }
+    #waitingState .tip-card p { color:#132c59; font-size:13px; line-height:1.3; }
+    #waitingState .waiting-connection-art { flex:0 0 auto; width:100%; min-height:74px; height:74px; margin:0; padding:8px 18px; border-radius:18px; background:linear-gradient(110deg,rgba(9,145,218,.20),rgba(95,76,219,.24) 52%,rgba(207,67,177,.17)); border:1px solid rgba(125,211,252,.30); box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 9px 24px rgba(0,0,0,.16); }
+    #waitingState .connection-node { width:39px; height:39px; border-radius:13px; font-size:19px; }
+    #waitingState .connection-node::after { top:51px; font-size:8px; }
+
+    #replyState, #timeoutState { position:relative; isolation:isolate; height:100%; min-height:0; justify-content:space-evenly; gap:clamp(8px,1.35vh,13px); padding:8px 1px 10px; }
+    #replyState::before, #timeoutState::before { content:""; position:absolute; z-index:-1; width:280px; height:280px; border-radius:50%; top:0; left:50%; transform:translateX(-50%); background:radial-gradient(circle,rgba(34,211,238,.20),rgba(99,102,241,.12) 48%,transparent 73%); pointer-events:none; }
+    #replyState::after, #timeoutState::after { content:""; position:relative; inset:auto; left:auto; bottom:auto; z-index:0; width:100%; min-height:36px; flex:0 0 36px; display:flex; align-items:center; justify-content:center; margin:0; border-radius:14px; border:1px solid rgba(125,211,252,.28); background:linear-gradient(100deg,rgba(14,165,233,.18),rgba(99,102,241,.20),rgba(217,70,239,.18)); color:#e3f2ff; font-size:9px; font-weight:1000; letter-spacing:.12em; box-shadow:inset 0 1px 0 rgba(255,255,255,.08); }
+    #replyState::after { content:"STAY CONNECTED  •  ANYTIME  •  ANYWHERE"; }
+    #timeoutState::after { content:"ONE SCAN. INSTANT CONNECTION."; }
+    #replyState .result-mascot-row, #timeoutState .result-mascot-row { width:100%; min-height:clamp(138px,20vh,178px); flex:0 0 auto; display:flex; align-items:center; justify-content:center; gap:8px; padding:8px; border-radius:22px; background:linear-gradient(115deg,rgba(14,165,233,.18),rgba(99,102,241,.20) 55%,rgba(217,70,239,.18)); border:1px solid rgba(125,211,252,.35); box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 10px 24px rgba(0,0,0,.16); }
+    #replyState .result-mascot, #timeoutState .result-mascot { width:42%; max-width:158px; height:clamp(128px,18vh,164px); object-fit:contain; }
+    #replyState .result-heading, #timeoutState .result-heading { flex:1; text-align:center; min-width:0; }
+    #replyState .result-heading .status-pill, #timeoutState .result-heading .status-pill { padding:8px 12px; font-size:clamp(17px,4.6vw,22px); }
+    #replyState .result-heading p, #timeoutState .result-heading p { margin:7px 0 0; font-size:16px; font-weight:900; }
+    #replyState .owner-reply-card { flex:1 1 auto; min-height:110px; display:flex; flex-direction:column; justify-content:center; padding:11px 12px; border-radius:19px; }
+    #replyState .reply-message { min-height:56px; display:flex; align-items:center; font-size:16px; }
+    #replyState .action-grid, #timeoutState .action-grid { flex:0 0 auto; width:100%; gap:9px; }
+    #replyState .action-button, #timeoutState .action-button { min-height:clamp(49px,7vh,60px); border-radius:16px; font-size:16px; }
+    #timeoutState .result-mascot-row { min-height:clamp(170px,24vh,215px); }
+    #timeoutState .timeout-note { display:inline-block; padding:7px 10px; border-radius:12px; background:rgba(255,255,255,.08); border:1px solid rgba(196,181,253,.18); color:#e0eaff; font-size:13px !important; }
+
+    .reply-sound-toggle { flex:0 0 42px; width:42px; height:42px; display:inline-flex; align-items:center; justify-content:center; border-radius:50%; color:#fff; font-size:21px; line-height:1; background:linear-gradient(145deg,#16b86a,#078447); border:2px solid #b8f5d4; box-shadow:0 4px 12px rgba(16,150,90,.24),inset 0 1px 3px rgba(255,255,255,.35); cursor:pointer; transition:transform .16s ease,filter .16s ease; }
+    .reply-sound-toggle:active { transform:scale(.94); }
+    .reply-sound-toggle.is-muted { background:linear-gradient(145deg,#64748b,#334155); border-color:#cbd5e1; box-shadow:0 4px 12px rgba(15,23,42,.18); }
+    .reply-sound-toggle:focus-visible { outline:3px solid #67e8f9; outline-offset:3px; }
+    #waitingState .waiting-sound-toggle { position:absolute; top:7px; right:2px; z-index:4; }
+    #replyState .reply-sound-toggle { width:38px; height:38px; flex-basis:38px; }
+
+    @media (min-width:768px) {
+      body { padding:16px; }
+      .app-shell { width:390px; height:min(920px,calc(100dvh - 32px)); min-height:0; max-width:390px; border-radius:30px; border:1.5px solid rgba(148,163,184,.4); box-shadow:0 28px 75px rgba(0,0,0,.55); }
+    }
+    @media (max-width:390px) {
+      .app-shell { width:100%; height:100dvh; }
+      .app-header { flex-basis:72px; min-height:72px; padding:6px 11px 5px; }
+      #screen1 { padding:8px 10px 7px; gap:clamp(4px,.8vh,7px); }
+      #screen1 .hero-composition { height:clamp(140px,19vh,170px); min-height:136px; }
+      #screen1 .cat-card { min-height:clamp(58px,7.5vh,68px); }
+      #screen1 .cat-card img { width:30px; height:28px; }
+      #screen1 .cat-card span:last-child { font-size:11px; }
+      #screen1 .tpl-pill { min-height:clamp(30px,4.1vh,35px); padding:4px 7px !important; font-size:12px !important; }
+      #screen1 .surface-card { padding:6px; }
+      #screen1 #customNote { min-height:33px; }
+      #screen1 label, #screen1 #locationBtn { min-height:35px; font-size:10px; }
+      #screen1 .btn-send-alert { min-height:45px; font-size:16px; }
+      #waitingState .waiting-visual { min-height:clamp(124px,18vh,150px); }
+      #waitingState .waiting-mascot { height:clamp(124px,18vh,150px); }
+      #waitingState .countdown-ring { width:clamp(104px,16vh,124px); height:clamp(104px,16vh,124px); flex-basis:clamp(104px,16vh,124px); }
+      #waitingState .countdown-ring span { font-size:40px; }
+      #waitingState .tip-card { min-height:70px; }
+      #waitingState .waiting-connection-art { min-height:68px; height:68px; }
+      #waitingState .connection-node::after { top:48px; }
+      #replyState, #timeoutState { gap:7px; }
+      #replyState .result-mascot-row, #timeoutState .result-mascot-row { min-height:clamp(125px,18vh,150px); }
+      #replyState .result-mascot, #timeoutState .result-mascot { height:clamp(116px,17vh,140px); }
+      #replyState .owner-reply-card { min-height:100px; }
+      #replyState .action-button, #timeoutState .action-button { min-height:48px; font-size:14px; }
+      #replyState::after, #timeoutState::after { min-height:32px; flex-basis:32px; font-size:8px; }
+    }
+    @media (max-height:740px) {
+      .app-header { flex-basis:68px; min-height:68px; }
+      #screen1 { gap:4px; padding-top:6px; padding-bottom:5px; }
+      #screen1 .hero-composition { height:clamp(118px,17vh,145px); min-height:116px; }
+      #screen1 .cat-card { min-height:56px; }
+      #screen1 .cat-card img { width:27px; height:25px; }
+      #screen1 .tpl-pill { min-height:29px; padding:3px 7px !important; }
+      #screen1 .surface-card { padding:5px; }
+      #screen1 #customNote { min-height:30px; }
+      #screen1 label, #screen1 #locationBtn { min-height:32px; }
+      #screen1 .btn-send-alert { min-height:41px; }
+      #waitingState .waiting-visual { min-height:118px; }
+      #waitingState .waiting-mascot { height:118px; }
+      #waitingState .countdown-ring { width:104px; height:104px; flex-basis:104px; }
+      #waitingState .countdown-ring span { font-size:38px; }
+      #waitingState .tip-card { min-height:64px; }
+      #waitingState .waiting-connection-art { min-height:60px; height:60px; }
+      #replyState .result-mascot-row, #timeoutState .result-mascot-row { min-height:118px; }
+      #replyState .result-mascot, #timeoutState .result-mascot { height:110px; }
+      #replyState .owner-reply-card { min-height:94px; }
+      #replyState .action-button, #timeoutState .action-button { min-height:44px; }
+    }
+
+  </style>
 </head>
 <body>
 
@@ -536,11 +666,10 @@
     <main id="screen1" class="flex-1 flex flex-col justify-between p-4 space-y-3">
       <!-- Official PingMe welcome mascot artwork -->
       <div class="hero-composition">
-        <img src="assets/Pingy_Waiting_Reference.png" alt="PingMe mascot welcoming you" class="hero-mascot" />
+        <img src="assets/Pingy_Welcome_Reference.png" alt="PingMe mascot holding the PingMe QR code" class="hero-mascot" onerror="this.onerror=null;this.src='assets/Pingy_Waiting_Reference.png'" />
         <div class="hero-use-cases" aria-label="PingMe use cases">
           <span title="Vehicle">🚗</span><span title="Two-wheeler">🏍️</span><span title="Keys">🔑</span><span title="Luggage">🧳</span>
         </div>
-        <div class="hero-qr-badge" aria-hidden="true"><span class="hero-qr-pattern">▦</span><span>ONE QR</span></div>
       </div>
 
       <!-- Category cards are self-explanatory; no extra heading -->
@@ -599,6 +728,7 @@
       <div id="waitingState" class="status-state waiting-state">
         <div class="status-pill success-pill waiting-status-pill">✓ <span data-i18n="pingSent">PING SENT!</span></div>
         <p class="status-subtitle" data-i18n="waitingReply">Waiting for reply...</p>
+        <button type="button" id="waitingSoundToggle" class="reply-sound-toggle waiting-sound-toggle" onclick="toggleReplySound()" aria-label="Mute reply audio" aria-pressed="true" title="Sound on">🔊</button>
         <div class="waiting-visual">
           <img src="assets/Pingy_Waiting_Reference.png" alt="PingMe mascot waiting" class="waiting-mascot mascot-float" />
           <div class="countdown-ring" id="countdownRing"><span id="countdownNumber">180</span><small data-i18n="seconds">SECONDS</small></div>
@@ -1062,13 +1192,15 @@
     }
 
     function updateReplySoundButton() {
-      const button = document.getElementById("replySoundToggle");
-      if (!button) return;
-      button.textContent = pingmeSoundEnabled ? "🔊" : "🔇";
-      button.classList.toggle("is-muted", !pingmeSoundEnabled);
-      button.setAttribute("aria-pressed", String(pingmeSoundEnabled));
-      button.setAttribute("aria-label", pingmeSoundEnabled ? "Mute reply audio" : "Turn reply audio on");
-      button.title = pingmeSoundEnabled ? "Sound on — tap to mute" : "Sound off — tap to unmute";
+      ["waitingSoundToggle", "replySoundToggle"].forEach(id => {
+        const button = document.getElementById(id);
+        if (!button) return;
+        button.textContent = pingmeSoundEnabled ? "🔊" : "🔇";
+        button.classList.toggle("is-muted", !pingmeSoundEnabled);
+        button.setAttribute("aria-pressed", String(pingmeSoundEnabled));
+        button.setAttribute("aria-label", pingmeSoundEnabled ? "Mute reply audio" : "Turn reply audio on");
+        button.title = pingmeSoundEnabled ? "Sound on — tap to mute" : "Sound off — tap to unmute";
+      });
     }
 
     function toggleReplySound() {
@@ -1095,6 +1227,7 @@
         ? "சூப்பர்! உங்களுக்கு பதில் வந்துவிட்டது!"
         : "Awesome! You've got a reply!";
       const speakReply = () => {
+        if (!pingmeSoundEnabled) return;
         const cleanReply = String(replyText || "").trim();
         if (cleanReply) speakPingMeText(cleanReply);
       };
