@@ -780,10 +780,23 @@
 }
 
 
-/* STORY IMAGE FINAL FIX: fill the complete picture box without cropping or side gaps. */
+/* FINAL STORY PRESENTATION: each image keeps its original proportions.
+   The frame shrinks/grows to the image ratio, so no black/blurred side strips,
+   no stretching and no cropping. */
 #waitingStoryModule .story-image-frame {
+  position:relative !important;
+  flex:0 0 auto !important;
+  width:auto;
+  height:auto;
+  max-width:100%;
+  margin:0 auto !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  overflow:visible !important;
   background:transparent !important;
-  overflow:hidden !important;
+  border:0 !important;
+  border-radius:12px !important;
 }
 #waitingStoryModule .story-image-frame::before {
   display:none !important;
@@ -793,13 +806,62 @@
   display:block !important;
   width:100% !important;
   height:100% !important;
-  object-fit:fill !important;
+  max-width:100% !important;
+  max-height:min(36vh,320px) !important;
+  object-fit:contain !important;
   object-position:center !important;
   filter:none !important;
   border-radius:12px !important;
 }
-/* Remove the scene number completely. */
+/* Hide scene counter entirely. */
+#waitingStoryModule .story-topline,
 #waitingStoryModule #storyCount { display:none !important; }
+
+/* Put the optional explainer action in the centre, with a clear premium treatment. */
+#waitingStoryModule .story-controls {
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:8px !important;
+  width:100% !important;
+}
+#waitingStoryModule .story-controls .story-progress { width:100% !important; flex:0 0 3px !important; }
+#waitingStoryModule .story-demo-button {
+  align-self:center !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-height:38px !important;
+  padding:0 22px !important;
+  border-radius:999px !important;
+  border:1.5px solid rgba(255,255,255,.9) !important;
+  background:linear-gradient(100deg,#0ea5e9,#5b45e8 55%,#db2777) !important;
+  color:#fff !important;
+  font-size:13px !important;
+  font-weight:900 !important;
+  letter-spacing:.02em !important;
+  box-shadow:0 5px 18px rgba(59,130,246,.35) !important;
+}
+
+/* BUY is deliberately placed over the empty pink CTA panel in vehicle_06_buy.png. */
+#waitingStoryModule .story-buy-overlay {
+  position:absolute;
+  left:50%;
+  bottom:18%;
+  transform:translate(-50%,50%);
+  z-index:3;
+  color:#fff;
+  font-size:clamp(20px,5vw,28px);
+  line-height:1;
+  font-weight:1000;
+  letter-spacing:.08em;
+  text-shadow:0 2px 5px rgba(110,0,45,.45);
+  pointer-events:none;
+}
+@media(max-height:700px) {
+  #waitingStoryModule .story-image-frame img { max-height:30vh !important; }
+  #waitingStoryModule .story-demo-button { min-height:34px !important; }
+}
 
 </style>
 </head>
@@ -902,7 +964,7 @@
         </div>
         <div class="story-module" id="waitingStoryModule" aria-live="polite">
           <div class="story-topline" style="justify-content:flex-end"><span class="story-count" id="storyCount">1 / 19</span></div>
-          <div class="story-image-frame"><img id="waitingStoryImage" src="assets/pingme-stories/vehicle_01_blocked.png" alt="PingMe story scene"></div>
+          <div class="story-image-frame"><img id="waitingStoryImage" src="assets/pingme-stories/vehicle_01_blocked.png" alt="PingMe story scene"><span id="storyBuyOverlay" class="story-buy-overlay" hidden>BUY</span></div>
           <div class="story-caption" id="waitingStoryCaption">My car is blocked! How do I reach the owner?</div>
           <div class="story-controls"><div class="story-progress"><span id="storyProgressFill"></span></div><button class="story-demo-button" type="button" onclick="openStoryDemo()">HOW PINGME WORKS</button></div>
         </div>
@@ -1278,11 +1340,26 @@
       const fill = document.getElementById("storyProgressFill");
       const kicker = document.getElementById("storyKicker");
       if(!img || !cap) return;
+      img.onload = () => {
+        const frame = img.closest(".story-image-frame");
+        const module = document.getElementById("waitingStoryModule");
+        if(!frame || !module || !img.naturalWidth || !img.naturalHeight) return;
+        const availableWidth = Math.max(120, module.clientWidth - 16);
+        const maxHeight = Math.min(window.innerHeight * 0.36, 320);
+        const ratio = img.naturalWidth / img.naturalHeight;
+        const displayHeight = Math.min(maxHeight, availableWidth / ratio);
+        const displayWidth = displayHeight * ratio;
+        frame.style.width = Math.round(displayWidth) + "px";
+        frame.style.height = Math.round(displayHeight) + "px";
+      };
       img.src = "assets/pingme-stories/" + item[0];
       const frame = img.closest(".story-image-frame");
-      if(frame) frame.style.setProperty("--story-bg", `url("${img.src}")`);
+      const buyOverlay = document.getElementById("storyBuyOverlay");
+      if(buyOverlay) buyOverlay.hidden = item[0] !== "vehicle_06_buy.png";
       img.alt = storyLabel(item);
       cap.textContent = storyText(item);
+      const demoButton = document.querySelector("#waitingStoryModule .story-demo-button");
+      if(demoButton) demoButton.textContent = currentLang === "ta" ? "PINGME எப்படி வேலை செய்கிறது?" : "HOW PINGME WORKS";
       if(count) count.textContent = (storyIndex+1) + "/" + pingMeStories.length;
       if(fill) fill.style.width = (((storyIndex+1)/pingMeStories.length)*100) + "%";
     }
