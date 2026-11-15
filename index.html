@@ -329,14 +329,68 @@
       #replyState .action-button, #timeoutState .action-button { min-height:51px; }
     }
 
+
+    /* PINGME PREMIUM FINISH — visual-only refinements */
+    .splash-logo-card {
+      min-width: min(84vw, 360px);
+      min-height: 190px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:linear-gradient(145deg,#ffffff 0%,#f3f8ff 58%,#f5edff 100%);
+      border:2px solid rgba(255,255,255,.96);
+      box-shadow:0 22px 65px rgba(0,0,0,.38),0 0 34px rgba(56,189,248,.28),0 0 52px rgba(192,132,252,.20),inset 0 2px 8px rgba(255,255,255,.95);
+    }
+    .splash-logo-card img {
+      height:clamp(118px,30vw,166px) !important;
+      max-width:100%;
+      filter:drop-shadow(0 8px 12px rgba(20,45,110,.20));
+    }
+    #splashScreen .tagline-pill {
+      margin-top:22px;
+      padding:10px 18px;
+      border:1px solid rgba(255,255,255,.42);
+      box-shadow:0 8px 26px rgba(126,34,206,.34),0 0 22px rgba(56,189,248,.20);
+    }
+    #splashScreen .tagline-pill span { font-size:clamp(11px,3vw,13px); }
+    .hero-composition { height:176px; background:radial-gradient(circle at 50% 42%,#ffffff 0%,#dff4ff 44%,#eadcff 76%,#ffe7f3 100%); box-shadow:0 9px 24px rgba(26,72,150,.18),inset 0 1px 0 rgba(255,255,255,.9); }
+    .hero-mascot { left:0; bottom:0; width:100%; height:100%; object-fit:contain; object-position:center bottom; transform:none; }
+    #screen2 { position:relative; overflow:hidden; background:radial-gradient(ellipse at 50% 10%,rgba(20,155,255,.30),transparent 38%),radial-gradient(ellipse at 80% 88%,rgba(192,65,255,.20),transparent 42%),linear-gradient(180deg,#061b43 0%,#07183b 54%,#160b3c 100%); }
+    #waitingState { min-height:620px; justify-content:space-between; gap:13px; padding:8px 0 15px; }
+    #waitingState .tip-card { position:relative; min-height:94px; padding:15px 16px; border-radius:21px; background:linear-gradient(115deg,#ffffff 0%,#e5f6ff 52%,#f5eaff 100%); border:1.5px solid rgba(255,255,255,.95); box-shadow:0 12px 26px rgba(0,0,0,.22),0 0 20px rgba(56,189,248,.16); }
+    #waitingState .tip-card::after { content:""; position:absolute; inset:4px; border-radius:16px; border:1px solid rgba(99,102,241,.12); pointer-events:none; }
+    #waitingState .tip-icon { width:48px; height:48px; flex:0 0 48px; display:flex; align-items:center; justify-content:center; border-radius:15px; background:linear-gradient(145deg,#dff7ff,#f0e7ff); box-shadow:inset 0 1px 0 #fff,0 4px 12px rgba(50,70,140,.12); }
+    #waitingState .tip-card strong { color:#17408a; letter-spacing:.06em; }
+    #waitingState .tip-card p { color:#132c59; line-height:1.35; }
+    #waitingState .waiting-connection-art { min-height:88px; }
+    #replyState::after { content:"STAY CONNECTED  •  ANYTIME  •  ANYWHERE"; letter-spacing:.12em; }
+    #timeoutState::after { content:"ONE SCAN. INSTANT CONNECTION."; }
+    #replyState .result-mascot-row { background:linear-gradient(115deg,rgba(14,165,233,.18),rgba(99,102,241,.20) 55%,rgba(217,70,239,.18)); border-color:rgba(125,211,252,.38); }
+    #timeoutState .result-mascot-row { background:linear-gradient(115deg,rgba(14,165,233,.14),rgba(99,102,241,.19) 55%,rgba(217,70,239,.17)); }
+    @media (max-width:390px) {
+      .splash-logo-card { min-height:166px; min-width:min(88vw,340px); }
+      .splash-logo-card img { height:clamp(112px,31vw,145px) !important; }
+      .hero-composition { height:158px; }
+      #waitingState { min-height:590px; gap:10px; }
+      #waitingState .tip-card { min-height:86px; padding:11px 12px; }
+      #waitingState .tip-card p { font-size:14px; }
+    }
+    @media (max-height:760px) and (max-width:767px) {
+      #waitingState { min-height:560px; }
+      #waitingState .waiting-visual .waiting-mascot { height:130px; }
+      #waitingState .countdown-ring { width:124px; height:124px; flex-basis:124px; }
+      #waitingState .countdown-ring span { font-size:48px; }
+      #waitingState .tip-card { min-height:76px; }
+    }
+
 </style>
 </head>
 <body>
 
   <!-- SPLASH -->
   <div id="splashScreen">
-    <div class="splash-logo-card bg-white rounded-3xl p-6 shadow-2xl">
-      <img src="assets/pingme-logo.png" alt="PingMe" class="h-20 w-auto object-contain" />
+    <div class="splash-logo-card bg-white rounded-3xl p-7 shadow-2xl">
+      <img src="assets/pingme-logo.png" alt="PingMe" class="h-36 w-auto object-contain" />
     </div>
     <div class="mt-4 tagline-pill px-4 py-1.5 rounded-full">
       <span class="text-xs font-extrabold tracking-widest text-white uppercase">ONE SCAN. INSTANT CONNECTION.</span>
@@ -537,16 +591,25 @@
     let selectedRating = 0;
     let replyShown = false;
 
-    const tips = [
-      "Pingy is keeping an eye out. 👀",
-      "Relax! Your number stays private. 🔒",
-      "One scan done. Pingy is on the case! 😄",
-      "Your keys called. They love QR tags! 🔑",
-      "Take a tiny break. We've got the waiting covered. ☕",
-      "No need to refresh. PingMe is checking for replies. 📲",
-      "Pingy is quicker than searching under the sofa! 🛋️"
-    ];
-    const tipIcons = ["👀", "🔒", "😄", "🔑", "☕", "📲", "🛋️"];
+    const tips = {
+      en: [
+        "Your number stays private. PingMe connects you without sharing it. 🔒",
+        "A quick scan can help someone reach the right owner. 📲",
+        "Keep your keys connected with a PingMe QR keychain. 🔑",
+        "Your bags and luggage can carry their own smart connection. 🧳",
+        "PingMe works for vehicles, keys, luggage and everyday belongings. ✨",
+        "No need to refresh. PingMe is checking for the owner's reply. 💬"
+      ],
+      ta: [
+        "உங்கள் மொபைல் எண் ரகசியமாகவே இருக்கும். 🔒",
+        "ஒரு சிறிய ஸ்கேன் சரியான உரிமையாளரை அணுக உதவும். 📲",
+        "PingMe QR கீசெயின் மூலம் உங்கள் சாவிகளை இணைத்திருங்கள். 🔑",
+        "உங்கள் பைகள் மற்றும் லக்கேஜ்களையும் PingMe மூலம் இணைக்கலாம். 🧳",
+        "வாகனம், சாவி, பை மற்றும் பல பொருட்களுக்கு PingMe பயன்படும். ✨",
+        "மீண்டும் Refresh செய்ய வேண்டாம். பதிலை PingMe தானாகச் சரிபார்க்கிறது. 💬"
+      ]
+    };
+    const tipIcons = ["🔒", "📲", "🔑", "🧳", "✨", "💬"];
 
     const uiText = {
       en: {
@@ -659,6 +722,13 @@
       document.getElementById("langLabel").textContent = currentLang === "en" ? "English | தமிழ்" : "தமிழ் | English";
       renderTemplates();
       updateAttachmentLabels();
+      if (document.getElementById("tipText")) {
+        tipIndex = 0;
+        const activeTips = tips[currentLang] || tips.en;
+        document.getElementById("tipText").textContent = activeTips[0];
+        const tipIcon = document.querySelector(".tip-icon");
+        if (tipIcon) tipIcon.textContent = tipIcons[0];
+      }
     }
 
     function updateAttachmentLabels() {
@@ -752,14 +822,15 @@
       const tipText = document.getElementById("tipText");
       const tipIcon = document.querySelector(".tip-icon");
       const tipCard = document.querySelector(".tip-card");
-      if (!tipText || !tips.length) return;
+      const activeTips = tips[currentLang] || tips.en;
+      if (!tipText || !activeTips.length) return;
 
       if (tipCard) tipCard.classList.add("tip-refresh");
       window.setTimeout(() => {
-        tipText.textContent = tips[tipIndex];
+        tipText.textContent = activeTips[tipIndex];
         if (tipIcon) tipIcon.textContent = tipIcons[tipIndex] || "💡";
         if (tipCard) tipCard.classList.remove("tip-refresh");
-        tipIndex = (tipIndex + 1) % tips.length;
+        tipIndex = (tipIndex + 1) % activeTips.length;
       }, 180);
     }
 
@@ -840,41 +911,52 @@
       } catch (err) {}
     }
 
-    function playPingMeReplyAlert() {
+    function speakPingMeText(text, onEnd) {
+      if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) return false;
+      try {
+        const utterance = new SpeechSynthesisUtterance(String(text || ""));
+        utterance.lang = currentLang === "ta" ? "ta-IN" : "en-IN";
+        // Original PingMe delivery: warm, confident and clear; not an imitation of any celebrity.
+        utterance.rate = currentLang === "ta" ? 0.90 : 0.93;
+        utterance.pitch = 0.88;
+        utterance.volume = 1;
+        const voices = window.speechSynthesis.getVoices();
+        const preferred = voices.find(v => currentLang === "ta"
+          ? /^ta(-|$)/i.test(v.lang)
+          : /^en-IN$/i.test(v.lang)) || voices.find(v => currentLang === "ta"
+          ? /^ta(-|$)/i.test(v.lang)
+          : /^en(-|$)/i.test(v.lang));
+        if (preferred) utterance.voice = preferred;
+        if (typeof onEnd === "function") utterance.onend = onEnd;
+        window.speechSynthesis.speak(utterance);
+        return true;
+      } catch (err) {
+        return false;
+      }
+    }
+
+    function playPingMeReplyAlert(replyText) {
       if (pingmeReplyAlertPlayed) return;
       pingmeReplyAlertPlayed = true;
 
-      // Gentle vibration; support varies by browser/device and silent-mode settings.
-      try {
-        if (navigator.vibrate) navigator.vibrate([180, 90, 180]);
-      } catch (err) {}
-
-      const phrase = currentLang === "ta"
-        ? "புதிய PingMe பதில் வந்துள்ளது!"
-        : "You've got a new PingMe reply!";
-
-      if ("speechSynthesis" in window && "SpeechSynthesisUtterance" in window) {
-        try {
-          window.speechSynthesis.cancel();
-          const utterance = new SpeechSynthesisUtterance(phrase);
-          utterance.lang = currentLang === "ta" ? "ta-IN" : "en-IN";
-          utterance.rate = 0.96;
-          utterance.pitch = 1.04;
-          utterance.volume = 1;
-          const voices = window.speechSynthesis.getVoices();
-          const preferred = voices.find(v =>
-            currentLang === "ta"
-              ? /^ta(-|$)/i.test(v.lang)
-              : /^en(-IN|-GB|-US)?$/i.test(v.lang) || /^en-IN$/i.test(v.lang)
-          );
-          if (preferred) utterance.voice = preferred;
-          utterance.onend = playPingMeSignatureChime;
-          utterance.onerror = playPingMeSignatureChime;
-          window.speechSynthesis.speak(utterance);
-          return;
-        } catch (err) {}
-      }
+      try { if (navigator.vibrate) navigator.vibrate([180, 90, 180]); } catch (err) {}
       playPingMeSignatureChime();
+
+      const announcement = currentLang === "ta"
+        ? "சூப்பர்! உங்களுக்கு பதில் வந்துவிட்டது!"
+        : "Awesome! You've got a reply!";
+      const speakReply = () => {
+        const cleanReply = String(replyText || "").trim();
+        if (cleanReply) speakPingMeText(cleanReply);
+      };
+
+      // Speak the attention announcement first, then automatically read the owner's reply.
+      // If browser speech is unavailable or blocked, the chime and on-screen reply still work.
+      window.setTimeout(() => {
+        if (!speakPingMeText(announcement, speakReply)) {
+          // The visual reply card and signature chime remain the fallback when speech is unavailable.
+        }
+      }, 1250);
     }
 
     async function checkOwnerReply() {
@@ -886,9 +968,9 @@
         if (result.session && (result.session.owner_reply || result.session.session_status === "replied")) {
           replyShown = true;
           stopWaitingTimers();
-          playPingMeReplyAlert();
           const reply = result.session.owner_reply || (currentLang === "ta" ? "பதில் வந்துவிட்டது!" : "The owner has replied.");
           document.getElementById("respGuidance").textContent = reply;
+          playPingMeReplyAlert(reply);
           document.getElementById("replyTime").textContent = result.session.replied_at ? new Date(result.session.replied_at).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}) : "";
           showStatusState("replyState");
           return true;
@@ -928,6 +1010,7 @@
     async function sendAlert() {
       if (sessionClosed || sessionStorage.getItem("pingme_session_closed") === "true") return;
       primePingMeAudio();
+      pingmeReplyAlertPlayed = false;
       const customMessage = document.getElementById("customNote").value.trim();
       const reason = selectedReason || customMessage;
       if (!reason) { alert(uiText[currentLang].chooseMessage); return; }
