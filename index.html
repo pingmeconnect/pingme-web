@@ -710,7 +710,9 @@
 .story-topline{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .story-kicker{font-size:clamp(11px,2.7vw,13px);font-weight:900;letter-spacing:.04em;color:#bae6fd}
 .story-count{font-size:12px;font-weight:900;color:#fff;background:rgba(14,165,233,.22);border:1px solid rgba(125,211,252,.4);padding:4px 8px;border-radius:99px;white-space:nowrap}
-.story-image-frame{position:relative;isolation:isolate;width:100%;height:clamp(150px,25vh,210px);display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:13px;background:#071226;border:1px solid rgba(255,255,255,.2)}
+.story-image-frame{position:relative;isolation:isolate;width:100%;aspect-ratio:1/1;height:auto;max-height:clamp(190px,34vh,320px);display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:13px;background:transparent;border:0;margin:0 auto}
+.story-image-frame::before{display:none!important;content:none!important}
+.story-image-frame img{display:block;width:100%;height:100%;object-fit:fill;object-position:center;filter:none;border-radius:13px}
 .story-image-frame::before{content:"";position:absolute;inset:-12px;z-index:-1;background-image:var(--story-bg);background-size:cover;background-position:center;filter:blur(16px) brightness(.62);transform:scale(1.08);opacity:.95}
 .story-image-frame img{position:relative;z-index:1;width:100%;height:100%;object-fit:contain;object-position:center;filter:drop-shadow(0 2px 9px rgba(0,0,0,.28))}
 .story-caption{min-height:40px;display:flex;align-items:center;justify-content:center;text-align:center;padding:3px 6px;color:#fff;font-size:clamp(13px,3.6vw,17px);font-weight:900;line-height:1.25;text-wrap:balance}
@@ -864,55 +866,12 @@
 }
 
 
-/* FINAL PATCH: natural-size story frames, language-consistent captions and centred WHY PINGME action. */
-#waitingStoryModule { align-items:stretch !important; }
-#waitingStoryModule .story-topline, #waitingStoryModule #storyCount { display:none !important; }
-#waitingStoryModule .story-image-frame {
-  flex:0 0 auto !important;
-  align-self:center !important;
-  display:block !important;
-  position:relative !important;
-  width:auto !important;
-  height:auto !important;
-  max-width:100% !important;
-  min-height:0 !important;
-  margin:0 auto !important;
-  overflow:hidden !important;
-  background:transparent !important;
-  border:0 !important;
-  border-radius:12px !important;
-}
-#waitingStoryModule .story-image-frame::before { display:none !important; content:none !important; }
-#waitingStoryModule .story-image-frame img {
-  display:block !important;
-  width:auto !important;
-  height:auto !important;
-  max-width:100% !important;
-  max-height:min(34vh,285px) !important;
-  object-fit:contain !important;
-  object-position:center !important;
-  margin:0 auto !important;
-  filter:none !important;
-  border-radius:12px !important;
-}
-#waitingStoryModule .story-caption { width:100% !important; text-align:center !important; }
-#waitingStoryModule .story-controls { display:flex !important; flex-direction:column !important; align-items:center !important; justify-content:center !important; gap:8px !important; width:100% !important; }
-#waitingStoryModule .story-controls .story-progress { width:100% !important; flex:0 0 3px !important; }
-#waitingStoryModule .story-demo-button {
-  align-self:center !important; display:inline-flex !important; align-items:center !important; justify-content:center !important;
-  min-height:40px !important; padding:0 24px !important; border-radius:999px !important;
-  border:2px solid rgba(255,255,255,.95) !important;
-  background:linear-gradient(100deg,#06b6d4,#4f46e5 52%,#db2777) !important;
-  color:#fff !important; font-size:14px !important; font-weight:1000 !important;
-  box-shadow:0 0 0 3px rgba(56,189,248,.14),0 7px 20px rgba(79,70,229,.4) !important;
-}
-#waitingStoryModule .story-buy-overlay[hidden] { display:none !important; }
-#waitingStoryModule .story-buy-overlay:not([hidden]) { display:block !important; }
-@media(max-height:700px) {
-  #waitingStoryModule .story-image-frame img { max-height:29vh !important; }
-  #waitingStoryModule .story-demo-button { min-height:35px !important; }
-}
-
+/* PingMe final story image layout: square assets fill square frame */
+.story-image-frame{aspect-ratio:1/1!important;width:100%!important;height:auto!important;max-height:min(34vh,320px)!important;overflow:hidden!important;background:transparent!important;border:0!important}
+.story-image-frame::before{display:none!important;content:none!important}
+.story-image-frame img{width:100%!important;height:100%!important;object-fit:fill!important;object-position:center!important;filter:none!important}
+.story-count,#storyCount{display:none!important}
+.story-demo-button{display:flex!important;margin:0 auto!important;align-items:center!important;justify-content:center!important;min-height:40px!important;padding:0 22px!important;border-radius:999px!important;border:1.5px solid #fff!important;background:linear-gradient(100deg,#0ea5e9,#5b45e8 55%,#db2777)!important;color:#fff!important;font-weight:900!important;box-shadow:0 5px 18px rgba(59,130,246,.35)!important}
 </style>
 </head>
 <body>
@@ -1016,7 +975,7 @@
           <div class="story-topline" style="justify-content:flex-end"><span class="story-count" id="storyCount">1 / 19</span></div>
           <div class="story-image-frame"><img id="waitingStoryImage" src="assets/pingme-stories/vehicle_01_blocked.png" alt="PingMe story scene"><span id="storyBuyOverlay" class="story-buy-overlay" hidden>BUY</span></div>
           <div class="story-caption" id="waitingStoryCaption">My car is blocked! How do I reach the owner?</div>
-          <div class="story-controls"><div class="story-progress"><span id="storyProgressFill"></span></div><button class="story-demo-button" type="button" onclick="openStoryDemo()">HOW PINGME WORKS</button></div>
+          <div class="story-controls"><div class="story-progress"><span id="storyProgressFill"></span></div><button class="story-demo-button" type="button" onclick="openStoryDemo()">WHY PINGME?</button></div>
         </div>
       </div>
 
@@ -1076,7 +1035,7 @@
     <!-- BUY PRODUCT MODAL -->
     <div id="storyDemoOverlay" class="story-demo-overlay hidden" role="dialog" aria-modal="true" aria-label="How PingMe works">
   <div class="story-demo-panel">
-    <div class="story-demo-head"><div class="story-demo-title" id="storyDemoTitle">HOW PINGME WORKS</div><button type="button" class="story-demo-close" onclick="closeStoryDemo()">CLOSE ✕</button></div>
+    <div class="story-demo-head"><div class="story-demo-title" id="storyDemoTitle">WHY PINGME?</div><button type="button" class="story-demo-close" onclick="closeStoryDemo()">CLOSE ✕</button></div>
     <img id="storyDemoImage" class="story-demo-image" src="assets/pingme-stories/vehicle_01_blocked.png" alt="PingMe story scene">
     <div id="storyDemoCaption" class="story-demo-caption"></div>
     <div class="story-demo-actions"><span id="storyDemoCount" class="story-count">1 / 19</span><button type="button" id="storyDemoNext" class="story-demo-next" onclick="nextStoryDemo()">NEXT →</button></div>
@@ -1370,7 +1329,6 @@
     let demoStoryIndex = 0;
     let demoStoryInterval = null;
     function storyText(item){
-      // Captions always follow the language selected in the app.
       return currentLang === "ta" ? item[3] : item[2];
     }
     function storyLabel(item){
@@ -1389,15 +1347,13 @@
         const frame = img.closest(".story-image-frame");
         const module = document.getElementById("waitingStoryModule");
         if(!frame || !module || !img.naturalWidth || !img.naturalHeight) return;
-        const availableWidth = Math.max(120, module.clientWidth - 18);
-        const maxHeight = Math.min(window.innerHeight * 0.34, 285);
+        const availableWidth = Math.max(120, module.clientWidth - 16);
+        const maxHeight = Math.min(window.innerHeight * 0.36, 320);
         const ratio = img.naturalWidth / img.naturalHeight;
-        let displayWidth = Math.min(availableWidth, maxHeight * ratio);
-        let displayHeight = displayWidth / ratio;
+        const displayHeight = Math.min(maxHeight, availableWidth / ratio);
+        const displayWidth = displayHeight * ratio;
         frame.style.width = Math.round(displayWidth) + "px";
         frame.style.height = Math.round(displayHeight) + "px";
-        img.style.width = "100%";
-        img.style.height = "100%";
       };
       img.src = "assets/pingme-stories/" + item[0];
       const frame = img.closest(".story-image-frame");
@@ -1406,7 +1362,7 @@
       img.alt = storyLabel(item);
       cap.textContent = storyText(item);
       const demoButton = document.querySelector("#waitingStoryModule .story-demo-button");
-      if(demoButton) demoButton.textContent = currentLang === "ta" ? "ஏன் PINGME?" : "WHY PINGME?";
+      if(demoButton) demoButton.textContent = currentLang === "ta" ? "PINGME எப்படி வேலை செய்கிறது?" : "WHY PINGME?";
       if(count) count.textContent = (storyIndex+1) + "/" + pingMeStories.length;
       if(fill) fill.style.width = (((storyIndex+1)/pingMeStories.length)*100) + "%";
     }
@@ -1430,7 +1386,7 @@
       document.getElementById("storyDemoImage").alt = storyLabel(item);
       document.getElementById("storyDemoCaption").textContent = storyText(item);
       document.getElementById("storyDemoCount").textContent = (demoStoryIndex+1) + "/" + pingMeStories.length;
-      document.getElementById("storyDemoTitle").textContent = currentLang === "ta" ? "ஏன் PINGME?" : "WHY PINGME?";
+      document.getElementById("storyDemoTitle").textContent = currentLang === "ta" ? "PINGME எப்படி வேலை செய்கிறது?" : "WHY PINGME?";
       document.getElementById("storyDemoNote").textContent = currentLang === "ta" ? "இது ஒரு டெமோ மட்டும். உண்மையான அலர்ட் எதுவும் அனுப்பப்படாது." : "This is a demo only. It will not send an alert or change your current request.";
       document.getElementById("storyDemoNext").textContent = demoStoryIndex === pingMeStories.length-1 ? (currentLang === "ta" ? "முடிக்கவும் ✓" : "FINISH ✓") : (currentLang === "ta" ? "அடுத்து →" : "NEXT →");
     }
