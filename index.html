@@ -779,6 +779,28 @@
  #waitingStoryModule .story-caption { min-height:32px !important; font-size:14px !important; }
 }
 
+
+/* STORY IMAGE FINAL FIX: fill the complete picture box without cropping or side gaps. */
+#waitingStoryModule .story-image-frame {
+  background:transparent !important;
+  overflow:hidden !important;
+}
+#waitingStoryModule .story-image-frame::before {
+  display:none !important;
+  content:none !important;
+}
+#waitingStoryModule .story-image-frame img {
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  object-fit:fill !important;
+  object-position:center !important;
+  filter:none !important;
+  border-radius:12px !important;
+}
+/* Remove the scene number completely. */
+#waitingStoryModule #storyCount { display:none !important; }
+
 </style>
 </head>
 <body>
@@ -1235,7 +1257,15 @@
     let storyInterval = null;
     let demoStoryIndex = 0;
     let demoStoryInterval = null;
-    function storyText(item){ return currentLang === "ta" ? item[3] : item[2]; }
+    function storyText(item){
+      const imageHasTamilText = new Set([
+        "bag_01_found.png","bag_02_qr_tag.png","bag_04_alert_sent.png",
+        "bag_05_returned.png","bag_06_buy.png",
+        "pet_01_family.png","pet_02_missing.png","pet_04_scan.png",
+        "pet_05_owner_alert.png","pet_06_reunion.png","pet_07_message.png"
+      ]).has(item[0]);
+      return (currentLang === "ta" || imageHasTamilText) ? item[3] : item[2];
+    }
     function storyLabel(item){
       if(currentLang === "ta") return item[1] === "vehicle" ? "வாகன உதவி" : item[1] === "bag" ? "தொலைந்த பொருள்" : "செல்லப் பிராணி";
       return item[1] === "vehicle" ? "VEHICLE ALERT" : item[1] === "bag" ? "LOST & FOUND" : "LOST PET";
