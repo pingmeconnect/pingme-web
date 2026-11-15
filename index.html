@@ -704,7 +704,32 @@
       .timeout-promo-card { min-height:68px; }
     }
 
-  </style>
+  
+/* PingMe real-life stories: compact, responsive, no page scroll */
+.story-module{width:min(100%,680px);margin:10px auto 0;padding:10px 12px 9px;border:1px solid rgba(125,211,252,.42);border-radius:18px;background:linear-gradient(145deg,rgba(12,35,73,.96),rgba(42,25,82,.94));box-shadow:0 8px 22px rgba(0,0,0,.22);display:grid;gap:7px}
+.story-topline{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.story-kicker{font-size:clamp(11px,2.7vw,13px);font-weight:900;letter-spacing:.04em;color:#bae6fd}
+.story-count{font-size:12px;font-weight:900;color:#fff;background:rgba(14,165,233,.22);border:1px solid rgba(125,211,252,.4);padding:4px 8px;border-radius:99px;white-space:nowrap}
+.story-image-frame{width:100%;height:clamp(112px,22vh,190px);display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:13px;background:#071226;border:1px solid rgba(255,255,255,.2)}
+.story-image-frame img{width:100%;height:100%;object-fit:contain;object-position:center}
+.story-caption{min-height:40px;display:flex;align-items:center;justify-content:center;text-align:center;padding:3px 6px;color:#fff;font-size:clamp(13px,3.6vw,17px);font-weight:900;line-height:1.25;text-wrap:balance}
+.story-controls{display:flex;align-items:center;justify-content:center;gap:8px}
+.story-progress{height:4px;background:rgba(255,255,255,.18);border-radius:99px;overflow:hidden;flex:1}
+.story-progress>span{display:block;height:100%;width:0;background:linear-gradient(90deg,#22d3ee,#f472b6);transition:width .25s}
+.story-demo-button{border:1px solid rgba(255,255,255,.55);border-radius:99px;padding:8px 15px;background:linear-gradient(90deg,#2563eb,#7c3aed,#db2777);color:#fff;font-size:12px;font-weight:1000;letter-spacing:.02em;box-shadow:0 4px 12px rgba(37,99,235,.28)}
+.story-demo-overlay{position:fixed;inset:0;z-index:95;background:rgba(3,8,23,.96);display:flex;align-items:center;justify-content:center;padding:12px}
+.story-demo-panel{width:min(100%,620px);max-height:calc(100dvh - 24px);display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:22px;border:1px solid rgba(125,211,252,.45);background:linear-gradient(160deg,#0b1d3a,#21134b);overflow:hidden}
+.story-demo-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.story-demo-title{font-size:clamp(17px,4.5vw,22px);font-weight:1000;color:white}
+.story-demo-close,.story-demo-next{border:0;border-radius:12px;padding:10px 14px;font-weight:1000;color:white;background:#db2777}
+.story-demo-image{width:100%;height:min(54dvh,430px);object-fit:contain;background:#071226;border-radius:14px}
+.story-demo-caption{font-size:clamp(16px,4vw,21px);line-height:1.35;font-weight:900;text-align:center;color:#fff;min-height:52px;display:flex;align-items:center;justify-content:center}
+.story-demo-actions{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.story-demo-note{font-size:11px;color:#cbd5e1;text-align:center}
+@media(max-height:700px){.story-module{margin-top:6px;padding:7px 9px;gap:5px}.story-image-frame{height:clamp(92px,17vh,132px)}.story-caption{min-height:32px;font-size:13px}.story-demo-image{height:43dvh}}
+@media(min-width:768px){.story-module{max-width:440px}.story-image-frame{height:150px}}
+
+</style>
 </head>
 <body>
 
@@ -803,6 +828,12 @@
           <img src="assets/Pingy_Waiting_Reference.png" alt="PingMe mascot waiting" class="waiting-mascot mascot-float" />
           <div class="countdown-ring" id="countdownRing"><span id="countdownNumber">180</span><small data-i18n="seconds">SECONDS</small></div>
         </div>
+        <div class="story-module" id="waitingStoryModule" aria-live="polite">
+          <div class="story-topline"><span class="story-kicker" id="storyKicker">REAL-LIFE PINGME STORIES</span><span class="story-count" id="storyCount">1 / 19</span></div>
+          <div class="story-image-frame"><img id="waitingStoryImage" src="assets/pingme-stories/vehicle_01_blocked.png" alt="PingMe real-life story scene"></div>
+          <div class="story-caption" id="waitingStoryCaption">My car is blocked! How do I reach the owner?</div>
+          <div class="story-controls"><div class="story-progress"><span id="storyProgressFill"></span></div><button class="story-demo-button" type="button" onclick="openStoryDemo()">HOW PINGME WORKS</button></div>
+        </div>
         <div class="tip-card"><span class="tip-icon">💡</span><div><strong data-i18n="pingmeTip">PINGME TIP</strong><p id="tipText">Your number stays private.</p></div></div>
         <div class="waiting-connection-art" aria-hidden="true">
           <span class="connection-node">⌗</span><span class="connection-node">↗</span><span class="connection-node">♥</span>
@@ -863,7 +894,17 @@
     </section>
 
     <!-- BUY PRODUCT MODAL -->
-    <div id="buyModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 flex items-center justify-center p-4">
+    <div id="storyDemoOverlay" class="story-demo-overlay hidden" role="dialog" aria-modal="true" aria-label="How PingMe works">
+  <div class="story-demo-panel">
+    <div class="story-demo-head"><div class="story-demo-title" id="storyDemoTitle">HOW PINGME WORKS</div><button type="button" class="story-demo-close" onclick="closeStoryDemo()">CLOSE ✕</button></div>
+    <img id="storyDemoImage" class="story-demo-image" src="assets/pingme-stories/vehicle_01_blocked.png" alt="PingMe story scene">
+    <div id="storyDemoCaption" class="story-demo-caption"></div>
+    <div class="story-demo-actions"><span id="storyDemoCount" class="story-count">1 / 19</span><button type="button" id="storyDemoNext" class="story-demo-next" onclick="nextStoryDemo()">NEXT →</button></div>
+    <div class="story-demo-note" id="storyDemoNote">This is a demo only. It will not send an alert or change your current request.</div>
+  </div>
+</div>
+
+<div id="buyModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 flex items-center justify-center p-4">
       <div class="w-full max-w-sm rounded-3xl bg-white border-2 border-cyan-300 p-5 text-slate-900 space-y-4 shadow-2xl max-h-[90dvh] overflow-y-auto">
         <div class="flex justify-between items-center"><h3 class="font-black text-indigo-900 text-xl" data-i18n="productTitle">PINGME SMART CONNECT KIT</h3><button onclick="closeBuyModal()" class="text-slate-700 text-2xl font-black" aria-label="Close">×</button></div>
         <div class="rounded-2xl bg-gradient-to-br from-blue-100 via-white to-fuchsia-100 p-4 text-center">
@@ -1060,6 +1101,8 @@
       document.getElementById("langLabel").textContent = currentLang === "en" ? "English | தமிழ்" : "தமிழ் | English";
       renderTemplates();
       updateAttachmentLabels();
+      renderWaitingStory();
+      if (!document.getElementById("storyDemoOverlay").classList.contains("hidden")) renderDemoStory();
       if (document.getElementById("tipText")) {
         tipIndex = 0;
         const activeTips = tips[currentLang] || tips.en;
@@ -1139,6 +1182,79 @@
       );
     }
 
+
+    // Story slides are display-only. They never call sendAlert() or modify a real session.
+    const pingMeStories = [["vehicle_01_blocked.png", "vehicle", "My car is blocked! How do I reach the owner?", "அடடா! என் காரை யாரோ மறிச்சு நிறுத்திட்டாங்களே! உரிமையாளரை எப்படி தொடர்பு கொள்வது?"], ["vehicle_02_qr_found.png", "vehicle", "I spotted a PingMe QR sticker on the vehicle.", "வண்டியில் PingMe QR ஸ்டிக்கர் இருக்கு பாருங்க!"], ["vehicle_03_scan.png", "vehicle", "I’ll scan it and send an alert with a photo and my location.", "QR-ஐ ஸ்கேன் பண்ணி, போட்டோவும் இருக்கும் இடத்தையும் அனுப்புறேன்."], ["vehicle_04_alert_sent.png", "vehicle", "The owner gets the alert and can reply privately.", "உரிமையாளருக்கு உடனே தகவல் போயிடும். அவர் தனியாக பதிலும் அனுப்பலாம்."], ["vehicle_05_owner_moves.png", "vehicle", "The owner replies and comes to move the vehicle. Problem solved!", "உரிமையாளர் பதில் அனுப்பிட்டு வந்து வண்டியை எடுத்துட்டார். பிரச்சினை தீர்ந்தது!"], ["vehicle_06_buy.png", "vehicle", "I want this! How can I get it? — Just click BUY!", "எனக்கும் இது வேணும்! எப்படிக் கிடைக்கும்? — BUY-ஐ அழுத்துங்க!"], ["bag_01_found.png", "bag", "Someone has left a bag here. I should help find its owner.", "இந்தப் பை யாரோடதுன்னு தெரியலையே… உரிமையாளரிடம் சேர்க்கணும்."], ["bag_02_qr_tag.png", "bag", "There’s a PingMe QR tag on the bag.", "அட, பையில் PingMe QR tag இருக்கு!"], ["bag_03_scan.png", "bag", "I’ll scan the QR and send a photo and location.", "QR-ஐ ஸ்கேன் பண்ணி, போட்டோவும் இடத்தையும் அனுப்புறேன்."], ["bag_04_alert_sent.png", "bag", "The owner receives the alert and replies. No need to exchange phone numbers.", "உரிமையாளருக்கு தகவல் போயிடுச்சு. அவர் பதிலும் அனுப்பிட்டார். நம்பர் பகிர வேண்டியதில்லை."], ["bag_05_returned.png", "bag", "The owner arrives and gets the bag back safely.", "உரிமையாளர் வந்துட்டார். பையும் பத்திரமா கிடைச்சுடுச்சு!"], ["bag_06_buy.png", "bag", "I want this! How can I get it? — Just click BUY!", "எனக்கும் இப்படியொரு tag வேணும்! — BUY-ஐ அழுத்துங்க!"], ["pet_01_family.png", "pet", "Jimmy is part of our family. We love him so much!", "ஜிம்மி எங்க வீட்டுப் பிள்ளை மாதிரி. எங்களுக்கு ரொம்பப் பிரியமானவன்!"], ["pet_02_missing.png", "pet", "Oh no! Jimmy is missing. I’ve searched everywhere!", "ஐயையோ! ஜிம்மியைக் காணோம்! எங்கெல்லாமோ தேடிட்டேன்… கிடைக்கவே இல்லையே!"], ["pet_03_found.png", "pet", "A kind person finds Jimmy wearing his PingMe QR tag.", "அதிர்ஷ்டவசமா, ஒருத்தர் ஜிம்மியைப் பார்த்தார். அவன் கழுத்தில் PingMe QR tag இருந்தது."], ["pet_04_scan.png", "pet", "They scan the tag and send Jimmy’s photo and location.", "அந்த QR-ஐ ஸ்கேன் பண்ணி, ஜிம்மியின் போட்டோவையும் இருக்கும் இடத்தையும் அனுப்பினார்."], ["pet_05_owner_alert.png", "pet", "The owner gets the alert: “That’s my Jimmy! Thank you. I’m coming!”", "உரிமையாளருக்கு தகவல் வந்ததும், “அட, என் ஜிம்மி! ரொம்ப நன்றி. உடனே வர்றேன்!”ன்னு பதில் அனுப்பினார்."], ["pet_06_reunion.png", "pet", "Jimmy is home again! One scan brings loved ones together.", "ஜிம்மி திரும்ப வீட்டுக்கு வந்துட்டான்! ஒரு ஸ்கேன் குடும்பத்தை மீண்டும் சேர்த்தது."], ["pet_07_message.png", "pet", "No need to exchange personal phone numbers. One scan. Instant connection.", "தனிப்பட்ட மொபைல் நம்பரைப் பகிர வேண்டாம். ஒரே ஸ்கேன்… உடனடி தொடர்பு!"]];
+    let storyIndex = 0;
+    let storyInterval = null;
+    let demoStoryIndex = 0;
+    let demoStoryInterval = null;
+    function storyText(item){ return currentLang === "ta" ? item[3] : item[2]; }
+    function storyLabel(item){
+      if(currentLang === "ta") return item[1] === "vehicle" ? "வாகன உதவி" : item[1] === "bag" ? "தொலைந்த பொருள்" : "செல்லப் பிராணி";
+      return item[1] === "vehicle" ? "VEHICLE ALERT" : item[1] === "bag" ? "LOST & FOUND" : "LOST PET";
+    }
+    function renderWaitingStory(){
+      const item = pingMeStories[storyIndex % pingMeStories.length];
+      const img = document.getElementById("waitingStoryImage");
+      const cap = document.getElementById("waitingStoryCaption");
+      const count = document.getElementById("storyCount");
+      const fill = document.getElementById("storyProgressFill");
+      const kicker = document.getElementById("storyKicker");
+      if(!img || !cap) return;
+      img.src = "assets/pingme-stories/" + item[0];
+      img.alt = storyLabel(item);
+      cap.textContent = storyText(item);
+      if(count) count.textContent = (storyIndex+1) + " / " + pingMeStories.length;
+      if(fill) fill.style.width = (((storyIndex+1)/pingMeStories.length)*100) + "%";
+      if(kicker) kicker.textContent = currentLang === "ta" ? "PINGME நிஜ வாழ்க்கைக் கதைகள்" : "REAL-LIFE PINGME STORIES";
+    }
+    function startAutoStoryLoop(){
+      stopAutoStoryLoop();
+      storyIndex = 0;
+      renderWaitingStory();
+      storyInterval = setInterval(() => {
+        if(replyShown || sessionClosed) { stopAutoStoryLoop(); return; }
+        storyIndex = (storyIndex + 1) % pingMeStories.length;
+        renderWaitingStory();
+      }, 5000);
+    }
+    function stopAutoStoryLoop(){
+      if(storyInterval) clearInterval(storyInterval);
+      storyInterval = null;
+    }
+    function renderDemoStory(){
+      const item = pingMeStories[demoStoryIndex];
+      document.getElementById("storyDemoImage").src = "assets/pingme-stories/" + item[0];
+      document.getElementById("storyDemoImage").alt = storyLabel(item);
+      document.getElementById("storyDemoCaption").textContent = storyText(item);
+      document.getElementById("storyDemoCount").textContent = (demoStoryIndex+1) + " / " + pingMeStories.length;
+      document.getElementById("storyDemoTitle").textContent = currentLang === "ta" ? "PINGME எப்படி வேலை செய்கிறது?" : "HOW PINGME WORKS";
+      document.getElementById("storyDemoNote").textContent = currentLang === "ta" ? "இது ஒரு டெமோ மட்டும். உண்மையான அலர்ட் எதுவும் அனுப்பப்படாது." : "This is a demo only. It will not send an alert or change your current request.";
+      document.getElementById("storyDemoNext").textContent = demoStoryIndex === pingMeStories.length-1 ? (currentLang === "ta" ? "முடிக்கவும் ✓" : "FINISH ✓") : (currentLang === "ta" ? "அடுத்து →" : "NEXT →");
+    }
+    function openStoryDemo(){
+      demoStoryIndex = 0;
+      document.getElementById("storyDemoOverlay").classList.remove("hidden");
+      renderDemoStory();
+      if(demoStoryInterval) clearInterval(demoStoryInterval);
+      demoStoryInterval = setInterval(() => {
+        if(document.getElementById("storyDemoOverlay").classList.contains("hidden")) return;
+        if(demoStoryIndex < pingMeStories.length-1){ demoStoryIndex++; renderDemoStory(); }
+        else closeStoryDemo();
+      }, 6500);
+    }
+    function nextStoryDemo(){
+      if(demoStoryIndex >= pingMeStories.length-1){ closeStoryDemo(); return; }
+      demoStoryIndex++;
+      renderDemoStory();
+    }
+    function closeStoryDemo(){
+      document.getElementById("storyDemoOverlay").classList.add("hidden");
+      if(demoStoryInterval) clearInterval(demoStoryInterval);
+      demoStoryInterval = null;
+    }
+
     function switchToScreen(id) {
       const shell = document.getElementById("appShell");
       shell.classList.remove("theme-light");
@@ -1154,6 +1270,7 @@
       if (pollInterval) clearInterval(pollInterval);
       if (tipInterval) clearInterval(tipInterval);
       timerInterval = pollInterval = tipInterval = null;
+      stopAutoStoryLoop();
     }
 
     function showTip() {
@@ -1195,6 +1312,7 @@
       pollInterval = setInterval(checkOwnerReply, 2500);
       showTip();
       tipInterval = setInterval(showTip, 8000);
+      startAutoStoryLoop();
     }
 
     function showStatusState(state) {
