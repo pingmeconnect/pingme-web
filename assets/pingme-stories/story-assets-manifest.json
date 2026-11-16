@@ -42,5 +42,16 @@
     "The HOW PINGME WORKS demo is isolated from real alert submission.",
     "Original admin.html and existing assets are retained.",
     "The waiting countdown and owner-reply polling remain in the original code; story rotation stops when waiting timers stop."
+  ],
+  "image_standard": {
+    "width": 1200,
+    "height": 675,
+    "aspect_ratio": "16:9",
+    "format": "PNG"
+  },
+  "display_notes": [
+    "Story images are display-only and do not create QR codes or send alerts.",
+    "All story images use the same 1200 x 675 pixel 16:9 canvas.",
+    "Captions remain in index.html and follow the English/Tamil app language toggle."
   ]
 }
