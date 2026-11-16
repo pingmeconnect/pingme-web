@@ -964,16 +964,16 @@
       <div class="surface-card p-3 space-y-2.5">
         <input type="text" id="customNote" maxlength="160" placeholder="Add details (optional)..." data-i18n-placeholder="customPlaceholder" class="w-full bg-slate-50 border-2 border-slate-300 rounded-xl px-3.5 py-3 text-base font-bold text-slate-900 focus:outline-none focus:border-cyan-500" />
         <div class="grid grid-cols-2 gap-2">
-          <label class="p-3 rounded-xl bg-slate-100 border-2 border-slate-300 flex items-center justify-center gap-2 cursor-pointer font-extrabold text-sm text-slate-800">
+          <label id="photoLabel" class="relative p-3 rounded-xl bg-slate-100 border-2 border-slate-300 flex items-center justify-center gap-2 cursor-pointer font-extrabold text-sm text-slate-800">
             <span>📷</span> <span data-i18n="addPhoto">ADD PHOTO</span>
+            <span id="photoCheck" aria-label="Photo attached" class="hidden absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-emerald-600 text-white text-xs font-black flex items-center justify-center shadow">✓</span>
             <input type="file" id="photoInput" accept="image/*" class="hidden" onchange="handlePhoto(event)" />
           </label>
-          <button type="button" onclick="attachLocation()" id="locationBtn" class="p-3 rounded-xl bg-slate-100 border-2 border-slate-300 flex items-center justify-center gap-2 font-extrabold text-sm text-slate-800">
+          <button type="button" onclick="attachLocation()" id="locationBtn" class="relative p-3 rounded-xl bg-slate-100 border-2 border-slate-300 flex items-center justify-center gap-2 font-extrabold text-sm text-slate-800">
             <span>📍</span> <span data-i18n="addLocation">ADD LOCATION</span>
+            <span id="locationCheck" aria-label="Location attached" class="hidden absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-emerald-600 text-white text-xs font-black flex items-center justify-center shadow">✓</span>
           </button>
         </div>
-        <div id="photoStatus" class="hidden text-sm font-extrabold text-emerald-700 bg-emerald-50 p-2 rounded-xl text-center"></div>
-        <div id="locationStatus" class="hidden text-sm font-extrabold text-emerald-700 bg-emerald-50 p-2 rounded-xl text-center"></div>
       </div>
 
       <button type="button" id="sendBtn" onclick="sendAlert()" class="btn-send-alert w-full py-4 rounded-2xl font-black text-lg text-white tracking-wider flex items-center justify-center gap-2 shadow-xl">
@@ -1276,11 +1276,10 @@
     }
 
     function updateAttachmentLabels() {
-      const d = uiText[currentLang];
-      const photoStatus = document.getElementById("photoStatus");
-      const locationStatus = document.getElementById("locationStatus");
-      if (photoBase64) { photoStatus.textContent = d.photoAdded; photoStatus.classList.remove("hidden"); }
-      if (locationUrl) { locationStatus.textContent = d.locationAdded; locationStatus.classList.remove("hidden"); }
+      const photoCheck = document.getElementById("photoCheck");
+      const locationCheck = document.getElementById("locationCheck");
+      if (photoCheck) photoCheck.classList.toggle("hidden", !photoBase64);
+      if (locationCheck) locationCheck.classList.toggle("hidden", !locationUrl);
     }
 
     function renderTemplates() {
