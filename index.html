@@ -1855,145 +1855,97 @@
       #screen1 .tpl-pill { min-height: 34px !important; }
       #screen1 .btn-send-alert { min-height: 44px !important; }
     }
-</style>
 
 
-<style id="pingme-responsive-viewport-only">
-/* PINGME RESPONSIVE VIEWPORT PATCH
-   Layout-only overrides. Existing HTML, assets, JavaScript, API calls,
-   form fields, alert workflow and event handlers are unchanged. */
+    /* PINGME FINAL VIEWPORT SAFETY FIX — layout/scroll only.
+       Keep every existing control visible and reachable on short mobile screens.
+       No HTML, JavaScript, API, or alert workflow changes. */
+    html, body {
+      width: 100% !important;
+      height: auto !important;
+      min-height: 100% !important;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+    }
+    body {
+      display: block !important;
+      align-items: initial !important;
+      justify-content: initial !important;
+      padding: 0 !important;
+    }
+    .app-shell {
+      width: 100% !important;
+      max-width: 520px !important;
+      height: auto !important;
+      min-height: 100svh !important;
+      min-height: 100dvh !important;
+      max-height: none !important;
+      margin: 0 auto !important;
+      overflow: visible !important;
+      border-radius: 0 !important;
+    }
+    .app-header {
+      position: sticky !important;
+      top: 0 !important;
+      flex: 0 0 auto !important;
+    }
+    #screen1 {
+      display: flex !important;
+      flex: 0 0 auto !important;
+      width: 100% !important;
+      height: auto !important;
+      min-height: calc(100svh - 78px) !important;
+      min-height: calc(100dvh - 78px) !important;
+      max-height: none !important;
+      overflow: visible !important;
+      justify-content: flex-start !important;
+      padding-bottom: max(14px, env(safe-area-inset-bottom)) !important;
+    }
+    #screen1 > * {
+      flex-shrink: 0 !important;
+    }
+    #screen1 #sendBtn,
+    #screen1 .btn-send-alert {
+      display: flex !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      position: relative !important;
+      flex: 0 0 auto !important;
+      width: 100% !important;
+      min-height: 54px !important;
+      margin-bottom: 4px !important;
+    }
+    #screen2 {
+      flex: 0 0 auto !important;
+      height: auto !important;
+      min-height: calc(100svh - 78px) !important;
+      min-height: calc(100dvh - 78px) !important;
+      max-height: none !important;
+      overflow: visible !important;
+      padding-bottom: max(18px, env(safe-area-inset-bottom)) !important;
+    }
+    #screen2 > .status-state:not(.hidden) {
+      min-height: 0 !important;
+      height: auto !important;
+    }
 
-/* Let the document scroll naturally on devices with shorter viewports. */
-html,
-body {
-  width: 100%;
-  height: auto !important;
-  min-height: 100%;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-}
-
-body {
-  display: block !important;
-  align-items: initial !important;
-  justify-content: initial !important;
-  padding: 0 !important;
-}
-
-/* Do not lock the application to one device's exact screen height. */
-#appShell,
-.app-shell {
-  width: 100% !important;
-  max-width: 390px;
-  height: auto !important;
-  min-height: 100dvh !important;
-  max-height: none !important;
-  margin: 0 auto !important;
-  overflow: visible !important;
-  border-radius: 0;
-}
-
-.app-header {
-  flex: 0 0 auto !important;
-}
-
-/* The full scan form and Send Alert button must remain reachable by scrolling. */
-#screen1 {
-  flex: 0 0 auto !important;
-  width: 100%;
-  height: auto !important;
-  min-height: 0 !important;
-  max-height: none !important;
-  overflow: visible !important;
-  justify-content: flex-start !important;
-}
-
-#screen1 > * {
-  flex-shrink: 0;
-}
-
-/* Status, reply and timeout screens also scroll if their content is taller. */
-#screen2 {
-  flex: 0 0 auto !important;
-  width: 100%;
-  height: auto !important;
-  min-height: 100dvh;
-  max-height: none !important;
-  overflow: visible !important;
-}
-
-#screen2 > .status-state:not(.hidden) {
-  height: auto !important;
-  min-height: 0 !important;
-  overflow: visible !important;
-}
-
-#waitingState,
-#replyState,
-#timeoutState,
-#doneState {
-  min-height: 0 !important;
-}
-
-/* Tablets and larger screens: use available width without stretching indefinitely. */
-@media (min-width: 600px) {
-  body {
-    padding: 16px !important;
-  }
-
-  #appShell,
-  .app-shell {
-    width: min(100%, 720px) !important;
-    max-width: 720px !important;
-    min-height: calc(100dvh - 32px) !important;
-    border-radius: 24px;
-    overflow: visible !important;
-  }
-
-  #screen1 {
-    padding-left: clamp(16px, 3vw, 28px) !important;
-    padding-right: clamp(16px, 3vw, 28px) !important;
-  }
-
-  #screen1 .hero-composition {
-    height: clamp(170px, 25vw, 230px) !important;
-    min-height: 150px !important;
-  }
-
-  #screen1 .cat-card {
-    min-height: 76px !important;
-  }
-
-  #screen1 .tpl-pill {
-    min-height: 44px !important;
-  }
-
-  #screen1 .btn-send-alert {
-    min-height: 54px !important;
-  }
-}
-
-/* Narrow phones and short landscape screens: preserve readable controls. */
-@media (max-width: 390px) {
-  #appShell,
-  .app-shell {
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-}
-
-@media (max-height: 560px) {
-  #screen1 {
-    gap: 7px !important;
-  }
-
-  #screen1 .hero-composition {
-    height: 110px !important;
-    min-height: 100px !important;
-  }
-
-  #screen1 .btn-send-alert {
-    min-height: 44px !important;
-  }
-}
+    /* On wide tablets/desktop, retain the centered PingMe panel. */
+    @media (min-width: 768px) {
+      body {
+        display: flex !important;
+        align-items: flex-start !important;
+        justify-content: center !important;
+        min-height: 100vh !important;
+        padding: 20px 24px !important;
+      }
+      .app-shell {
+        width: min(100%, 520px) !important;
+        min-height: calc(100vh - 40px) !important;
+        border-radius: 30px !important;
+        overflow: hidden !important;
+      }
+      #screen1, #screen2 {
+        overflow: visible !important;
+      }
+    }
 </style>
