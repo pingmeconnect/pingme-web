@@ -873,284 +873,27 @@
 .story-count,#storyCount{display:none!important}
 .story-demo-button{display:flex!important;margin:0 auto!important;align-items:center!important;justify-content:center!important;min-height:40px!important;padding:0 22px!important;border-radius:999px!important;border:1.5px solid #fff!important;background:linear-gradient(100deg,#0ea5e9,#5b45e8 55%,#db2777)!important;color:#fff!important;font-weight:900!important;box-shadow:0 5px 18px rgba(59,130,246,.35)!important}
 
-
-/* PINGME SCAN PAGE — RESPONSIVE CONTENT-FIT FIX
-   Layout-only override: preserve existing markup, IDs, handlers and API workflow. */
-html, body {
-  width: 100%;
-  height: auto !important;
-  min-height: 100%;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
+/* PINGME STORY DISPLAY FIX — fixed 16:9, no crop/stretch, no counters/progress */
+#waitingStoryModule .story-topline,
+#waitingStoryModule .story-progress,
+#waitingStoryModule .story-count,
+#storyDemoCount { display:none !important; }
+#waitingStoryModule .story-image-frame {
+  width:100% !important; height:auto !important; max-height:none !important;
+  aspect-ratio:16 / 9 !important; overflow:hidden !important;
+  display:block !important; margin:0 auto !important;
+  background:#eef2f8 !important; border:0 !important; border-radius:14px !important;
 }
-body {
-  display: block !important;
-  align-items: initial !important;
-  justify-content: initial !important;
-  padding: 0 !important;
+#waitingStoryModule .story-image-frame img,
+.story-demo-image {
+  display:block !important; width:100% !important; height:100% !important;
+  aspect-ratio:16 / 9 !important; object-fit:contain !important;
+  object-position:center center !important; border-radius:14px !important;
+  filter:none !important; transform:none !important;
 }
-#appShell.app-shell {
-  width: min(100%, 390px);
-  max-width: 390px;
-  height: auto !important;
-  min-height: 100dvh;
-  margin: 0 auto;
-  overflow: visible !important;
-}
-#appShell .app-header {
-  position: sticky;
-  top: 0;
-  z-index: 30;
-  flex: 0 0 78px;
-}
-#screen1 {
-  display: flex;
-  flex: 0 0 auto !important;
-  width: 100%;
-  height: auto !important;
-  min-height: calc(100dvh - 78px);
-  max-height: none !important;
-  overflow: visible !important;
-  justify-content: flex-start !important;
-  gap: 10px !important;
-  padding: 10px 12px max(14px, env(safe-area-inset-bottom)) !important;
-}
-#screen1.hidden { display: none !important; }
-#screen1 > * {
-  flex-shrink: 0 !important;
-}
-#screen1 .hero-composition {
-  height: clamp(138px, 19vh, 178px);
-  min-height: 138px;
-}
-#screen1 .category-block,
-#screen1 .message-block,
-#screen1 .surface-card,
-#screen1 #sendBtn,
-#screen1 .screen1-footer {
-  position: relative;
-  flex: 0 0 auto;
-}
-#screen1 #reasonsContainer { gap: 6px !important; }
-#screen1 .tpl-pill { min-height: 36px; }
-#screen1 .surface-card { padding: 8px; }
-#screen1 #customNote { min-height: 40px; }
-#screen1 #sendBtn {
-  display: flex !important;
-  visibility: visible !important;
-  min-height: 52px;
-  margin-top: 1px;
-  margin-bottom: 2px;
-}
-#screen1 .screen1-footer {
-  padding-bottom: 2px;
-}
-#screen2 {
-  flex: 1 0 auto !important;
-  min-height: calc(100dvh - 78px);
-  height: auto !important;
-  overflow: visible !important;
-}
-#screen2.hidden { display: none !important; }
-#screen2 > .status-state:not(.hidden) {
-  min-height: calc(100dvh - 102px);
-}
-@media (max-width: 390px) {
-  #screen1 {
-    gap: 8px !important;
-    padding-left: 10px !important;
-    padding-right: 10px !important;
-  }
-}
-@media (min-width: 768px) {
-  #appShell.app-shell {
-    border-radius: 28px;
-    overflow: visible !important;
-    box-shadow: 0 28px 75px rgba(0,0,0,.45);
-  }
-}
-
-
-
-/* PINGME SCAN PAGE — SAFE RESPONSIVE RESTORE
-   Restores normal document flow. No fixed-height/zero-height flex trap.
-   Keeps all original elements, IDs, event handlers and API calls intact. */
-html, body {
-  width: 100%;
-  min-height: 100%;
-  height: auto !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-}
-body {
-  display: block !important;
-  padding: 0 !important;
-}
-#appShell.app-shell {
-  width: min(100%, 390px) !important;
-  max-width: 390px !important;
-  height: auto !important;
-  min-height: 100dvh !important;
-  max-height: none !important;
-  margin: 0 auto !important;
-  overflow: visible !important;
-  display: flex !important;
-  flex-direction: column !important;
-  padding-bottom: max(8px, env(safe-area-inset-bottom)) !important;
-}
-#appShell > .app-header {
-  position: relative !important;
-  top: auto !important;
-  flex: 0 0 72px !important;
-  min-height: 72px !important;
-  padding: 6px 12px 5px !important;
-}
-#screen1 {
-  display: flex !important;
-  flex: 0 0 auto !important;
-  width: 100% !important;
-  height: auto !important;
-  min-height: 0 !important;
-  max-height: none !important;
-  overflow: visible !important;
-  justify-content: flex-start !important;
-  gap: 7px !important;
-  padding: 8px 10px 8px !important;
-}
-#screen1.hidden { display: none !important; }
-#screen1 > * {
-  flex-shrink: 0 !important;
-  min-height: 0;
-  margin-top: 0 !important;
-}
-#screen1 .hero-composition {
-  flex: 0 0 118px !important;
-  height: 118px !important;
-  min-height: 118px !important;
-  border-radius: 18px !important;
-}
-#screen1 .hero-mascot {
-  object-fit: contain !important;
-  object-position: center bottom !important;
-}
-#screen1 .category-block {
-  flex: 0 0 auto !important;
-  margin: 0 !important;
-}
-#screen1 .cat-card {
-  height: 58px !important;
-  min-height: 58px !important;
-  padding: 4px 3px !important;
-  gap: 2px !important;
-  border-radius: 12px !important;
-}
-#screen1 .cat-card img {
-  width: 27px !important;
-  height: 25px !important;
-}
-#screen1 .cat-card span:last-child {
-  font-size: 11px !important;
-  line-height: 1.05 !important;
-}
-#screen1 .message-block {
-  flex: 0 0 auto !important;
-  min-height: 0 !important;
-  overflow: visible !important;
-}
-#screen1 #reasonsContainer {
-  display: grid !important;
-  grid-auto-rows: minmax(39px, auto) !important;
-  gap: 5px !important;
-  height: auto !important;
-  min-height: 0 !important;
-  overflow: visible !important;
-}
-#screen1 #reasonsContainer .tpl-pill {
-  height: auto !important;
-  min-height: 39px !important;
-  padding: 5px 9px !important;
-  font-size: 12px !important;
-  line-height: 1.1 !important;
-  border-radius: 11px !important;
-}
-#screen1 .surface-card {
-  flex: 0 0 auto !important;
-  min-height: 0 !important;
-  padding: 7px !important;
-  gap: 5px !important;
-}
-#screen1 #customNote {
-  height: 36px !important;
-  min-height: 36px !important;
-  padding: 6px 9px !important;
-  font-size: 12px !important;
-}
-#screen1 label,
-#screen1 #locationBtn {
-  height: 36px !important;
-  min-height: 36px !important;
-  padding: 4px 5px !important;
-  font-size: 10px !important;
-  line-height: 1 !important;
-}
-#screen1 .btn-send-alert,
-#screen1 #sendBtn {
-  display: flex !important;
-  visibility: visible !important;
-  flex: 0 0 46px !important;
-  height: 46px !important;
-  min-height: 46px !important;
-  margin: 0 !important;
-  padding: 5px !important;
-  font-size: 17px !important;
-}
-#screen1 .screen1-footer {
-  flex: 0 0 auto !important;
-  padding: 0 0 2px !important;
-  line-height: 1.05 !important;
-}
-#screen1 .privacy-line { font-size: 9px !important; gap: 6px !important; }
-#screen1 .copyright-line { margin-top: 2px !important; font-size: 7px !important; }
-#screen2 {
-  flex: 0 0 auto !important;
-  height: auto !important;
-  min-height: calc(100dvh - 72px) !important;
-  max-height: none !important;
-  overflow: visible !important;
-}
-#screen2.hidden { display: none !important; }
-#screen2 > .status-state:not(.hidden) {
-  min-height: calc(100dvh - 90px) !important;
-}
-@media (max-height: 720px) {
-  #screen1 .hero-composition {
-    flex-basis: 100px !important;
-    height: 100px !important;
-    min-height: 100px !important;
-  }
-  #screen1 .cat-card { height: 52px !important; min-height: 52px !important; }
-  #screen1 #reasonsContainer { grid-auto-rows: minmax(35px, auto) !important; gap: 4px !important; }
-  #screen1 #reasonsContainer .tpl-pill { min-height: 35px !important; padding: 4px 8px !important; }
-  #screen1 .surface-card { padding: 5px !important; }
-  #screen1 #customNote,
-  #screen1 label,
-  #screen1 #locationBtn { height: 32px !important; min-height: 32px !important; }
-  #screen1 .btn-send-alert,
-  #screen1 #sendBtn { flex-basis: 42px !important; height: 42px !important; min-height: 42px !important; }
-}
-@media (min-width: 768px) {
-  body {
-    display: block !important;
-    padding: 0 !important;
-    background: radial-gradient(ellipse at 50% 0%,#173d82 0%,#081a3b 48%,#03091c 100%) !important;
-  }
-  #appShell.app-shell {
-    width: 390px !important;
-    min-height: 100dvh !important;
-    border-radius: 0 !important;
-    border: 0 !important;
-    box-shadow: none !important;
-  }
+#waitingStoryModule .story-controls {
+  display:flex !important; justify-content:center !important;
+  align-items:center !important; gap:8px !important;
 }
 
 </style>
@@ -1253,10 +996,10 @@ body {
           <div class="countdown-ring" id="countdownRing"><span id="countdownNumber">180</span><small data-i18n="seconds">SECONDS</small></div>
         </div>
         <div class="story-module" id="waitingStoryModule" aria-live="polite">
-          <div class="story-topline" style="justify-content:flex-end"><span class="story-count" id="storyCount" aria-hidden="true">1 / 19</span></div>
+          <div class="story-topline" style="justify-content:flex-end"><span class="story-count" id="storyCount">1 / 19</span></div>
           <div class="story-image-frame"><img id="waitingStoryImage" src="assets/pingme-stories/vehicle_01_blocked.png" alt="PingMe story scene"><span id="storyBuyOverlay" class="story-buy-overlay" hidden>BUY</span></div>
           <div class="story-caption" id="waitingStoryCaption">My car is blocked! How do I reach the owner?</div>
-          <div class="story-controls"><div class="story-progress"><span id="storyProgressFill" aria-hidden="true"></span></div><button class="story-demo-button" type="button" onclick="openStoryDemo()">WHY PINGME?</button></div>
+          <div class="story-controls"><div class="story-progress"><span id="storyProgressFill"></span></div><button class="story-demo-button" type="button" onclick="openStoryDemo()">WHY PINGME?</button></div>
         </div>
       </div>
 
@@ -1604,7 +1347,7 @@ body {
 
 
     // Story slides are display-only. They never call sendAlert() or modify a real session.
-    const pingMeStories = [["vehicle_01_blocked.png", "vehicle", "My car is blocked! How do I reach the owner?", "அடடா! என் காரை யாரோ மறிச்சு நிறுத்திட்டாங்களே! உரிமையாளரை எப்படி தொடர்பு கொள்வது?"], ["vehicle_02_qr_found.png", "vehicle", "I spotted a PingMe QR sticker on the vehicle.", "வண்டியில் PingMe QR ஸ்டிக்கர் இருக்கு பாருங்க!"], ["vehicle_03_scan.png", "vehicle", "I’ll scan it and send an alert with a photo and my location.", "QR-ஐ ஸ்கேன் பண்ணி, போட்டோவும் இருக்கும் இடத்தையும் அனுப்புறேன்."], ["vehicle_04_alert_sent.png", "vehicle", "The owner gets the alert and can reply privately.", "உரிமையாளருக்கு உடனே தகவல் போயிடும். அவர் தனியாக பதிலும் அனுப்பலாம்."], ["vehicle_05_owner_moves.png", "vehicle", "The owner replies and comes to move the vehicle. Problem solved!", "உரிமையாளர் பதில் அனுப்பிட்டு வந்து வண்டியை எடுத்துட்டார். பிரச்சினை தீர்ந்தது!"], ["vehicle_06_buy.png", "vehicle", "I want this! How can I get it? — Just click BUY!", "எனக்கும் இது வேணும்! எப்படிக் கிடைக்கும்? — BUY-ஐ அழுத்துங்க!"], ["bag_01_found.png", "bag", "Someone has left a bag here. I should help find its owner.", "இந்தப் பை யாரோடதுன்னு தெரியலையே… உரிமையாளரிடம் சேர்க்கணும்."], ["bag_02_qr_tag.png", "bag", "There’s a PingMe QR tag on the bag.", "அட, பையில் PingMe QR tag இருக்கு!"], ["bag_03_scan.png", "bag", "I’ll scan the QR and send a photo and location.", "QR-ஐ ஸ்கேன் பண்ணி, போட்டோவும் இடத்தையும் அனுப்புறேன்."], ["bag_04_alert_sent.png", "bag", "The owner receives the alert and replies. No need to exchange phone numbers.", "உரிமையாளருக்கு தகவல் போயிடுச்சு. அவர் பதிலும் அனுப்பிட்டார். நம்பர் பகிர வேண்டியதில்லை."], ["bag_05_returned.png", "bag", "The owner arrives and gets the bag back safely.", "உரிமையாளர் வந்துட்டார். பையும் பத்திரமா கிடைச்சுடுச்சு!"], ["bag_06_buy.png", "bag", "I want this! How can I get it? — Just click BUY!", "எனக்கும் இப்படியொரு tag வேணும்! — BUY-ஐ அழுத்துங்க!"], ["pet_01_family.png", "pet", "Jimmy is part of our family. We love him so much!", "ஜிம்மி எங்க வீட்டுப் பிள்ளை மாதிரி. எங்களுக்கு ரொம்பப் பிரியமானவன்!"], ["pet_02_missing.png", "pet", "Oh no! Jimmy is missing. I’ve searched everywhere!", "ஐயையோ! ஜிம்மியைக் காணோம்! எங்கெல்லாமோ தேடிட்டேன்… கிடைக்கவே இல்லையே!"], ["pet_03_found.png", "pet", "A kind person finds Jimmy wearing his PingMe QR tag.", "அதிர்ஷ்டவசமா, ஒருத்தர் ஜிம்மியைப் பார்த்தார். அவன் கழுத்தில் PingMe QR tag இருந்தது."], ["pet_04_scan.png", "pet", "They scan the tag and send Jimmy’s photo and location.", "அந்த QR-ஐ ஸ்கேன் பண்ணி, ஜிம்மியின் போட்டோவையும் இருக்கும் இடத்தையும் அனுப்பினார்."], ["pet_05_owner_alert.png", "pet", "The owner gets the alert: “That’s my Jimmy! Thank you. I’m coming!”", "உரிமையாளருக்கு தகவல் வந்ததும், “அட, என் ஜிம்மி! ரொம்ப நன்றி. உடனே வர்றேன்!”ன்னு பதில் அனுப்பினார்."], ["pet_06_reunion.png", "pet", "Jimmy is home again! One scan brings loved ones together.", "ஜிம்மி திரும்ப வீட்டுக்கு வந்துட்டான்! ஒரு ஸ்கேன் குடும்பத்தை மீண்டும் சேர்த்தது."], ["pet_07_message.png", "pet", "No need to exchange personal phone numbers. One scan. Instant connection.", "தனிப்பட்ட மொபைல் நம்பரைப் பகிர வேண்டாம். ஒரே ஸ்கேன்… உடனடி தொடர்பு!"]];
+    const pingMeStories = [["vehicle_01_blocked.png", "vehicle", "My car is blocked! How do I reach the owner?", "அய்யய்யோ, என் காருக்கு முன்னாடி வேற வண்டி நிறுத்தியிருக்காங்க! இதோட owner-ஐ எப்படி கூப்பிடுறது?"], ["vehicle_02_qr_found.png", "vehicle", "I spotted a PingMe QR sticker on the vehicle.", "அட, இந்த வண்டியில PingMe QR ஸ்டிக்கர் இருக்கே!"], ["vehicle_03_scan.png", "vehicle", "I’ll scan it and send an alert with a photo and my location.", "இத ஸ்கேன் பண்ணி, போட்டோவும் நான் இருக்கிற இடத்தையும் அனுப்பிடுறேன்."], ["vehicle_04_alert_sent.png", "vehicle", "The owner gets the alert and can reply privately.", "வண்டியோட owner-க்கு உடனே மெசேஜ் போயிடும். அவரும் நமக்குத் தனியா reply பண்ணலாம்."], ["vehicle_05_owner_moves.png", "vehicle", "The owner replies and comes to move the vehicle. Problem solved!", "owner reply பண்ணிட்டாரு. வந்து வண்டியையும் எடுத்துட்டாரு. பிரச்சினை ஓவர்!"], ["vehicle_06_buy.png", "vehicle", "I want this! How can I get it? — Just click BUY!", "எனக்கும் இந்த PingMe வேணும்! எப்படி வாங்குறது? — BUY-ஐ தட்டுங்க!"], ["bag_01_found.png", "bag", "Someone has left a bag here. I should help find its owner.", "இந்தப் பை யாரோடதுன்னு தெரியலையே… owner கிட்ட சேர்க்கணுமே!"], ["bag_02_qr_tag.png", "bag", "There’s a PingMe QR tag on the bag.", "அடடா, இந்தப் பையில PingMe QR tag இருக்கே!"], ["bag_03_scan.png", "bag", "I’ll scan the QR and send a photo and location.", "QR-ஐ ஸ்கேன் பண்ணி, போட்டோவும் location-உம் அனுப்பிடுறேன்."], ["bag_04_alert_sent.png", "bag", "The owner receives the alert and replies. No need to exchange phone numbers.", "owner-க்கு alert போயிடுச்சு; அவரும் reply பண்ணிட்டாரு. நம்பர் சொல்லவே வேண்டாம்!"], ["bag_05_returned.png", "bag", "The owner arrives and gets the bag back safely.", "owner வந்துட்டாரு. பையும் பத்திரமா திரும்பக் கிடைச்சிடுச்சு!"], ["bag_06_buy.png", "bag", "I want this! How can I get it? — Just click BUY!", "எனக்கும் இப்படியொரு tag வேணும்! — BUY-ஐ தட்டுங்க!"], ["pet_01_family.png", "pet", "Jimmy is part of our family. We love him so much!", "ஜிம்மி எங்க வீட்டில ஒருத்தன் மாதிரி. எங்களுக்கு அவனை ரொம்பப் பிடிக்கும்!"], ["pet_02_missing.png", "pet", "Oh no! Jimmy is missing. I’ve searched everywhere!", "அய்யய்யோ, ஜிம்மியைக் காணோம்! எங்கெங்கோ தேடிப் பார்த்தாச்சு… இன்னும் கிடைக்கல!"], ["pet_03_found.png", "pet", "A kind person finds Jimmy wearing his PingMe QR tag.", "நல்லவேளை, ஒருத்தர் ஜிம்மியைப் பார்த்திருக்காரு. அவன் கழுத்தில PingMe QR tag இருந்தது."], ["pet_04_scan.png", "pet", "They scan the tag and send Jimmy’s photo and location.", "அவர் QR-ஐ ஸ்கேன் பண்ணி, ஜிம்மியோட போட்டோவையும் location-உம் அனுப்பினாரு."], ["pet_05_owner_alert.png", "pet", "The owner gets the alert: “That’s my Jimmy! Thank you. I’m coming!”", "owner-க்கு alert வந்ததும், “அட, என் ஜிம்மி! ரொம்ப நன்றி. இதோ வந்துட்டிருக்கேன்!”ன்னு reply பண்ணினாரு."], ["pet_06_reunion.png", "pet", "Jimmy is home again! One scan brings loved ones together.", "ஜிம்மி மறுபடியும் வீட்டுக்கு வந்துட்டான்! ஒரே ஒரு scan அவனை எங்ககிட்ட சேர்த்துடுச்சு."], ["pet_07_message.png", "pet", "No need to exchange personal phone numbers. One scan. Instant connection.", "உங்க mobile number-ஐ யார்கிட்டயும் சொல்ல வேண்டாம். ஒரு scan போதும்… உடனே தொடர்பு கிடைக்கும்!"]];
     let storyIndex = 0;
     let storyInterval = null;
     let demoStoryIndex = 0;
@@ -1616,25 +1359,35 @@ body {
       if(currentLang === "ta") return item[1] === "vehicle" ? "வாகன உதவி" : item[1] === "bag" ? "தொலைந்த பொருள்" : "செல்லப் பிராணி";
       return item[1] === "vehicle" ? "VEHICLE ALERT" : item[1] === "bag" ? "LOST & FOUND" : "LOST PET";
     }
+    let waitingStoryRenderToken = 0;
     function renderWaitingStory(){
       const item = pingMeStories[storyIndex % pingMeStories.length];
       const img = document.getElementById("waitingStoryImage");
       const cap = document.getElementById("waitingStoryCaption");
       const count = document.getElementById("storyCount");
       const fill = document.getElementById("storyProgressFill");
-      const kicker = document.getElementById("storyKicker");
       if(!img || !cap) return;
-      img.onload = null;
-      img.src = "assets/pingme-stories/" + item[0];
-      const frame = img.closest(".story-image-frame");
-      const buyOverlay = document.getElementById("storyBuyOverlay");
-      if(buyOverlay) buyOverlay.hidden = item[0] !== "vehicle_06_buy.png";
-      img.alt = storyLabel(item);
-      cap.textContent = storyText(item);
-      const demoButton = document.querySelector("#waitingStoryModule .story-demo-button");
-      if(demoButton) demoButton.textContent = currentLang === "ta" ? "PINGME எப்படி வேலை செய்கிறது?" : "WHY PINGME?";
-      if(count) count.textContent = (storyIndex+1) + "/" + pingMeStories.length;
-      if(fill) fill.style.width = (((storyIndex+1)/pingMeStories.length)*100) + "%";
+      const token = ++waitingStoryRenderToken;
+      const nextSrc = "assets/pingme-stories/" + item[0];
+      // Preload first: keep the previous caption visible until its matching image is ready.
+      // Then swap image, caption, counter and progress together in one paint.
+      const applyStory = () => {
+        if (token !== waitingStoryRenderToken) return;
+        img.src = nextSrc;
+        img.alt = storyLabel(item);
+        cap.textContent = storyText(item);
+        const buyOverlay = document.getElementById("storyBuyOverlay");
+        if(buyOverlay) buyOverlay.hidden = item[0] !== "vehicle_06_buy.png";
+        const demoButton = document.querySelector("#waitingStoryModule .story-demo-button");
+        if(demoButton) demoButton.textContent = currentLang === "ta" ? "PINGME எப்படி வேலை செய்கிறது?" : "WHY PINGME?";
+        if(count) count.textContent = (storyIndex+1) + "/" + pingMeStories.length;
+        if(fill) fill.style.width = (((storyIndex+1)/pingMeStories.length)*100) + "%";
+      };
+      const preload = new Image();
+      preload.onload = applyStory;
+      preload.onerror = applyStory;
+      preload.src = nextSrc;
+      if (preload.complete) applyStory();
     }
     function startAutoStoryLoop(){
       stopAutoStoryLoop();
@@ -1752,18 +1505,19 @@ body {
 
     // PingMe Signature Alert: browser-native speech + the same two-note chime.
     // Audio is primed by the user's SEND ALERT tap; playback is attempted once per reply.
-    function primePingMeAudio() {
+    async function primePingMeAudio() {
       try {
         const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContextClass) return;
+        if (!AudioContextClass) return false;
         if (!pingmeAudioContext) pingmeAudioContext = new AudioContextClass();
-        if (pingmeAudioContext.state === "suspended") pingmeAudioContext.resume();
+        if (pingmeAudioContext.state === "suspended") await pingmeAudioContext.resume();
         const buffer = pingmeAudioContext.createBuffer(1, 1, 22050);
         const source = pingmeAudioContext.createBufferSource();
         source.buffer = buffer;
         source.connect(pingmeAudioContext.destination);
         source.start(0);
-      } catch (err) {}
+        return pingmeAudioContext.state === "running";
+      } catch (err) { return false; }
     }
 
     function playPingMeSignatureChime() {
@@ -1800,8 +1554,8 @@ body {
         const utterance = new SpeechSynthesisUtterance(String(text || ""));
         utterance.lang = currentLang === "ta" ? "ta-IN" : "en-IN";
         // Original PingMe delivery: warm, confident and clear; not an imitation of any celebrity.
-        utterance.rate = currentLang === "ta" ? 0.82 : 0.82;
-        utterance.pitch = 0.98;
+        utterance.rate = currentLang === "ta" ? 0.90 : 0.93;
+        utterance.pitch = 0.88;
         utterance.volume = 1;
         const voices = window.speechSynthesis.getVoices();
         const preferred = voices.find(v => currentLang === "ta"
@@ -1851,8 +1605,8 @@ body {
       playPingMeSignatureChime();
 
       const announcement = currentLang === "ta"
-        ? "மகிழ்ச்சி! உங்களுக்கு உரிமையாளரிடமிருந்து பதில் வந்துவிட்டது."
-        : "Good news! You have got a reply from the owner.";
+        ? "சூப்பர்! உங்களுக்கு பதில் வந்துவிட்டது!"
+        : "Awesome! You've got a reply!";
       // Announce only that a reply has arrived. The owner's message stays visual;
       // never read the private message content aloud.
       window.setTimeout(() => {
@@ -1911,7 +1665,7 @@ body {
 
     async function sendAlert() {
       if (sessionClosed || sessionStorage.getItem("pingme_session_closed") === "true") return;
-      primePingMeAudio();
+      await primePingMeAudio();
       pingmeReplyAlertPlayed = false;
       const customMessage = document.getElementById("customNote").value.trim();
       const reason = selectedReason || customMessage;
@@ -2047,93 +1801,4 @@ body {
 .story-image-frame { background:transparent !important; }
 .story-image-frame img { object-fit:contain !important; object-position:center !important; }
 .story-demo-image { object-fit:contain !important; object-position:center !important; }
-
-/* PingMe Stories: fixed 16:9 artwork frame; preserve image proportions without cropping. */
-.story-image-frame{
-  width:100% !important;
-  height:auto !important;
-  aspect-ratio:16 / 9 !important;
-  max-height:none !important;
-  overflow:hidden !important;
-  margin:0 auto !important;
-  background:#eef2f8 !important;
-  border:0 !important;
-}
-.story-image-frame img{
-  width:100% !important;
-  height:100% !important;
-  aspect-ratio:16 / 9 !important;
-  object-fit:contain !important;
-  object-position:center !important;
-  display:block !important;
-  background:#eef2f8 !important;
-}
-#waitingStoryModule .story-topline,
-#waitingStoryModule .story-count,
-#waitingStoryModule .story-progress,
-#waitingStoryModule .story-progress > span{
-  display:none !important;
-}
-
-
-#storyDemoImage{
-  display:block !important;
-  width:100% !important;
-  aspect-ratio:16 / 9 !important;
-  height:auto !important;
-  object-fit:contain !important;
-  object-position:center !important;
-  background:#eef2f8 !important;
-}
-
-#storyDemoCount{display:none !important;}
-
-
-/* PINGME STORY + REPLY READABILITY UPDATE — final visual overrides only */
-/* All 19 story assets are 1200x675 (16:9); preserve the full artwork. */
-#waitingStoryModule .story-image-frame, .story-demo-image, #storyDemoImage {
-  width:100% !important; height:auto !important; aspect-ratio:16 / 9 !important;
-  max-width:100% !important; max-height:none !important; overflow:hidden !important;
-  background:#eef3ff !important; border:0 !important; border-radius:16px !important;
-}
-#waitingStoryModule .story-image-frame img, .story-demo-image, #storyDemoImage {
-  display:block !important; width:100% !important; height:100% !important;
-  aspect-ratio:16 / 9 !important; object-fit:contain !important;
-  object-position:center !important; background:#eef3ff !important;
-  transform:none !important; filter:none !important;
-}
-#waitingStoryModule .story-topline, #waitingStoryModule .story-kicker,
-#waitingStoryModule .story-count, #waitingStoryModule .story-progress,
-#waitingStoryModule .story-progress > span, #storyDemoCount { display:none !important; }
-#waitingStoryModule .story-caption {
-  min-height:64px !important; width:100% !important; padding:14px 16px !important;
-  display:flex !important; align-items:center !important; justify-content:center !important;
-  text-align:center !important; border-radius:16px !important;
-  color:#ffffff !important; font-size:clamp(18px,4.5vw,22px) !important;
-  line-height:1.35 !important; font-weight:900 !important; letter-spacing:.005em !important;
-  background:linear-gradient(120deg,#102b62 0%,#254da0 52%,#6238a8 100%) !important;
-  border:1px solid rgba(145,210,255,.8) !important;
-  box-shadow:0 8px 22px rgba(15,35,85,.22), inset 0 1px 0 rgba(255,255,255,.18) !important;
-  text-shadow:0 1px 2px rgba(0,0,0,.18) !important;
-}
-#replyState .owner-reply-card {
-  border:2px solid #67d9f5 !important;
-  background:linear-gradient(145deg,#ffffff 0%,#eaf7ff 52%,#f0eaff 100%) !important;
-  box-shadow:0 12px 28px rgba(12,38,88,.22),0 0 0 4px rgba(34,211,238,.08) !important;
-}
-#replyState .reply-card-title { font-size:16px !important; font-weight:1000 !important; color:#12336e !important; }
-#replyState .reply-message {
-  min-height:72px !important; padding:16px 15px !important;
-  display:flex !important; align-items:center !important; justify-content:center !important;
-  text-align:center !important; font-size:clamp(20px,5.2vw,26px) !important;
-  line-height:1.32 !important; font-weight:950 !important; color:#102b55 !important;
-  border:1.5px solid #9bdcf4 !important; border-radius:16px !important;
-  background:linear-gradient(120deg,#e4fff0 0%,#e0f7ff 55%,#f0eaff 100%) !important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 5px 14px rgba(20,70,120,.10) !important;
-  text-shadow:0 1px 0 rgba(255,255,255,.9) !important;
-}
-@media(max-width:390px){
- #waitingStoryModule .story-caption{font-size:18px !important;min-height:58px !important;padding:12px !important;}
- #replyState .reply-message{font-size:20px !important;min-height:64px !important;padding:13px !important;}
-}
 </style>
