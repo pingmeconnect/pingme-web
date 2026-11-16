@@ -896,6 +896,12 @@
   align-items:center !important; gap:8px !important;
 }
 
+
+    /* Approved full-width PingMe hero artwork: fills the complete banner frame. */
+    #screen1 .pingme-full-hero { position:relative !important; overflow:hidden !important; padding:0 !important; }
+    #screen1 .pingme-full-hero .hero-banner-image { position:absolute !important; inset:0 !important; display:block !important; width:100% !important; height:100% !important; max-width:none !important; object-fit:cover !important; object-position:center 46% !important; transform:none !important; border:0 !important; border-radius:inherit !important; }
+    #screen1 .pingme-full-hero::before { display:none !important; }
+
 </style>
 </head>
 <body>
@@ -927,11 +933,8 @@
     <!-- SCREEN 1: WELCOME & SEND ALERT -->
     <main id="screen1" class="flex-1 flex flex-col justify-between p-4 space-y-3">
       <!-- Official PingMe welcome mascot artwork -->
-      <div class="hero-composition">
-        <img src="assets/mascot-smile.png" alt="Pingy mascot" class="hero-mascot" onerror="this.onerror=null;this.src='assets/boy-share.png'" />
-        <div class="hero-use-cases" aria-label="PingMe use cases">
-          <span title="Vehicle">🚗</span><span title="Two-wheeler">🏍️</span><span title="Keys">🔑</span><span title="Luggage">🧳</span>
-        </div>
+      <div class="hero-composition pingme-full-hero">
+        <img src="assets/pingme-hero-banner.png" alt="PingMe mascot with vehicle, keys and luggage connection icons" class="hero-banner-image" fetchpriority="high" />
       </div>
 
       <!-- Category cards are self-explanatory; no extra heading -->
@@ -1346,7 +1349,7 @@
 
 
     // Story slides are display-only. They never call sendAlert() or modify a real session.
-    const pingMeStories = [["vehicle_01_blocked.png", "vehicle", "My car is blocked! How do I reach the owner?", "அய்யய்யோ, என் காருக்கு முன்னாடி வேற வண்டி நிறுத்தியிருக்காங்க! இதோட owner-ஐ எப்படி கூப்பிடுறது?"], ["vehicle_02_qr_found.png", "vehicle", "I spotted a PingMe QR sticker on the vehicle.", "அட, இந்த வண்டியில PingMe QR ஸ்டிக்கர் இருக்கே!"], ["vehicle_03_scan.png", "vehicle", "I’ll scan it and send an alert with a photo and my location.", "இத ஸ்கேன் பண்ணி, போட்டோவும் நான் இருக்கிற இடத்தையும் அனுப்பிடுறேன்."], ["vehicle_04_alert_sent.png", "vehicle", "The owner gets the alert and can reply privately.", "வண்டியோட owner-க்கு உடனே மெசேஜ் போயிடும். அவரும் நமக்குத் தனியா reply பண்ணலாம்."], ["vehicle_05_owner_moves.png", "vehicle", "The owner replies and comes to move the vehicle. Problem solved!", "owner reply பண்ணிட்டாரு. வந்து வண்டியையும் எடுத்துட்டாரு. பிரச்சினை ஓவர்!"], ["vehicle_06_buy.png", "vehicle", "I want this! How can I get it? — Just click BUY!", "எனக்கும் இந்த PingMe வேணும்! எப்படி வாங்குறது? — BUY-ஐ தட்டுங்க!"], ["bag_01_found.png", "bag", "Someone has left a bag here. I should help find its owner.", "இந்தப் பை யாரோடதுன்னு தெரியலையே… owner கிட்ட சேர்க்கணுமே!"], ["bag_02_qr_tag.png", "bag", "There’s a PingMe QR tag on the bag.", "அடடா, இந்தப் பையில PingMe QR tag இருக்கே!"], ["bag_03_scan.png", "bag", "I’ll scan the QR and send a photo and location.", "QR-ஐ ஸ்கேன் பண்ணி, போட்டோவும் location-உம் அனுப்பிடுறேன்."], ["bag_04_alert_sent.png", "bag", "The owner receives the alert and replies. No need to exchange phone numbers.", "owner-க்கு alert போயிடுச்சு; அவரும் reply பண்ணிட்டாரு. நம்பர் சொல்லவே வேண்டாம்!"], ["bag_05_returned.png", "bag", "The owner arrives and gets the bag back safely.", "owner வந்துட்டாரு. பையும் பத்திரமா திரும்பக் கிடைச்சிடுச்சு!"], ["bag_06_buy.png", "bag", "I want this! How can I get it? — Just click BUY!", "எனக்கும் இப்படியொரு tag வேணும்! — BUY-ஐ தட்டுங்க!"], ["pet_01_family.png", "pet", "Jimmy is part of our family. We love him so much!", "ஜிம்மி எங்க வீட்டில ஒருத்தன் மாதிரி. எங்களுக்கு அவனை ரொம்பப் பிடிக்கும்!"], ["pet_02_missing.png", "pet", "Oh no! Jimmy is missing. I’ve searched everywhere!", "அய்யய்யோ, ஜிம்மியைக் காணோம்! எங்கெங்கோ தேடிப் பார்த்தாச்சு… இன்னும் கிடைக்கல!"], ["pet_03_found.png", "pet", "A kind person finds Jimmy wearing his PingMe QR tag.", "நல்லவேளை, ஒருத்தர் ஜிம்மியைப் பார்த்திருக்காரு. அவன் கழுத்தில PingMe QR tag இருந்தது."], ["pet_04_scan.png", "pet", "They scan the tag and send Jimmy’s photo and location.", "அவர் QR-ஐ ஸ்கேன் பண்ணி, ஜிம்மியோட போட்டோவையும் location-உம் அனுப்பினாரு."], ["pet_05_owner_alert.png", "pet", "The owner gets the alert: “That’s my Jimmy! Thank you. I’m coming!”", "owner-க்கு alert வந்ததும், “அட, என் ஜிம்மி! ரொம்ப நன்றி. இதோ வந்துட்டிருக்கேன்!”ன்னு reply பண்ணினாரு."], ["pet_06_reunion.png", "pet", "Jimmy is home again! One scan brings loved ones together.", "ஜிம்மி மறுபடியும் வீட்டுக்கு வந்துட்டான்! ஒரே ஒரு scan அவனை எங்ககிட்ட சேர்த்துடுச்சு."], ["pet_07_message.png", "pet", "No need to exchange personal phone numbers. One scan. Instant connection.", "உங்க mobile number-ஐ யார்கிட்டயும் சொல்ல வேண்டாம். ஒரு scan போதும்… உடனே தொடர்பு கிடைக்கும்!"]];
+    const pingMeStories = [["vehicle_01_blocked.png","vehicle","My car is blocked! How do I reach the owner?","அய்யய்யோ, என் காருக்கு முன்னாடி வேற வண்டி நிறுத்தியிருக்காங்க! இதோட owner-ஐ எப்படி கூப்பிடுறது?"],["vehicle_02_qr_found.png","vehicle","I spotted a PingMe QR sticker on the vehicle.","அட, இந்த வண்டியில PingMe QR ஸ்டிக்கர் இருக்கே!"],["vehicle_03_scan.png","vehicle","I’ll scan it and send an alert with a photo and my location.","இத ஸ்கேன் பண்ணி, போட்டோவும் நான் இருக்கிற இடத்தையும் அனுப்பிடுறேன்."],["vehicle_04_alert_sent.png","vehicle","The owner gets the alert and can reply privately.","வண்டியோட owner-க்கு உடனே மெசேஜ் போயிடும். அவரும் நமக்குத் தனியா reply பண்ணலாம்."],["vehicle_05_owner_moves.png","vehicle","The owner replies and comes to move the vehicle. Problem solved!","owner reply பண்ணிட்டாரு. வந்து வண்டியையும் எடுத்துட்டாரு. பிரச்சினை ஓவர்!"],["vehicle_06_buy.png","vehicle","I want this! How can I get it? — Just click BUY!","எனக்கும் இந்த PingMe வேணும்! எப்படி வாங்குறது? — BUY-ஐ தட்டுங்க!"],["bag_01_found.png","bag","Someone has left a bag here. I should help find its owner.","இந்தப் பை யாரோடதுன்னு தெரியலையே… owner கிட்ட சேர்க்கணுமே!"],["bag_02_qr_tag.png","bag","There’s a PingMe QR tag on the bag.","அடடா, இந்தப் பையில PingMe QR tag இருக்கே!"],["bag_03_scan.png","bag","I’ll scan the QR and send a photo and location.","QR-ஐ ஸ்கேன் பண்ணி, போட்டோவும் location-உம் அனுப்பிடுறேன்."],["bag_04_alert_sent.png","bag","The owner receives the alert and replies. No need to exchange phone numbers.","owner-க்கு alert போயிடுச்சு; அவரும் reply பண்ணிட்டாரு. நம்பர் சொல்லவே வேண்டாம்!"],["bag_05_returned.png","bag","The owner arrives and gets the bag back safely.","owner வந்துட்டாரு. பையும் பத்திரமா திரும்பக் கிடைச்சிடுச்சு!"],["bag_06_buy.png","bag","I want this! How can I get it? — Just click BUY!","எனக்கும் இப்படியொரு tag வேணும்! — BUY-ஐ தட்டுங்க!"]];
     let storyIndex = 0;
     let storyInterval = null;
     let demoStoryIndex = 0;
