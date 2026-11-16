@@ -13,6 +13,40 @@
 </style>
 </head>
 <body>
+
+<style>
+#adminApp[hidden]{display:none!important}
+.auth-screen{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 15% 15%,#2457b7 0,#0a286f 42%,#061744 100%);font-family:Inter,system-ui,sans-serif}
+.auth-card{width:min(430px,100%);background:#fff;border:1px solid #e5eaf5;border-radius:22px;padding:26px;box-shadow:0 25px 80px #0005}
+.auth-logo{display:block;width:150px;height:62px;object-fit:contain;margin:0 auto 12px}.auth-title{text-align:center;color:#102b69;font-size:23px;font-weight:900;margin:4px 0}.auth-sub{text-align:center;color:#687795;font-size:12px;margin:0 0 22px}.auth-field{display:grid;gap:6px;margin:12px 0}.auth-field label{font-size:11px;font-weight:800;color:#425477}.auth-field input{width:100%;padding:13px;border:1px solid #cbd7ea;border-radius:10px;font:inherit;outline:none}.auth-field input:focus{border-color:#2878ed;box-shadow:0 0 0 3px #2878ed20}.auth-submit{width:100%;border:0;border-radius:10px;padding:13px;background:linear-gradient(100deg,#1764df,#16418d);color:#fff;font-weight:900;margin-top:8px}.auth-link{display:block;border:0;background:none;color:#1858b9;font-weight:800;font-size:12px;margin:14px auto 0;cursor:pointer}.auth-error{display:none;background:#fff0f1;color:#a32336;padding:10px;border-radius:9px;font-size:11px;margin:10px 0}.auth-note{text-align:center;color:#75819a;font-size:10px;margin-top:17px;line-height:1.5}.auth-top{display:flex;justify-content:flex-end;margin-bottom:8px}.auth-top button{border:0;background:#eef3ff;color:#153b83;border-radius:8px;padding:7px 10px;font-weight:800;font-size:11px}
+</style>
+<div class="auth-screen" id="authScreen">
+ <div class="auth-card">
+  <img class="auth-logo" src="assets/pingme-logo.png" alt="PingMe">
+  <h1 class="auth-title" id="authTitle">Admin Login</h1>
+  <p class="auth-sub" id="authSubtitle">Sign in to PingMe Administration</p>
+  <div class="auth-error" id="authError" role="alert"></div>
+  <form id="loginForm">
+   <div class="auth-field"><label for="adminEmail">Admin email</label><input id="adminEmail" type="email" autocomplete="username" value="pingmeconnect@gmail.com" required></div>
+   <div class="auth-field"><label for="adminPassword">Password</label><input id="adminPassword" type="password" autocomplete="current-password" placeholder="Enter your admin password" required></div>
+   <button class="auth-submit" id="authSubmit" type="submit">Sign in securely</button>
+  </form>
+  <form id="resetForm" hidden>
+   <div class="auth-field"><label for="resetEmail">Admin email</label><input id="resetEmail" type="email" autocomplete="email" value="pingmeconnect@gmail.com" required></div>
+   <button class="auth-submit" type="submit">Send password reset email</button>
+  </form>
+  <form id="newPasswordForm" hidden>
+   <div class="auth-field"><label for="newAdminPassword">New password (at least 8 characters)</label><input id="newAdminPassword" type="password" minlength="8" autocomplete="new-password" required></div>
+   <div class="auth-field"><label for="confirmAdminPassword">Confirm new password</label><input id="confirmAdminPassword" type="password" minlength="8" autocomplete="new-password" required></div>
+   <button class="auth-submit" type="submit">Update password</button>
+  </form>
+  <button class="auth-link" id="forgotLink" type="button">Forgot password?</button>
+  <button class="auth-link" id="backLoginLink" type="button" hidden>Back to login</button>
+  <p class="auth-note">Restricted administrator access · PingMe</p>
+ </div>
+</div>
+
+<div id="adminApp" hidden>
 <header class="topbrand"><img src="assets/pingme-logo.png" alt="PingMe logo"><div><div class="brandtitle">PingMe Admin Panel <span>— Complete Preview</span></div><div class="brandmeta">✓ Manage Customers　 ✓ QR & Stickers　 ✓ Credits & Subscription　 ✓ Alerts & Templates　 ✓ Reports</div></div></header>
 <div class="shell">
 <aside class="sidebar"><div><div class="side-logo"><img src="assets/pingme-logo.png" alt="PingMe"></div><nav class="nav" id="sideNav">
@@ -38,6 +72,7 @@
 <nav class="bottomnav" id="bottomNav"><button class="active" data-page="dashboard"><span>▦</span>Home</button><button data-page="customers"><span>♙</span>Customers</button><button data-page="add"><span>＋</span>Add</button><button data-page="qr"><span>▦</span>QR Studio</button><button data-page="settings"><span>☰</span>More</button></nav>
 <div class="modal" id="customerModal"><div class="modalbox"><div class="modalhead"><div><b style="font-size:15px">Customer Details</b><div class="sub" style="margin:3px 0 0">Profile · Credits · Subscription · QR & Print · Logs</div></div><button class="close" onclick="closeModal()">✕</button></div><div class="customerhero"><div class="avatar" style="width:56px;height:56px">RK</div><div style="flex:1"><b id="modalName" style="font-size:16px">Rajesh Kumar</b><div id="modalId" class="sub" style="margin:3px 0">PM-K7X4Q9</div><span class="pill" id="modalStatus">ACTIVE</span></div><button class="btn light small" onclick="toast('Profile editing needs connected database.')">✎ Edit</button></div><div class="tabs" style="margin-top:14px"><button class="active">Overview</button><button>Credits</button><button>History</button><button>QR & Print</button><button>Logs</button></div><div class="profilegrid"><div class="card"><h3>Customer Information</h3><div class="healthrow"><span>Registration Date</span><b>10 Nov 2026</b></div><div class="healthrow"><span>Activation Date</span><b>12 Nov 2026</b></div><div class="healthrow"><span>Subscription Start</span><b>12 Nov 2026</b></div><div class="healthrow"><span>Subscription Expiry</span><b>11 Nov 2027</b></div><div class="healthrow"><span>Mobile</span><b>+91 98765 43210</b></div><div class="healthrow"><span>Email</span><b>sample@email.com</b></div></div><div class="card"><div class="split"><div class="metric"><div><small>Paid Credits</small><b>245</b></div></div><div class="metric"><div><small>Test Credits</small><b>5 / 5</b></div></div></div><div class="metric" style="margin-top:8px"><div><small>Plan</small><b>Starter Kit (₹599)</b><small>Subscription · 1 Year</small></div></div><div style="margin-top:12px" class="btnrow"><button class="btn light small">Edit Details</button><button class="btn light small">Add / Deduct Credits</button><button class="btn light small">Extend Subscription</button><button class="btn red small" onclick="toast('Status update needs backend integration.')">Set Inactive</button></div></div></div><p class="footerhint">Sample profile data for layout preview only. Public QR pages must never expose personal customer details.</p></div></div>
 <div id="toast" style="position:fixed;left:50%;bottom:82px;transform:translateX(-50%);background:#102b69;color:#fff;padding:10px 15px;border-radius:10px;box-shadow:0 6px 20px #0003;display:none;z-index:40;font-size:11px;max-width:90vw;text-align:center"></div>
+</div>
 <script>
 const demoCustomers=[{id:'PM-K7X4Q9',name:'Rajesh Kumar',mobile:'+91 98765 43210',credits:245,expiry:'11 Nov 2027',status:'Active'},{id:'PM-P3R8L2',name:'Priya S',mobile:'+91 91840 277123',credits:120,expiry:'15 Mar 2027',status:'Active'},{id:'PM-L9M2F7',name:'Karthik R',mobile:'+91 91944 399887',credits:0,expiry:'05 Nov 2026',status:'Inactive'},{id:'PM-T6V1N5',name:'Meena V',mobile:'+91 98765 12345',credits:5,expiry:'30 Nov 2026',status:'Testing'}];
 function showPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+name));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===name));window.scrollTo({top:0,behavior:'smooth'});}
@@ -49,4 +84,70 @@ function closeModal(){document.getElementById('customerModal').classList.remove(
 document.getElementById('addForm').addEventListener('submit',e=>{e.preventDefault();const name=document.getElementById('newName').value.trim(),mobile=document.getElementById('newMobile').value.trim();if(!name||!mobile)return;demoCustomers.unshift({id:'PM-'+Math.random().toString(36).slice(2,8).toUpperCase(),name,mobile,credits:0,expiry:'Not activated',status:document.getElementById('newStatus').value});renderCustomers();e.target.reset();toast('Demo customer added locally. Connect backend for permanent saving.');showPage('customers')});
 let toastTimer;function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.style.display='none',3000)}function editTemplate(name){toast(name+' editor preview — approved Meta template rules still apply.')}
 </script>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+const SUPABASE_URL = 'https://vlmlcwzyfummpwxuitcn.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_a2PPtTLwt8Uf1CcW6ZsWKg_YOZ1E9BC';
+const ADMIN_EMAIL = 'pingmeconnect@gmail.com';
+const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+  auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+});
+const $ = id => document.getElementById(id);
+function authMessage(message){ $('authError').textContent=message; $('authError').style.display='block'; }
+function clearMessage(){ $('authError').textContent=''; $('authError').style.display='none'; }
+function showMode(mode){
+  clearMessage();
+  $('loginForm').hidden = mode !== 'login';
+  $('resetForm').hidden = mode !== 'reset';
+  $('newPasswordForm').hidden = mode !== 'newpassword';
+  $('forgotLink').hidden = mode !== 'login';
+  $('backLoginLink').hidden = mode === 'login';
+  $('authTitle').textContent = mode==='reset'?'Reset admin password':mode==='newpassword'?'Choose a new password':'Admin Login';
+  $('authSubtitle').textContent = mode==='reset'?'We will email you a secure password reset link.':mode==='newpassword'?'Set a new password for your PingMe admin account.':'Sign in to PingMe Administration';
+}
+function showAdmin(){ $('authScreen').style.display='none'; $('adminApp').hidden=false; }
+function showLogin(){ $('adminApp').hidden=true; $('authScreen').style.display='grid'; showMode('login'); }
+$('loginForm').addEventListener('submit', async e=>{
+ e.preventDefault(); clearMessage();
+ const email=$('adminEmail').value.trim().toLowerCase(), password=$('adminPassword').value;
+ if(email!==ADMIN_EMAIL){authMessage('This email is not authorised for PingMe administration.');return;}
+ $('authSubmit').disabled=true; $('authSubmit').textContent='Signing in…';
+ const {data,error}=await supabase.auth.signInWithPassword({email,password});
+ $('authSubmit').disabled=false; $('authSubmit').textContent='Sign in securely';
+ if(error){authMessage(error.message.includes('Invalid login credentials')?'Incorrect email or password. If you have not set a password yet, use Forgot password.':error.message);return;}
+ if(data.user?.email?.toLowerCase()!==ADMIN_EMAIL){await supabase.auth.signOut();authMessage('This account is not authorised.');return;}
+ showAdmin();
+});
+$('forgotLink').addEventListener('click',()=>showMode('reset'));
+$('backLoginLink').addEventListener('click',()=>showMode('login'));
+$('resetForm').addEventListener('submit',async e=>{
+ e.preventDefault();clearMessage();const email=$('resetEmail').value.trim().toLowerCase();
+ if(email!==ADMIN_EMAIL){authMessage('Please use the registered PingMe admin email.');return;}
+ const redirectTo=location.origin+location.pathname+'?reset=1';
+ const {error}=await supabase.auth.resetPasswordForEmail(email,{redirectTo});
+ if(error){authMessage(error.message);return;}
+ authMessage('Password reset email requested. Check your inbox and spam folder.');
+});
+$('newPasswordForm').addEventListener('submit',async e=>{
+ e.preventDefault();clearMessage();const p=$('newAdminPassword').value, c=$('confirmAdminPassword').value;
+ if(p.length<8){authMessage('Use at least 8 characters.');return;}if(p!==c){authMessage('The passwords do not match.');return;}
+ const {error}=await supabase.auth.updateUser({password:p});
+ if(error){authMessage(error.message);return;}
+ await supabase.auth.signOut();history.replaceState({},document.title,location.pathname);$('adminPassword').value='';showMode('login');authMessage('Password updated. Sign in using your new password.');
+});
+$('adminApp').insertAdjacentHTML('afterbegin','<div class="auth-top"><button id="adminSignOut" type="button">Sign out</button></div>');
+document.getElementById('adminSignOut').addEventListener('click',async()=>{await supabase.auth.signOut();showLogin();});
+const {data:{session},error:sessionError}=await supabase.auth.getSession();
+if(sessionError){showLogin();authMessage('Could not verify your session. Please sign in again.');}
+else if(session?.user?.email?.toLowerCase()===ADMIN_EMAIL){
+ const isRecovery=location.hash.includes('type=recovery')||new URLSearchParams(location.search).has('reset');
+ if(isRecovery){$('authScreen').style.display='grid';showMode('newpassword');}else showAdmin();
+}else{if(session)await supabase.auth.signOut();showLogin();}
+supabase.auth.onAuthStateChange((event,session)=>{
+ if(event==='PASSWORD_RECOVERY'){ $('authScreen').style.display='grid';$('adminApp').hidden=true;showMode('newpassword'); }
+ else if(event==='SIGNED_OUT'){showLogin();}
+});
+</script>
+
 </body></html>
