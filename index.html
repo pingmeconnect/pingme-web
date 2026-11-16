@@ -972,10 +972,10 @@
           <div class="countdown-ring" id="countdownRing"><span id="countdownNumber">180</span><small data-i18n="seconds">SECONDS</small></div>
         </div>
         <div class="story-module" id="waitingStoryModule" aria-live="polite">
-          <div class="story-topline" style="justify-content:flex-end"><span class="story-count" id="storyCount">1 / 19</span></div>
+          <div class="story-topline" style="justify-content:flex-end"><span class="story-count" id="storyCount" aria-hidden="true">1 / 19</span></div>
           <div class="story-image-frame"><img id="waitingStoryImage" src="assets/pingme-stories/vehicle_01_blocked.png" alt="PingMe story scene"><span id="storyBuyOverlay" class="story-buy-overlay" hidden>BUY</span></div>
           <div class="story-caption" id="waitingStoryCaption">My car is blocked! How do I reach the owner?</div>
-          <div class="story-controls"><div class="story-progress"><span id="storyProgressFill"></span></div><button class="story-demo-button" type="button" onclick="openStoryDemo()">WHY PINGME?</button></div>
+          <div class="story-controls"><div class="story-progress"><span id="storyProgressFill" aria-hidden="true"></span></div><button class="story-demo-button" type="button" onclick="openStoryDemo()">WHY PINGME?</button></div>
         </div>
       </div>
 
@@ -1343,18 +1343,7 @@
       const fill = document.getElementById("storyProgressFill");
       const kicker = document.getElementById("storyKicker");
       if(!img || !cap) return;
-      img.onload = () => {
-        const frame = img.closest(".story-image-frame");
-        const module = document.getElementById("waitingStoryModule");
-        if(!frame || !module || !img.naturalWidth || !img.naturalHeight) return;
-        const availableWidth = Math.max(120, module.clientWidth - 16);
-        const maxHeight = Math.min(window.innerHeight * 0.36, 320);
-        const ratio = img.naturalWidth / img.naturalHeight;
-        const displayHeight = Math.min(maxHeight, availableWidth / ratio);
-        const displayWidth = displayHeight * ratio;
-        frame.style.width = Math.round(displayWidth) + "px";
-        frame.style.height = Math.round(displayHeight) + "px";
-      };
+      img.onload = null;
       img.src = "assets/pingme-stories/" + item[0];
       const frame = img.closest(".story-image-frame");
       const buyOverlay = document.getElementById("storyBuyOverlay");
@@ -1530,8 +1519,8 @@
         const utterance = new SpeechSynthesisUtterance(String(text || ""));
         utterance.lang = currentLang === "ta" ? "ta-IN" : "en-IN";
         // Original PingMe delivery: warm, confident and clear; not an imitation of any celebrity.
-        utterance.rate = currentLang === "ta" ? 0.90 : 0.93;
-        utterance.pitch = 0.88;
+        utterance.rate = currentLang === "ta" ? 0.82 : 0.82;
+        utterance.pitch = 0.98;
         utterance.volume = 1;
         const voices = window.speechSynthesis.getVoices();
         const preferred = voices.find(v => currentLang === "ta"
@@ -1581,8 +1570,8 @@
       playPingMeSignatureChime();
 
       const announcement = currentLang === "ta"
-        ? "சூப்பர்! உங்களுக்கு பதில் வந்துவிட்டது!"
-        : "Awesome! You've got a reply!";
+        ? "மகிழ்ச்சி! உங்களுக்கு உரிமையாளரிடமிருந்து பதில் வந்துவிட்டது."
+        : "Good news! You have got a reply from the owner.";
       // Announce only that a reply has arrived. The owner's message stays visual;
       // never read the private message content aloud.
       window.setTimeout(() => {
@@ -1777,4 +1766,93 @@
 .story-image-frame { background:transparent !important; }
 .story-image-frame img { object-fit:contain !important; object-position:center !important; }
 .story-demo-image { object-fit:contain !important; object-position:center !important; }
+
+/* PingMe Stories: fixed 16:9 artwork frame; preserve image proportions without cropping. */
+.story-image-frame{
+  width:100% !important;
+  height:auto !important;
+  aspect-ratio:16 / 9 !important;
+  max-height:none !important;
+  overflow:hidden !important;
+  margin:0 auto !important;
+  background:#eef2f8 !important;
+  border:0 !important;
+}
+.story-image-frame img{
+  width:100% !important;
+  height:100% !important;
+  aspect-ratio:16 / 9 !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  display:block !important;
+  background:#eef2f8 !important;
+}
+#waitingStoryModule .story-topline,
+#waitingStoryModule .story-count,
+#waitingStoryModule .story-progress,
+#waitingStoryModule .story-progress > span{
+  display:none !important;
+}
+
+
+#storyDemoImage{
+  display:block !important;
+  width:100% !important;
+  aspect-ratio:16 / 9 !important;
+  height:auto !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  background:#eef2f8 !important;
+}
+
+#storyDemoCount{display:none !important;}
+
+
+/* PINGME STORY + REPLY READABILITY UPDATE — final visual overrides only */
+/* All 19 story assets are 1200x675 (16:9); preserve the full artwork. */
+#waitingStoryModule .story-image-frame, .story-demo-image, #storyDemoImage {
+  width:100% !important; height:auto !important; aspect-ratio:16 / 9 !important;
+  max-width:100% !important; max-height:none !important; overflow:hidden !important;
+  background:#eef3ff !important; border:0 !important; border-radius:16px !important;
+}
+#waitingStoryModule .story-image-frame img, .story-demo-image, #storyDemoImage {
+  display:block !important; width:100% !important; height:100% !important;
+  aspect-ratio:16 / 9 !important; object-fit:contain !important;
+  object-position:center !important; background:#eef3ff !important;
+  transform:none !important; filter:none !important;
+}
+#waitingStoryModule .story-topline, #waitingStoryModule .story-kicker,
+#waitingStoryModule .story-count, #waitingStoryModule .story-progress,
+#waitingStoryModule .story-progress > span, #storyDemoCount { display:none !important; }
+#waitingStoryModule .story-caption {
+  min-height:64px !important; width:100% !important; padding:14px 16px !important;
+  display:flex !important; align-items:center !important; justify-content:center !important;
+  text-align:center !important; border-radius:16px !important;
+  color:#ffffff !important; font-size:clamp(18px,4.5vw,22px) !important;
+  line-height:1.35 !important; font-weight:900 !important; letter-spacing:.005em !important;
+  background:linear-gradient(120deg,#102b62 0%,#254da0 52%,#6238a8 100%) !important;
+  border:1px solid rgba(145,210,255,.8) !important;
+  box-shadow:0 8px 22px rgba(15,35,85,.22), inset 0 1px 0 rgba(255,255,255,.18) !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.18) !important;
+}
+#replyState .owner-reply-card {
+  border:2px solid #67d9f5 !important;
+  background:linear-gradient(145deg,#ffffff 0%,#eaf7ff 52%,#f0eaff 100%) !important;
+  box-shadow:0 12px 28px rgba(12,38,88,.22),0 0 0 4px rgba(34,211,238,.08) !important;
+}
+#replyState .reply-card-title { font-size:16px !important; font-weight:1000 !important; color:#12336e !important; }
+#replyState .reply-message {
+  min-height:72px !important; padding:16px 15px !important;
+  display:flex !important; align-items:center !important; justify-content:center !important;
+  text-align:center !important; font-size:clamp(20px,5.2vw,26px) !important;
+  line-height:1.32 !important; font-weight:950 !important; color:#102b55 !important;
+  border:1.5px solid #9bdcf4 !important; border-radius:16px !important;
+  background:linear-gradient(120deg,#e4fff0 0%,#e0f7ff 55%,#f0eaff 100%) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 5px 14px rgba(20,70,120,.10) !important;
+  text-shadow:0 1px 0 rgba(255,255,255,.9) !important;
+}
+@media(max-width:390px){
+ #waitingStoryModule .story-caption{font-size:18px !important;min-height:58px !important;padding:12px !important;}
+ #replyState .reply-message{font-size:20px !important;min-height:64px !important;padding:13px !important;}
+}
 </style>
