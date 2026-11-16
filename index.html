@@ -1967,4 +1967,22 @@
         overflow: visible !important;
       }
     }
+
+
+    /* Critical screen switch fix: responsive layout must respect .hidden.
+       Otherwise screen1 stays forced visible after SEND ALERT and screen2
+       is placed below it, making the scanner look stuck on SENDING. */
+    #screen1.hidden,
+    #screen2.hidden {
+      display: none !important;
+      visibility: hidden !important;
+    }
+    #screen1:not(.hidden) {
+      display: flex !important;
+      visibility: visible !important;
+    }
+    #screen2:not(.hidden) {
+      display: flex !important;
+      visibility: visible !important;
+    }
 </style>
