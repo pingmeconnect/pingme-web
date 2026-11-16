@@ -1211,21 +1211,17 @@
           vehicle: [
             {icon:"🚗",text:"Blocking my way"},
             {icon:"💡",text:"Alarm / Lights ON"},
-            {icon:"🅿️",text:"Parking issue"},
-            {icon:"⚠️",text:"Vehicle issue"},
-            {icon:"💬",text:"Other message"}
+            {icon:"🅿️",text:"Parking issue"}
           ],
           lost: [
             {icon:"🔑",text:"I found your keys."},
             {icon:"🎒",text:"I found your bag."},
-            {icon:"📦",text:"You left something behind."},
-            {icon:"💬",text:"Please contact me about your belongings."}
+            {icon:"📦",text:"You left something behind."}
           ],
           other: [
             {icon:"📦",text:"Your delivery has arrived."},
             {icon:"👤",text:"Someone is looking for you."},
-            {icon:"🔔",text:"I need your attention."},
-            {icon:"✉️",text:"I have an important message."}
+            {icon:"🔔",text:"I need your attention."}
           ]
         }
       },
@@ -1234,21 +1230,17 @@
           vehicle: [
             {icon:"🚗",text:"என் வழியை மறைக்கிறது"},
             {icon:"💡",text:"அலாரம் / விளக்குகள் எரிகின்றன"},
-            {icon:"🅿️",text:"பார்க்கிங் பிரச்சினை"},
-            {icon:"⚠️",text:"வாகனத்தில் பிரச்சினை"},
-            {icon:"💬",text:"மற்ற செய்தி"}
+            {icon:"🅿️",text:"பார்க்கிங் பிரச்சினை"}
           ],
           lost: [
             {icon:"🔑",text:"உங்கள் சாவி கிடைத்துள்ளது."},
             {icon:"🎒",text:"உங்கள் பை கிடைத்துள்ளது."},
-            {icon:"📦",text:"ஒரு பொருளை விட்டுச் சென்றுள்ளீர்கள்."},
-            {icon:"💬",text:"உங்கள் பொருள் பற்றி என்னைத் தொடர்பு கொள்ளவும்."}
+            {icon:"📦",text:"ஒரு பொருளை விட்டுச் சென்றுள்ளீர்கள்."}
           ],
           other: [
             {icon:"📦",text:"உங்கள் பார்சல் வந்துள்ளது."},
             {icon:"👤",text:"ஒருவர் உங்களைத் தேடுகிறார்."},
-            {icon:"🔔",text:"உங்கள் கவனம் தேவை."},
-            {icon:"✉️",text:"ஒரு முக்கிய செய்தி உள்ளது."}
+            {icon:"🔔",text:"உங்கள் கவனம் தேவை."}
           ]
         }
       }
@@ -1439,11 +1431,22 @@
 
     function switchToScreen(id) {
       const shell = document.getElementById("appShell");
+      const firstScreen = document.getElementById("screen1");
+      const secondScreen = document.getElementById("screen2");
       shell.classList.remove("theme-light");
       shell.classList.add("theme-dark");
-      ["screen1","screen2"].forEach(s => {
-        document.getElementById(s).classList.toggle("hidden", s !== id);
-      });
+
+      // Set both the utility class and an explicit display value. This avoids
+      // a Tailwind/custom-CSS display conflict leaving the waiting screen hidden
+      // after a successful alert on some mobile browsers.
+      const showSecond = id === "screen2";
+      firstScreen.classList.toggle("hidden", showSecond);
+      secondScreen.classList.toggle("hidden", !showSecond);
+      firstScreen.style.display = showSecond ? "none" : "flex";
+      secondScreen.style.display = showSecond ? "flex" : "none";
+      firstScreen.setAttribute("aria-hidden", showSecond ? "true" : "false");
+      secondScreen.setAttribute("aria-hidden", showSecond ? "false" : "true");
+
       window.scrollTo({top:0,behavior:"instant"});
     }
 
@@ -1706,6 +1709,22 @@
         }
 
         if (!response.ok || !data.success) {
+          // The Worker can save the scan session before a delivery provider
+          // finishes responding. If a session ID exists, continue to the
+          // waiting screen instead of leaving the scanner on the first page.
+          if (data.session_id) {
+            currentSessionId = data.session_id;
+            switchToScreen("screen2");
+            startWaitingExperience();
+            return;
+          }
+          const recoveredAfterStatus = await recoverRecentSession(requestStartedAt);
+          if (recoveredAfterStatus && recoveredAfterStatus.session_id) {
+            currentSessionId = recoveredAfterStatus.session_id;
+            switchToScreen("screen2");
+            startWaitingExperience();
+            return;
+          }
           alert(data.error || "Failed to send alert.");
           btn.disabled = false;
           btn.innerHTML = `➤ <span data-i18n="sendAlert">${uiText[currentLang].sendAlert}</span>`;
