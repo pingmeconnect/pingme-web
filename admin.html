@@ -1,341 +1,52 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PingMe Admin Panel — Customer Management Centre</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    * { font-family: 'Plus Jakarta Sans', sans-serif; box-sizing: border-box; }
-    body {
-      margin: 0; padding: 0; min-height: 100dvh; color: #1e293b;
-      background: linear-gradient(135deg, #f0f4ff 0%, #eef2ff 50%, #fdf4ff 100%);
-    }
-    .saas-card {
-      background: #ffffff;
-      border: 1px solid rgba(226, 232, 240, 0.8);
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
-    }
-    .sidebar {
-      background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%);
-      color: #f8fafc;
-    }
-    .nav-btn {
-      width: 100%; display: flex; align-items: center; gap: 12px; padding: 11px 14px;
-      border-radius: 12px; font-size: 13.5px; font-weight: 700; color: #94a3b8; background: transparent;
-      cursor: pointer; transition: all 0.15s ease; text-align: left;
-    }
-    .nav-btn:hover { background: rgba(255, 255, 255, 0.08); color: #ffffff; }
-    .nav-btn.active {
-      background: linear-gradient(90deg, #6366f1 0%, #4f46e5 100%);
-      color: #ffffff; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
-    }
-    .pm-input, .pm-select, .pm-textarea {
-      width: 100%; padding: 10px 14px; border-radius: 12px;
-      border: 1.5px solid #cbd5e1; background: #f8fafc;
-      color: #0f172a; font-size: 14px; outline: none; transition: border-color 0.2s;
-    }
-    .pm-input:focus, .pm-select:focus, .pm-textarea:focus { border-color: #6366f1; background: #ffffff; }
-    .modal-backdrop {
-      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(6px);
-      display: none; align-items: center; justify-content: center; z-index: 999; padding: 16px;
-    }
-    .modal-backdrop.open { display: flex !important; }
-  </style>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#082b78"><title>PingMe Admin Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#082b78;--navy2:#123e9a;--blue:#1764df;--gold:#e8b84d;--ink:#10224b;--muted:#657493;--line:#dbe5f5;--paper:#f4f7fd;--white:#fff;--green:#159b55;--red:#d83c52;--purple:#7955db;--shadow:0 8px 24px #0c2c6710}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:linear-gradient(135deg,#eef3ff,#f9fbff 55%,#fff8ec);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:13px}button,input,select,textarea{font:inherit}button{cursor:pointer}.topbrand{height:76px;background:linear-gradient(100deg,#fff 0 20%,#092d7b 20% 100%);display:flex;align-items:center;padding:10px 22px;gap:22px;border-bottom:4px solid var(--gold);box-shadow:0 4px 15px #092d7b20}.topbrand img{width:190px;max-height:56px;object-fit:contain;background:#fff;border-radius:12px;padding:4px}.brandtitle{color:white;font-weight:900;font-size:clamp(17px,2vw,25px)}.brandtitle span{color:#ffd86d}.brandmeta{color:#e7efff;font-size:11px;margin-top:5px}.shell{display:grid;grid-template-columns:218px minmax(0,1fr);gap:14px;padding:14px;max-width:1800px;margin:auto}.sidebar{background:linear-gradient(180deg,#092b76,#101c54);border:1px solid #d9e4ff;border-radius:18px;color:white;padding:13px;min-height:calc(100vh - 110px);display:flex;flex-direction:column;position:sticky;top:10px;align-self:start}.side-logo{display:flex;align-items:center;gap:8px;padding:4px 5px 15px;border-bottom:1px solid #ffffff24;margin-bottom:10px}.side-logo img{width:130px;background:white;border-radius:9px;padding:3px}.nav{display:grid;gap:4px}.nav button{border:0;background:transparent;color:#e0e9ff;text-align:left;padding:11px 10px;border-radius:10px;font-weight:700;display:flex;gap:10px;align-items:center}.nav button:hover,.nav button.active{background:linear-gradient(90deg,#2878ed,#3158c7);color:#fff;box-shadow:0 4px 12px #0002}.nav .ico{width:20px;text-align:center;font-size:16px}.sidefoot{margin-top:auto;padding:12px 9px;background:#ffffff0c;border:1px solid #ffffff20;border-radius:12px;color:#c5d4f6;font-size:10px}.online{color:#62e6a2;font-weight:800}.workspace{min-width:0}.page{display:none}.page.active{display:block}.panelhead{background:linear-gradient(100deg,#092d7b,#16469e);color:#fff;border:1px solid #c8d8fa;border-radius:14px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:var(--shadow);margin-bottom:12px}.panelhead h1{font-size:18px;margin:0;font-weight:900}.panelhead p{margin:4px 0 0;color:#d8e5ff;font-size:11px}.userchip{display:flex;align-items:center;gap:8px;font-size:11px;text-align:right}.avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#f8d99b,#fff);display:grid;place-items:center;color:#153c87;font-weight:900;border:2px solid #f4ce72}.grid{display:grid;gap:10px}.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:10px}.stat,.card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}.stat{padding:13px;display:flex;align-items:center;gap:11px;min-width:0}.staticon{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:21px;flex:none}.stat strong{font-size:22px;display:block;line-height:1.1}.stat small{color:var(--muted);font-weight:700;font-size:10px}.overviewgrid{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:10px}.metric{padding:12px;border-radius:13px;background:linear-gradient(135deg,#fff,#f4f7ff);border:1px solid var(--line);display:flex;gap:9px;align-items:center}.metric b{font-size:18px;display:block}.metric small{font-size:10px;color:var(--muted);font-weight:700}.cols2{grid-template-columns:1.3fr 1fr}.card{padding:14px;margin-bottom:10px;min-width:0}.card h2,.card h3{margin:0 0 10px;font-size:14px;font-weight:900;color:#102b69}.sub{color:var(--muted);font-size:10px;margin-top:-6px;margin-bottom:10px}.actions{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px}.action{border:1px solid var(--line);background:#fff;border-radius:11px;padding:11px 5px;color:#173c87;font-weight:800;font-size:10px;display:grid;gap:5px;justify-items:center}.action span{font-size:20px}.action:hover{border-color:#7aa8f3;background:#f2f7ff}.healthrow{display:flex;justify-content:space-between;border-bottom:1px solid #edf1f8;padding:7px 0;font-size:11px}.ok{color:var(--green);font-weight:800}.btn{border:0;border-radius:9px;padding:9px 13px;background:var(--blue);color:white;font-weight:800;font-size:11px;box-shadow:0 3px 8px #1764df22}.btn.gold{background:linear-gradient(100deg,#e7b54a,#f4d57f);color:#382600}.btn.green{background:#159b55}.btn.red{background:#d83c52}.btn.light{background:#eef4ff;color:#16418d;border:1px solid #d5e3fb;box-shadow:none}.btn.small{padding:6px 9px;font-size:10px}.btnrow{display:flex;gap:7px;flex-wrap:wrap}.field{display:grid;gap:5px;margin-bottom:9px}.field label{font-size:10px;color:#536381;font-weight:800}.field input,.field select,.field textarea,.search{width:100%;border:1px solid #cbd8ed;border-radius:9px;background:#fbfdff;padding:10px;color:#152b57;outline:none;min-width:0}.field input:focus,.field select:focus,.field textarea:focus,.search:focus{border-color:#4386ef;box-shadow:0 0 0 3px #4386ef18}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:11px}table{width:100%;border-collapse:collapse;white-space:nowrap;font-size:10px}th{background:#edf3ff;color:#17366f;text-transform:uppercase;font-size:9px;letter-spacing:.04em;text-align:left;padding:10px}td{padding:10px;border-top:1px solid #edf1f8}tr:hover td{background:#f8fbff}.pill{display:inline-block;border-radius:30px;padding:4px 8px;font-weight:800;font-size:9px;background:#e7f7ee;color:#12844a}.pill.warn{background:#fff2d8;color:#9a6500}.pill.off{background:#ffe9ec;color:#b72e43}.pill.info{background:#eaf1ff;color:#2457ae}.split{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tabs{display:flex;gap:4px;background:#eaf0fc;padding:4px;border-radius:10px;margin-bottom:12px;overflow:auto}.tabs button{border:0;border-radius:7px;background:transparent;padding:8px 12px;color:#294779;font-size:10px;font-weight:800;white-space:nowrap}.tabs button.active{background:#fff;box-shadow:0 2px 6px #183b7b18}.qrbox{width:145px;height:145px;border:1px solid var(--line);border-radius:12px;display:grid;place-items:center;background:white;margin:auto;font-size:76px}.qrrow{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:9px;border-bottom:1px solid #edf1f8;font-size:10px}.qrrow:last-child{border:0}.customerhero{display:flex;gap:12px;align-items:center}.customerhero img{width:62px;height:62px;border-radius:14px;object-fit:cover;background:#edf3ff}.profilegrid{display:grid;grid-template-columns:1.2fr 1fr;gap:10px}.notice{background:#fff8e7;border:1px solid #f1d28c;padding:10px;border-radius:10px;color:#76530d;font-size:10px}.bar{height:10px;background:#e9effa;border-radius:20px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,#2878ed,#8a5de2);border-radius:20px}.bottomnav{display:none}.modal{display:none;position:fixed;inset:0;background:#081b43b8;z-index:20;align-items:center;justify-content:center;padding:14px}.modal.open{display:flex}.modalbox{background:#fff;border-radius:17px;padding:18px;width:min(560px,100%);max-height:90dvh;overflow:auto;box-shadow:0 20px 70px #0004}.modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.close{border:0;background:#edf2fb;border-radius:50%;width:30px;height:30px;font-weight:900}.footerhint{font-size:9px;color:#72809c;padding:6px 2px}.highlightstrip{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}.highlightstrip div{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 5px;text-align:center;font-size:9px;font-weight:800;color:#234078}.highlightstrip b{display:block;font-size:17px;margin-bottom:3px}
+@media(max-width:1100px){.shell{grid-template-columns:190px 1fr;padding:10px;gap:10px}.stats{grid-template-columns:repeat(2,1fr)}.overviewgrid{grid-template-columns:repeat(2,1fr)}.actions{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:720px){body{font-size:12px;padding-bottom:72px}.topbrand{height:auto;min-height:62px;padding:8px 10px;gap:9px;background:linear-gradient(100deg,#fff 0 31%,#092d7b 31%)}.topbrand img{width:105px;max-height:44px;padding:3px}.brandtitle{font-size:14px}.brandmeta{font-size:9px}.shell{display:block;padding:8px}.sidebar{display:none}.panelhead{padding:12px;border-radius:12px}.panelhead h1{font-size:15px}.panelhead p{font-size:9px}.userchip{font-size:0}.userchip .avatar{font-size:12px}.stats{gap:7px}.stat{padding:9px;gap:8px}.staticon{width:34px;height:34px;font-size:17px}.stat strong{font-size:18px}.stat small{font-size:9px}.overviewgrid{gap:7px}.metric{padding:9px;gap:6px}.metric b{font-size:16px}.cols2,.split,.profilegrid{grid-template-columns:1fr}.card{padding:11px}.actions{grid-template-columns:repeat(3,minmax(0,1fr))}.action{padding:9px 3px}.formgrid{grid-template-columns:1fr}.highlightstrip{grid-template-columns:repeat(2,1fr)}.bottomnav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;z-index:10;bottom:0;left:0;right:0;padding:7px 5px calc(7px + env(safe-area-inset-bottom));background:#082b78;border-top:2px solid var(--gold);box-shadow:0 -5px 18px #092b7625}.bottomnav button{border:0;background:transparent;color:#dce8ff;font-size:9px;font-weight:800;display:grid;justify-items:center;gap:2px;padding:3px 0}.bottomnav button span{font-size:17px}.bottomnav button.active{color:#ffdc7c}.qrrow{grid-template-columns:1fr auto;gap:5px}.qrrow .format{grid-column:1/-1}.tablewrap table{min-width:690px}.panelhead .btn{padding:8px;font-size:9px}.userchip div:last-child{display:none}}
+@media(max-width:380px){.topbrand img{width:88px}.brandtitle{font-size:12px}.stats{grid-template-columns:1fr 1fr}.stat strong{font-size:16px}.metric b{font-size:14px}}
+</style>
 </head>
-<body class="p-3 sm:p-6">
-
-  <!-- MAIN SAAS DASHBOARD VIEW (UNLOCKED DIRECTLY) -->
-  <div id="appView" class="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-    
-    <!-- SIDEBAR -->
-    <aside class="lg:col-span-3 sidebar rounded-3xl p-4 min-h-[calc(100dvh-48px)] flex flex-col justify-between shadow-2xl">
-      <div class="space-y-6">
-        <div class="flex items-center gap-3 px-2 pt-2">
-          <div class="bg-white px-3 py-1.5 rounded-2xl shadow-md border border-slate-200">
-            <span class="font-black text-indigo-600 text-lg">PingMe</span>
-          </div>
-          <div>
-            <div class="text-[10px] text-indigo-300 font-extrabold uppercase tracking-widest">ONE SCAN. INSTANT CONNECTION.</div>
-          </div>
-        </div>
-
-        <nav class="space-y-1">
-          <button class="nav-btn active"><span>👥</span> Customers Management</button>
-        </nav>
-      </div>
-
-      <div class="p-3 rounded-2xl bg-white/5 border border-white/10 text-xs space-y-1">
-        <div class="font-bold text-emerald-400 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> System Online</div>
-        <div class="text-slate-400 text-[11px]">Direct Standalone Mode Active.</div>
-      </div>
-    </aside>
-
-    <!-- MAIN WORKSPACE -->
-    <main class="lg:col-span-9 space-y-6">
-      
-      <!-- TOP HEADER BAR -->
-      <header class="saas-card px-6 py-3.5 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-extrabold text-lg">👑</div>
-          <div>
-            <h1 class="text-lg font-extrabold text-slate-900">PingMe Admin Panel — Customer Management Centre</h1>
-            <p class="text-xs text-slate-500">Click any customer row below to instantly open their profile popup.</p>
-          </div>
-        </div>
-      </header>
-
-      <!-- 4 TOP STAT CARDS -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="saas-card p-4 flex items-center gap-4">
-          <div class="w-12 h-12 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-xl font-bold">👥</div>
-          <div>
-            <div class="text-2xl font-extrabold text-slate-900">3</div>
-            <div class="text-xs font-bold text-slate-500">Total Customers</div>
-          </div>
-        </div>
-        <div class="saas-card p-4 flex items-center gap-4">
-          <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl font-bold">QR</div>
-          <div>
-            <div class="text-2xl font-extrabold text-slate-900">2</div>
-            <div class="text-xs font-bold text-slate-500">Active QR Codes</div>
-          </div>
-        </div>
-        <div class="saas-card p-4 flex items-center gap-4">
-          <div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl font-bold">📷</div>
-          <div>
-            <div class="text-2xl font-extrabold text-slate-900">37</div>
-            <div class="text-xs font-bold text-slate-500">Scans Today</div>
-          </div>
-        </div>
-        <div class="saas-card p-4 flex items-center gap-4">
-          <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl font-bold">🪙</div>
-          <div>
-            <div class="text-2xl font-extrabold text-slate-900">8,420</div>
-            <div class="text-xs font-bold text-slate-500">Credits Left</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- PRIMARY CUSTOMERS TABLE -->
-      <div class="saas-card p-5 space-y-4">
-        <div class="flex items-center justify-between">
-          <div>
-            <h3 class="font-extrabold text-slate-900 text-base">👥 Registered Customers</h3>
-            <p class="text-xs text-slate-500">Click any customer row to open profile popup.</p>
-          </div>
-          <button onclick="openCustomerModal('PM000248')" class="px-4 py-2 rounded-xl bg-indigo-600 text-white font-extrabold text-xs shadow">Test Popup Modal</button>
-        </div>
-
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm">
-            <thead class="bg-slate-100 text-slate-700 text-xs uppercase font-extrabold">
-              <tr>
-                <th class="p-3 rounded-l-xl">Customer ID</th>
-                <th class="p-3">Name</th>
-                <th class="p-3">Mobile Number</th>
-                <th class="p-3">Credits</th>
-                <th class="p-3">Expiry Date</th>
-                <th class="p-3">Status</th>
-                <th class="p-3 rounded-r-xl text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="customerTableBody" class="divide-y divide-slate-100 text-xs font-semibold text-slate-800">
-              <!-- Populated by JS -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </main>
-  </div>
-
-  <!-- ================= CUSTOMER PROFILE MODAL ================= -->
-  <div id="customerModal" class="modal-backdrop">
-    <div class="saas-card bg-white max-w-3xl w-full p-6 space-y-5 max-h-[92dvh] overflow-y-auto relative shadow-2xl">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg">👤</div>
-          <div>
-            <h3 class="font-black text-lg text-slate-900">Customer Profile &amp; QR Center</h3>
-            <p class="text-xs text-slate-500">View, edit and manage customer details</p>
-          </div>
-        </div>
-        <button onclick="closeCustomerModal()" class="w-9 h-9 rounded-full bg-slate-100 text-slate-700 font-bold flex items-center justify-center hover:bg-slate-200 transition">✕</button>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
-        <div class="md:col-span-5 bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col items-center text-center space-y-3">
-          <div id="modalQrBox" class="bg-white p-3 rounded-xl shadow border flex items-center justify-center"></div>
-          <div id="modalQrIdCaption" class="text-xs font-black text-indigo-600 tracking-wider">PM000248</div>
-          <div class="grid grid-cols-2 gap-2 w-full pt-1">
-            <button onclick="alert('Downloading PNG...')" class="py-2 rounded-xl bg-indigo-600 text-white text-xs font-extrabold">⬇ PNG</button>
-            <button onclick="alert('Downloading PDF...')" class="py-2 rounded-xl bg-rose-600 text-white text-xs font-extrabold">📄 PDF</button>
-            <button onclick="alert('URL Copied!')" class="py-2 rounded-xl bg-slate-200 text-slate-800 text-xs font-extrabold">📋 Copy</button>
-            <button onclick="alert('Share generated!')" class="py-2 rounded-xl bg-purple-600 text-white text-xs font-extrabold">📤 Share</button>
-          </div>
-        </div>
-
-        <div class="md:col-span-7 space-y-4">
-          <div class="flex items-center justify-between bg-indigo-50/60 p-3 rounded-2xl border border-indigo-100">
-            <div>
-              <div class="text-[10px] text-slate-500 font-bold uppercase">Customer ID</div>
-              <div id="mCustId" class="text-sm font-black text-indigo-900">PM000248</div>
-            </div>
-            <button onclick="toggleEditMode()" id="editToggleBtn" class="px-3 py-1.5 rounded-xl bg-indigo-600 text-white text-xs font-extrabold shadow">✏️ Edit Details</button>
-          </div>
-
-          <div class="grid grid-cols-3 gap-2">
-            <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-900 text-center">
-              <div class="text-slate-500 text-[10px] font-bold">Credits</div>
-              <div id="mCredits" class="text-base font-black">360</div>
-            </div>
-            <div class="p-2.5 rounded-xl bg-purple-50 border border-purple-100 text-purple-900 text-center">
-              <div class="text-slate-500 text-[10px] font-bold">Scans</div>
-              <div id="mScans" class="text-base font-black">37</div>
-            </div>
-            <div class="p-2.5 rounded-xl bg-sky-50 border border-sky-100 text-sky-900 text-center">
-              <div class="text-slate-500 text-[10px] font-bold">WA Usage</div>
-              <div id="mWaUsage" class="text-base font-black">24</div>
-            </div>
-          </div>
-
-          <div class="space-y-2 text-xs">
-            <div><label class="block font-bold text-slate-700">Name</label><input type="text" id="mName" class="pm-input !py-1.5" disabled /></div>
-            <div><label class="block font-bold text-slate-700">Mobile Number</label><input type="text" id="mMobile" class="pm-input !py-1.5" disabled /></div>
-            <div><label class="block font-bold text-slate-700">Email ID</label><input type="text" id="mEmail" class="pm-input !py-1.5" disabled /></div>
-            <div><label class="block font-bold text-slate-700">Address</label><input type="text" id="mAddress" class="pm-input !py-1.5" disabled /></div>
-          </div>
-
-          <div class="pt-1">
-            <label class="block font-bold text-slate-700 mb-1 text-xs">Account Status</label>
-            <div class="grid grid-cols-2 gap-2">
-              <button type="button" id="btnActive" onclick="setAccountStatus('Active')" class="py-2 rounded-xl border-2 font-black text-xs bg-emerald-50 text-emerald-700 border-emerald-400">🟢 ACTIVE</button>
-              <button type="button" id="btnInactive" onclick="setAccountStatus('Inactive')" class="py-2 rounded-xl border-2 font-black text-xs bg-white text-slate-400 border-slate-200">🔴 INACTIVE</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
-        <button onclick="saveCustomerEdits()" class="py-2.5 px-6 rounded-xl bg-indigo-600 text-white font-extrabold text-xs shadow">Save Changes</button>
-        <button onclick="closeCustomerModal()" class="py-2.5 px-4 rounded-xl bg-slate-200 text-slate-700 font-bold text-xs">Cancel</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const customers = [
-      { id: "PM000248", name: "Priya S", mobile: "+91 91840 277123", email: "priya.s@gmail.com", address: "No. 12, Lake View Street, Chennai", credits: 360, scans: 37, waUsage: 24, expiry: "10 Feb 2027", status: "Active" },
-      { id: "PM000247", name: "Karthik R", mobile: "+91 91876 543210", email: "karthik@email.com", address: "No. 45, Anna Nagar, Chennai", credits: 120, scans: 12, waUsage: 8, expiry: "15 Mar 2027", status: "Active" },
-      { id: "PM000246", name: "Meena V", mobile: "+91 91944 399887", email: "meena@email.com", address: "No. 8, Gandhi Road, Chennai", credits: 0, scans: 4, waUsage: 2, expiry: "05 Nov 2026", status: "Inactive" }
-    ];
-
-    let selectedCust = null;
-    let isEditMode = false;
-
-    window.addEventListener("DOMContentLoaded", () => {
-      renderTable();
-    });
-
-    function renderTable() {
-      const body = document.getElementById("customerTableBody");
-      if (!body) return;
-      
-      body.innerHTML = customers.map(c => `
-        <tr class="hover:bg-slate-50 transition cursor-pointer" onclick="openCustomerModal('${c.id}')">
-          <td class="p-3 font-extrabold text-indigo-600">${c.id}</td>
-          <td class="p-3 font-extrabold text-slate-900">${c.name}</td>
-          <td class="p-3 text-slate-600">${c.mobile}</td>
-          <td class="p-3 font-extrabold text-amber-600">${c.credits}</td>
-          <td class="p-3 text-slate-600">${c.expiry}</td>
-          <td class="p-3">
-            <span class="px-2.5 py-1 rounded-full text-xs font-extrabold ${c.status === 'Active' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">${c.status}</span>
-          </td>
-          <td class="p-3 text-right">
-            <button onclick="event.stopPropagation(); openCustomerModal('${c.id}');" class="px-3.5 py-1.5 rounded-xl bg-indigo-50 text-indigo-600 font-extrabold text-xs hover:bg-indigo-100 transition">View</button>
-          </td>
-        </tr>
-      `).join("");
-    }
-
-    function openCustomerModal(id) {
-      const c = customers.find(x => x.id === id);
-      if (!c) return;
-      selectedCust = c;
-      isEditMode = false;
-      setEditFieldsState(false);
-
-      document.getElementById("mCustId").textContent = c.id;
-      document.getElementById("mCredits").textContent = c.credits;
-      document.getElementById("mScans").textContent = c.scans;
-      document.getElementById("mWaUsage").textContent = c.waUsage;
-
-      document.getElementById("mName").value = c.name;
-      document.getElementById("mMobile").value = c.mobile;
-      document.getElementById("mEmail").value = c.email;
-      document.getElementById("mAddress").value = c.address;
-
-      updateStatusButtons(c.status);
-      
-      const qrBox = document.getElementById("modalQrBox");
-      qrBox.innerHTML = "";
-      new QRCode(qrBox, { text: `https://pingmeconnect.in/?t=${c.id}`, width: 130, height: 130, correctLevel: QRCode.CorrectLevel.H });
-      
-      document.getElementById("modalQrIdCaption").textContent = c.id;
-      document.getElementById("customerModal").classList.add("open");
-    }
-
-    function closeCustomerModal() {
-      document.getElementById("customerModal").classList.remove("open");
-      selectedCust = null;
-    }
-
-    function toggleEditMode() {
-      isEditMode = !isEditMode;
-      setEditFieldsState(isEditMode);
-      document.getElementById("editToggleBtn").textContent = isEditMode ? "🔒 Lock" : "✏️ Edit Details";
-    }
-
-    function setEditFieldsState(enabled) {
-      document.getElementById("mName").disabled = !enabled;
-      document.getElementById("mMobile").disabled = !enabled;
-      document.getElementById("mEmail").disabled = !enabled;
-      document.getElementById("mAddress").disabled = !enabled;
-    }
-
-    function setAccountStatus(status) {
-      if (!selectedCust) return;
-      selectedCust.status = status;
-      updateStatusButtons(status);
-    }
-
-    function updateStatusButtons(status) {
-      const activeBtn = document.getElementById("btnActive");
-      const inactiveBtn = document.getElementById("btnInactive");
-      if (status === "Active") {
-        activeBtn.className = "py-2 rounded-xl border-2 font-black text-xs bg-emerald-50 text-emerald-700 border-emerald-400";
-        inactiveBtn.className = "py-2 rounded-xl border-2 font-black text-xs bg-white text-slate-400 border-slate-200";
-      } else {
-        activeBtn.className = "py-2 rounded-xl border-2 font-black text-xs bg-white text-slate-400 border-slate-200";
-        inactiveBtn.className = "py-2 rounded-xl border-2 font-black text-xs bg-rose-50 text-rose-700 border-rose-400";
-      }
-    }
-
-    function saveCustomerEdits() {
-      if (!selectedCust) return;
-      selectedCust.name = document.getElementById("mName").value.trim();
-      selectedCust.mobile = document.getElementById("mMobile").value.trim();
-      selectedCust.email = document.getElementById("mEmail").value.trim();
-      selectedCust.address = document.getElementById("mAddress").value.trim();
-
-      closeCustomerModal();
-      renderTable();
-      alert("Customer profile updated successfully!");
-    }
-  </script>
-</body>
-</html>
+<body>
+<header class="topbrand"><img src="assets/pingme-logo.png" alt="PingMe logo"><div><div class="brandtitle">PingMe Admin Panel <span>— Complete Preview</span></div><div class="brandmeta">✓ Manage Customers　 ✓ QR & Stickers　 ✓ Credits & Subscription　 ✓ Alerts & Templates　 ✓ Reports</div></div></header>
+<div class="shell">
+<aside class="sidebar"><div><div class="side-logo"><img src="assets/pingme-logo.png" alt="PingMe"></div><nav class="nav" id="sideNav">
+<button class="active" data-page="dashboard"><span class="ico">▦</span>Dashboard</button><button data-page="customers"><span class="ico">♙</span>Customers</button><button data-page="add"><span class="ico">＋</span>Add Customer</button><button data-page="qr"><span class="ico">▦</span>QR Studio</button><button data-page="credits"><span class="ico">◉</span>Credits & Billing</button><button data-page="communication"><span class="ico">☏</span>Communication</button><button data-page="orders"><span class="ico">▣</span>Orders & Dispatch</button><button data-page="reports"><span class="ico">▥</span>Reports & Analytics</button><button data-page="audit"><span class="ico">◎</span>Scan Audit Logs</button><button data-page="backup"><span class="ico">☁</span>Backup & System Health</button><button data-page="settings"><span class="ico">⚙</span>Settings</button>
+</nav></div><div class="sidefoot"><div class="online">● System Online</div><div>PingMe Secure Admin Workspace</div><div style="margin-top:7px">ONE SCAN. INSTANT CONNECTION.</div></div></aside>
+<main class="workspace">
+<section class="page active" id="page-dashboard"><div class="panelhead"><div><h1>▦ Dashboard</h1><p>Welcome back, PingMe Admin · Sunday, 15 November 2026</p></div><div class="userchip"><div class="avatar">PM</div><div><b>PingMe Admin</b><br><span style="color:#dbe7ff">Super Administrator</span></div></div></div>
+<div class="grid stats"><div class="stat"><div class="staticon" style="background:#e8efff;color:#2865ce">♙</div><div><strong>486</strong><small>Total Customers</small></div></div><div class="stat"><div class="staticon" style="background:#e3f8ed;color:#159b55">✓</div><div><strong>392</strong><small>Active</small></div></div><div class="stat"><div class="staticon" style="background:#fff0e4;color:#e97828">♙</div><div><strong>64</strong><small>Inactive</small></div></div><div class="stat"><div class="staticon" style="background:#f0eaff;color:#7955db">▣</div><div><strong>30</strong><small>Testing</small></div></div></div>
+<div class="grid overviewgrid"><div class="metric"><span style="font-size:24px">🪙</span><div><small>Master Credit Wallet</small><b>8,750</b><small>For customer alerts</small></div></div><div class="metric"><span style="font-size:24px">➤</span><div><small>This Month Alerts</small><b>3,246</b><small>Delivered</small></div></div><div class="metric"><span style="font-size:24px">▣</span><div><small>Active Subscriptions</small><b>392</b><small>Valid</small></div></div><div class="metric"><span style="font-size:24px">♧</span><div><small>Expiry (Next 7 Days)</small><b>18</b><small>Customers</small></div></div></div>
+<div class="grid cols2"><div class="card"><h2>Quick Actions</h2><div class="actions"><button class="action" data-go="add"><span>＋</span>Add Customer</button><button class="action" data-go="qr"><span>▦</span>QR Downloads</button><button class="action" data-go="communication"><span>☏</span>Send Message</button><button class="action" data-go="credits"><span>🪙</span>Add Credits</button><button class="action" data-go="settings"><span>♧</span>Maintenance</button><button class="action" data-go="backup"><span>☑</span>System Status</button></div></div><div class="card"><h2>System Health</h2><div class="healthrow"><span>WhatsApp API</span><b class="ok">● Online</b></div><div class="healthrow"><span>Database (Supabase)</span><b class="ok">● Online</b></div><div class="healthrow"><span>Email Service (Resend)</span><b class="ok">● Online</b></div><div class="healthrow"><span>QR Service</span><b class="ok">● Online</b></div></div></div>
+<div class="highlightstrip"><div><b>▣</b>Separate Registration & Activation Dates</div><div><b>🎁</b>5 Free Test Credits</div><div><b>⏻</b>Auto Inactive (Zero Credits / Expiry)</div><div><b>✎</b>Editable Pricing & Plans</div><div><b>▦</b>QR Downloads · All 6 Designs</div></div></section>
+<section class="page" id="page-customers"><div class="panelhead"><div><h1>♙ Customers</h1><p>Search, review and manage registered PingMe customers</p></div><button class="btn gold" data-go="add">＋ Add Customer</button></div><div class="card"><div class="btnrow" style="margin-bottom:10px"><input class="search" id="customerSearch" placeholder="Search name, mobile or customer ID" style="max-width:330px"><select class="search" id="customerFilter" style="max-width:160px"><option value="all">All statuses</option><option>Active</option><option>Inactive</option><option>Testing</option></select></div><div class="tablewrap"><table><thead><tr><th>Customer ID</th><th>Customer</th><th>Mobile</th><th>Paid Credits</th><th>Subscription Expiry</th><th>Status</th><th>Action</th></tr></thead><tbody id="customerRows"></tbody></table></div><p class="footerhint">Demo customer records are sample data. Connect your secured data source before live use.</p></div></section>
+<section class="page" id="page-add"><div class="panelhead"><div><h1>♙ Add New Customer</h1><p>Register a customer before testing, verification and activation</p></div></div><div class="card"><form id="addForm"><div class="formgrid"><div class="field"><label>Customer Name *</label><input required id="newName" placeholder="Enter customer name"></div><div class="field"><label>Mobile Number *</label><input required id="newMobile" type="tel" placeholder="+91 98765 43210"></div><div class="field"><label>Email Address (Optional)</label><input id="newEmail" type="email" placeholder="name@example.com"></div><div class="field"><label>Address (Optional)</label><input id="newAddress" placeholder="City, State"></div><div class="field"><label>Customer Photo (Optional)</label><input type="file" accept="image/*" id="newPhoto"></div><div class="field"><label>Initial Account Status</label><select id="newStatus"><option>Testing</option><option>Inactive</option></select></div></div><div class="notice">New registration receives up to 5 separate free test credits. Registration does not automatically activate the customer's live alerts.</div><div class="btnrow" style="margin-top:12px"><button class="btn" type="submit">Save Customer</button><button class="btn light" type="reset">Clear Form</button></div></form></div></section>
+<section class="page" id="page-qr"><div class="panelhead"><div><h1>▦ QR Studio – Download Stickers</h1><p>One unique customer QR · Six approved print formats</p></div></div><div class="grid cols2"><div class="card" style="text-align:center"><h2>Customer QR Preview</h2><div class="qrbox">▦</div><b id="qrCustomerId">PM-K7X4Q9</b><p class="sub">Sample preview only — real customer QR is generated from their secure URL</p><button class="btn" onclick="toast('Choose a real customer record when QR generation is connected.')">View Live URL</button></div><div class="card"><h2>Download Print Files (Same QR – Approved Sizes)</h2><div class="qrrow"><b class="format">🚘 Car Card (PVC)</b><span>85.6 × 54 mm</span><button class="btn light small" onclick="toast('Print export is not connected in this preview.')">PNG / PDF</button></div><div class="qrrow"><b class="format">🏍 Bike Sticker</b><span>60 × 45 mm</span><button class="btn light small" onclick="toast('Print export is not connected in this preview.')">PNG / PDF</button></div><div class="qrrow"><b class="format">🧳 Luggage Sticker</b><span>55 × 40 mm</span><button class="btn light small" onclick="toast('Print export is not connected in this preview.')">PNG / PDF</button></div><div class="qrrow"><b class="format">🏷 Plastic Tag</b><span>32 × 48 mm</span><button class="btn light small" onclick="toast('Print export is not connected in this preview.')">PNG / PDF</button></div><div class="qrrow"><b class="format">🔑 Keychain (Front)</b><span>29 × 46 mm</span><button class="btn light small" onclick="toast('Print export is not connected in this preview.')">PNG / PDF</button></div><div class="qrrow"><b class="format">🔑 Keychain (Back)</b><span>29 × 46 mm</span><button class="btn light small" onclick="toast('Print export is not connected in this preview.')">PNG / PDF</button></div><div class="btnrow" style="margin-top:12px"><button class="btn" onclick="toast('ZIP export is not connected in this preview.')">⬇ Download All (ZIP)</button><button class="btn green" onclick="toast('WhatsApp sharing will be enabled with the live integration.')">Share on WhatsApp</button></div></div></div></section>
+<section class="page" id="page-credits"><div class="panelhead"><div><h1>◉ Credits & Subscription</h1><p>Separate customer credits, master pool and actual Meta charges</p></div></div><div class="tabs"><button class="active">Overview</button><button>Transactions</button><button>Recharge Plans</button></div><div class="grid overviewgrid"><div class="metric"><span>💳</span><div><small>Master Credit Wallet</small><b>8,750</b></div></div><div class="metric"><span>∞</span><div><small>Meta WhatsApp Usage</small><b>3,246</b><small>Messages this month</small></div></div><div class="metric"><span>₹</span><div><small>Estimated Meta Charges</small><b>₹441.46</b></div></div><div class="metric"><span>👥</span><div><small>Customer Paid Credits</small><b>Wallet ledger</b></div></div></div><div class="grid cols2"><div class="card"><h2>Customer Credit Plans</h2><div class="split"><div class="metric"><div><small>Recharge</small><b>₹99</b><small>250 Credits</small></div></div><div class="metric"><div><small>Recharge</small><b>₹149</b><small>500 Credits</small></div></div></div><div class="field" style="margin-top:12px"><label>Manual Credit Adjustment</label><input placeholder="Customer ID"></div><div class="formgrid"><div class="field"><label>Credits (+ / -)</label><input type="number" placeholder="e.g. 100"></div><div class="field"><label>Validity / Expiry</label><input type="date"></div></div><div class="field"><label>Reason (Required)</label><input placeholder="Adjustment reason"></div><button class="btn" onclick="toast('Credit adjustment requires the secured ledger integration.')">Add / Deduct Credits</button></div><div class="card"><h2>Subscription & Starter Kit</h2><div class="metric"><div><small>Annual Subscription Renewal</small><b>₹149 / Year</b></div></div><div class="metric" style="margin-top:8px"><div><small>Starter Kit Price</small><b>₹599</b><small>Editable price</small></div></div><div class="notice" style="margin-top:12px">Only successfully delivered customer alert messages should deduct one customer credit and one master-pool credit. Failed or pending messages must not deduct.</div><p class="footerhint">Actual Meta charges are separate from PingMe customer credits. Verify billing in Meta Business Manager.</p></div></div></section>
+<section class="page" id="page-communication"><div class="panelhead"><div><h1>☏ Communication – WhatsApp & Email</h1><p>Approved templates, customer announcements and delivery history</p></div></div><div class="tabs"><button class="active">Send Message</button><button>Templates</button><button>History</button></div><div class="grid cols2"><div class="card"><h2>Message Templates</h2><div class="healthrow"><span>🎀 Activation / Welcome Message</span><button class="btn light small" onclick="editTemplate('Activation / Welcome Message')">Edit</button></div><div class="healthrow"><span>☆ Low Credit Reminder (≤ 10)</span><button class="btn light small" onclick="editTemplate('Low Credit Reminder')">Edit</button></div><div class="healthrow"><span>▣ Expiry Reminder (7 Days Before)</span><button class="btn light small" onclick="editTemplate('Expiry Reminder')">Edit</button></div><div class="healthrow"><span>♧ Maintenance Notice</span><button class="btn light small" onclick="editTemplate('Maintenance Notice')">Edit</button></div><div class="healthrow"><span>✉ General Announcement</span><button class="btn light small" onclick="editTemplate('General Announcement')">Edit</button></div><div class="notice" style="margin-top:10px">Existing approved alert template remains unchanged. Business-initiated WhatsApp messages outside the 24-hour window must use approved Meta templates.</div></div><div class="card"><h2>Send To</h2><div class="field"><label>Target Audience</label><select><option>All Active Customers</option><option>Selected Customers</option><option>By Customer ID</option></select></div><div class="field"><label>Channel</label><select><option>WhatsApp</option><option>Email (where supplied)</option><option>WhatsApp + Email</option></select></div><div class="field"><label>Message / Template</label><textarea rows="5" placeholder="Choose an approved template or compose a permitted message"></textarea></div><button class="btn" onclick="toast('Sending requires the PingMe WhatsApp API connection.')">➤ Compose & Send</button></div></div></section>
+<section class="page" id="page-orders"><div class="panelhead"><div><h1>▣ Orders & Dispatch</h1><p>Starter Kit production, packing and delivery tracking</p></div></div><div class="tabs"><button class="active">All Orders</button><button>Pending Print</button><button>Ready to Dispatch</button><button>Dispatched</button></div><div class="card"><div class="tablewrap"><table><thead><tr><th>Order ID</th><th>Customer</th><th>Kit</th><th>Status</th><th>Action</th></tr></thead><tbody><tr><td>ORD-1045</td><td>Rajesh Kumar</td><td>Starter Kit</td><td><span class="pill warn">Print Pending</span></td><td><button class="btn light small">Edit</button></td></tr><tr><td>ORD-1044</td><td>Priya S</td><td>Starter Kit</td><td><span class="pill">Ready to Dispatch</span></td><td><button class="btn light small">Update</button></td></tr><tr><td>ORD-1043</td><td>Karthik R</td><td>Starter Kit</td><td><span class="pill info">Dispatched</span></td><td><button class="btn light small">Track</button></td></tr></tbody></table></div></div></section>
+<section class="page" id="page-reports"><div class="panelhead"><div><h1>▥ Reports & Analytics</h1><p>Revenue, kit sales, recharge orders and credit usage</p></div><button class="btn gold" onclick="toast('Export becomes available after reports are connected.')">Export</button></div><div class="grid overviewgrid"><div class="metric"><span>₹</span><div><small>Revenue (This Month)</small><b>₹42,550</b></div></div><div class="metric"><span>📦</span><div><small>Kits Sold</small><b>71</b></div></div><div class="metric"><span>◉</span><div><small>Recharge Orders</small><b>38</b></div></div><div class="metric"><span>☏</span><div><small>Alerts Delivered</small><b>3,246</b></div></div></div><div class="card"><h2>Weekly Activity Overview</h2><div style="height:190px;display:flex;align-items:end;gap:12px;padding:15px 4px 0;border-bottom:1px solid var(--line)"><div style="height:30%;flex:1;background:#5e8de8;border-radius:6px 6px 0 0"></div><div style="height:46%;flex:1;background:#5e8de8;border-radius:6px 6px 0 0"></div><div style="height:55%;flex:1;background:#5e8de8;border-radius:6px 6px 0 0"></div><div style="height:50%;flex:1;background:#5e8de8;border-radius:6px 6px 0 0"></div><div style="height:66%;flex:1;background:#5e8de8;border-radius:6px 6px 0 0"></div><div style="height:73%;flex:1;background:#5e8de8;border-radius:6px 6px 0 0"></div><div style="height:88%;flex:1;background:#7955db;border-radius:6px 6px 0 0"></div></div><div class="btnrow" style="justify-content:space-around;margin-top:7px;color:var(--muted);font-size:9px"><span>Nov 9</span><span>Nov 10</span><span>Nov 11</span><span>Nov 12</span><span>Nov 13</span><span>Nov 14</span><span>Nov 15</span></div></div></section>
+<section class="page" id="page-audit"><div class="panelhead"><div><h1>◎ Scan Audit Logs (Security)</h1><p>Private administrator-only scan and delivery history</p></div></div><div class="card"><div class="formgrid"><div class="field"><label>From</label><input type="date" value="2026-11-08"></div><div class="field"><label>To</label><input type="date" value="2026-11-15"></div></div><input class="search" placeholder="Search Customer ID or event"><div class="tablewrap" style="margin-top:10px"><table><thead><tr><th>Date & Time</th><th>Customer ID</th><th>Event</th><th>IP Address</th><th>Device / Browser</th><th>Location (Approx.)</th></tr></thead><tbody><tr><td>15 Nov 2026, 05:42 PM</td><td>PM-K7X4Q9</td><td>QR Scanned</td><td>103.122.xxx.24</td><td>Android / Chrome</td><td>Chennai, IN</td></tr><tr><td>15 Nov 2026, 05:43 PM</td><td>PM-K7X4Q9</td><td>Alert Sent (Vehicle)</td><td>—</td><td>WhatsApp API</td><td>—</td></tr><tr><td>14 Nov 2026, 09:18 PM</td><td>PM-L9M2F7</td><td>QR Scanned</td><td>157.49.xxx.11</td><td>iPhone / Safari</td><td>Bengaluru, IN</td></tr></tbody></table></div><p class="footerhint">IP-based location is approximate. Precise GPS is recorded only when the scanner grants permission and the workflow requests it.</p></div></section>
+<section class="page" id="page-backup"><div class="panelhead"><div><h1>☁ Backup & System Health</h1><p>Secure backups, restore readiness and service status</p></div></div><div class="grid cols2"><div class="card"><h2>System Health</h2><div class="healthrow"><span>WhatsApp API</span><b class="ok">Online</b></div><div class="healthrow"><span>Supabase Database</span><b class="ok">Online</b></div><div class="healthrow"><span>Resend Email</span><b class="ok">Online</b></div><div class="healthrow"><span>QR Generator</span><b class="ok">Online</b></div><div class="healthrow"><span>Last Backup</span><b>Sample · 15 Nov 2026</b></div><button class="btn" style="margin-top:12px" onclick="toast('Backup job needs secure server-side setup.')">Run Backup</button></div><div class="card"><h2>Backup Policy</h2><div class="notice">Weekly encrypted backup of customer data to private, access-controlled storage. Never place customer personal data in a public GitHub repository.</div><p class="sub" style="margin-top:12px">Backup contents should include customer records, wallet ledger, subscriptions, message logs and configuration. Restore tests should be scheduled periodically.</p></div></div></section>
+<section class="page" id="page-settings"><div class="panelhead"><div><h1>⚙ Settings</h1><p>Business plans, communication, admin security and system controls</p></div></div><div class="grid cols2"><div class="card"><h2>Business & Plan Settings</h2><div class="field"><label>Starter Kit Price (₹)</label><input value="599" type="number"></div><div class="field"><label>Annual Subscription (₹)</label><input value="149" type="number"></div><div class="field"><label>Recharge Plan 1 — Credits / Price</label><input value="250 credits · ₹99"></div><div class="field"><label>Recharge Plan 2 — Credits / Price</label><input value="500 credits · ₹149"></div><button class="btn" onclick="toast('Pricing save requires backend connection.')">Save Settings</button></div><div class="card"><h2>WhatsApp & Email Settings</h2><div class="field"><label>WhatsApp Business API</label><input value="Connected through secure server configuration" disabled></div><div class="field"><label>Email Service</label><input value="Resend · server-side key" disabled></div><h2 style="margin-top:14px">Admin & Security</h2><div class="healthrow"><span>Admin login / password reset</span><b>Configure</b></div><div class="healthrow"><span>Two-factor authentication</span><b>Recommended</b></div><button class="btn light" onclick="toast('Authentication is not included in this visual front-end preview.')">Security Settings</button></div><div class="card"><h2>System Maintenance</h2><p class="sub">Pause customer alert processing during planned maintenance.</p><label style="display:flex;gap:9px;align-items:center;font-weight:800"><input type="checkbox" id="maintenanceToggle"> Enable Maintenance Mode</label><div class="field" style="margin-top:10px"><label>Maintenance Message</label><textarea rows="3">PingMe is temporarily under maintenance. Please try again shortly.</textarea></div><button class="btn gold" onclick="toast('Maintenance mode control requires secure server-side integration.')">Save Maintenance</button></div></div></section>
+</main></div>
+<nav class="bottomnav" id="bottomNav"><button class="active" data-page="dashboard"><span>▦</span>Home</button><button data-page="customers"><span>♙</span>Customers</button><button data-page="add"><span>＋</span>Add</button><button data-page="qr"><span>▦</span>QR Studio</button><button data-page="settings"><span>☰</span>More</button></nav>
+<div class="modal" id="customerModal"><div class="modalbox"><div class="modalhead"><div><b style="font-size:15px">Customer Details</b><div class="sub" style="margin:3px 0 0">Profile · Credits · Subscription · QR & Print · Logs</div></div><button class="close" onclick="closeModal()">✕</button></div><div class="customerhero"><div class="avatar" style="width:56px;height:56px">RK</div><div style="flex:1"><b id="modalName" style="font-size:16px">Rajesh Kumar</b><div id="modalId" class="sub" style="margin:3px 0">PM-K7X4Q9</div><span class="pill" id="modalStatus">ACTIVE</span></div><button class="btn light small" onclick="toast('Profile editing needs connected database.')">✎ Edit</button></div><div class="tabs" style="margin-top:14px"><button class="active">Overview</button><button>Credits</button><button>History</button><button>QR & Print</button><button>Logs</button></div><div class="profilegrid"><div class="card"><h3>Customer Information</h3><div class="healthrow"><span>Registration Date</span><b>10 Nov 2026</b></div><div class="healthrow"><span>Activation Date</span><b>12 Nov 2026</b></div><div class="healthrow"><span>Subscription Start</span><b>12 Nov 2026</b></div><div class="healthrow"><span>Subscription Expiry</span><b>11 Nov 2027</b></div><div class="healthrow"><span>Mobile</span><b>+91 98765 43210</b></div><div class="healthrow"><span>Email</span><b>sample@email.com</b></div></div><div class="card"><div class="split"><div class="metric"><div><small>Paid Credits</small><b>245</b></div></div><div class="metric"><div><small>Test Credits</small><b>5 / 5</b></div></div></div><div class="metric" style="margin-top:8px"><div><small>Plan</small><b>Starter Kit (₹599)</b><small>Subscription · 1 Year</small></div></div><div style="margin-top:12px" class="btnrow"><button class="btn light small">Edit Details</button><button class="btn light small">Add / Deduct Credits</button><button class="btn light small">Extend Subscription</button><button class="btn red small" onclick="toast('Status update needs backend integration.')">Set Inactive</button></div></div></div><p class="footerhint">Sample profile data for layout preview only. Public QR pages must never expose personal customer details.</p></div></div>
+<div id="toast" style="position:fixed;left:50%;bottom:82px;transform:translateX(-50%);background:#102b69;color:#fff;padding:10px 15px;border-radius:10px;box-shadow:0 6px 20px #0003;display:none;z-index:40;font-size:11px;max-width:90vw;text-align:center"></div>
+<script>
+const demoCustomers=[{id:'PM-K7X4Q9',name:'Rajesh Kumar',mobile:'+91 98765 43210',credits:245,expiry:'11 Nov 2027',status:'Active'},{id:'PM-P3R8L2',name:'Priya S',mobile:'+91 91840 277123',credits:120,expiry:'15 Mar 2027',status:'Active'},{id:'PM-L9M2F7',name:'Karthik R',mobile:'+91 91944 399887',credits:0,expiry:'05 Nov 2026',status:'Inactive'},{id:'PM-T6V1N5',name:'Meena V',mobile:'+91 98765 12345',credits:5,expiry:'30 Nov 2026',status:'Testing'}];
+function showPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+name));document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===name));window.scrollTo({top:0,behavior:'smooth'});}
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.go)));
+function renderCustomers(){const q=(document.getElementById('customerSearch')?.value||'').toLowerCase(),f=document.getElementById('customerFilter')?.value||'all';document.getElementById('customerRows').innerHTML=demoCustomers.filter(c=>(f==='all'||c.status===f)&&[c.id,c.name,c.mobile].join(' ').toLowerCase().includes(q)).map(c=>`<tr><td><b>${c.id}</b></td><td>${c.name}</td><td>${c.mobile}</td><td>${c.credits}</td><td>${c.expiry}</td><td><span class="pill ${c.status==='Inactive'?'off':c.status==='Testing'?'warn':''}">${c.status}</span></td><td><button class="btn light small" onclick="openCustomer('${c.id}')">View</button></td></tr>`).join('')||'<tr><td colspan="7">No matching customers</td></tr>'}
+document.getElementById('customerSearch').addEventListener('input',renderCustomers);document.getElementById('customerFilter').addEventListener('change',renderCustomers);renderCustomers();
+function openCustomer(id){const c=demoCustomers.find(x=>x.id===id);if(!c)return;document.getElementById('modalName').textContent=c.name;document.getElementById('modalId').textContent=c.id;document.getElementById('modalStatus').textContent=c.status.toUpperCase();document.getElementById('modalStatus').className='pill '+(c.status==='Inactive'?'off':c.status==='Testing'?'warn':'');document.getElementById('customerModal').classList.add('open')}
+function closeModal(){document.getElementById('customerModal').classList.remove('open')}document.getElementById('customerModal').addEventListener('click',e=>{if(e.target.id==='customerModal')closeModal()});
+document.getElementById('addForm').addEventListener('submit',e=>{e.preventDefault();const name=document.getElementById('newName').value.trim(),mobile=document.getElementById('newMobile').value.trim();if(!name||!mobile)return;demoCustomers.unshift({id:'PM-'+Math.random().toString(36).slice(2,8).toUpperCase(),name,mobile,credits:0,expiry:'Not activated',status:document.getElementById('newStatus').value});renderCustomers();e.target.reset();toast('Demo customer added locally. Connect backend for permanent saving.');showPage('customers')});
+let toastTimer;function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.style.display='none',3000)}function editTemplate(name){toast(name+' editor preview — approved Meta template rules still apply.')}
+</script>
+</body></html>
