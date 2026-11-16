@@ -1801,4 +1801,56 @@
 .story-image-frame { background:transparent !important; }
 .story-image-frame img { object-fit:contain !important; object-position:center !important; }
 .story-demo-image { object-fit:contain !important; object-position:center !important; }
+
+
+    /* PINGME FIT FIX v2 — compact vertical rhythm so Send Alert remains visible.
+       Overrides layout only; no application logic or event handlers changed. */
+    #screen1 {
+      gap: 7px !important;
+      padding: 9px 11px 10px !important;
+      justify-content: flex-start !important;
+      min-height: 0 !important;
+    }
+    /* Tailwind space-y utilities were adding margins on top of the flex gap. */
+    #screen1 > :not([hidden]) ~ :not([hidden]) {
+      margin-top: 0 !important;
+    }
+    #screen1 .hero-composition {
+      height: clamp(118px, 15vh, 148px) !important;
+      min-height: 118px !important;
+      flex: 0 0 auto !important;
+    }
+    #screen1 .category-block { flex: 0 0 auto !important; }
+    #screen1 .cat-card {
+      min-height: 58px !important;
+      padding: 6px 4px !important;
+      gap: 3px !important;
+    }
+    #screen1 .cat-card img { width: 32px !important; height: 29px !important; }
+    #screen1 .cat-card span:last-child { font-size: 12px !important; line-height: 1.1 !important; }
+    #screen1 .message-block { gap: 5px !important; flex: 0 0 auto !important; }
+    #screen1 .tpl-pill {
+      min-height: 39px !important;
+      padding: 5px 9px !important;
+      font-size: 13px !important;
+      line-height: 1.15 !important;
+    }
+    #screen1 .tpl-pill .text-2xl { font-size: 17px !important; }
+    #screen1 .surface-card { padding: 7px !important; flex: 0 0 auto !important; }
+    #screen1 #customNote { min-height: 36px !important; padding: 7px 10px !important; }
+    #screen1 label, #screen1 #locationBtn { min-height: 37px !important; padding: 6px 6px !important; font-size: 11px !important; }
+    #screen1 .btn-send-alert { min-height: 48px !important; padding: 8px 10px !important; font-size: 18px !important; flex: 0 0 auto !important; }
+    #screen1 .screen1-footer { padding: 0 !important; font-size: 9px !important; line-height: 1.15 !important; }
+    .app-shell { height: auto !important; max-height: none !important; }
+    @media (min-width: 768px) {
+      body { align-items: flex-start !important; }
+      .app-shell { min-height: calc(100dvh - 40px) !important; }
+    }
+    @media (max-height: 760px) {
+      #screen1 { gap: 5px !important; padding-top: 6px !important; padding-bottom: 7px !important; }
+      #screen1 .hero-composition { height: 105px !important; min-height: 105px !important; }
+      #screen1 .cat-card { min-height: 52px !important; }
+      #screen1 .tpl-pill { min-height: 34px !important; }
+      #screen1 .btn-send-alert { min-height: 44px !important; }
+    }
 </style>
