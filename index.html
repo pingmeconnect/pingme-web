@@ -872,6 +872,104 @@
 .story-image-frame img{width:100%!important;height:100%!important;object-fit:fill!important;object-position:center!important;filter:none!important}
 .story-count,#storyCount{display:none!important}
 .story-demo-button{display:flex!important;margin:0 auto!important;align-items:center!important;justify-content:center!important;min-height:40px!important;padding:0 22px!important;border-radius:999px!important;border:1.5px solid #fff!important;background:linear-gradient(100deg,#0ea5e9,#5b45e8 55%,#db2777)!important;color:#fff!important;font-weight:900!important;box-shadow:0 5px 18px rgba(59,130,246,.35)!important}
+
+
+/* PINGME SCAN PAGE — RESPONSIVE CONTENT-FIT FIX
+   Layout-only override: preserve existing markup, IDs, handlers and API workflow. */
+html, body {
+  width: 100%;
+  height: auto !important;
+  min-height: 100%;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+body {
+  display: block !important;
+  align-items: initial !important;
+  justify-content: initial !important;
+  padding: 0 !important;
+}
+#appShell.app-shell {
+  width: min(100%, 390px);
+  max-width: 390px;
+  height: auto !important;
+  min-height: 100dvh;
+  margin: 0 auto;
+  overflow: visible !important;
+}
+#appShell .app-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  flex: 0 0 78px;
+}
+#screen1 {
+  display: flex;
+  flex: 0 0 auto !important;
+  width: 100%;
+  height: auto !important;
+  min-height: calc(100dvh - 78px);
+  max-height: none !important;
+  overflow: visible !important;
+  justify-content: flex-start !important;
+  gap: 10px !important;
+  padding: 10px 12px max(14px, env(safe-area-inset-bottom)) !important;
+}
+#screen1.hidden { display: none !important; }
+#screen1 > * {
+  flex-shrink: 0 !important;
+}
+#screen1 .hero-composition {
+  height: clamp(138px, 19vh, 178px);
+  min-height: 138px;
+}
+#screen1 .category-block,
+#screen1 .message-block,
+#screen1 .surface-card,
+#screen1 #sendBtn,
+#screen1 .screen1-footer {
+  position: relative;
+  flex: 0 0 auto;
+}
+#screen1 #reasonsContainer { gap: 6px !important; }
+#screen1 .tpl-pill { min-height: 36px; }
+#screen1 .surface-card { padding: 8px; }
+#screen1 #customNote { min-height: 40px; }
+#screen1 #sendBtn {
+  display: flex !important;
+  visibility: visible !important;
+  min-height: 52px;
+  margin-top: 1px;
+  margin-bottom: 2px;
+}
+#screen1 .screen1-footer {
+  padding-bottom: 2px;
+}
+#screen2 {
+  flex: 1 0 auto !important;
+  min-height: calc(100dvh - 78px);
+  height: auto !important;
+  overflow: visible !important;
+}
+#screen2.hidden { display: none !important; }
+#screen2 > .status-state:not(.hidden) {
+  min-height: calc(100dvh - 102px);
+}
+@media (max-width: 390px) {
+  #screen1 {
+    gap: 8px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+}
+@media (min-width: 768px) {
+  #appShell.app-shell {
+    border-radius: 28px;
+    overflow: visible !important;
+    box-shadow: 0 28px 75px rgba(0,0,0,.45);
+  }
+}
+
 </style>
 </head>
 <body>
