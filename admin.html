@@ -46,6 +46,7 @@
 <div class="field"><label>To date</label><input type="date" id="pmScannerTo"></div>
 </div>
 <div class="btnrow"><button class="btn" id="pmScannerApply">Search Records</button><button class="btn light" id="pmScannerAll">All-Time History</button><button class="btn green" id="pmScannerExcel" disabled>⬇ Download Excel</button></div>
+<div style="margin-top:10px;display:flex;align-items:center;gap:8px"><input type="checkbox" id="pmScannerIncludeCustomer" style="width:16px;height:16px"><label for="pmScannerIncludeCustomer" style="font-weight:800;color:#536381">Include Customer Details in Excel (name, mobile, email and address)</label></div>
 <p class="footerhint">Only existing records in public.scan_logs are shown. IP-based location is approximate; GPS is included only when it was shared. Export files contain personal data—share only with authorised recipients.</p>
 </div>
 <div class="grid overviewgrid" id="pmScannerStats"><div class="metric"><div><small>Matching scan records</small><b>—</b></div></div><div class="metric"><div><small>Distinct QR tags</small><b>—</b></div></div><div class="metric"><div><small>Records with IP</small><b>—</b></div></div><div class="metric"><div><small>Records with GPS</small><b>—</b></div></div></div>
@@ -186,6 +187,7 @@ async function pmRenderDbSection(page,table,title,editable=false){const el=docum
 async function pmReloadPage(page){if(page==='orders')return pmRenderDbSection('orders','orders','Orders & Dispatch',true);if(page==='audit')return pmRenderScannerDetails();if(page==='communication')return pmRenderCommunication();if(page==='credits')return pmRenderCredits();if(page==='settings')return pmRenderSettings();if(page==='backup')return pmRenderBackup();if(page==='reports')return pmRenderReports();if(page==='qr')return pmRenderQr()}
 let pmScannerRows=[];
 let pmScannerTagCodes=[];
+let pmScannerCustomerDetails={};
 function pmScannerDate(value){if(!value)return '—';const d=new Date(value);return Number.isNaN(d.getTime())?String(value):d.toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'});}
 function pmScannerEscape(v){return safe(v===null||v===undefined?'—':String(v));}
 async function pmScannerFetchAll(query){let all=[],from=0,batch=1000;while(true){const {data,error}=await query.range(from,from+batch-1);if(error)throw error;const rows=data||[];all.push(...rows);if(rows.length<batch)break;from+=batch;}return all;}
@@ -194,38 +196,44 @@ async function pmRenderScannerDetails(){
  if(!page.querySelector('#pmScannerApply'))return;
  const tagSelect=document.getElementById('pmScannerTag');
  const results=document.getElementById('pmScannerResults');
- results.innerHTML='<p class="footerhint">Loading QR Tag Codes…</p>';
- try{
-  const tags=await pmScannerFetchAll(db.from('scan_logs').select('tag_code').order('tag_code',{ascending:true}));
-  pmScannerTagCodes=[...new Set(tags.map(x=>x.tag_code).filter(Boolean))].sort();
-  const previous=tagSelect.value;
-  tagSelect.innerHTML='<option value="">All QR Tag Codes</option>'+pmScannerTagCodes.map(t=>`<option value="${pmScannerEscape(t)}">${pmScannerEscape(t)}</option>`).join('');
-  if(pmScannerTagCodes.includes(previous))tagSelect.value=previous;
- }catch(e){results.innerHTML=`<div class="notice">Could not load tag codes: ${pmScannerEscape(e.message)}</div>`;return;}
+ const apiBase='https://pingme-api.pingmeconnect.workers.dev';
+ // Customer IDs are the QR Tag Codes in the current PingMe QR Studio flow.
+ const previous=tagSelect.value;
+ pmScannerTagCodes=[...new Set((customers||[]).map(c=>String(c.customer_id||'').trim()).filter(Boolean))].sort();
+ tagSelect.innerHTML='<option value="">All QR Tag Codes</option>'+pmScannerTagCodes.map(t=>`<option value="${pmScannerEscape(t)}">${pmScannerEscape(t)}</option>`).join('');
+ if(pmScannerTagCodes.includes(previous))tagSelect.value=previous;
  const run=async(allTime=false)=>{
   const btn=document.getElementById('pmScannerApply');btn.disabled=true;btn.textContent='Searching…';
-  results.innerHTML='<p class="footerhint">Loading scan records…</p>';
+  results.innerHTML='<p class="footerhint">Loading scan records securely…</p>';
   try{
-   const selected=tagSelect.value||document.getElementById('pmScannerTagSearch').value.trim();
+   const selected=(document.getElementById('pmScannerTagSearch').value||'').trim()||tagSelect.value;
    const fromDate=allTime?'':document.getElementById('pmScannerFrom').value;
    const toDate=allTime?'':document.getElementById('pmScannerTo').value;
    if(fromDate&&toDate&&fromDate>toDate)throw new Error('From date cannot be later than To date.');
-   let q=db.from('scan_logs').select('*').order('created_at',{ascending:false});
-   if(selected)q=q.eq('tag_code',selected);
-   if(fromDate)q=q.gte('created_at',new Date(fromDate+'T00:00:00').toISOString());
-   if(toDate){const end=new Date(toDate+'T00:00:00');end.setDate(end.getDate()+1);q=q.lt('created_at',end.toISOString());}
-   pmScannerRows=await pmScannerFetchAll(q);
-   document.getElementById('pmScannerCount').textContent=pmScannerRows.length+' matching records';
+   const {data:{session},error:sessionError}=await db.auth.getSession();
+   if(sessionError)throw sessionError;
+   if(!session?.access_token)throw new Error('Your admin session has expired. Please sign in again.');
+   const params=new URLSearchParams();
+   if(selected)params.set('tag_code',selected);
+   if(fromDate)params.set('from',fromDate);
+   if(toDate)params.set('to',toDate);
+   params.set('include_customer_details',document.getElementById('pmScannerIncludeCustomer')?.checked?'true':'false');
+   const response=await fetch(`${apiBase}/api/admin/scanner-details?${params.toString()}`,{method:'GET',headers:{Authorization:`Bearer ${session.access_token}`}});
+   const payload=await response.json().catch(()=>({}));
+   if(!response.ok)throw new Error(payload.error||`Scanner API returned HTTP ${response.status}`);
+   pmScannerRows=Array.isArray(payload.records)?payload.records:[];
+   pmScannerCustomerDetails=payload.customer_details||{};
+   document.getElementById('pmScannerCount').textContent=pmScannerRows.length+' matching records'+(payload.truncated?' · maximum report limit reached':'');
    document.getElementById('pmScannerExcel').disabled=!pmScannerRows.length;
    const distinct=new Set(pmScannerRows.map(r=>r.tag_code).filter(Boolean)).size;
    const withIp=pmScannerRows.filter(r=>r.scanner_ip).length;
    const withGps=pmScannerRows.filter(r=>r.gps_lat!==null&&r.gps_lat!==''&&r.gps_lng!==null&&r.gps_lng!=='').length;
    document.getElementById('pmScannerStats').innerHTML=[['Matching scan records',pmScannerRows.length],['Distinct QR tags',distinct],['Records with IP',withIp],['Records with GPS',withGps]].map(([k,v])=>`<div class="metric"><div><small>${k}</small><b>${v}</b></div></div>`).join('');
-   if(!pmScannerRows.length){results.innerHTML='<p class="footerhint">No scan records match these filters.</p>';return;}
+   if(!pmScannerRows.length){results.innerHTML='<p class="footerhint">No scan records match these filters. Try All-Time History or clear the tag search.</p>';return;}
    const cols=[['created_at','Date & Time'],['tag_code','QR Tag Code'],['scanner_ip','Scanner IP'],['country','Country'],['region','Region / State'],['city','City'],['isp','ISP'],['user_agent','Device / Browser'],['reason','Reason'],['custom_message','Additional Message'],['gps_lat','GPS Latitude'],['gps_lng','GPS Longitude'],['location_url','Location URL'],['photo_url','Photo URL'],['delivery_status','Alert Status'],['photo_delivery_status','Photo Delivery'],['location_delivery_status','GPS Delivery'],['email_sent','Email Sent'],['owner_reply','Owner Reply'],['replied_at','Reply Date & Time'],['session_status','Session Status'],['id','Scan Record ID']];
    const shown=pmScannerRows.slice(0,100);
-   results.innerHTML=`<div class="tablewrap"><table><thead><tr>${cols.slice(0,10).map(c=>`<th>${c[1]}</th>`).join('')}</tr></thead><tbody>${shown.map(r=>`<tr>${cols.slice(0,10).map(([k])=>`<td title="${pmScannerEscape(r[k])}">${pmScannerEscape(k==='created_at'?pmScannerDate(r[k]):r[k]).slice(0,100)}</td>`).join('')}</tr>`).join('')}</tbody></table></div><p class="footerhint">Showing ${shown.length} of ${pmScannerRows.length} records. Download Excel for the complete filtered report and all report columns.</p>`;
-  }catch(e){pmScannerRows=[];document.getElementById('pmScannerExcel').disabled=true;results.innerHTML=`<div class="notice">Search failed: ${pmScannerEscape(e.message)}. Confirm the signed-in admin has read access to public.scan_logs.</div>`;}
+   results.innerHTML=`<div class="tablewrap"><table><thead><tr>${cols.slice(0,10).map(c=>`<th>${c[1]}</th>`).join('')}</tr></thead><tbody>${shown.map(r=>`<tr>${cols.slice(0,10).map(([k])=>`<td title="${pmScannerEscape(r[k])}">${pmScannerEscape(k==='created_at'?pmScannerDate(r[k]):r[k]).slice(0,100)}</td>`).join('')}</tr>`).join('')}</tbody></table></div><p class="footerhint">Showing ${shown.length} of ${pmScannerRows.length} records. Download Excel for the complete filtered report.</p>`;
+  }catch(e){pmScannerRows=[];pmScannerCustomerDetails={};document.getElementById('pmScannerExcel').disabled=true;document.getElementById('pmScannerCount').textContent='Search failed';results.innerHTML=`<div class="notice">Search failed: ${pmScannerEscape(e.message)}. The admin API must be deployed and the current admin session must be valid.</div>`;}
   finally{btn.disabled=false;btn.textContent='Search Records';}
  };
  document.getElementById('pmScannerApply').onclick=()=>run(false);
@@ -234,15 +242,23 @@ async function pmRenderScannerDetails(){
  document.getElementById('pmScannerExcel').onclick=()=>{
   if(!pmScannerRows.length)return;
   const cols=[['created_at','Date & Time'],['tag_code','QR Tag Code'],['scanner_ip','Scanner IP'],['country','Country'],['region','Region / State'],['city','City'],['isp','ISP'],['user_agent','Device / Browser'],['reason','Reason'],['custom_message','Additional Message'],['gps_lat','GPS Latitude'],['gps_lng','GPS Longitude'],['location_url','Location URL'],['photo_url','Photo URL'],['delivery_status','Alert Status'],['photo_delivery_status','Photo Delivery Status'],['location_delivery_status','GPS Delivery Status'],['email_sent','Email Sent'],['owner_reply','Owner Reply'],['replied_at','Reply Date & Time'],['session_status','Session Status'],['id','Scan Record ID']];
-  const data=pmScannerRows.map(r=>Object.fromEntries(cols.map(([k,label])=>[label,k==='created_at'||k==='replied_at'? (r[k]?new Date(r[k]).toISOString(): '') : (r[k]??'')])));
-  const wb=XLSX.utils.book_new();const ws=XLSX.utils.json_to_sheet(data);ws['!cols']=cols.map(([k])=>({wch:Math.min(48,Math.max(14,k.length+4))}));XLSX.utils.book_append_sheet(wb,ws,'Scanner Details');
-  const summary=[{Report:'PingMe Scanner Details',Generated_At:new Date().toISOString(),Records:pmScannerRows.length,QR_Tag_Code:tagSelect.value||document.getElementById('pmScannerTagSearch').value.trim()||'All',From_Date:document.getElementById('pmScannerFrom').value||'All time',To_Date:document.getElementById('pmScannerTo').value||'All time',Source:'Supabase public.scan_logs'}];
+  const data=pmScannerRows.map(r=>Object.fromEntries(cols.map(([k,label])=>[label,k==='created_at'||k==='replied_at'?(r[k]?new Date(r[k]).toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}):''):(r[k]??'')])));
+  const wb=XLSX.utils.book_new();
+  const ws=XLSX.utils.json_to_sheet(data);ws['!cols']=cols.map(([k])=>({wch:Math.min(48,Math.max(14,k.length+4))}));XLSX.utils.book_append_sheet(wb,ws,'Scan History');
+  const includeCustomer=document.getElementById('pmScannerIncludeCustomer')?.checked;
+  if(includeCustomer){
+   const map=pmScannerCustomerDetails||{};
+   const customerRows=pmScannerRows.map(r=>{const c=map[String(r.tag_code||'')]||{};return {'QR Tag Code':r.tag_code||'', 'Customer Name':c.name||'', 'Mobile Number':c.mobile||'', 'Email ID':c.email||'', 'Registered Address':c.address||''};});
+   const unique=[...new Map(customerRows.map(r=>[r['QR Tag Code'],r])).values()];
+   const cws=XLSX.utils.json_to_sheet(unique);cws['!cols']=[{wch:20},{wch:28},{wch:18},{wch:32},{wch:45}];XLSX.utils.book_append_sheet(wb,cws,'Customer Details');
+  }
+  const summary=[{Report:'PingMe Scanner Details',Generated_At:new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}),Records:pmScannerRows.length,QR_Tag_Code:tagSelect.value||document.getElementById('pmScannerTagSearch').value.trim()||'All',From_Date:document.getElementById('pmScannerFrom').value||'All time',To_Date:document.getElementById('pmScannerTo').value||'All time',Customer_Details_Included:includeCustomer?'Yes':'No',Time_Zone:'Asia/Kolkata',Source:'PingMe authenticated Scanner Details API'}];
   XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(summary),'Report Summary');
   const stamp=new Date().toISOString().slice(0,10);XLSX.writeFile(wb,`PingMe-Scanner-Details-${stamp}.xlsx`);
  };
- // Do not automatically fetch all historical personal data; user chooses Search or All-Time.
- results.innerHTML='<p class="footerhint">Select a QR Tag Code and/or date range, then click Search Records. Use All-Time History to include every available record.</p>';
+ results.innerHTML='<p class="footerhint">Select a QR Tag Code and/or date range, then click Search Records. All-Time History clears the date filters and retrieves all matching history.</p>';
 }
+
 async function pmRenderCredits(){const el=document.getElementById('page-credits');el.innerHTML=`<div class="panelhead"><div><h1>Credits & Subscription</h1><p>Live customer balances and transaction ledger</p></div><button class="btn light small" id="pmCreditRefresh">↻ Refresh</button></div><div class="grid cols2"><div class="card"><h2>Customer Credit Adjustment</h2><div class="field"><label>Customer</label><select id="pmCreditCustomerSelect">${customers.map(c=>`<option value="${c.id}">${safe(c.customer_id)} — ${safe(c.name)} (${c.paid_credits||0} credits)</option>`).join('')}</select></div><div class="field"><label>Credits (+ add / − deduct)</label><input id="pmCreditDelta" type="number" step="1"></div><div class="field"><label>Reason (required)</label><input id="pmCreditWhy"></div><button class="btn" id="pmCreditSubmit">Apply adjustment</button><p class="footerhint">Uses the atomic pingme_adjust_customer_credits database function.</p></div><div class="card"><h2>Wallet summary</h2><div class="healthrow"><span>Customers</span><b>${customers.length}</b></div><div class="healthrow"><span>Total paid credits</span><b>${customers.reduce((n,c)=>n+(Number(c.paid_credits)||0),0)}</b></div><div class="healthrow"><span>Free test credits remaining</span><b>${customers.reduce((n,c)=>n+(Number(c.test_credits)||0),0)}</b></div><p class="footerhint">Master pool and Meta charges are not present in the supplied schema; no invented totals are shown.</p></div></div><div class="card"><h2>Credit Transactions</h2><div id="pmCreditLedger">Loading…</div></div>`;document.getElementById('pmCreditSubmit').onclick=async()=>{const id=document.getElementById('pmCreditCustomerSelect').value,amount=Number(document.getElementById('pmCreditDelta').value),reason=document.getElementById('pmCreditWhy').value.trim();if(!id||!Number.isInteger(amount)||!amount||!reason){toast('Select a customer, enter a non-zero whole number and reason.');return}const {data,error}=await db.rpc('pingme_adjust_customer_credits',{p_customer_id:id,p_amount:amount,p_reason:reason});if(error){toast('Credit adjustment failed: '+error.message);return}toast('Credits updated. New balance: '+data);await loadCustomers();await pmRenderCredits()};document.getElementById('pmCreditRefresh').onclick=pmRenderCredits;try{const rows=await pmLoadTable('pingme_credit_transactions');pmRenderTable(document.getElementById('pmCreditLedger'),rows,'pingme_credit_transactions')}catch(e){document.getElementById('pmCreditLedger').textContent='Ledger unavailable: '+e.message}}
 async function pmRenderSettings(){const el=document.getElementById('page-settings');el.innerHTML=`<div class="panelhead"><div><h1>Settings</h1><p>Persisted settings in public.app_settings</p></div><button class="btn light small" id="pmSettingsRefresh">↻ Refresh</button></div><div class="card"><h2>Save / update a setting</h2><div class="formgrid"><div class="field"><label>Setting key</label><input id="pmSettingKey" placeholder="starter_kit_price"></div><div class="field"><label>Value (JSON)</label><input id="pmSettingValue" placeholder='599 or "enabled"'></div></div><button class="btn" id="pmSettingSave">Save setting</button><p class="footerhint">This writes only to app_settings. WhatsApp credentials and secrets must never be stored in browser-accessible settings.</p></div><div class="card"><h2>Saved settings</h2><div id="pmSettingsRows">Loading…</div></div>`;const load=async()=>{try{const rows=await pmLoadTable('app_settings');pmRenderTable(document.getElementById('pmSettingsRows'),rows,'app_settings',true)}catch(e){document.getElementById('pmSettingsRows').textContent='Settings table unavailable: '+e.message}};document.getElementById('pmSettingsRefresh').onclick=load;document.getElementById('pmSettingSave').onclick=async()=>{const key=document.getElementById('pmSettingKey').value.trim(),raw=document.getElementById('pmSettingValue').value.trim();if(!key||!raw){toast('Enter a key and JSON value.');return}let value;try{value=JSON.parse(raw)}catch(e){toast('Value must be valid JSON (example: 599 or "active").');return}const {error}=await db.from('app_settings').upsert({key,value,updated_at:new Date().toISOString()},{onConflict:'key'});if(error){toast('Setting save failed: '+error.message);return}toast('Setting saved in Supabase.');load()};await load()}
 async function pmRenderBackup(){const el=document.getElementById('page-backup');el.innerHTML=`<div class="panelhead"><div><h1>Backup & System Health</h1><p>Live connectivity checks and manual data export</p></div><button class="btn light small" id="pmHealthCheck">Run checks</button></div><div class="card"><h2>Database health</h2><div id="pmHealthRows">Checking…</div></div><div class="card"><h2>Download database snapshot</h2><p class="sub">Exports the tables readable by this admin session to a local JSON file. This is a manual export, not an automated encrypted backup.</p><button class="btn" id="pmBackupDownload">Download JSON snapshot</button><div id="pmBackupStatus" class="footerhint"></div></div>`;const check=async()=>{const host=document.getElementById('pmHealthRows');host.innerHTML='';for(const t of ['pingme_customers','pingme_credit_transactions','app_settings','orders','scan_logs','whatsapp_message_logs']){const {error}=await db.from(t).select('*',{count:'exact',head:true});host.innerHTML+=`<div class="healthrow"><span>public.${t}</span><b class="${error?'':'ok'}">${error?'Unavailable: '+safe(error.message):'Connected'}</b></div>`}};document.getElementById('pmHealthCheck').onclick=check;document.getElementById('pmBackupDownload').onclick=async()=>{const out={created_at:new Date().toISOString(),project:SUPABASE_URL,tables:{}};for(const t of ['pingme_customers','pingme_credit_transactions','app_settings','orders','scan_logs','whatsapp_message_logs','tags','credit_lots']){const {data,error}=await db.from(t).select('*').limit(5000);if(error){document.getElementById('pmBackupStatus').textContent='Snapshot stopped: '+t+' — '+error.message;return}out.tables[t]=data||[]}pmDownload('pingme-manual-snapshot-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify(out,null,2),'application/json');document.getElementById('pmBackupStatus').textContent='Snapshot downloaded. Store it privately; it contains customer personal data.'};await check()}
