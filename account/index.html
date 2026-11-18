@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My PingMe Account</title>
+<meta name="theme-color" content="#102b62">
+<style>
+:root{--navy:#102b62;--blue:#1768c5;--cyan:#26c6da;--ink:#17233d;--muted:#66748c;--line:#e5ebf4;--bg:#f4f7fc}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,Arial,sans-serif}
+header{background:linear-gradient(120deg,#102b62,#174b9b);color:white;padding:22px max(20px,calc((100vw - 1080px)/2));display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{font-size:22px;font-weight:800;letter-spacing:-.5px}.brand span{color:#ff83b4}.tag{font-size:12px;color:#d7e8ff}
+main{max-width:1080px;margin:28px auto;padding:0 18px}.panel{background:white;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 8px 28px #12315b0a;margin-bottom:18px}
+h1,h2,h3{margin:0 0 12px}h1{font-size:26px}h2{font-size:18px}.muted{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+.metric{padding:18px;border:1px solid var(--line);border-radius:14px}.metric small{display:block;color:var(--muted)}.metric b{font-size:24px;color:var(--navy)}
+input,button{font:inherit}input{width:100%;padding:13px;border:1px solid #cdd7e6;border-radius:10px;margin:8px 0 14px}
+button,.btn{border:0;background:var(--blue);color:white;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}button.secondary{background:#edf3fb;color:var(--navy)}
+.notice{background:#eef7ff;border:1px solid #cfe6ff;border-radius:12px;padding:13px;color:#214d7b;font-size:13px}
+.hidden{display:none!important}.row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.qr{width:190px;height:190px;object-fit:contain;background:white;border:1px solid var(--line);padding:10px;border-radius:12px}
+footer{text-align:center;color:var(--muted);padding:30px 16px;font-size:12px}
+@media(max-width:600px){header{padding:18px}.panel{padding:18px}main{margin-top:16px}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<header><div><div class="brand">Ping<span>Me</span></div><div class="tag">ONE SCAN. INSTANT CONNECTION.</div></div><a class="btn secondary" href="/">Visit website</a></header>
+<main>
+<section id="loginPanel" class="panel">
+<h1>Welcome to your PingMe account</h1><p class="muted">Sign in with the email address registered with your PingMe account. We'll send you a secure sign-in link.</p>
+<label for="email">Registered email address</label><input id="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+<button id="sendLink">Send secure sign-in link</button><p id="loginMessage" class="muted" role="status"></p>
+<div class="notice">Don't have an email registered? Contact PingMe support to update your account. QR scanning remains available without customer login.</div>
+</section>
+<section id="accountPanel" class="hidden">
+<div class="panel row"><div><h1>My PingMe Account</h1><div id="accountEmail" class="muted"></div></div><button id="signOut" class="secondary">Sign out</button></div>
+<div class="grid">
+<div class="metric"><small>Customer ID</small><b id="customerId">—</b></div>
+<div class="metric"><small>Account status</small><b id="status">—</b></div>
+<div class="metric"><small>Paid credits</small><b id="paidCredits">—</b></div>
+<div class="metric"><small>Free test credits</small><b id="testCredits">—</b></div>
+<div class="metric"><small>Subscription expiry</small><b id="expiry">—</b></div>
+</div>
+<div class="panel" style="margin-top:18px"><h2>My profile</h2><div class="grid">
+<div><small class="muted">Name</small><p id="name">—</p></div><div><small class="muted">Mobile</small><p id="mobile">—</p></div><div><small class="muted">Email</small><p id="profileEmail">—</p></div><div><small class="muted">Address</small><p id="address">—</p></div>
+</div></div>
+<div class="panel"><h2>My QR code</h2><p class="muted">Use this code for your PingMe tag. Keep it safe and do not share your private account sign-in link.</p><div class="row"><div><p><b id="qrCustomer">—</b></p><a id="openScanner" class="btn" target="_blank" rel="noopener">Open my scanner page</a></div><img id="qrImage" class="qr" alt="Your PingMe QR code"></div></div>
+<div class="notice">Account self-service is currently read-only for sensitive fields. Credit changes, activation, subscription changes and payment approvals remain controlled by PingMe administration.</div>
+</section>
+</main><footer>PingMe · ONE SCAN. INSTANT CONNECTION.</footer>
+<script>
+const SUPABASE_URL='https://vlmlcwzyfummpwxuitcn.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='sb_publishable_a2PPtTLwt8Uf1CcW6ZsWKg_YOZ1E9BC';
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+const $=id=>document.getElementById(id);
+function message(t){$('loginMessage').textContent=t}
+async function loadAccount(){
+ const {data:{user},error:authErr}=await db.auth.getUser();
+ if(authErr||!user){$('loginPanel').classList.remove('hidden');$('accountPanel').classList.add('hidden');return}
+ $('loginPanel').classList.add('hidden');
+ // Link this verified email to its matching customer row, then read only that linked row.
+ const {error:claimError}=await db.rpc('pingme_claim_customer_account');
+ if(claimError){$('loginPanel').classList.remove('hidden');message(claimError.message.includes('No unlinked')?'This email is not linked to a PingMe customer record. Please contact support.':'Account linking is not ready. Please contact PingMe support.');return}
+ const {data,error}=await db.from('pingme_customers').select('id,customer_id,name,mobile,email,address,status,subscription_expiry,paid_credits,test_credits').eq('auth_user_id',user.id).maybeSingle();
+ if(error){$('loginPanel').classList.remove('hidden');message('Your customer account link is not ready yet. Please contact PingMe support.');return}
+ if(!data){$('loginPanel').classList.remove('hidden');message('This verified email is not linked to a PingMe customer record yet. Please contact PingMe support to link your account.');return}
+ $('accountPanel').classList.remove('hidden');$('accountEmail').textContent=user.email||'';
+ const fields={customerId:data.customer_id,status:data.status,paidCredits:data.paid_credits,testCredits:data.test_credits,expiry:data.subscription_expiry||'Not set',name:data.name,mobile:data.mobile,profileEmail:data.email,address:data.address||'Not provided',qrCustomer:data.customer_id};
+ Object.entries(fields).forEach(([id,v])=>$(id).textContent=v??'—');
+ const scanUrl=`${location.origin}/?t=${encodeURIComponent(data.customer_id)}`;
+ $('openScanner').href=scanUrl;
+ $('qrImage').src=`https://api.qrserver.com/v1/create-qr-code/?size=380x380&data=${encodeURIComponent(scanUrl)}`;
+}
+$('sendLink').onclick=async()=>{const email=$('email').value.trim();if(!email){message('Enter your registered email.');return}
+ $('sendLink').disabled=true;message('Sending secure sign-in link…');
+ const {error}=await db.auth.signInWithOtp({email,options:{emailRedirectTo:location.origin+'/account/'}});
+ $('sendLink').disabled=false;message(error?error.message:'Check your email for the secure PingMe sign-in link.')};
+$('signOut').onclick=async()=>{await db.auth.signOut();location.reload()};
+db.auth.onAuthStateChange(()=>setTimeout(loadAccount,0));
+loadAccount();
+</script>
+</body></html>

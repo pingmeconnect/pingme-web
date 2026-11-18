@@ -1,0 +1,1 @@
+The uploaded Worker source arrived as formatted Markdown/pasted text, not a clean JavaScript source file. It contains escaped markup and formatting artifacts. This reference is included for audit only. Do not rename it to .js or deploy it. Restore the original Worker source from the existing Cloudflare/GitHub worker project before applying reviewed changes.
