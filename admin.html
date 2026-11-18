@@ -380,15 +380,48 @@ async function pmRenderCommunication(){
    <div id="pmWaProspect" style="display:none"><div class="notice">For people who have enquired about PingMe but are not registered customers. Send only to contacts who have agreed to receive WhatsApp messages. Follow WhatsApp's approved business-initiated messaging rules.</div><div class="field"><label>Contact name</label><input id="pmWaProspectName" placeholder="Enter contact name"></div><div class="field"><label>WhatsApp number (with country code)</label><input id="pmWaProspectMobile" placeholder="e.g. 919XXXXXXXXX" inputmode="tel"></div></div>
    <div class="notice" id="pmWaRecipientCount" style="margin-top:12px">${registeredCustomers.length} registered customers with mobile numbers.</div>
   </div>
-  <div class="card"><h2>2. Choose a ready-made message</h2><div class="field"><label>PingMe message template</label><select id="pmWaTemplate">${templates.map(t=>`<option value="${t.id}">${t.name}</option>`).join('')}</select><small class="footerhint" id="pmWaTemplateCategory">Category: Utility · Draft — Meta approval required</small></div><div class="field"><label>Message title (internal)</label><input id="pmWaSubject" value="${templates[0].subject}"></div><div class="field"><label>Edit message before sending</label><textarea id="pmWaMessage" rows="13" style="min-height:260px">${templates[0].body.replaceAll('{{name}}','Customer')}</textarea><small class="footerhint">Customer name is personalised. Other placeholders such as {{credits}} or {{expiry_date}} must be filled with real values before sending. These are proposed drafts until Meta approves each template.</small></div></div>
+  <div class="card"><h2>2. Choose a ready-made message</h2><div class="field"><label>PingMe message template</label><select id="pmWaTemplate">${templates.map(t=>`<option value="${t.id}">${t.name}</option>`).join('')}</select><small class="footerhint" id="pmWaTemplateCategory">Category: Utility · Draft — Meta approval required</small></div><div class="field"><label>Message title (internal)</label><input id="pmWaSubject" value="${templates[0].subject}"></div><div class="field"><label>Edit message before sending</label><textarea id="pmWaMessage" rows="13" style="min-height:260px">${templates[0].body.replaceAll('{{name}}','Customer')}</textarea><small class="footerhint">Customer name, available credits and subscription expiry are filled from the selected customer record where available. Enter any additional details below.</small></div><div class="field" id="pmWaVariableFields" style="margin-top:10px"><label>Template details</label><div class="notice">Select a template to see the details required for that message.</div></div></div>
  </div>
  <div class="card"><h2>3. Add PingMe product image (optional)</h2><div class="grid cols2" style="align-items:center"><div><div class="field"><label>Attach image</label><input id="pmWaImage" type="file" accept="image/png,image/jpeg,image/webp"><small class="footerhint">PNG, JPG or WEBP. Image attachment is optional.</small></div><button class="btn light small" id="pmWaRemoveImage" type="button">Remove image</button></div><div id="pmWaImagePreview" style="min-height:90px;display:flex;align-items:center;justify-content:center;border:1px dashed #cbd5e1;border-radius:12px;padding:10px;color:#64748b">No image attached</div></div></div>
  <div class="card"><h2>Message preview</h2><div style="max-width:620px;background:#f4f8ff;border:1px solid #dbe7fb;border-radius:16px;padding:18px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><img src="${PM_PINGME_LOGO}" alt="PingMe" style="width:46px;height:46px;object-fit:contain;background:white;border-radius:10px;padding:3px"><div><b style="color:#123b80">PingMe</b><div style="font-size:12px;color:#64748b">ONE SCAN. INSTANT CONNECTION.</div></div></div><div id="pmWaPreviewText" style="white-space:pre-wrap;line-height:1.55;color:#172b4d">${templates[0].body.replaceAll('{{name}}','Customer')}</div><div id="pmWaPreviewImage"></div></div><div class="card" style="margin-top:14px;background:#f8fbff"><h2>4. Choose sending method</h2><div class="grid cols2" style="gap:12px"><label style="display:flex;gap:10px;align-items:flex-start;border:1px solid #b9d1f5;border-radius:12px;padding:14px;background:#fff;cursor:pointer"><input type="radio" name="pmWaSendMode" value="freeform" id="pmWaModeFreeform" checked style="margin-top:3px"><span><b>Editable WhatsApp message</b><br><small>For recipients who messaged your PingMe Business number within the last 24 hours. Your edited text and optional image can be sent.</small></span></label><div style="border:1px solid #e2c98e;border-radius:12px;padding:14px;background:#fff"><b>Approved Meta template</b><br><small>For activation, welcome and reminders outside the 24-hour window.</small><p style="margin:8px 0 0;color:#9a6500;font-weight:700">The 7 customer templates below are drafts until Meta approves them.</p><small>The existing pingme_instant_alert template is reserved for QR scanner alerts and must not be reused for promotions or reminders.</small></div></div><div class="notice" style="margin-top:12px"><label style="display:flex;gap:9px;align-items:flex-start;font-weight:600"><input type="checkbox" id="pmWaConsent" style="margin-top:3px"> I confirm these recipients have agreed to receive PingMe WhatsApp messages.</label><label id="pmWaWindowLabel" style="display:flex;gap:9px;align-items:flex-start;font-weight:600;margin-top:8px"><input type="checkbox" id="pmWaWindow" style="margin-top:3px"> I confirm each recipient has messaged our WhatsApp Business number within the last 24 hours.</label></div></div><div class="btnrow" style="justify-content:flex-end;margin-top:16px"><button class="btn light" id="pmWaPrepare">Prepare message</button><button class="btn" id="pmWaSend">Send WhatsApp Message</button></div><p class="footerhint" id="pmWaStatus">Choose recipients, review the personalised message and confirm consent. Free-form messages are permitted only during an open 24-hour customer-service window. Outside that window, PingMe must use a separately Meta-approved customer communication template.</p></div>`;
  const byId=id=>document.getElementById(id);
  const currentTemplate=()=>templates.find(t=>t.id===byId('pmWaTemplate').value)||templates[0];
  const selectedCustomers=()=>Array.from(byId('pmWaCustomers').selectedOptions).map(o=>customers.find(c=>String(c.id)===o.value)).filter(Boolean);
- const renderPreview=()=>{const t=currentTemplate();const audience=byId('pmWaAudience').value;const name=audience==='prospect'?(byId('pmWaProspectName').value.trim()||'there'):(selectedCustomers()[0]?.name||'Customer');const message=byId('pmWaMessage').value.replaceAll('{{name}}',name);byId('pmWaPreviewText').textContent=message;byId('pmWaSubject').value=byId('pmWaSubject').value||t.subject;};
- byId('pmWaTemplate').onchange=()=>{const t=currentTemplate();byId('pmWaSubject').value=t.subject;byId('pmWaMessage').value=t.body;byId('pmWaTemplateCategory').textContent=`Category: ${t.category} · Draft — Meta approval required`;renderPreview()};
+ const variableValues={};
+ const variableMeta={
+  credits:{label:'Available credits',hint:'Automatically taken from each selected customer\'s paid credit balance.',automatic:true},
+  expiry_date:{label:'Subscription expiry date',hint:'Automatically taken from each selected customer\'s subscription expiry.',automatic:true},
+  balance:{label:'Available balance (credits)',hint:'Automatically taken from each selected customer\'s paid credit balance.',automatic:true},
+  recharge_credits:{label:'Recharge credits',hint:'Enter the number of credits added in this recharge.',automatic:false},
+  announcement:{label:'Announcement text',hint:'Enter the announcement that will be sent to every selected recipient.',automatic:false}
+ };
+ const templateVars=body=>[...new Set([...body.matchAll(/{{\s*([^}]+?)\s*}}/g)].map(m=>m[1].trim()).filter(v=>v.toLowerCase()!=='name'))];
+ const renderVariableFields=()=>{
+  const vars=templateVars(byId('pmWaMessage').value),host=byId('pmWaVariableFields');
+  if(!vars.length){host.innerHTML='<label>Template details</label><div class="notice">No additional details are required. Customer name will be personalised automatically.</div>';return}
+  host.innerHTML='<label>Template details</label>'+vars.map(key=>{
+   const meta=variableMeta[key]||{label:key.replaceAll('_',' ').replace(/^\\w/,c=>c.toUpperCase()),hint:'Enter this value before sending.',automatic:false};
+   if(meta.automatic)return `<div class="notice" style="margin:6px 0"><b>${safe(meta.label)}</b><br><small>${safe(meta.hint)}</small></div>`;
+   return `<div class="field" style="margin-top:8px"><label>${safe(meta.label)} *</label><textarea data-wa-variable="${safe(key)}" rows="2" placeholder="${safe(meta.hint)}">${safe(variableValues[key]||'')}</textarea><small class="footerhint">${safe(meta.hint)}</small></div>`;
+  }).join('');
+  host.querySelectorAll('[data-wa-variable]').forEach(input=>input.addEventListener('input',()=>{variableValues[input.dataset.waVariable]=input.value;renderPreview()}));
+ };
+ const valueForRecipient=(key,recipient)=>{
+  if(key==='credits'||key==='balance')return String(recipient.paid_credits??'').trim();
+  if(key==='expiry_date')return recipient.subscription_expiry?fmtDate(recipient.subscription_expiry):'';
+  return String(variableValues[key]||'').trim();
+ };
+ const personaliseMessage=(body,recipient)=>{
+  let result=body.replace(/{{\s*name\s*}}/gi,recipient.name||'Customer');
+  for(const key of templateVars(body)){
+   const value=valueForRecipient(key,recipient);
+   if(!value)return {error:key};
+   result=result.replace(new RegExp('{{\\s*'+key+'\\s*}}','gi'),value);
+  }
+  return {message:result};
+ };
+ const renderPreview=()=>{const t=currentTemplate();const audience=byId('pmWaAudience').value;const name=audience==='prospect'?(byId('pmWaProspectName').value.trim()||'there'):(selectedCustomers()[0]?.name||'Customer');const first=audience==='prospect'?{name,paid_credits:null,subscription_expiry:null}:({...selectedCustomers()[0],name});const personalised=personaliseMessage(byId('pmWaMessage').value,first);byId('pmWaPreviewText').textContent=personalised.message||byId('pmWaMessage').value.replaceAll('{{name}}',name);byId('pmWaSubject').value=byId('pmWaSubject').value||t.subject;};
+ byId('pmWaTemplate').onchange=()=>{const t=currentTemplate();byId('pmWaSubject').value=t.subject;byId('pmWaMessage').value=t.body;byId('pmWaTemplateCategory').textContent=`Category: ${t.category} · Draft — Meta approval required`;renderVariableFields();renderPreview()};
  byId('pmWaModeFreeform').onchange=()=>{byId('pmWaWindowLabel').style.display='flex';byId('pmWaStatus').textContent='Free-form mode selected. Each recipient must have messaged your PingMe Business number within the last 24 hours.'};
  byId('pmWaAudience').onchange=()=>{const prospect=byId('pmWaAudience').value==='prospect';byId('pmWaRegistered').style.display=prospect?'none':'block';byId('pmWaProspect').style.display=prospect?'block':'none';renderPreview()};
  const filterCustomers=()=>{const q=byId('pmWaCustomerSearch').value.toLowerCase(),status=byId('pmWaStatusFilter').value;Array.from(byId('pmWaCustomers').options).forEach(o=>{const c=customers.find(x=>String(x.id)===o.value);const matchesText=o.text.toLowerCase().includes(q);const matchesStatus=status==='all'||String(c?.status||'Unknown')===status;o.hidden=!(matchesText&&matchesStatus)})};
@@ -397,7 +430,8 @@ async function pmRenderCommunication(){
  byId('pmWaSelectAll').onclick=()=>Array.from(byId('pmWaCustomers').options).filter(o=>!o.hidden).forEach(o=>o.selected=true);
  byId('pmWaClear').onclick=()=>Array.from(byId('pmWaCustomers').options).forEach(o=>o.selected=false);
  byId('pmWaCustomers').onchange=()=>{const n=selectedCustomers().length;byId('pmWaRecipientCount').textContent=n?`${n} customer(s) selected.`:`${registeredCustomers.length} registered customers with mobile numbers.`;renderPreview()};
- ['pmWaMessage','pmWaSubject','pmWaProspectName'].forEach(id=>byId(id).addEventListener('input',renderPreview));
+ byId('pmWaMessage').addEventListener('input',()=>{renderVariableFields();renderPreview()});
+ ['pmWaSubject','pmWaProspectName'].forEach(id=>byId(id).addEventListener('input',renderPreview));
  let imageData=null;
  byId('pmWaImage').onchange=()=>{const file=byId('pmWaImage').files?.[0];if(!file){imageData=null;return}if(file.size>5*1024*1024){toast('Please choose an image under 5 MB.');byId('pmWaImage').value='';return}const reader=new FileReader();reader.onload=()=>{imageData=reader.result;byId('pmWaImagePreview').innerHTML=`<img src="${imageData}" alt="Message attachment" style="max-width:100%;max-height:180px;object-fit:contain;border-radius:8px">`;byId('pmWaPreviewImage').innerHTML=`<img src="${imageData}" alt="PingMe attachment" style="display:block;max-width:100%;max-height:220px;object-fit:contain;border-radius:10px;margin-top:12px">`};reader.readAsDataURL(file)};
  byId('pmWaRemoveImage').onclick=()=>{imageData=null;byId('pmWaImage').value='';byId('pmWaImagePreview').textContent='No image attached';byId('pmWaPreviewImage').innerHTML=''};
@@ -405,39 +439,45 @@ async function pmRenderCommunication(){
  byId('pmWaSend').onclick=async()=>{
   const prospect=byId('pmWaAudience').value==='prospect';
   const sendMode=document.querySelector('input[name="pmWaSendMode"]:checked')?.value||'freeform';
-  if(sendMode!=='freeform'){toast('Approved-template sending is not enabled yet. PingMe customer communication templates must first be approved in Meta and connected to the Worker.');return}
-  const consent=byId('pmWaConsent').checked,windowOpen=byId('pmWaWindow').checked;
-  if(!consent){toast('Confirm that recipients have agreed to receive PingMe WhatsApp messages.');return}
-  if(!windowOpen){toast('Free-form messages require each recipient to have messaged your WhatsApp Business number within the last 24 hours.');return}
-  const message=byId('pmWaMessage').value.trim();if(!message){toast('Enter a message first.');return}
-  const unresolved=[...message.matchAll(/{{\s*([^}]+)\s*}}/g)].map(m=>m[1].trim()).filter(v=>v.toLowerCase()!=='name');
-  if(unresolved.length){toast('Please replace these template placeholders before sending: '+[...new Set(unresolved)].join(', '));return}
+  if(sendMode!=='freeform'){toast('Approved-template sending is not enabled yet. Submit and connect the approved Meta templates first.');return}
+  if(!byId('pmWaConsent').checked){toast('Confirm that recipients have agreed to receive PingMe WhatsApp messages.');return}
+  if(!byId('pmWaWindow').checked){toast('Free-form messages require each recipient to have messaged your WhatsApp Business number within the last 24 hours.');return}
+  const body=byId('pmWaMessage').value.trim();if(!body){toast('Enter a message first.');return}
   let recipients=[];
   if(prospect){
-   const raw=byId('pmWaProspectMobile').value.trim();const digits=raw.replace(/\D/g,'');
+   const digits=byId('pmWaProspectMobile').value.trim().replace(/\\D/g,'');
    if(digits.length<10||digits.length>15){toast('Enter a valid WhatsApp number with country code.');return}
-   recipients=[{name:byId('pmWaProspectName').value.trim()||'there',to:digits}];
+   recipients=[{name:byId('pmWaProspectName').value.trim()||'there',to:digits,paid_credits:null,subscription_expiry:null}];
   }else{
-   recipients=selectedCustomers().map(c=>({name:c.name||'Customer',to:String(c.mobile||'').replace(/\D/g,'')})).filter(r=>r.to.length>=10&&r.to.length<=15);
+   recipients=selectedCustomers().map(c=>({name:c.name||'Customer',to:String(c.mobile||'').replace(/\\D/g,''),paid_credits:c.paid_credits,subscription_expiry:c.subscription_expiry})).filter(r=>r.to.length>=10&&r.to.length<=15);
    if(!recipients.length){toast('Select at least one registered customer with a valid mobile number.');return}
   }
   if(recipients.length>100){toast('Maximum 100 recipients per send.');return}
-  if(!confirm(`Send this WhatsApp message to ${recipients.length} recipient(s)?`))return;
+  const personalised=recipients.map(r=>({...r,rendered:personaliseMessage(body,r)}));
+  const missing=[...new Set(personalised.filter(r=>r.rendered.error).map(r=>r.rendered.error))];
+  if(missing.length){toast('Missing required details: '+missing.join(', ')+'. Check customer records or fill the template details.');return}
+  if(!confirm(`Send this WhatsApp message to ${recipients.length} recipient(s)? Each customer receives their own personalised values.`))return;
   const btn=byId('pmWaSend');btn.disabled=true;btn.textContent='Sending…';byId('pmWaStatus').textContent='Connecting securely to PingMe WhatsApp service…';
   try{
    const {data:{session}}=await db.auth.getSession();if(!session?.access_token)throw new Error('Admin session expired. Sign in again.');
-   const apiBase='https://pingme-api.pingmeconnect.workers.dev';
-   const response=await fetch(`${apiBase}/api/admin/whatsapp-send`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${session.access_token}`},body:JSON.stringify({recipients,message, image_data:imageData||null,consent_confirmed:true,service_window_open:true})});
-   const result=await response.json().catch(()=>({error:'Invalid server response'}));
-   if(!response.ok)throw new Error(result.error||`WhatsApp service returned ${response.status}`);
-   const sent=(result.results||[]).filter(x=>x.success).length,failed=(result.results||[]).length-sent;
+   const apiBase='https://pingme-api.pingmeconnect.workers.dev',results=[];
+   for(const recipient of personalised){
+    try{
+     const response=await fetch(`${apiBase}/api/admin/whatsapp-send`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${session.access_token}`},body:JSON.stringify({recipients:[{name:recipient.name,to:recipient.to}],message:recipient.rendered.message,image_data:imageData||null,consent_confirmed:true,service_window_open:true})});
+     const result=await response.json().catch(()=>({error:'Invalid server response'}));
+     if(!response.ok)throw new Error(result.error||`WhatsApp service returned ${response.status}`);
+     results.push(...(result.results||[]));
+    }catch(error){results.push({to:recipient.to,success:false,error:error.message})}
+   }
+   const sent=results.filter(x=>x.success).length,failed=results.length-sent;
    byId('pmWaStatus').textContent=`Send completed. Accepted by Meta: ${sent}. Failed: ${failed}. Meta acceptance is not the same as final delivery; delivery status must be confirmed by webhook.`;
    toast(`WhatsApp send finished: ${sent} accepted, ${failed} failed.`);
-   if(result.results?.length)byId('pmWaStatus').innerHTML+=`<br><small>${result.results.map(x=>`${safe(x.to)}: ${x.success?'Accepted by Meta':safe(x.error||'Failed')}`).join('<br>')}</small>`;
+   if(results.length)byId('pmWaStatus').innerHTML+=`<br><small>${results.map(x=>`${safe(x.to)}: ${x.success?'Accepted by Meta':safe(x.error||'Failed')}`).join('<br>')}</small>`;
   }catch(err){byId('pmWaStatus').textContent='Send failed: '+err.message;toast('WhatsApp send failed: '+err.message)}
   finally{btn.disabled=false;btn.textContent='Send WhatsApp Message'}
  };
  byId('pmWaRefresh').onclick=async()=>{await loadCustomers();pmRenderCommunication()};
+ renderVariableFields();
  renderPreview();
 }
 
