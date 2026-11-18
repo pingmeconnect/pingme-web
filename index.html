@@ -4,7 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#071226">
-<meta name="description" content="PingMe — one scan, instant connection. Smart QR stickers and keychains for vehicles, keys and luggage.">
+<meta name="description" content="PingMe helps people contact you privately when your vehicle, keys, luggage or belongings need attention. One scan. Instant connection.">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PingMe — One Scan. Instant Connection.">
+<meta property="og:description" content="A simple, private way to connect with the owner of a PingMe-tagged vehicle or belonging.">
+<meta property="og:image" content="https://pingemconnect.in/assets/og-preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://pingemconnect.in/">
 <title>PingMe — One Scan. Instant Connection.</title>
 <link rel="icon" href="/assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,6 +31,55 @@ section{padding:76px 0}.sectionHead{text-align:center;max-width:700px;margin:0 a
 footer{background:#050e20;color:#dce6f7;padding:42px 0 24px}.foot{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap}.foot img{width:142px;background:#fff;border-radius:8px;padding:5px}.foot p{font-size:12px;color:#9eacc3;line-height:1.8;max-width:360px}.footlinks{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:#c6d2e6}.copy{border-top:1px solid #26344c;margin-top:28px;padding-top:18px;color:#8292ad;font-size:11px}
 @media(max-width:800px){.links{display:none}.hero{padding:52px 0 42px}.heroGrid,.offerGrid{grid-template-columns:1fr}.heroArt{min-height:280px;grid-row:1}.heroArt img{max-height:280px}.hero h1{font-size:42px}.steps{grid-template-columns:1fr}.useGrid{grid-template-columns:repeat(2,1fr)}section{padding:56px 0}.offerGrid{gap:26px}}
 @media(max-width:420px){.wrap{width:min(100% - 30px,1160px)}.logo{width:132px}.hero h1{font-size:37px}.lead{font-size:15px}.useGrid{gap:10px}.use{padding:17px 10px}.actions .btn{width:100%}}
+
+/* Premium refinement: restrained surfaces, clearer hierarchy and accessible motion. */
+:root{scroll-padding-top:92px}
+header{box-shadow:0 4px 22px rgba(7,18,38,.045)}
+.logo{width:164px}
+.hero{padding:84px 0 78px;background:radial-gradient(ellipse at 78% 22%,rgba(115,91,238,.13),transparent 34%),radial-gradient(ellipse at 8% 8%,rgba(6,182,212,.10),transparent 32%),linear-gradient(180deg,#f7faff 0%,#fff 100%)}
+.hero h1{max-width:650px}
+.heroArt{min-height:420px}
+.heroArt:before{width:360px;height:360px;background:linear-gradient(140deg,#dff4ff,#eee8ff 58%,#ffe8f3);box-shadow:0 28px 80px rgba(35,78,150,.10)}
+.heroArt img{width:min(100%,460px);height:410px;object-fit:contain;transform:scale(1.02)}
+.eyebrow{box-shadow:0 5px 18px rgba(29,78,216,.05)}
+.btn{min-height:48px}
+.sectionHead{margin-bottom:42px}
+.step,.use{box-shadow:0 12px 36px rgba(18,48,92,.055);transition:transform .2s ease,box-shadow .2s ease}
+.step:hover,.use:hover{transform:translateY(-3px);box-shadow:0 18px 42px rgba(18,48,92,.09)}
+.step .num{border-radius:13px;background:linear-gradient(135deg,#e4f5ff,#eeeaff);color:#245bd3}
+.use img{width:92px;height:92px;object-fit:contain}
+.benefits{background:#fff}
+.benefitGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.benefit{padding:23px;border:1px solid #e4eaf4;border-radius:18px;background:linear-gradient(180deg,#fff,#fbfdff)}
+.benefitIcon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:#edf5ff;color:#1c63d5;font-size:20px}
+.benefit h3{font-size:15px;margin:14px 0 7px;color:#102044}
+.benefit p{font-size:13px;line-height:1.75;color:#64748b;margin:0}
+.offer{background:radial-gradient(ellipse at 82% 5%,rgba(96,75,220,.34),transparent 38%),linear-gradient(120deg,#071226,#101f43 65%,#17204b)}
+.kit{box-shadow:0 26px 75px rgba(0,0,0,.24);border:1px solid rgba(255,255,255,.55)}
+.price{letter-spacing:-.05em}
+.kit .btn{background:linear-gradient(100deg,#1764df,#5b50e6);box-shadow:0 10px 24px rgba(23,100,223,.22)}
+.faq details{padding:20px 4px}
+.faq summary{list-style:none;position:relative;padding-right:30px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:after{content:"+";position:absolute;right:4px;top:-4px;color:#2563eb;font-size:22px;font-weight:500}
+.faq details[open] summary:after{content:"−"}
+footer{background:linear-gradient(135deg,#050e20,#0b1831)}
+.footlinks a:hover{color:#fff;text-decoration:underline;text-underline-offset:4px}
+@media(max-width:800px){
+ .hero{padding:48px 0 46px}
+ .heroArt{min-height:260px;grid-row:1}
+ .heroArt:before{width:240px;height:240px}
+ .heroArt img{height:270px;max-height:270px}
+ .benefitGrid{grid-template-columns:1fr}
+}
+@media(max-width:420px){
+ .heroArt img{height:240px;max-height:240px}
+ .logo{width:138px}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
+}
+
 </style>
 <script>
 /* Backward-compatible QR routing:
@@ -40,7 +96,7 @@ footer{background:#050e20;color:#dce6f7;padding:42px 0 24px}.foot{display:flex;j
 <body>
 <header><div class="wrap nav">
 <a href="/" aria-label="PingMe home"><img class="logo" src="/assets/pingme-logo.png" alt="PingMe — One Scan. Instant Connection."></a>
-<nav class="links"><a href="#how">How it works</a><a href="#uses">Where to use</a><a href="#kit">Starter Kit</a><a href="#faq">FAQs</a></nav>
+<nav class="links"><a href="#how">How it works</a><a href="#why-pingme">Why PingMe</a><a href="#uses">Where to use</a><a href="#kit">Starter Kit</a><a href="#faq">FAQs</a></nav>
 <a class="btn" href="#kit">Get PingMe</a>
 </div></header>
 <main>
@@ -59,6 +115,15 @@ footer{background:#050e20;color:#dce6f7;padding:42px 0 24px}.foot{display:flex;j
 <div class="step"><div class="num">02</div><h3>Someone scans</h3><p>The QR opens the PingMe alert page assigned to your registered tag.</p></div>
 <div class="step"><div class="num">03</div><h3>Get connected</h3><p>Receive an alert and respond privately, without displaying your phone number to the finder.</p></div>
 </div></div></section>
+
+<section class="benefits" id="why-pingme"><div class="wrap">
+<div class="sectionHead"><div class="kicker">Made for everyday peace of mind</div><h2>A simple connection, without sharing your number</h2><p>PingMe gives a finder a straightforward way to send an alert to the registered owner through a unique QR tag.</p></div>
+<div class="benefitGrid">
+<div class="benefit"><div class="benefitIcon">⌁</div><h3>Private by design</h3><p>The public scan page is designed to connect the finder and owner without displaying the owner's phone number.</p></div>
+<div class="benefit"><div class="benefitIcon">◉</div><h3>No app needed to scan</h3><p>A compatible phone camera or QR scanner opens the web experience in the browser.</p></div>
+<div class="benefit"><div class="benefitIcon">⌖</div><h3>Useful context with alerts</h3><p>The finder can choose an alert reason and, when appropriate, add optional details, a photo or location.</p></div>
+</div></div></section>
+
 <section class="uses" id="uses"><div class="wrap"><div class="sectionHead"><div class="kicker">One kit, many uses</div><h2>Keep important things connected</h2><p>Use PingMe QR tags across everyday essentials.</p></div>
 <div class="useGrid">
 <div class="use"><img src="/assets/icon-vehicle.png" alt=""><h3>Cars & bikes</h3><p>For parking, vehicle attention and contact alerts.</p></div>
@@ -69,13 +134,13 @@ footer{background:#050e20;color:#dce6f7;padding:42px 0 24px}.foot{display:flex;j
 <section class="offer" id="kit"><div class="wrap offerGrid">
 <div><div class="kicker" style="color:#72c8ff">PingMe Starter Kit</div><h2>Start connecting your essentials.</h2><p>Get your personal QR kit and activate your tags with PingMe. Your QR codes are assigned to your registered customer profile.</p></div>
 <div class="kit"><div class="kitTop"><div><h3>PingMe Starter Kit</h3><p style="margin:5px 0;color:#64748b;font-size:12px">Smart Connect Kit</p></div><div class="price">₹599</div></div>
-<ul><li>Personalised QR stickers and tags</li><li>QR keychain(s) and reusable tags as per final kit specification</li><li>250 included message credits</li><li>1-year subscription included</li><li>English and Tamil support experience</li></ul>
-<a class="btn" href="https://wa.me/919840547587?text=Hi%2C%20I%27m%20interested%20in%20ordering%20the%20PingMe%20Starter%20Kit%20for%20%E2%82%B9599." target="_blank" rel="noopener">Order via WhatsApp</a>
-<p style="font-size:11px;color:#718096;margin:12px 0 0">Order and payment confirmation will be handled by our team.</p>
+<ul><li>Personalised QR stickers and tags</li><li>QR keychains and reusable tags included in the confirmed kit configuration</li><li>250 included message credits</li><li>1-year subscription included</li><li>English and Tamil support experience</li></ul>
+<a class="btn" href="#launch" target="_blank" rel="noopener">Ordering opens soon</a>
+<p style="font-size:11px;color:#718096;margin:12px 0 0" id="launch">We are preparing the secure ordering experience. Ordering details will be published before launch.</p>
 </div></div></section>
 <section id="faq"><div class="wrap"><div class="sectionHead"><div class="kicker">Need to know</div><h2>Frequently asked questions</h2></div><div class="faq">
 <details><summary>Does the person scanning need the PingMe app?</summary><p>No. The QR opens a web page in the phone browser. The scanner does not need to install an app or sign in.</p></details>
-<details><summary>Will my phone number be shown publicly?</summary><p>PingMe is designed to connect the finder and owner without displaying the owner's phone number on the public scan page.</p></details>
+<details><summary>Will my phone number be shown publicly?</summary><p>The public scan page is designed not to display the owner's phone number. Alerts are routed through PingMe using the configured contact channels.</p></details>
 <details><summary>Does every QR belong to a different customer?</summary><p>Yes. Each registered QR uses its own unique customer/tag identifier to load the corresponding owner's alert flow.</p></details>
 <details><summary>Can I use PingMe in Tamil?</summary><p>The customer scan experience supports English and Tamil.</p></details>
 </div></div></section>
