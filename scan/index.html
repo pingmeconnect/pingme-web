@@ -1052,6 +1052,13 @@
         </div>
       </div>
 
+      <div id="unavailableState" class="status-state done-state hidden service-unavailable-state">
+        <img src="/assets/Pingy_ThankYou_Reference.png" alt="PingMe mascot" class="done-mascot mascot-float" />
+        <div class="status-pill timeout-pill">PINGME</div>
+        <h2 id="serviceUnavailableTitle" class="service-unavailable-title">We’re unable to connect right now</h2>
+        <p id="serviceUnavailableText" class="service-unavailable-text">Please try again a little later. Thank you for your understanding.</p>
+      </div>
+
       <div id="doneState" class="status-state done-state hidden">
         <img src="/assets/Pingy_ThankYou_Reference.png" alt="Thank you from PingMe" class="done-mascot mascot-float" />
         <div class="status-pill success-pill">✓ <span data-i18n="allDone">ALL DONE!</span></div>
@@ -1090,7 +1097,7 @@
       </div>
     </div>
 
-    <!-- RATE MODAL: feedback is sent to the PingMe WhatsApp business number -->
+    <!-- RATE MODAL: feedback is saved to Supabase table pingme_reviews (shown in Admin > Reviews) -->
     <div id="reviewModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 flex items-center justify-center p-4">
       <div class="w-full max-w-sm rounded-3xl bg-white border-2 border-amber-300 p-5 text-slate-900 space-y-4 shadow-2xl">
         <div class="flex justify-between items-center"><h3 class="font-black text-indigo-900 text-xl" data-i18n="rateTitle">RATE</h3><button onclick="closeReviewModal()" class="text-slate-700 text-2xl font-black" aria-label="Close">×</button></div>
@@ -1103,6 +1110,7 @@
         </div>
         <textarea id="reviewText" rows="3" maxlength="300" placeholder="Your feedback (optional)..." data-i18n-placeholder="reviewPlaceholder" class="w-full border-2 border-slate-300 rounded-xl p-3 text-base"></textarea>
         <button onclick="submitReview()" class="w-full py-3.5 rounded-2xl bg-amber-500 text-white font-black text-lg" data-i18n="sendFeedback">SEND FEEDBACK</button>
+        <div id="reviewThanksBox" class="hidden"><div class="rt-ico">🙏</div><h3 class="rt-title" data-i18n="reviewThanksTitle">Thank you!</h3><p class="rt-text" data-i18n="reviewThanks">Your feedback has been submitted. We really appreciate it!</p></div>
       </div>
     </div>
 
@@ -1166,12 +1174,12 @@
         privateNumber:"🔒 Your number stays private.", greatNews:"GREAT NEWS!",
         ownerReplied:"Owner replied!", ownerReplyLabel:"Owner's Reply", timeUp:"TIME'S UP!",
         noReplyShort:"No reply yet.", sessionEnded:"Your session has ended.", allDone:"ALL DONE!", sessionClosed:"Session closed.",
-        buyPingMe:"BUY", referFriend:"SHARE", rateUs:"RATE", done:"DONE",
+        buyPingMe:"BUY", referFriend:"SHARE", rateUs:"REVIEW", done:"DONE",
         productTitle:"PINGME SMART CONNECT KIT", kitPriceNote:"One-time kit price",
         kitIntro:"Everything you need to connect through one QR.",
         kitItem1:"QR stickers for vehicle and other uses", kitItem2:"QR keychains and reusable tags",
         kitItem3:"Starter credits included", kitItem4:"1-year subscription included",
-        orderWhatsApp:"ORDER ON WHATSAPP", rateTitle:"RATE",
+        orderWhatsApp:"ORDER ON WHATSAPP", rateTitle:"REVIEW",
         reviewPlaceholder:"Your feedback (optional)...", sendFeedback:"SEND FEEDBACK",
         photoAdded:"✓ Photo selected", locationAdded:"✓ Location captured",
         noReply:"No reply in 180 seconds.", closeAfterTimeout:"CLOSE SESSION",
@@ -1179,7 +1187,7 @@
         locationError:"Could not get location. Allow access and try again.",
         chooseMessage:"Select a message or add details.",
         networkError:"Connection error. Try again.", ratingRequired:"Select a rating.",
-        reviewThanks:"Thanks! Your feedback is ready to send on WhatsApp."
+        reviewThanks:"Your feedback has been submitted. We really appreciate it!", reviewThanksTitle:"Thank you!", reviewSaveError:"Could not submit feedback. Please try again.", serviceUnavailableTitle:"We’re unable to connect right now", serviceUnavailableText:"Please try again a little later. Thank you for your understanding.",
       },
       ta: {
         welcomeTitle:"இணைவோம்!", welcomeSubtitle:"ஒரே ஸ்கேன் மூலம் உரிமையாளரை அணுகுங்கள்.", chooseCategory:"வகையைத் தேர்வு செய்யவும்", selectMessage:"செய்தியைத் தேர்வு செய்யவும்",
@@ -1190,11 +1198,11 @@
         greatNews:"மகிழ்ச்சியான செய்தி!", ownerReplied:"பதில் வந்துவிட்டது!", replyReceived:"பதில் கிடைத்தது!",
         closeSession:"✕ முடிக்கவும்", allDone:"✓ முடிந்தது!", sessionClosed:"அமர்வு முடிந்தது.",
         noMoreMessages:"இந்த அறிவிப்பு முடிந்தது.", buyPingMe:"வாங்க", referFriend:"பகிர்",
-        rateUs:"மதிப்பிடு", done:"முடிந்தது", productTitle:"PINGME ஸ்மார்ட் கனெக்ட் கிட்",
+        rateUs:"கருத்து தெரிவிக்க", done:"முடிந்தது", productTitle:"PINGME ஸ்மார்ட் கனெக்ட் கிட்",
         kitPriceNote:"ஒருமுறை செலுத்தும் விலை", kitIntro:"ஒரே QR மூலம் இணைக்க தேவையான அனைத்தும்.",
         kitItem1:"வாகனம் மற்றும் பிற பயன்பாடுகளுக்கான QR ஸ்டிக்கர்கள்", kitItem2:"QR கீசெயின்கள் மற்றும் மீண்டும் பயன்படுத்தும் டேக்குகள்",
         kitItem3:"தொடக்க கிரெடிட்கள் சேர்க்கப்பட்டுள்ளன", kitItem4:"1 ஆண்டு சந்தா சேர்க்கப்பட்டுள்ளது",
-        orderWhatsApp:"WHATSAPP மூலம் ஆர்டர்", rateTitle:"உங்கள் அனுபவத்தை மதிப்பிடு",
+        orderWhatsApp:"WHATSAPP மூலம் ஆர்டர்", rateTitle:"உங்கள் கருத்தைப் பகிருங்கள்",
         reviewPlaceholder:"உங்கள் கருத்து (விருப்பம்)...", sendFeedback:"கருத்தை அனுப்பு",
         photoAdded:"✓ புகைப்படம் தேர்ந்தெடுக்கப்பட்டது", locationAdded:"✓ இருப்பிடம் பெறப்பட்டது",
         noReply:"180 விநாடிகளில் பதில் இல்லை.", closeAfterTimeout:"முடிக்கவும்",
@@ -1202,7 +1210,7 @@
         locationError:"இருப்பிட அனுமதி வழங்கி மீண்டும் முயற்சிக்கவும்.",
         chooseMessage:"செய்தியைத் தேர்வு செய்யவும் அல்லது விவரம் சேர்க்கவும்.",
         networkError:"இணைப்பு பிழை. மீண்டும் முயற்சி செய்யவும்.", ratingRequired:"மதிப்பீட்டைத் தேர்வு செய்யவும்.",
-        reviewThanks:"நன்றி! உங்கள் கருத்தை WhatsApp மூலம் அனுப்பலாம்."
+        reviewThanks:"உங்கள் கருத்து சமர்ப்பிக்கப்பட்டது. மிக்க நன்றி!", reviewThanksTitle:"நன்றி!", reviewSaveError:"கருத்தை சமர்ப்பிக்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.", serviceUnavailableTitle:"தற்போது இணைக்க முடியவில்லை", serviceUnavailableText:"சிறிது நேரம் கழித்து மீண்டும் முயற்சிக்கவும். உங்கள் புரிதலுக்கு நன்றி.",
       }
     };
 
@@ -1502,7 +1510,7 @@
     }
 
     function showStatusState(state) {
-      ["waitingState","replyState","timeoutState","doneState"].forEach(id => {
+      ["waitingState","replyState","timeoutState","unavailableState","doneState"].forEach(id => {
         document.getElementById(id).classList.toggle("hidden", id !== state);
       });
       switchToScreen("screen2");
@@ -1621,6 +1629,23 @@
       }, 1250);
     }
 
+    async function translateOwnerReplyToTamil(message) {
+      const text = String(message || "").trim();
+      if (!text) return "உரிமையாளரிடமிருந்து பதில் வந்துள்ளது.";
+      // Use the browser-facing Google Translate endpoint only for the reply text; retain the original if translation is unavailable.
+      try {
+        const url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=ta&dt=t&q=" + encodeURIComponent(text);
+        const response = await fetch(url, { method:"GET", cache:"no-store" });
+        if (!response.ok) throw new Error("Translation unavailable");
+        const data = await response.json();
+        const translated = Array.isArray(data?.[0]) ? data[0].map(part => part?.[0] || "").join("").trim() : "";
+        return translated || text;
+      } catch (error) {
+        console.warn("Tamil reply translation unavailable; showing original reply.", error);
+        return text;
+      }
+    }
+
     async function checkOwnerReply() {
       if (!currentSessionId || replyShown || sessionClosed) return false;
       try {
@@ -1630,7 +1655,12 @@
         if (result.session && (result.session.owner_reply || result.session.session_status === "replied")) {
           replyShown = true;
           stopWaitingTimers();
-          const reply = result.session.owner_reply || (currentLang === "ta" ? "பதில் வந்துவிட்டது!" : "The owner has replied.");
+          const originalReply = result.session.owner_reply || (currentLang === "ta" ? "பதில் வந்துவிட்டது!" : "The owner has replied.");
+          let reply = originalReply;
+          if (currentLang === "ta") {
+            // Prefer a Tamil translation supplied by the backend; otherwise translate the owner's reply for this scanner view.
+            reply = result.session.owner_reply_ta || await translateOwnerReplyToTamil(originalReply);
+          }
           document.getElementById("respGuidance").textContent = reply;
           playPingMeReplyAlert(reply);
           document.getElementById("replyTime").textContent = result.session.replied_at ? new Date(result.session.replied_at).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}) : "";
@@ -1667,6 +1697,20 @@
         await new Promise(resolve => setTimeout(resolve, 1200));
       }
       return null;
+    }
+
+    function isCustomerServiceUnavailable(responseStatus, data) {
+      const raw = [data?.error, data?.message, data?.code, data?.reason, data?.status].filter(Boolean).join(" ").toLowerCase();
+      return responseStatus === 402 || responseStatus === 410 || /credit.?zero|no.?credit|insufficient.?credit|credit.?exhaust|subscription.?expir|expired.?subscription|account.?expir|customer.?expir|plan.?expir|inactive.?subscription|renewal.?required/.test(raw);
+    }
+
+    function showServiceUnavailable() {
+      stopWaitingTimers();
+      const title = document.getElementById("serviceUnavailableTitle");
+      const message = document.getElementById("serviceUnavailableText");
+      title.textContent = uiText[currentLang].serviceUnavailableTitle;
+      message.textContent = uiText[currentLang].serviceUnavailableText;
+      showStatusState("unavailableState");
     }
 
     async function sendAlert() {
@@ -1710,6 +1754,12 @@
         }
 
         if (!response.ok || !data.success) {
+          if (isCustomerServiceUnavailable(response.status, data)) {
+            btn.disabled = false;
+            btn.innerHTML = `➤ <span data-i18n="sendAlert">${uiText[currentLang].sendAlert}</span>`;
+            showServiceUnavailable();
+            return;
+          }
           // The Worker can save the scan session before a delivery provider
           // finishes responding. If a session ID exists, continue to the
           // waiting screen instead of leaving the scanner on the first page.
@@ -1778,12 +1828,36 @@
       window.open(`https://wa.me/${CONFIG.WHATSAPP_ORDER_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
     }
 
-    function openShareModal() {
-      const message = "Check out PingMe – One Scan. Instant Connection! " + CONFIG.PUBLIC_SITE_URL;
-      window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
+    async function openShareModal() {
+      const url = CONFIG.PUBLIC_SITE_URL;
+      const shareData = { title:"PingMe – One Scan. Instant Connection.", text:"Check out PingMe – One Scan. Instant Connection!", url };
+      try {
+        if (navigator.share) {
+          await navigator.share(shareData);
+          return;
+        }
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(url);
+          alert(currentLang === "ta" ? "PingMe இணைப்பு நகலெடுக்கப்பட்டது. விரும்பும் இடத்தில் பகிரலாம்." : "PingMe link copied. You can share it wherever you like.");
+          return;
+        }
+        window.prompt(currentLang === "ta" ? "இந்த இணைப்பை நகலெடுத்து பகிரவும்:" : "Copy and share this PingMe link:", url);
+      } catch (error) {
+        if (error?.name !== "AbortError") {
+          try { window.prompt(currentLang === "ta" ? "இந்த இணைப்பை நகலெடுத்து பகிரவும்:" : "Copy and share this PingMe link:", url); } catch (_) {}
+        }
+      }
     }
 
-    function openReviewModal() { selectedRating = 0; paintStars(); document.getElementById("reviewText").value = ""; document.getElementById("reviewModal").classList.remove("hidden"); }
+    let reviewSubmitted = false, reviewSending = false;
+    const REVIEW_DB = { URL: "https://vlmlcwzyfummpwxuitcn.supabase.co", KEY: "sb_publishable_a2PPtTLwt8Uf1CcW6ZsWKg_YOZ1E9BC" };
+    function setReviewFormVisible(show) {
+      document.getElementById("starPicker").classList.toggle("hidden", !show);
+      document.getElementById("reviewText").classList.toggle("hidden", !show);
+      document.querySelector('#reviewModal button[onclick="submitReview()"]').classList.toggle("hidden", !show);
+      document.getElementById("reviewThanksBox").classList.toggle("hidden", show);
+    }
+    function openReviewModal() { selectedRating = 0; paintStars(); document.getElementById("reviewText").value = ""; setReviewFormVisible(!reviewSubmitted); document.getElementById("reviewModal").classList.remove("hidden"); }
     function closeReviewModal() { document.getElementById("reviewModal").classList.add("hidden"); }
     function setRating(value) { selectedRating = value; paintStars(); }
     function paintStars() {
@@ -1792,12 +1866,29 @@
         star.style.color = index < selectedRating ? "#f59e0b" : "#94a3b8";
       });
     }
-    function submitReview() {
+    async function submitReview() {
+      if (reviewSubmitted || reviewSending) return;
       if (!selectedRating) { alert(uiText[currentLang].ratingRequired); return; }
-      const feedback = document.getElementById("reviewText").value.trim();
-      const message = `PingMe feedback: ${selectedRating}/5 stars${feedback ? " — " + feedback : ""}`;
-      window.open(`https://wa.me/${CONFIG.WHATSAPP_ORDER_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
-      closeReviewModal();
+      const feedback = document.getElementById("reviewText").value.trim().slice(0, 300);
+      const sendBtn = document.querySelector('#reviewModal button[onclick="submitReview()"]');
+      reviewSending = true; sendBtn.disabled = true; sendBtn.style.opacity = ".6";
+      try {
+        // Saved to the same Supabase table the Admin > Reviews page reads. No WhatsApp is opened.
+        const res = await fetch(`${REVIEW_DB.URL}/rest/v1/pingme_reviews`, {
+          method: "POST",
+          headers: { apikey: REVIEW_DB.KEY, Authorization: `Bearer ${REVIEW_DB.KEY}`, "Content-Type": "application/json", Prefer: "return=minimal" },
+          body: JSON.stringify({ tag_code: TAG_CODE, rating: selectedRating, feedback: feedback, language: currentLang })
+        });
+        if (!res.ok) throw new Error("Review save failed: " + res.status);
+        reviewSubmitted = true;
+        setReviewFormVisible(false);
+        setTimeout(closeReviewModal, 2600);
+      } catch (error) {
+        console.error(error);
+        alert(uiText[currentLang].reviewSaveError);
+      } finally {
+        reviewSending = false; sendBtn.disabled = false; sendBtn.style.opacity = "";
+      }
     }
 
     window.addEventListener("DOMContentLoaded", () => {
@@ -1814,6 +1905,8 @@
       }
     });
   </script>
+
+
 
 
 
@@ -2338,6 +2431,37 @@ button:active:not(:disabled), label:active, .cat-card:active, .tpl-pill:active{ 
 #buyModal ul{ list-style:none; padding:0; }
 #buyModal li{ padding:3px 0; font-weight:800; }
 
+/* ===== OWNER REPLY: branded light card, logo watermark, highlighted readable text ===== */
+#appShell #replyState .owner-reply-card{
+  position:relative !important; overflow:hidden !important; isolation:isolate;
+  background:linear-gradient(160deg,#ffffff 0%,#e3e9ff 55%,#fff6cf 100%) !important;
+  border:2px solid rgba(255,255,255,.9) !important; box-shadow:0 12px 30px rgba(0,0,40,.45),0 0 0 3px rgba(255,214,10,.45) !important;
+}
+#appShell #replyState .owner-reply-card::before{
+  content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background:url("/assets/pingme-logo.png") center 58%/72% auto no-repeat; opacity:.16;
+}
+#appShell #replyState .owner-reply-card::after{
+  content:""; position:absolute; top:-46px; right:-46px; width:130px; height:130px; border-radius:50%; z-index:0; pointer-events:none;
+  background:radial-gradient(circle,rgba(255,214,10,.55),transparent 68%);
+}
+#appShell #replyState .owner-reply-card > *{ position:relative; z-index:1; }
+#appShell #replyState .reply-message{
+  background:rgba(255,255,255,.58) !important; backdrop-filter:blur(2px); -webkit-backdrop-filter:blur(2px);
+  border:0 !important; border-left:7px solid var(--pm-yellow) !important; border-radius:6px 16px 16px 6px !important;
+  color:#0b0840 !important; font-weight:1000 !important; letter-spacing:.005em; text-shadow:0 1px 0 rgba(255,255,255,.9);
+  box-shadow:0 4px 14px rgba(20,18,63,.18) !important; padding:clamp(10px,1.6vh,16px) 14px !important;
+}
+#appShell #replyState .reply-card-title{ color:#14123f !important; font-weight:1000 !important; }
+#appShell #replyState .reply-time{ color:#3f4fb8 !important; font-weight:800 !important; }
+
+/* ===== REVIEW: thank-you state ===== */
+#reviewModal #reviewThanksBox{ text-align:center; padding:18px 6px 10px; }
+#reviewModal #reviewThanksBox.hidden{ display:none !important; }
+#reviewModal #reviewThanksBox .rt-ico{ font-size:56px; line-height:1; animation:pmPop .6s cubic-bezier(.2,.9,.3,1.3) both; }
+#reviewModal #reviewThanksBox .rt-title{ font-size:28px !important; font-weight:1000; color:#fff !important; margin:10px 0 6px; }
+#reviewModal #reviewThanksBox .rt-text{ font-size:15px; font-weight:800; color:#dfe6ff !important; }
+
 </style>
 
 </body>
@@ -2512,4 +2636,12 @@ button:active:not(:disabled), label:active, .cat-card:active, .tpl-pill:active{ 
       display: flex !important;
       visibility: visible !important;
     }
+
+/* Requested scanner-only refinements: branded reply, unavailable state, no layout redesign. */
+#appShell .owner-reply-card{background:linear-gradient(145deg,#fff 0%,#eef8ff 48%,#f4efff 100%) !important;border:2px solid #8bdcf4 !important;box-shadow:0 12px 28px rgba(0,0,0,.24),0 0 0 4px rgba(56,189,248,.10) !important;}
+#appShell .reply-message{background:linear-gradient(115deg,#e2f8ff 0%,#e9e7ff 55%,#fff0f7 100%) !important;border:1.5px solid #a5bff7 !important;color:#10265b !important;font-size:clamp(16px,4.2vw,19px) !important;font-weight:900 !important;line-height:1.5 !important;padding:13px 14px !important;}
+#appShell .service-unavailable-state{align-items:center;text-align:center;justify-content:center;gap:14px;padding:20px 12px !important;}
+#appShell .service-unavailable-state .done-mascot{max-width:190px;height:clamp(130px,25vh,210px);}
+#appShell .service-unavailable-title{font-size:clamp(20px,5vw,25px);font-weight:1000;color:#fff;line-height:1.3;}
+#appShell .service-unavailable-text{font-size:clamp(15px,4vw,18px);font-weight:800;color:#e4efff;line-height:1.5;max-width:310px;}
 </style>
