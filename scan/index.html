@@ -1201,6 +1201,43 @@
   @media(min-width:768px){.app-shell{max-width:540px!important}}
 </style>
 
+
+<style id="pingme-locked-five-screen-design">
+  /* Screen 1: centered Pingy, premium royal-blue treatment, compact responsive form. */
+  .pingme-first-screen-mascot{width:100%;height:clamp(88px,15vh,142px);flex:0 0 auto;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:22px;background:radial-gradient(ellipse at 50% 55%,rgba(34,211,238,.24),rgba(99,102,241,.14) 52%,transparent 76%);}
+  .pingme-first-screen-mascot img{height:100%;width:min(100%,290px);object-fit:contain;object-position:center;filter:drop-shadow(0 8px 16px rgba(0,0,0,.28));}
+  #screen1{gap:clamp(6px,1.15vh,11px)!important;justify-content:flex-start!important;}
+  #screen1 .pingme-first-screen-mascot{margin-bottom:1px}
+  #screen1 .category-block{flex:0 0 auto!important}
+  #screen1 .pingme-category-grid{gap:8px!important}
+  #screen1 .cat-card{min-height:clamp(57px,8.2vh,78px)!important}
+  #screen1 .cat-card img{width:clamp(28px,4.2vh,38px)!important;height:clamp(28px,4.2vh,38px)!important}
+  #screen1 .message-block{flex:1 1 auto!important;min-height:clamp(104px,16vh,150px)!important}
+  #screen1 #reasonsContainer{gap:6px!important}
+  #screen1 .tpl-pill{min-height:clamp(37px,5.6vh,48px)!important;padding:7px 10px!important}
+  #screen1 .surface-card{padding:8px!important}
+  #screen1 #customNote{min-height:clamp(39px,5.8vh,49px)!important}
+  #screen1 label,#screen1 #locationBtn{min-height:clamp(40px,6vh,49px)!important}
+  #screen1 .pingme-privacy-note{min-height:29px!important}
+  #screen1 .btn-send-alert{min-height:clamp(49px,7vh,59px)!important}
+  .pingme-explore-final{position:absolute!important;inset:0!important;width:100%!important;max-width:none!important;height:100%!important;min-height:100%!important;overflow-y:auto!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;gap:clamp(7px,1.4vh,13px)!important;padding:clamp(12px,2vh,20px)!important;border:0!important;border-radius:0!important;background:radial-gradient(ellipse at 50% 24%,rgba(29,105,240,.34),transparent 48%),linear-gradient(180deg,#071b4a 0%,#101c58 58%,#24104a 100%)!important;color:#fff!important}
+  .pingme-explore-final.hidden{display:none!important}
+  .explore-thankyou-mascot{width:100%;height:clamp(105px,19vh,165px);object-fit:contain;filter:drop-shadow(0 8px 18px rgba(0,0,0,.25))}
+  .explore-thanks-title{width:100%;margin:0;padding:12px 14px;border-radius:20px;background:linear-gradient(145deg,#fff,#e8f2ff);color:#10245b;font-size:clamp(18px,4.7vw,24px);font-weight:1000;line-height:1.2;box-shadow:0 10px 25px rgba(0,0,0,.2)}
+  .explore-thanks-sub{margin:0;color:#eaf5ff;font-weight:800;font-size:14px}
+  .explore-copy{width:100%;padding:10px 12px;border-radius:18px;background:linear-gradient(110deg,#172e78,#31206f);border:1px solid rgba(103,232,249,.55);box-shadow:0 7px 18px rgba(0,0,0,.18)}
+  .explore-title{font-size:clamp(18px,4.5vw,23px);font-weight:1000;line-height:1.15;color:#fff}
+  .explore-tagline{margin-top:5px;color:#ffe66b;font-size:clamp(13px,3.4vw,16px);font-weight:900}
+  .explore-use-grid{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .explore-use-card{min-width:0;min-height:90px;padding:8px 4px;border-radius:16px;background:linear-gradient(145deg,#fff,#e6f1ff);border:1px solid #a8d7ff;color:#10245b;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:clamp(11px,2.8vw,13px);font-weight:1000;text-align:center}
+  .explore-use-card img{width:clamp(34px,7vh,54px);height:clamp(34px,7vh,54px);object-fit:contain}
+  .explore-cta{display:flex;align-items:center;justify-content:center;width:100%;min-height:clamp(50px,7vh,60px);padding:10px;border-radius:17px;background:linear-gradient(180deg,#ffe94f,#ffbd08);border:2px solid #fff1a3;color:#071a49;font-size:clamp(15px,3.8vw,18px);font-weight:1000;text-decoration:none;box-shadow:0 8px 20px rgba(255,193,7,.25)}
+  .explore-done{width:100%;min-height:42px;border-radius:14px;border:1px solid rgba(147,197,253,.55);background:linear-gradient(90deg,#173b80,#35216d);color:#fff;font-weight:900}
+  @media(max-height:680px){.pingme-first-screen-mascot{height:82px!important}#screen1{gap:5px!important;padding-top:6px!important;padding-bottom:6px!important}#screen1 .cat-card{min-height:53px!important}#screen1 .message-block{min-height:96px!important}#screen1 .tpl-pill{min-height:34px!important}#screen1 .surface-card{padding:6px!important}#screen1 #customNote{min-height:35px!important}#screen1 label,#screen1 #locationBtn{min-height:36px!important}#screen1 .pingme-privacy-note{min-height:24px!important;font-size:9px!important}#screen1 .btn-send-alert{min-height:45px!important}.explore-thankyou-mascot{height:90px!important}}
+  @media(max-height:600px){.pingme-first-screen-mascot{height:66px!important}#screen1{gap:4px!important;padding:5px 10px!important}#screen1 .cat-card{min-height:46px!important;padding:4px!important}#screen1 .cat-card img{width:25px!important;height:25px!important}#screen1 .cat-card span:last-child{font-size:11px!important}#screen1 .message-block{min-height:78px!important}#screen1 .tpl-pill{min-height:29px!important;padding:4px 8px!important;font-size:12px!important}#screen1 .tpl-pill .text-2xl{font-size:18px!important}#screen1 .surface-card{padding:5px!important}#screen1 #customNote{min-height:32px!important;padding:5px 8px!important}#screen1 label,#screen1 #locationBtn{min-height:32px!important;padding:5px!important;font-size:10px!important}#screen1 .pingme-privacy-note{min-height:21px!important;padding:3px!important;font-size:8px!important}#screen1 .btn-send-alert{min-height:40px!important;font-size:15px!important}.app-header{min-height:65px!important}.pingme-global-footer{padding-top:4px!important;padding-bottom:4px!important;font-size:9px!important}}
+  @media(min-width:768px){.app-shell{max-width:540px!important}.pingme-first-screen-mascot{height:135px}}
+</style>
+
 </head>
 <body>
 
@@ -1229,8 +1266,10 @@
     </header>
 <!-- STAGE 2: existing category + message form (existing workflow retained) -->
     <main id="screen1" class="flex flex-1 flex-col justify-between p-4 space-y-3" aria-label="Send a Ping">
-      <!-- Official PingMe welcome mascot artwork -->
-      <div class="pingme-form-heading"><span class="form-heading-icon" aria-hidden="true">➤</span><h1 data-i18n="sendPingTitle">SEND A PING</h1></div>
+      <!-- Locked design: Pingy centered above the form; no extra instruction headings. -->
+      <div class="pingme-first-screen-mascot" aria-label="PingMe mascot">
+        <img src="../assets/Pingy_Welcome_Reference.png" alt="Pingy, the PingMe mascot" />
+      </div>
       <!-- Category cards are self-explanatory; no extra heading -->
       <div class="category-block">
         <div class="grid grid-cols-2 gap-2.5 pingme-category-grid">
@@ -1389,13 +1428,27 @@
         <button id="submitReviewButton" onclick="submitReview()" class="w-full py-3.5 rounded-2xl bg-amber-500 text-white font-black text-lg" data-i18n="sendFeedback">SUBMIT REVIEW</button>
         <p id="reviewError" class="hidden text-sm font-bold text-red-600" role="alert"></p>
       </div>
-      <div id="reviewThankYou" class="hidden w-full max-w-sm rounded-3xl bg-white border-2 border-emerald-300 p-5 text-slate-900 text-center shadow-2xl">
-        <img src="../assets/Pingy_ThankYou_Reference.png" alt="Pingy thanking you with folded hands" class="h-40 w-full object-contain mx-auto" />
-        <h3 class="text-2xl font-black text-indigo-900" data-review-thanks-en>Thank you for your valuable feedback!</h3>
-        <h3 class="hidden text-2xl font-black text-indigo-900" data-review-thanks-ta>உங்கள் மதிப்புமிக்க கருத்துக்கு மிக்க நன்றி!</h3>
-        <p class="mt-2 text-slate-700 font-bold" data-review-sub-en>Pingy thanks you with folded hands. 🙏</p>
-        <p class="hidden mt-2 text-slate-700 font-bold" data-review-sub-ta>பிங்கி கைகூப்பி நன்றி தெரிவிக்கிறான். 🙏</p>
-        <button type="button" onclick="closeReviewModal()" class="mt-4 w-full py-3 rounded-2xl bg-emerald-600 text-white font-black">DONE</button>
+      <div id="reviewThankYou" class="hidden w-full max-w-sm rounded-3xl p-4 text-center shadow-2xl pingme-explore-final">
+        <img src="../assets/Pingy_ThankYou_Reference.png" alt="Pingy thanking you with folded hands" class="explore-thankyou-mascot" />
+        <h3 class="explore-thanks-title" data-review-thanks-en>Thank you for your valuable feedback!</h3>
+        <h3 class="hidden explore-thanks-title" data-review-thanks-ta>உங்கள் மதிப்புமிக்க கருத்துக்கு மிக்க நன்றி!</h3>
+        <p class="explore-thanks-sub" data-review-sub-en>Pingy thanks you! 🙏</p>
+        <p class="hidden explore-thanks-sub" data-review-sub-ta>பிங்கி கைகூப்பி நன்றி தெரிவிக்கிறான்! 🙏</p>
+        <div class="explore-copy">
+          <div class="explore-title" data-explore-en>Discover What PingMe Can Do</div>
+          <div class="hidden explore-title" data-explore-ta>PingMe மூலம் என்ன செய்யலாம் என்று அறியுங்கள்</div>
+          <div class="explore-tagline" data-explore-tag-en>One Smart QR Tag. Multiple Possibilities.</div>
+          <div class="hidden explore-tagline" data-explore-tag-ta>ஒரே ஸ்மார்ட் QR டேக். பல பயன்பாடுகள்.</div>
+        </div>
+        <div class="explore-use-grid">
+          <div class="explore-use-card"><img src="../assets/icon-vehicle.png" alt=""/><span data-use-vehicle-en>Vehicle</span><span class="hidden" data-use-vehicle-ta>வாகனம்</span></div>
+          <div class="explore-use-card"><img src="../assets/icon-lostfound.png" alt=""/><span data-use-keys-en>Keys</span><span class="hidden" data-use-keys-ta>சாவிகள்</span></div>
+          <div class="explore-use-card"><img src="../assets/icon-other.png" alt=""/><span data-use-bags-en>Bags &amp; Luggage</span><span class="hidden" data-use-bags-ta>பைகள் &amp; பயணப்பைகள்</span></div>
+        </div>
+        <a href="https://pingmeconnect.in/#kit" target="_blank" rel="noopener" class="explore-cta" data-explore-cta-en>EXPLORE PINGME →</a>
+        <a href="https://pingmeconnect.in/#kit" target="_blank" rel="noopener" class="explore-cta hidden" data-explore-cta-ta>பிங்க்மீ பற்றி அறியுங்கள் →</a>
+        <button type="button" onclick="closeReviewModal()" class="explore-done" data-explore-done-en>DONE</button>
+        <button type="button" onclick="closeReviewModal()" class="explore-done hidden" data-explore-done-ta>முடிந்தது</button>
       </div>
     </div>
 
@@ -1569,6 +1622,8 @@
       document.querySelectorAll("[data-welcome-ta]").forEach(el => el.classList.toggle("hidden", currentLang !== "ta"));
       document.querySelectorAll("[data-privacy-en]").forEach(el => el.classList.toggle("hidden", currentLang !== "en"));
       document.querySelectorAll("[data-privacy-ta]").forEach(el => el.classList.toggle("hidden", currentLang !== "ta"));
+      ["data-review-thanks-en","data-review-sub-en","data-explore-en","data-explore-tag-en","data-use-vehicle-en","data-use-keys-en","data-use-bags-en","data-explore-cta-en","data-explore-done-en"].forEach(a=>document.querySelectorAll(`[${a}]`).forEach(el=>el.classList.toggle("hidden",currentLang!=="en")));
+      ["data-review-thanks-ta","data-review-sub-ta","data-explore-ta","data-explore-tag-ta","data-use-vehicle-ta","data-use-keys-ta","data-use-bags-ta","data-explore-cta-ta","data-explore-done-ta"].forEach(a=>document.querySelectorAll(`[${a}]`).forEach(el=>el.classList.toggle("hidden",currentLang!=="ta")));
       renderTemplates();
       updateAttachmentLabels();
       renderWaitingStory();
