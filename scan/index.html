@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>PingMe — One Scan. Instant Connection.</title>
   <meta name="description" content="PingMe connects people through one QR scan. Private, secure and simple.">
-  <link rel="icon" type="image/png" href="assets/icon-192.png" />
+  <link rel="icon" type="image/png" href="/assets/icon-192.png" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
@@ -909,7 +909,7 @@
   <!-- SPLASH -->
   <div id="splashScreen">
     <div class="splash-logo-card bg-white rounded-3xl p-7 shadow-2xl">
-      <img src="assets/pingme-logo.png" alt="PingMe" class="h-36 w-auto object-contain" />
+      <img src="/assets/pingme-logo.png" alt="PingMe" class="h-36 w-auto object-contain" />
     </div>
     <div class="mt-4 tagline-pill px-4 py-1.5 rounded-full">
       <span class="text-xs font-extrabold tracking-widest text-white uppercase">ONE SCAN. INSTANT CONNECTION.</span>
@@ -921,7 +921,7 @@
     <header class="app-header px-4 pb-3 flex items-center justify-between gap-2">
       <div class="brand-stack flex flex-col items-start">
         <div class="brand-pill pl-3 pr-4 py-1.5 flex items-center">
-          <img src="assets/pingme-logo.png" alt="PingMe" class="h-9 w-auto object-contain" />
+          <img src="/assets/pingme-logo.png" alt="PingMe" class="h-9 w-auto object-contain" />
         </div>
         <span class="brand-tagline">ONE SCAN. INSTANT CONNECTION.</span>
       </div>
@@ -942,17 +942,17 @@
         <div class="grid grid-cols-3 gap-2.5">
           <button type="button" onclick="selectCategory('vehicle')" id="cat-vehicle" class="cat-card active relative py-2.5 px-2 flex flex-col items-center gap-1">
             <span id="check-vehicle" class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 text-white text-[10px] font-bold flex items-center justify-center">✓</span>
-            <img src="assets/icon-vehicle.png" alt="" class="w-9 h-9 object-contain" />
+            <img src="/assets/icon-vehicle.png" alt="" class="w-9 h-9 object-contain" />
             <span class="text-sm font-extrabold text-slate-900" data-i18n="vehicle">Vehicle</span>
           </button>
           <button type="button" onclick="selectCategory('lost')" id="cat-lost" class="cat-card py-2.5 px-2 flex flex-col items-center gap-1 relative">
             <span id="check-lost" class="hidden absolute -top-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 text-white text-[10px] font-bold flex items-center justify-center">✓</span>
-            <img src="assets/icon-lostfound.png" alt="" class="w-9 h-9 object-contain" />
+            <img src="/assets/icon-lostfound.png" alt="" class="w-9 h-9 object-contain" />
             <span class="text-sm font-extrabold text-slate-900" data-i18n="lostFound">Lost &amp; Found</span>
           </button>
           <button type="button" onclick="selectCategory('other')" id="cat-other" class="cat-card py-2.5 px-2 flex flex-col items-center gap-1 relative">
             <span id="check-other" class="hidden absolute -top-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 text-white text-[10px] font-bold flex items-center justify-center">✓</span>
-            <img src="assets/icon-other.png" alt="" class="w-9 h-9 object-contain" />
+            <img src="/assets/icon-other.png" alt="" class="w-9 h-9 object-contain" />
             <span class="text-sm font-extrabold text-slate-900" data-i18n="other">Other</span>
           </button>
         </div>
@@ -995,12 +995,12 @@
         <p class="status-subtitle" data-i18n="waitingReply">Waiting for reply...</p>
         <button type="button" id="waitingSoundToggle" class="reply-sound-toggle waiting-sound-toggle" onclick="toggleReplySound()" aria-label="Mute reply audio" aria-pressed="true" title="Sound on">🔊</button>
         <div class="waiting-visual">
-          <img src="assets/mascot-waiting.png" alt="PingMe mascot waiting" class="waiting-mascot mascot-float" />
+          <img src="/assets/mascot-waiting.png" alt="PingMe mascot waiting" class="waiting-mascot mascot-float" />
           <div class="countdown-ring" id="countdownRing"><span id="countdownNumber">180</span><small data-i18n="seconds">SECONDS</small></div>
         </div>
         <div class="story-module" id="waitingStoryModule" aria-live="polite">
           <div class="story-topline" style="justify-content:flex-end"><span class="story-count" id="storyCount">1 / 19</span></div>
-          <div class="story-image-frame"><img id="waitingStoryImage" src="assets/pingme-stories/vehicle_01_blocked.png" alt="PingMe story scene"><span id="storyBuyOverlay" class="story-buy-overlay" hidden>BUY</span></div>
+          <div class="story-image-frame"><img id="waitingStoryImage" src="/assets/pingme-stories/vehicle_01_blocked.png" alt="PingMe story scene"><span id="storyBuyOverlay" class="story-buy-overlay" hidden>BUY</span></div>
           <div class="story-caption" id="waitingStoryCaption">My car is blocked! How do I reach the owner?</div>
           <div class="story-controls"><div class="story-progress"><span id="storyProgressFill"></span></div><button class="story-demo-button" type="button" onclick="openStoryDemo()">WHY PINGME?</button></div>
         </div>
@@ -1008,7 +1008,7 @@
 
       <div id="replyState" class="status-state result-state hidden">
         <div class="result-mascot-row">
-          <img src="assets/Pingy_ThumbsUp_Reference.png" alt="PingMe mascot giving thumbs up" class="result-mascot mascot-float" />
+          <img src="/assets/Pingy_ThumbsUp_Reference.png" alt="PingMe mascot giving thumbs up" class="result-mascot mascot-float" />
           <div class="result-heading"><div class="status-pill success-pill">✓ <span data-i18n="greatNews">GREAT NEWS!</span></div><p data-i18n="ownerReplied">Owner replied!</p></div>
         </div>
         <div class="owner-reply-card">
@@ -1020,7 +1020,7 @@
           <time id="replyTime" class="reply-time"></time>
         </div>
         <div class="reply-promo-card">
-          <img src="assets/mascot-smile.png" alt="Happy PingMe mascot" class="reply-promo-mascot" />
+          <img src="/assets/mascot-smile.png" alt="Happy PingMe mascot" class="reply-promo-mascot" />
           <div class="reply-promo-copy">
             <strong>PingMe Tip</strong>
             <span>Stay connected for faster support and resolution.</span>
@@ -1029,7 +1029,7 @@
         </div>
         <div class="timeout-promo-card">
           <div class="timeout-promo-copy"><strong>PingMe Tip</strong><span>Scan the PingMe QR anytime for quick and private help.</span></div>
-          <img src="assets/qr-tag-mockup.png" alt="PingMe QR tag" />
+          <img src="/assets/qr-tag-mockup.png" alt="PingMe QR tag" />
         </div>
         <div class="action-grid">
           <button onclick="openBuyModal()" class="action-button action-buy">🛒 <span data-i18n="buyPingMe">BUY</span></button>
@@ -1041,7 +1041,7 @@
 
       <div id="timeoutState" class="status-state result-state hidden">
         <div class="result-mascot-row timeout-row">
-          <img src="assets/Pingy_ThankYou_Reference.png" alt="PingMe mascot" class="result-mascot mascot-float" />
+          <img src="/assets/Pingy_ThankYou_Reference.png" alt="PingMe mascot" class="result-mascot mascot-float" />
           <div class="result-heading"><div class="status-pill timeout-pill">◷ <span data-i18n="timeUp">TIME'S UP!</span></div><p data-i18n="noReplyShort">No reply yet.</p><p class="timeout-note" data-i18n="sessionEnded">Your session has ended.</p></div>
         </div>
         <div class="action-grid">
@@ -1053,7 +1053,7 @@
       </div>
 
       <div id="doneState" class="status-state done-state hidden">
-        <img src="assets/Pingy_ThankYou_Reference.png" alt="Thank you from PingMe" class="done-mascot mascot-float" />
+        <img src="/assets/Pingy_ThankYou_Reference.png" alt="Thank you from PingMe" class="done-mascot mascot-float" />
         <div class="status-pill success-pill">✓ <span data-i18n="allDone">ALL DONE!</span></div>
         <p data-i18n="sessionClosed">Session closed.</p>
       </div>
@@ -1063,7 +1063,7 @@
     <div id="storyDemoOverlay" class="story-demo-overlay hidden" role="dialog" aria-modal="true" aria-label="How PingMe works">
   <div class="story-demo-panel">
     <div class="story-demo-head"><div class="story-demo-title" id="storyDemoTitle">WHY PINGME?</div><button type="button" class="story-demo-close" onclick="closeStoryDemo()">CLOSE ✕</button></div>
-    <img id="storyDemoImage" class="story-demo-image" src="assets/pingme-stories/vehicle_01_blocked.png" alt="PingMe story scene">
+    <img id="storyDemoImage" class="story-demo-image" src="/assets/pingme-stories/vehicle_01_blocked.png" alt="PingMe story scene">
     <div id="storyDemoCaption" class="story-demo-caption"></div>
     <div class="story-demo-actions"><span id="storyDemoCount" class="story-count">1 / 19</span><button type="button" id="storyDemoNext" class="story-demo-next" onclick="nextStoryDemo()">NEXT →</button></div>
     <div class="story-demo-note" id="storyDemoNote">This is a demo only. It will not send an alert or change your current request.</div>
@@ -1074,7 +1074,7 @@
       <div class="w-full max-w-sm rounded-3xl bg-white border-2 border-cyan-300 p-5 text-slate-900 space-y-4 shadow-2xl max-h-[90dvh] overflow-y-auto">
         <div class="flex justify-between items-center"><h3 class="font-black text-indigo-900 text-xl" data-i18n="productTitle">PINGME SMART CONNECT KIT</h3><button onclick="closeBuyModal()" class="text-slate-700 text-2xl font-black" aria-label="Close">×</button></div>
         <div class="rounded-2xl bg-gradient-to-br from-blue-100 via-white to-fuchsia-100 p-4 text-center">
-          <img src="assets/pingme-logo.png" alt="PingMe" class="h-14 mx-auto object-contain mb-2">
+          <img src="/assets/pingme-starter-kit.png" alt="PingMe Smart Connect Kit" class="h-14 mx-auto object-contain mb-2">
           <div class="text-3xl font-black text-indigo-900">₹599</div>
           <div class="text-sm font-bold text-emerald-700" data-i18n="kitPriceNote">One-time kit price</div>
         </div>
@@ -1086,6 +1086,7 @@
           <li>✓ <span data-i18n="kitItem4">1-year subscription included</span></li>
         </ul>
         <button onclick="orderStarterKitWhatsApp()" class="w-full py-4 rounded-2xl bg-emerald-600 text-white font-black text-lg shadow-lg">🟢 <span data-i18n="orderWhatsApp">ORDER ON WHATSAPP</span></button>
+        <a href="https://www.pingmeconnect.in" target="_blank" rel="noopener" class="web-link-btn">🌐 www.pingmeconnect.in</a>
       </div>
     </div>
 
@@ -1362,7 +1363,7 @@
       const fill = document.getElementById("storyProgressFill");
       if(!img || !cap) return;
       const token = ++waitingStoryRenderToken;
-      const nextSrc = "assets/pingme-stories/" + item[0];
+      const nextSrc = "/assets/pingme-stories/" + item[0];
       // Preload first: keep the previous caption visible until its matching image is ready.
       // Then swap image, caption, counter and progress together in one paint.
       const applyStory = () => {
@@ -1399,7 +1400,7 @@
     }
     function renderDemoStory(){
       const item = pingMeStories[demoStoryIndex];
-      document.getElementById("storyDemoImage").src = "assets/pingme-stories/" + item[0];
+      document.getElementById("storyDemoImage").src = "/assets/pingme-stories/" + item[0];
       document.getElementById("storyDemoImage").alt = storyLabel(item);
       document.getElementById("storyDemoCaption").textContent = storyText(item);
       document.getElementById("storyDemoCount").textContent = (demoStoryIndex+1) + "/" + pingMeStories.length;
@@ -1813,6 +1814,8 @@
       }
     });
   </script>
+
+
 
 <!-- PingMe premium theme (design only) -->
 <style id="pingme-neon-theme">
@@ -2311,6 +2314,29 @@ button:active:not(:disabled), label:active, .cat-card:active, .tpl-pill:active{ 
 /* path-proof mascots (embedded) for waiting screen + tip card */
 #appShell .waiting-mascot{ content:var(--pm-wait); }
 #appShell .reply-promo-mascot{ content:var(--pm-smile); }
+
+/* website link button inside the BUY popup */
+#buyModal .web-link-btn{
+  display:flex; align-items:center; justify-content:center; gap:8px; width:100%; text-decoration:none;
+  padding:14px; border-radius:18px; font-weight:1000; font-size:clamp(14px,4.2vw,17px); letter-spacing:.02em;
+  color:var(--pm-navy) !important; background:linear-gradient(180deg,#ffe95a,var(--pm-yellow-2)); border:2px solid rgba(255,255,255,.85);
+  box-shadow:0 0 18px rgba(255,214,10,.5),inset 0 2px 0 rgba(255,255,255,.8),inset 0 -4px 0 rgba(200,120,0,.4);
+}
+#buyModal .web-link-btn:active{ transform:scale(.97); }
+/* BUY popup: explicit styling so it never depends on Tailwind */
+#buyModal > div > div.text-center, #buyModal .rounded-2xl.text-center{
+  background:linear-gradient(180deg,#fff,#e6eaff) !important; border-radius:18px !important; padding:14px !important; text-align:center;
+  box-shadow:0 6px 16px rgba(0,0,40,.3),inset 0 2px 0 rgba(255,255,255,.9);
+}
+#buyModal .rounded-2xl.text-center img{ display:block; height:clamp(70px,13vh,112px); width:auto; max-width:78%; object-fit:contain; margin:0 auto 6px; }
+#buyModal .rounded-2xl.text-center .text-3xl{ font-size:34px; font-weight:1000; color:#14123f !important; }
+#buyModal button[onclick="orderStarterKitWhatsApp()"]{
+  display:flex; align-items:center; justify-content:center; gap:8px; width:100%; padding:14px; border-radius:18px; font-weight:1000;
+  font-size:clamp(14px,4.2vw,17px); color:#fff; background:linear-gradient(180deg,#25d366,#0c9a46); border:2px solid rgba(255,255,255,.6);
+  box-shadow:0 6px 14px rgba(0,0,40,.35),inset 0 2px 0 rgba(255,255,255,.45);
+}
+#buyModal ul{ list-style:none; padding:0; }
+#buyModal li{ padding:3px 0; font-weight:800; }
 
 </style>
 
