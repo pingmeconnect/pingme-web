@@ -22,3 +22,4 @@ Selected source baseline: homepage-update branch ZIP supplied by the owner.
 - Admin WhatsApp broadcast UI currently expects a Supabase Edge Function `pingme-send-message`; supplied Supabase screenshot showed no Edge Functions. The existing Cloudflare Worker does not implement that same broadcast endpoint.
 - Customer portal does not yet provide profile editing, recharge checkout, orders, referrals or activity history.
 - QR print export and other admin placeholders require implementation/testing.
+.
