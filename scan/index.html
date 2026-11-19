@@ -1167,6 +1167,40 @@
       visibility: visible !important;
     }
 </style>
+
+<style id="pingme-direct-first-screen-fix">
+  html,body{min-height:100%;background:#061432!important}
+  body{overflow-x:hidden}
+  .app-shell{width:100%;max-width:540px!important;min-height:100dvh!important;height:100dvh!important;max-height:none!important;margin:0 auto!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;background:radial-gradient(ellipse at 50% 0%,#183e80 0%,#0a2250 42%,#071632 100%)!important;box-shadow:0 0 40px rgba(0,0,0,.28)}
+  .app-header{flex:0 0 auto!important;min-height:76px!important}
+  #welcomeGate{display:none!important}
+  #screen1{display:flex!important;flex:1 1 auto!important;min-height:0!important;height:auto!important;overflow-y:auto!important;overflow-x:hidden!important;justify-content:space-between!important;gap:clamp(9px,1.5vh,15px)!important;padding:clamp(12px,2vh,18px) clamp(13px,3vw,19px)!important;border-radius:0!important;background:linear-gradient(180deg,#0b2452 0%,#102d68 48%,#101b4d 100%)!important;color:#fff!important}
+  #screen1 .pingme-form-heading{color:#fff!important;padding:5px 8px 8px!important;min-height:52px}
+  #screen1 .pingme-form-heading h1{color:#fff!important;font-size:clamp(25px,6vw,31px)!important;text-shadow:0 3px 12px rgba(0,0,0,.35)}
+  #screen1 .form-heading-icon{color:#ffd52b!important}
+  #screen1 .category-block{flex:0 0 auto!important}
+  #screen1 .pingme-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+  #screen1 .pingme-category-grid #cat-other{grid-column:1/-1!important;justify-self:center!important;width:calc(50% - 5px)!important}
+  #screen1 .cat-card{min-height:clamp(70px,10vh,88px)!important;padding:9px 7px!important;border-radius:17px!important;background:linear-gradient(145deg,#fff 0%,#e8f3ff 100%)!important;border:2px solid #b9d8ff!important;box-shadow:0 7px 16px rgba(0,0,0,.17)!important}
+  #screen1 .cat-card.active{background:linear-gradient(145deg,#fff2a0,#ffd52b)!important;border-color:#fff09b!important;box-shadow:0 0 0 2px rgba(255,213,43,.18),0 8px 18px rgba(255,194,0,.18)!important}
+  #screen1 .cat-card img{width:clamp(31px,5vh,43px)!important;height:clamp(31px,5vh,43px)!important;object-fit:contain!important}
+  #screen1 .cat-card span:last-child{color:#10265b!important;font-size:13px!important;line-height:1.15!important;text-align:center}
+  #screen1 .message-block{flex:1 1 auto!important;min-height:118px!important;display:flex!important;align-items:stretch!important}
+  #screen1 #reasonsContainer{width:100%!important;display:flex!important;flex-direction:column!important;justify-content:space-evenly!important;gap:8px!important}
+  #screen1 .tpl-pill{min-height:clamp(43px,6.5vh,54px)!important;border-radius:14px!important;background:linear-gradient(145deg,#fff,#eaf4ff)!important;border:1.5px solid #b8d7ff!important;color:#10265b!important;box-shadow:0 5px 13px rgba(0,0,0,.15)!important;padding:9px 12px!important;font-size:14px!important}
+  #screen1 .tpl-pill.active{background:linear-gradient(100deg,#d9f7ff,#c7f1ff)!important;border:2px solid #27c9ff!important;color:#09265a!important}
+  #screen1 .surface-card{flex:0 0 auto!important;background:linear-gradient(145deg,#fff,#edf5ff)!important;border:1.5px solid #b7d4ff!important;border-radius:17px!important;padding:9px!important;box-shadow:0 7px 18px rgba(0,0,0,.18)!important}
+  #screen1 #customNote{min-height:clamp(43px,6vh,54px)!important;background:#fff!important;color:#10265b!important;border:1.5px solid #c2d5ef!important;font-size:14px!important}
+  #screen1 label,#screen1 #locationBtn{min-height:clamp(44px,6.5vh,53px)!important;border-radius:14px!important;background:linear-gradient(145deg,#fff,#e8f2ff)!important;color:#10265b!important;border:1.5px solid #bdd5f5!important;font-size:12px!important}
+  #screen1 .pingme-privacy-note{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:8px;min-height:34px;padding:6px 10px;border-radius:12px;background:rgba(9,205,255,.10);border:1px solid rgba(103,232,249,.35);color:#e4f7ff;text-align:center;font-size:10px;font-weight:800;line-height:1.25}
+  #screen1 .btn-send-alert{flex:0 0 auto!important;min-height:clamp(54px,7.5vh,64px)!important;border-radius:18px!important;background:linear-gradient(180deg,#ffe94f,#ffbd08)!important;color:#071a49!important;border:2px solid #fff1a3!important;box-shadow:0 8px 20px rgba(255,193,7,.27)!important;font-size:18px!important}
+  #screen1 .btn-send-alert:disabled{opacity:.72!important}
+  .pingme-global-footer{flex:0 0 auto!important;background:linear-gradient(90deg,#081a43,#11285e,#081a43)!important;border-top:1px solid rgba(103,232,249,.3)!important;padding:7px 8px calc(8px + env(safe-area-inset-bottom))!important}
+  #screen2{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important}
+  @media(max-height:720px){#screen1{gap:7px!important;padding-top:8px!important;padding-bottom:8px!important}#screen1 .cat-card{min-height:60px!important}#screen1 .message-block{min-height:108px!important}#screen1 .tpl-pill{min-height:38px!important}#screen1 .surface-card{padding:7px!important}#screen1 #customNote{min-height:39px!important}#screen1 label,#screen1 #locationBtn{min-height:40px!important}#screen1 .pingme-privacy-note{min-height:27px!important;font-size:9px!important}#screen1 .btn-send-alert{min-height:48px!important}}
+  @media(min-width:768px){.app-shell{max-width:540px!important}}
+</style>
+
 </head>
 <body>
 
@@ -1193,20 +1227,8 @@
         <span class="text-cyan-300">🌐</span> <span id="langLabel">English | தமிழ்</span>
       </button>
     </header>
-
-    <!-- STAGE 1: REACH welcome after QR scan -->
-    <section id="welcomeGate" aria-label="PingMe welcome" class="pingme-welcome-screen">
-      <div class="welcome-mascot-wrap"><img class="welcome-art" src="../assets/mascot-smile.png" alt="Pingy, the PingMe mascot" /></div>
-      <div class="welcome-message-card"><h1>PingMe</h1><p>Scan. Ping.<br>Connect.</p><span class="welcome-swoosh" aria-hidden="true"></span></div>
-      <div class="welcome-actions">
-        <button type="button" class="welcome-cta" onclick="beginScanExperience()"><span data-welcome-en>CONTINUE</span><span data-welcome-ta class="hidden">தொடரவும்</span><span aria-hidden="true">➜</span></button>
-        <a href="https://pingmeconnect.in/#kit" target="_blank" rel="noopener" class="welcome-explore" data-welcome-en>🛒 Explore Products <span>→</span></a>
-        <a href="https://pingmeconnect.in/#kit" target="_blank" rel="noopener" class="hidden welcome-explore" data-welcome-ta>🛒 தயாரிப்புகளைப் பாருங்கள் <span>→</span></a>
-      </div>
-    </section>
-
-    <!-- STAGE 2: existing category + message form (existing workflow retained) -->
-    <main id="screen1" class="hidden flex-1 flex flex-col justify-between p-4 space-y-3">
+<!-- STAGE 2: existing category + message form (existing workflow retained) -->
+    <main id="screen1" class="flex flex-1 flex-col justify-between p-4 space-y-3" aria-label="Send a Ping">
       <!-- Official PingMe welcome mascot artwork -->
       <div class="pingme-form-heading"><span class="form-heading-icon" aria-hidden="true">➤</span><h1 data-i18n="sendPingTitle">SEND A PING</h1></div>
       <!-- Category cards are self-explanatory; no extra heading -->
@@ -1251,6 +1273,7 @@
         </div>
       </div>
 
+      <div class="pingme-privacy-note" role="note"><span aria-hidden="true">🔒</span><span data-privacy-en>Your contact details stay private. Photo and GPS are optional.</span><span class="hidden" data-privacy-ta>உங்கள் தொடர்பு விவரங்கள் பாதுகாப்பாக இருக்கும். புகைப்படம் மற்றும் GPS விருப்பத்தேர்வு.</span></div>
       <button type="button" id="sendBtn" onclick="sendAlert()" class="btn-send-alert w-full py-4 rounded-2xl font-black text-lg text-white tracking-wider flex items-center justify-center gap-2 shadow-xl">
         <span>➤</span> <span id="txtSendBtn" data-i18n="sendAlert">SEND ALERT</span>
       </button>
@@ -1544,6 +1567,8 @@
       document.getElementById("langLabel").textContent = currentLang === "en" ? "English" : "தமிழ்";
       document.querySelectorAll("[data-welcome-en]").forEach(el => el.classList.toggle("hidden", currentLang !== "en"));
       document.querySelectorAll("[data-welcome-ta]").forEach(el => el.classList.toggle("hidden", currentLang !== "ta"));
+      document.querySelectorAll("[data-privacy-en]").forEach(el => el.classList.toggle("hidden", currentLang !== "en"));
+      document.querySelectorAll("[data-privacy-ta]").forEach(el => el.classList.toggle("hidden", currentLang !== "ta"));
       renderTemplates();
       updateAttachmentLabels();
       renderWaitingStory();
@@ -1956,7 +1981,7 @@
     }
 
     async function sendAlert() {
-      if (sessionClosed || sessionStorage.getItem("pingme_session_closed") === "true") return;
+      if (sessionClosed) return;
       await primePingMeAudio();
       pingmeReplyAlertPlayed = false;
       const customMessage = document.getElementById("customNote").value.trim();
@@ -2124,10 +2149,12 @@
       selectedReason = i18n.en.templates.vehicle[0].text;
       applyLanguage();
       updateReplySoundButton();
-      if (sessionStorage.getItem("pingme_session_closed") === "true") {
-        sessionClosed = true;
-        showStatusState("doneState");
-      }
+      // A fresh page load from a QR scan starts a fresh visitor session.
+      // The closed flag is only used to prevent duplicate actions within the current page.
+      sessionStorage.removeItem("pingme_session_closed");
+      sessionClosed = false;
+      switchToScreen("screen1");
+      renderTemplates();
     });
   </script>
 </body>
