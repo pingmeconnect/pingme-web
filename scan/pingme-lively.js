@@ -275,4 +275,236 @@
     }
     if (document.body) start(); else document.addEventListener("DOMContentLoaded", start);
   })();
+
+  /* ---- (5) Theatre effects + sounds on screen 1 (form), screen 2 (wait) and the end screens. Display/sound only. ---- */
+  (function () {
+    var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion:reduce)").matches;
+    var css3 = [
+      ".pm-fx-ripple{position:fixed;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;border:3px solid #67e8f9;pointer-events:none;z-index:9998;animation:pmRip .6s ease-out forwards}",
+      "@keyframes pmRip{to{transform:scale(7);opacity:0}}",
+      ".pm-plane{position:fixed;z-index:9998;font-size:34px;pointer-events:none;animation:pmPlane 1s cubic-bezier(.4,0,.2,1) forwards;filter:drop-shadow(0 6px 8px rgba(0,0,0,.4))}",
+      "@keyframes pmPlane{0%{transform:translate(0,0) scale(1) rotate(0);opacity:1}100%{transform:translate(60px,-70vh) scale(.4) rotate(35deg);opacity:0}}",
+      ".pm-flash{position:fixed;inset:0;z-index:9997;pointer-events:none;background:radial-gradient(circle at 50% 80%,rgba(103,232,249,.55),transparent 60%);animation:pmFlash .7s ease-out forwards}",
+      "@keyframes pmFlash{from{opacity:1}to{opacity:0}}",
+      ".pm-radar{position:absolute;left:50%;top:50%;width:100px;height:100px;margin:-50px 0 0 -50px;border-radius:50%;border:3px solid rgba(103,232,249,.8);pointer-events:none;animation:pmRadar 3s ease-out infinite;opacity:0}",
+      ".pm-radar.r2{animation-delay:1s}.pm-radar.r3{animation-delay:2s}",
+      "@keyframes pmRadar{0%{transform:scale(.8);opacity:.9}100%{transform:scale(2.6);opacity:0}}",
+      "html body #appShell #countdownRing.pm-hot{animation:pmHot .5s ease-in-out infinite alternate!important;box-shadow:0 0 0 4px rgba(251,146,60,.8),0 0 30px rgba(239,68,68,.8)!important}",
+      "@keyframes pmHot{to{transform:scale(1.07)}}",
+      ".pm-bubbles{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}",
+      ".pm-bubbles i{position:absolute;bottom:-30px;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.55),rgba(150,190,255,.12));border:1px solid rgba(255,255,255,.25);animation:pmRise linear infinite}",
+      "@keyframes pmRise{to{transform:translateY(-115vh) translateX(20px)}}",
+      ".pm-vignette{position:fixed;inset:0;z-index:9996;pointer-events:none;background:radial-gradient(circle,transparent 45%,rgba(0,0,30,.65));animation:pmFlash 1.6s ease-out forwards}",
+      "@media (prefers-reduced-motion:reduce){.pm-radar,.pm-bubbles{display:none}}"
+    ].join("");
+    var st3 = document.createElement("style"); st3.textContent = css3; document.head.appendChild(st3);
+
+    var ac = null;
+    function ctx() {
+      try {
+        if (!ac) { var AC = window.AudioContext || window.webkitAudioContext; if (AC) ac = new AC(); }
+        if (ac && ac.state === "suspended") ac.resume();
+      } catch (e) {}
+      return ac;
+    }
+    function soundOn() { try { return typeof pingmeSoundEnabled === "undefined" ? true : !!pingmeSoundEnabled; } catch (e) { return true; } }
+    /* notes: [[freq, startSec, durSec], ...] */
+    function tone(notes, vol, type) {
+      if (!soundOn()) return;
+      var c = ctx(); if (!c || c.state !== "running") return;
+      try {
+        var t0 = c.currentTime + 0.02, g = c.createGain(); g.connect(c.destination);
+        g.gain.setValueAtTime(vol || 0.12, t0);
+        notes.forEach(function (n) {
+          var o = c.createOscillator(), e = c.createGain();
+          o.type = type || "sine"; o.frequency.setValueAtTime(n[0], t0 + n[1]);
+          e.gain.setValueAtTime(0.0001, t0 + n[1]); e.gain.linearRampToValueAtTime(1, t0 + n[1] + 0.01);
+          e.gain.exponentialRampToValueAtTime(0.0001, t0 + n[1] + n[2]);
+          o.connect(e); e.connect(g); o.start(t0 + n[1]); o.stop(t0 + n[1] + n[2] + 0.02);
+        });
+      } catch (e) {}
+    }
+    window.pmTone = tone;
+    var SND = {
+      pop: function () { tone([[660, 0, 0.09], [990, 0.05, 0.1]], 0.1); },
+      send: function () { tone([[440, 0, 0.12], [587, 0.08, 0.12], [740, 0.16, 0.12], [988, 0.24, 0.12], [1319, 0.32, 0.4]], 0.14, "triangle"); },
+      sonar: function () { tone([[880, 0, 0.5], [880, 0.02, 0.9]], 0.07); },
+      tick: function () { tone([[1500, 0, 0.04]], 0.09, "square"); },
+      sad: function () { tone([[392, 0, 0.4], [330, 0.35, 0.4], [262, 0.7, 0.8]], 0.12, "sine"); }
+    };
+
+    /* unlock audio on the first touch (browser rule) */
+    document.addEventListener("pointerdown", function () { ctx(); }, { once: true, passive: true });
+
+    function ripple(x, y) {
+      if (reduce) return;
+      var r = document.createElement("i"); r.className = "pm-fx-ripple"; r.style.left = x + "px"; r.style.top = y + "px";
+      document.body.appendChild(r); setTimeout(function () { if (r.parentNode) r.parentNode.removeChild(r); }, 700);
+    }
+    /* Screen 1: pop + ripple on every tap of cards / templates / language buttons */
+    document.addEventListener("pointerdown", function (ev) {
+      var t = ev.target && ev.target.closest ? ev.target.closest(".cat-card,.tpl-pill,#locationBtn,#screen1 label") : null;
+      if (t && t.id !== "sendBtn") { ripple(ev.clientX, ev.clientY); SND.pop(); }
+    }, true);
+    /* Send button: whoosh + paper plane + flash */
+    document.addEventListener("click", function (ev) {
+      var b = ev.target && ev.target.closest ? ev.target.closest("#sendBtn") : null;
+      if (!b || b.disabled) return;
+      SND.send();
+      if (reduce) return;
+      var rc = b.getBoundingClientRect();
+      var p = document.createElement("div"); p.className = "pm-plane"; p.textContent = "✈️";
+      p.style.left = (rc.left + rc.width / 2 - 17) + "px"; p.style.top = (rc.top + rc.height / 2 - 17) + "px";
+      var f = document.createElement("div"); f.className = "pm-flash";
+      document.body.appendChild(p); document.body.appendChild(f);
+      setTimeout(function () { [p, f].forEach(function (n) { if (n.parentNode) n.parentNode.removeChild(n); }); }, 1100);
+    }, true);
+
+    /* Floating soft bubbles behind the page (all screens) */
+    if (!reduce) {
+      var bb = document.createElement("div"); bb.className = "pm-bubbles"; bb.setAttribute("aria-hidden", "true");
+      var h = ""; for (var i = 0; i < 12; i++) { var sz = 10 + Math.round(Math.random() * 26); h += "<i style='left:" + Math.round(Math.random() * 100) + "%;width:" + sz + "px;height:" + sz + "px;animation-duration:" + (9 + Math.random() * 9).toFixed(1) + "s;animation-delay:-" + (Math.random() * 12).toFixed(1) + "s'></i>"; }
+      bb.innerHTML = h;
+      var addB = function () { if (document.body) document.body.insertBefore(bb, document.body.firstChild); };
+      if (document.body) addB(); else document.addEventListener("DOMContentLoaded", addB);
+    }
+
+    /* Screen 2: radar rings + sonar + last-10-seconds ticking; end screens: sad tone on timeout */
+    function visible(el) { return el && !el.classList.contains("hidden") && el.offsetParent !== null; }
+    var radarOn = false, sonarTimer = null, lastTick = -1, timeoutPlayed = false;
+    function watch() {
+      var wait = document.getElementById("waitingState"), ring = document.getElementById("countdownRing"), num = document.getElementById("countdownNumber"), to = document.getElementById("timeoutState");
+      if (!wait) return;
+      var shown = visible(wait);
+      if (shown && !radarOn && ring) {
+        radarOn = true;
+        if (!ring.querySelector(".pm-radar")) { ring.style.position = ring.style.position || "relative"; ["", "r2", "r3"].forEach(function (c) { var d = document.createElement("i"); d.className = "pm-radar " + c; ring.appendChild(d); }); }
+        SND.sonar(); sonarTimer = setInterval(function () { if (visible(wait)) SND.sonar(); }, 15000);
+      }
+      if (!shown && radarOn) { radarOn = false; clearInterval(sonarTimer); if (ring && ring.classList.contains("pm-hot")) ring.classList.remove("pm-hot"); }
+      if (shown && num && ring) {
+        var n = parseInt(num.textContent, 10);
+        if (n > 0 && n <= 10) { if (!ring.classList.contains("pm-hot")) ring.classList.add("pm-hot"); if (n !== lastTick) { lastTick = n; SND.tick(); } } else if (ring.classList.contains("pm-hot")) ring.classList.remove("pm-hot");
+      }
+      if (to && visible(to) && !timeoutPlayed) {
+        timeoutPlayed = true; SND.sad();
+        if (!reduce) { var v = document.createElement("div"); v.className = "pm-vignette"; document.body.appendChild(v); setTimeout(function () { if (v.parentNode) v.parentNode.removeChild(v); }, 1700); }
+      }
+    }
+    var mo = new MutationObserver(watch);
+    var boot = function () { var sh = document.getElementById("appShell") || document.body; mo.observe(sh, { subtree: true, childList: true, attributes: true, attributeFilter: ["class"], characterData: true }); watch(); };
+    if (document.body) boot(); else document.addEventListener("DOMContentLoaded", boot);
+  })();
+
+  /* ---- (6) "Smile card" under the story: fills the empty space with cheerful, calming messages while the person waits. ---- */
+  (function () {
+    var css4 = [
+      "html body #appShell #screen2 > #waitingState.status-state:not(.hidden){justify-content:flex-start!important;gap:14px!important}",
+      "#pmSmile{width:100%;margin-top:10px;padding:12px 14px;border-radius:22px;display:flex;align-items:center;gap:14px;background:linear-gradient(120deg,rgba(255,255,255,.18),rgba(255,255,255,.07));border:1.5px solid rgba(255,255,255,.4);box-shadow:0 12px 26px rgba(0,0,50,.4),inset 0 2px 0 rgba(255,255,255,.35);color:#fff;text-align:left;flex:0 0 auto;min-height:110px;margin:auto 0!important;position:relative}",
+      "#pmSmile .pm-breath{flex:0 0 74px;height:74px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff7b0,#ffb703 55%,#fb5607);box-shadow:0 8px 18px rgba(0,0,40,.45),inset 0 -6px 10px rgba(180,60,0,.35);font-size:38px;animation:pmBreath 8s ease-in-out infinite}",
+      "@keyframes pmBreath{0%,100%{transform:scale(.88)}50%{transform:scale(1.12)}}",
+      "#pmSmile .pm-smile-txt{flex:1;min-width:0}",
+      "#pmSmile .pm-smile-lbl{font:800 11px/1 system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#fde047;margin-bottom:6px}",
+      "#pmSmile .pm-smile-line{font:800 clamp(15px,4.4vw,18px)/1.3 'Plus Jakarta Sans','Noto Sans Tamil',system-ui,sans-serif;transition:opacity .4s,transform .4s}",
+      "#pmSmile .pm-smile-line.pm-sw{opacity:0;transform:translateY(8px)}",
+      "@media (prefers-reduced-motion:reduce){#pmSmile .pm-breath{animation:none}}"
+    ].join("");
+    var st4 = document.createElement("style"); st4.textContent = css4; document.head.appendChild(st4);
+    var L = {
+      en: ["Take a deep breath… help is on the way 😊", "Relax! The owner is being pinged right now 📲", "Parking trouble? Everyone has been there 🚗", "Smile! A calm face makes the whole day better 😄", "You did the smart thing — one scan, no shouting 👏", "No stress. PingMe is working for you 💙", "Breathe in… breathe out… almost there 🌈"],
+      ta: ["ஆழ்ந்து மூச்சு விடுங்கள்… உதவி வருகிறது 😊", "கவலை வேண்டாம்! உரிமையாளருக்கு தகவல் போய்விட்டது 📲", "பார்க்கிங் பிரச்சனையா? எல்லோருக்கும் நடக்கும் 🚗", "சிரியுங்கள்! அமைதியான முகம் நாளை அழகாக்கும் 😄", "ஒரே ஸ்கேன், கத்த வேண்டாம் — புத்திசாலித்தனம்! 👏", "டென்ஷன் வேண்டாம். PingMe உங்களுக்காக வேலை செய்கிறது 💙", "மூச்சை இழுத்து… விடுங்கள்… கிட்டத்தட்ட வந்துவிட்டது 🌈"]
+    };
+    var T = { en: "Relax & smile", ta: "ரிலாக்ஸ் & சிரிப்பு" };
+    var EM = ["😊", "😌", "😄", "🤗", "😎", "🥳", "🌈"];
+
+    /* Special days (fixed dates, India). Add more rows any time: [month, day, emoji, EN title, TA title, EN message, TA message] */
+    var DAYS = [
+      [1, 1, "🎆", "Happy New Year", "புத்தாண்டு வாழ்த்துகள்", "New year, new smiles. Make today count!", "புதிய ஆண்டு, புதிய புன்னகை. இன்றே தொடங்குங்கள்!"],
+      [1, 12, "🔥", "National Youth Day", "தேசிய இளைஞர் தினம்", "Arise, awake and keep going. Your energy can change things!", "எழுங்கள், விழியுங்கள், முன்னேறுங்கள்!"],
+      [1, 14, "🌾", "Pongal wishes", "பொங்கல் வாழ்த்துகள்", "May your life overflow with joy, like the Pongal pot!", "பொங்கல் பானை போல் மகிழ்ச்சி பொங்கட்டும்!"],
+      [1, 26, "🇮🇳", "Republic Day", "குடியரசு தினம்", "Proud to be Indian. Jai Hind!", "இந்தியராக பெருமை. ஜெய் ஹிந்த்!"],
+      [2, 28, "🔬", "National Science Day", "தேசிய அறிவியல் தினம்", "Stay curious. Every big idea starts with one question.", "ஆர்வமாக இருங்கள். ஒரு கேள்வியிலிருந்தே பெரிய யோசனை பிறக்கும்."],
+      [3, 8, "👩", "Women's Day", "மகளிர் தினம்", "Strong women make strong families and a strong nation.", "வலிமையான பெண்கள் வலிமையான நாட்டை உருவாக்குகிறார்கள்."],
+      [4, 14, "🌼", "Tamil New Year", "தமிழ் புத்தாண்டு", "Puthandu vazthukal! May this year bring you peace and success.", "புத்தாண்டு வாழ்த்துகள்! அமைதியும் வெற்றியும் பெருகட்டும்."],
+      [4, 22, "🌍", "Earth Day", "புவி தினம்", "Plant a tree, park with care. Be kind to Earth today.", "ஒரு மரம் நடுங்கள். பூமிக்கு அன்பு காட்டுங்கள்."],
+      [5, 1, "🛠️", "Labour Day", "தொழிலாளர் தினம்", "Hard work builds everything. Salute to every worker!", "உழைப்பே உயர்வு. அனைத்து தொழிலாளர்களுக்கும் வணக்கம்!"],
+      [6, 5, "🌳", "Environment Day", "சுற்றுச்சூழல் தினம்", "Small green habits make a big difference.", "சிறு பசுமை பழக்கங்களும் பெரிய மாற்றம் தரும்."],
+      [6, 21, "🧘", "Yoga Day", "யோகா தினம்", "Breathe in calm, breathe out stress.", "அமைதியை உள்ளிழுங்கள், மன அழுத்தத்தை வெளியேற்றுங்கள்."],
+      [8, 15, "🇮🇳", "Independence Day", "சுதந்திர தினம்", "Freedom is precious. Happy Independence Day, India!", "சுதந்திரம் விலைமதிப்பற்றது. சுதந்திர தின வாழ்த்துகள்!"],
+      [8, 29, "🏅", "National Sports Day", "தேசிய விளையாட்டு தினம்", "Play fair, play happy, stay fit!", "நேர்மையாக விளையாடுங்கள், ஆரோக்கியமாக இருங்கள்!"],
+      [9, 5, "🎓", "Teachers' Day", "ஆசிரியர் தினம்", "Thank you, teachers, for lighting the way. Call one today!", "வழிகாட்டும் ஆசிரியர்களுக்கு நன்றி. இன்று ஒருவரிடம் பேசுங்கள்!"],
+      [9, 15, "⚙️", "Engineers' Day", "பொறியாளர் தினம்", "Great things are built one small step at a time.", "பெரிய சாதனைகள் சிறு படிகளால் உருவாகும்."],
+      [10, 2, "🕊️", "Gandhi Jayanti", "காந்தி ஜெயந்தி", "Be the change. Be kind, be patient, be calm.", "மாற்றமாக இருங்கள். அன்பும் பொறுமையும் காட்டுங்கள்."],
+      [10, 15, "🚀", "Dream Big Day", "கனவு காணும் நாள்", "Dream big, work hard, never stop learning. Remembering Dr. A.P.J. Abdul Kalam.", "பெரிய கனவு காணுங்கள், கடினமாக உழையுங்கள். டாக்டர் அப்துல் கலாமை நினைவுகூர்கிறோம்."],
+      [10, 31, "🤝", "National Unity Day", "தேசிய ஒருமைப்பாட்டு தினம்", "Together we are stronger. Unity in diversity!", "ஒற்றுமையே பலம். வேற்றுமையில் ஒற்றுமை!"],
+      [11, 14, "🧒", "Children's Day", "குழந்தைகள் தினம்", "Every child is a star. Smile and share joy today!", "ஒவ்வொரு குழந்தையும் நட்சத்திரம். இன்று மகிழ்ச்சியை பகிருங்கள்!"],
+      [11, 20, "👧", "Universal Children's Day", "உலக குழந்தைகள் தினம்", "Let every child laugh, learn and feel safe.", "ஒவ்வொரு குழந்தையும் சிரிக்கட்டும், கற்கட்டும், பாதுகாப்பாக இருக்கட்டும்."],
+      [11, 26, "📜", "Constitution Day", "அரசியலமைப்பு தினம்", "Rights and duties go hand in hand. Be a proud citizen.", "உரிமையும் கடமையும் இணைந்தவை. பெருமைமிகு குடிமகனாக இருங்கள்."],
+      [12, 25, "🎄", "Merry Christmas", "கிறிஸ்துமஸ் வாழ்த்துகள்", "Peace, love and joy to you and your family!", "உங்களுக்கும் குடும்பத்துக்கும் அமைதி, அன்பு, மகிழ்ச்சி!"],
+      [12, 31, "🎉", "New Year's Eve", "புத்தாண்டு முன்னிரவு", "Another great year ends. Smile and look ahead!", "ஒரு அருமையான ஆண்டு முடிகிறது. புன்னகையுடன் முன்னேறுங்கள்!"]
+    ];
+    var DAILY = [
+      ["🌞", "Good day!", "இனிய நாள்!", "Every day is a fresh start. Make it a good one.", "ஒவ்வொரு நாளும் புதிய தொடக்கம். இனிதாக்குங்கள்."],
+      ["💪", "Today's thought", "இன்றைய சிந்தனை", "Small steps every day lead to big success.", "தினமும் சிறு படிகள் பெரிய வெற்றியாகும்."],
+      ["😊", "Today's thought", "இன்றைய சிந்தனை", "A smile costs nothing but gives a lot.", "புன்னகைக்கு விலை இல்லை, ஆனால் மதிப்பு அதிகம்."],
+      ["🌈", "Today's thought", "இன்றைய சிந்தனை", "After every storm comes a rainbow.", "ஒவ்வொரு புயலுக்கும் பின் வானவில் உண்டு."],
+      ["🧠", "Today's thought", "இன்றைய சிந்தனை", "Stay calm. Good people and good things find a way.", "அமைதியாக இருங்கள். நல்லவை வழி கண்டுபிடிக்கும்."],
+      ["🤝", "Today's thought", "இன்றைய சிந்தனை", "Be kind. You never know whose day you are saving.", "அன்பாக இருங்கள். யாருடைய நாளை காப்பாற்றுகிறீர்கள் என்று தெரியாது."],
+      ["🚗", "Today's thought", "இன்றைய சிந்தனை", "Patience today saves a lot of tension tomorrow.", "இன்றைய பொறுமை நாளைய டென்ஷனை குறைக்கும்."],
+      ["🌟", "Today's thought", "இன்றைய சிந்தனை", "You are doing better than you think.", "நீங்கள் நினைப்பதை விட சிறப்பாக செய்கிறீர்கள்."],
+      ["🙏", "Today's thought", "இன்றைய சிந்தனை", "Say thank you to someone today.", "இன்று யாருக்காவது நன்றி சொல்லுங்கள்."],
+      ["🌱", "Today's thought", "இன்றைய சிந்தனை", "Grow a little every day.", "தினமும் கொஞ்சம் வளருங்கள்."]
+    ];
+    var EXTRA = [];
+    try {
+      fetch("/scan/days.json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : []; }).then(function (j) { if (Array.isArray(j)) EXTRA = j; }).catch(function () {});
+    } catch (e) {}
+    /* every item for today (built-in + days.json); rotates one by one. Falls back to a daily thought. */
+    function dayItems() {
+      var d = new Date(), m = d.getMonth() + 1, dd = d.getDate(), y = d.getFullYear(), out = [], seen = {}, i;
+      for (i = 0; i < DAYS.length; i++) if (DAYS[i][0] === m && DAYS[i][1] === dd) out.push({ sp: true, em: DAYS[i][2], t: [DAYS[i][3], DAYS[i][4]], q: [DAYS[i][5], DAYS[i][6]] });
+      for (i = 0; i < EXTRA.length; i++) {
+        var x = EXTRA[i]; if (!x || x.m !== m || x.d !== dd || (x.y && x.y !== y)) continue;
+        out.push({ sp: true, em: x.e || "🎉", t: [x.en || "", x.ta || x.en || ""], q: [x.qen || "", x.qta || x.qen || ""] });
+      }
+      out = out.filter(function (o) { var k = o.t[0]; if (seen[k]) return false; seen[k] = 1; return true; });
+      if (out.length) return out;
+      var doy = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000), r = DAILY[doy % DAILY.length];
+      return [{ sp: false, em: r[0], t: [r[1], r[2]], q: [r[3], r[4]] }];
+    }
+    var evIdx = 0;
+    var smileIdx = 0;
+    var idx = 0, timer = null;
+    function lang() { return (typeof currentLang !== "undefined" && currentLang === "ta") ? "ta" : "en"; }
+    function build() {
+      var w = document.getElementById("waitingState"); if (!w) return null;
+      var c = document.getElementById("pmSmile");
+      if (c) return c;
+      c = document.createElement("div"); c.id = "pmSmile";
+      c.innerHTML = "<div class='pm-breath'>😊</div><div class='pm-smile-txt'><div class='pm-smile-lbl'></div><div class='pm-smile-line'></div></div>";
+      var sm = document.getElementById("waitingStoryModule");
+      if (sm && sm.nextSibling) w.insertBefore(c, sm.nextSibling); else w.appendChild(c);
+      return c;
+    }
+    function show(first) {
+      var c = build(); if (!c) return;
+      var l = lang(), line = c.querySelector(".pm-smile-line"), lbl = c.querySelector(".pm-smile-lbl"), em = c.querySelector(".pm-breath");
+      var set = function () {
+        var k = l === "ta" ? 1 : 0;
+        if (idx % 2 === 0) { var dl = dayItems(), di = dl[evIdx++ % dl.length]; lbl.textContent = (di.sp ? "🎉 " : "📅 ") + di.t[k]; line.textContent = di.q[k]; em.textContent = di.em; }
+        else { lbl.textContent = T[l]; line.textContent = L[l][smileIdx % L[l].length]; em.textContent = EM[smileIdx % EM.length]; smileIdx++; }
+        line.classList.remove("pm-sw"); idx++;
+      };
+      if (first) set(); else { line.classList.add("pm-sw"); setTimeout(set, 400); }
+    }
+    function sync() {
+      var w = document.getElementById("waitingState");
+      var vis = w && !w.classList.contains("hidden") && w.offsetParent !== null;
+      if (vis && !timer) { show(true); timer = setInterval(function () { show(false); }, 5000); }
+      if (!vis && timer) { clearInterval(timer); timer = null; }
+    }
+    var mo2 = new MutationObserver(sync);
+    function boot() { mo2.observe(document.getElementById("appShell") || document.body, { subtree: true, attributes: true, attributeFilter: ["class"] }); sync(); }
+    if (document.body) boot(); else document.addEventListener("DOMContentLoaded", boot);
+  })();
 })();
