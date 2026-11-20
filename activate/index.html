@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>Activate your PingMe account</title>
+<link rel="stylesheet" href="activate.css">
+</head>
+<body>
+<main class="shell">
+  <header class="brand">
+    <!-- Replace this inline mark with your existing logo file if you prefer, e.g. <img src="/assets/logo.png" alt="PingMe"> -->
+    <svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="6" fill="#fff"/><path d="M13 24a11 11 0 0 1 11-11M35 24a11 11 0 0 1-11 11" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M7 24A17 17 0 0 1 24 7M41 24A17 17 0 0 1 24 41" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="3" stroke-linecap="round"/></svg>
+    <div><div class="word">PingMe</div><div class="tag">One Scan. Instant Connection.</div></div>
+  </header>
+
+  <section class="card" id="card">
+    <h1>Activate your account</h1>
+    <ol class="steps">
+      <li>On WhatsApp, send <strong>ACTIVATE</strong> and your Customer ID (for example <strong>ACTIVATE PM-A15E3C15</strong>) to the PingMe Business number, from your registered mobile.</li>
+      <li>You will receive a six-digit code, valid for 30 minutes.</li>
+      <li>Enter it below and choose a password.</li>
+    </ol>
+
+    <form id="form" novalidate autocomplete="off">
+      <label for="cid">Customer ID</label>
+      <input id="cid" name="cid" type="text" inputmode="text" autocapitalize="characters" autocomplete="off" spellcheck="false" maxlength="40" placeholder="PM-A15E3C15" required>
+
+      <label for="otp">Six-digit code</label>
+      <input id="otp" name="otp" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" placeholder="123456" required>
+
+      <label for="pw">New password</label>
+      <div class="pwrow">
+        <input id="pw" name="pw" type="password" autocomplete="new-password" minlength="8" maxlength="72" required aria-describedby="pwhint">
+        <button type="button" class="ghost" id="toggle" aria-pressed="false">Show</button>
+      </div>
+      <p class="hint" id="pwhint">At least 8 characters, with a letter and a number.</p>
+
+      <label for="pw2">Confirm password</label>
+      <input id="pw2" name="pw2" type="password" autocomplete="new-password" maxlength="72" required>
+
+      <div id="msg" class="msg" role="alert" aria-live="polite" hidden></div>
+      <button type="submit" class="primary" id="submit">Activate Account</button>
+    </form>
+
+    <div id="done" class="done" hidden>
+      <div class="tick" aria-hidden="true">✓</div>
+      <h2>Your account is active</h2>
+      <p>Your PingMe account has been activated and your password is set. You can now sign in to the customer portal.</p>
+    </div>
+  </section>
+  <p class="foot">Private · Secure · Simple</p>
+</main>
+<script src="activate.js"></script>
+</body>
+</html>
