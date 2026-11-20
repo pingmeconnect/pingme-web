@@ -103,9 +103,29 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-conten
 .btn:disabled{opacity:.55;cursor:not-allowed}
 .pmInstall{display:none}
 
-</style></head>
+</style><style id="pmDashCss">
+.modalbox{width:min(820px,100%)}
+.customerhero{align-items:flex-start;gap:16px;background:linear-gradient(120deg,#f3f7ff,#fff);border:1px solid #dbe7fb;border-radius:16px;padding:14px}
+.pmCAv{width:92px;height:92px;border-radius:50%;background:linear-gradient(135deg,#1768c5,#20bfd2) center/cover no-repeat;color:#fff;font-weight:900;font-size:32px;display:flex;align-items:center;justify-content:center;flex:none;border:3px solid #fff;box-shadow:0 4px 14px #12315b33}
+.pmPhotoBtns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+#customerModal .profilegrid{grid-template-columns:1fr 1fr}
+#customerModal .profilegrid .card.full{grid-column:1/-1}
+@media(max-width:720px){#customerModal .profilegrid{grid-template-columns:1fr}.pmCAv{width:72px;height:72px;font-size:24px}.customerhero{padding:10px;gap:10px}}
+.navgrp{font-size:10px;letter-spacing:.12em;color:#9fb6ee;font-weight:800;margin:14px 10px 4px}
+.pmQuick{position:relative;flex:1;max-width:340px;min-width:0;margin-left:18px}
+.pmQuick input{width:100%;border:1px solid #ffffff55;background:#ffffff22;color:#fff;border-radius:12px;padding:9px 12px;outline:none}
+.pmQuick input::placeholder{color:#dbe7ff}
+#pmQuickRes{position:absolute;left:0;right:0;top:calc(100% + 6px);background:#fff;color:#17233d;border-radius:12px;box-shadow:0 14px 40px #0004;z-index:80;overflow:hidden;display:none}
+#pmQuickRes button{display:flex;width:100%;border:0;background:#fff;text-align:left;padding:10px 12px;gap:10px;align-items:center;border-bottom:1px solid #eef2f8}
+#pmQuickRes button:hover{background:#f1f6ff}#pmQuickRes small{color:#66748c;display:block}
+@media(max-width:720px){.pmQuick{margin-left:6px;flex:1;min-width:110px}.pmQuick input{padding:8px 9px;font-size:12px}.topbrand .brandtitle{display:none}#pmQuickRes{position:fixed;left:10px;right:10px;top:66px}}
+.topbrand{position:relative;z-index:90;overflow:visible!important}
+.pmQA{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:0 0 14px}
+.pmQA button{border:1px solid #dbe7fb;background:#fff;border-radius:14px;padding:12px;text-align:left;font-weight:800;color:#153c87;box-shadow:0 6px 16px #12315b0d;display:flex;gap:8px;align-items:center}
+</style>
+</head>
 <body>
-<header class="topbrand"><img src="assets/pingme-logo.png" alt="PingMe logo"><div><div class="brandtitle">Admin Panel</div></div><button class="btn gold" id="pmSignOut" style="margin-left:auto;white-space:nowrap">Sign out</button></header>
+<header class="topbrand"><img src="assets/pingme-logo.png" alt="PingMe logo"><div><div class="brandtitle">Admin Panel</div></div><div class="pmQuick"><input id="pmQuickIn" type="search" autocomplete="off" placeholder="🔎 Find customer: name, mobile or ID"><div id="pmQuickRes"></div></div><button class="btn gold" id="pmSignOut" style="margin-left:auto;white-space:nowrap">Sign out</button></header>
 <div class="shell">
 <aside class="sidebar"><div><div class="side-logo"><img src="assets/pingme-logo.png" alt="PingMe"></div><nav class="nav" id="sideNav">
 <button class="active" data-page="dashboard"><span class="ico">▦</span>Dashboard</button><button data-page="customers"><span class="ico">♙</span>Customers</button><button data-page="add"><span class="ico">＋</span>Add Customer</button><button data-page="qr"><span class="ico">▦</span>QR Studio</button><button data-page="credits"><span class="ico">◉</span>Credits & Billing</button><button data-page="communication"><span class="ico">☏</span>Communication</button><button data-page="automation"><span class="ico">⚡</span>Automation Hub</button><button data-page="meta"><span class="ico">◈</span>Meta & Billing</button><button data-page="orders"><span class="ico">▣</span>Orders & Dispatch</button><button data-page="reports"><span class="ico">▥</span>Reports & Analytics</button><button data-page="reviews"><span class="ico">★</span>Customer Reviews</button><button data-page="audit"><span class="ico">◎</span>Scanner Details</button><button data-page="backup"><span class="ico">☁</span>Backup & System Health</button><button data-page="settings"><span class="ico">⚙</span>Settings</button>
@@ -175,8 +195,9 @@ async function loadCustomers(){const tbody=document.getElementById('customerRows
 function renderCustomers(){const q=(document.getElementById('customerSearch')?.value||'').toLowerCase(),f=document.getElementById('customerFilter')?.value||'all';const rows=customers.filter(c=>(f==='all'||c.status===f)&&[c.customer_id,c.name,c.mobile,c.email].join(' ').toLowerCase().includes(q));document.getElementById('customerRows').innerHTML=rows.map(c=>`<tr><td><b>${safe(c.customer_id)}</b></td><td>${safe(c.name)}</td><td>${safe(c.mobile)}</td><td>${c.paid_credits??0}</td><td>${fmtDate(c.subscription_expiry)}</td><td><span class="pill ${c.status==='Inactive'?'off':c.status==='Testing'?'warn':''}">${safe(c.status)}</span></td><td><button class="btn light small" data-customer-view="${c.id}">View</button></td></tr>`).join('')||'<tr><td colspan="7">No customers found in Supabase.</td></tr>';document.querySelectorAll('[data-customer-view]').forEach(b=>b.addEventListener('click',()=>openCustomer(b.dataset.customerView)))}
 
 function updateDashboard(){const active=customers.filter(c=>c.status==='Active').length,inactive=customers.filter(c=>c.status==='Inactive').length,testing=customers.filter(c=>c.status==='Testing').length;const stats=document.querySelectorAll('#page-dashboard .stat strong');if(stats.length>=4){stats[0].textContent=customers.length;stats[1].textContent=active;stats[2].textContent=inactive;stats[3].textContent=testing}const hint=document.querySelector('#page-dashboard .panelhead p');if(hint)hint.textContent='Live Supabase customer data · '+new Date().toLocaleString('en-IN')}
-document.getElementById('addForm').addEventListener('submit',async e=>{e.preventDefault();const btn=e.target.querySelector('[type=submit]');const name=document.getElementById('newName').value.trim(),mobile=document.getElementById('newMobile').value.trim(),email=document.getElementById('newEmail').value.trim()||null,address=document.getElementById('newAddress').value.trim()||null,status=document.getElementById('newStatus').value;if(!name||!mobile){toast('Name and mobile are required.');return}const _v=pmCheckNewCustomer(name,mobile)||pmCheckSecondary(mobile);if(_v){toast(_v);return}btn.disabled=true;btn.textContent='Saving…';try{const payload={customer_id:makeCustomerId(),name,mobile,email,address,status,registration_date:new Date().toISOString().slice(0,10),paid_credits:0,test_credits:5,...pmAlertFields()};const {data,error}=await db.from('pingme_customers').insert(payload).select().single();if(error)throw error;customers.unshift(data);pmLogSecondaryAdded(data);renderCustomers();updateDashboard();e.target.reset();showPage('customers');toast('Customer saved successfully in Supabase. Customer ID: '+data.customer_id)}catch(err){toast('Save failed: '+err.message)}finally{btn.disabled=false;btn.textContent='Save Customer'}});
-document.getElementById('newPhoto').addEventListener('change',()=>{if(document.getElementById('newPhoto').files.length)toast('Photo upload is not configured yet. Customer details will save without the photo.')});
+document.getElementById('addForm').addEventListener('submit',async e=>{e.preventDefault();const btn=e.target.querySelector('[type=submit]');const name=document.getElementById('newName').value.trim(),mobile=document.getElementById('newMobile').value.trim(),email=document.getElementById('newEmail').value.trim()||null,address=document.getElementById('newAddress').value.trim()||null,status=document.getElementById('newStatus').value;if(!name||!mobile){toast('Name and mobile are required.');return}const _v=pmCheckNewCustomer(name,mobile)||pmCheckSecondary(mobile);if(_v){toast(_v);return}btn.disabled=true;btn.textContent='Saving…';try{const payload={customer_id:makeCustomerId(),name,mobile,email,address,status,registration_date:new Date().toISOString().slice(0,10),paid_credits:0,test_credits:5,...pmAlertFields()};const {data,error}=await db.from('pingme_customers').insert(payload).select().single();if(error)throw error;customers.unshift(data);pmLogSecondaryAdded(data);if(window.__newPhotoData){await pmSavePhoto(data.id,window.__newPhotoData);window.__newPhotoData=null}renderCustomers();updateDashboard();e.target.reset();showPage('customers');toast('Customer saved successfully in Supabase. Customer ID: '+data.customer_id)}catch(err){toast('Save failed: '+err.message)}finally{btn.disabled=false;btn.textContent='Save Customer'}});
+window.__newPhotoData=null;
+document.getElementById('newPhoto').addEventListener('change',async()=>{const f=document.getElementById('newPhoto').files[0];window.__newPhotoData=null;if(!f)return;try{window.__newPhotoData=await pmToJpeg256(f);toast('Photo ready – it will be saved with the customer.')}catch(e){toast('Could not read that picture. Try another.')}});
 function openCustomer(id){
  const c=customers.find(x=>String(x.id)===String(id));if(!c)return;
  selectedCustomer=c;
@@ -413,7 +434,7 @@ async function pmRenderQr(){
   document.getElementById('pmQrUrl').textContent=url;
   box.innerHTML='';
   if(typeof QRCode==='undefined'){box.textContent='QR library did not load. Check internet/CDN access and refresh.';return}
-  new QRCode(box,{text:url,width:210,height:210,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});
+  new QRCode(box,{text:url,width:210,height:210,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
   document.getElementById('pmQrOpenPage').onclick=()=>window.open(url,'_blank','noopener');
   document.getElementById('pmQrDownloadRaw').onclick=()=>pmQrDownloadRaw(url,code);
   root.querySelectorAll('[data-pm-qr-format]').forEach(btn=>btn.onclick=()=>pmQrDownloadArtwork(url,code,c.name,btn.dataset.pmQrFormat));
@@ -426,7 +447,12 @@ async function pmRenderQr(){
 function pmLoadBrandLogo(){
  return new Promise((resolve,reject)=>{const logo=new Image();logo.onload=()=>resolve(logo);logo.onerror=()=>reject(new Error('Official PingMe logo could not be loaded. Export has been blocked.'));logo.src=PM_PINGME_LOGO;});
 }
-function pmDrawLogoInQr(ctx,qrX,qrY,qrSize,logo){
+function pmDrawLogoAbove(ctx,cx,top,maxW,maxH,logo){
+ // Logo sits ABOVE the QR (never on it) so scanning is never disturbed.
+ const r=logo.width/logo.height;let w=maxW,h=w/r;if(h>maxH){h=maxH;w=h*r;}
+ ctx.drawImage(logo,cx-w/2,top+(maxH-h)/2,w,h);
+}
+function pmDrawLogoInQr(ctx,qrX,qrY,qrSize,logo){ return; /* retired: logo no longer drawn on the QR */
  // Keep a clear white quiet zone behind the official logo at the QR centre.
  const box=qrSize*.235,pad=box*.13,x=qrX+(qrSize-box)/2,y=qrY+(qrSize-box)/2;
  ctx.save();ctx.fillStyle='#fff';ctx.fillRect(x-pad,y-pad,box+pad*2,box+pad*2);
@@ -438,10 +464,10 @@ async function pmQrDownloadRaw(url,code){
  let logo;try{logo=await pmLoadBrandLogo()}catch(e){toast(e.message);return;}
  const host=document.createElement('div');host.style.cssText='position:fixed;left:-99999px;top:0;background:#fff';document.body.appendChild(host);
  try{
-  new QRCode(host,{text:url,width:1200,height:1200,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});
+  new QRCode(host,{text:url,width:1200,height:1200,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
   await new Promise(r=>setTimeout(r,350));const q=host.querySelector('canvas');if(!q)throw new Error('QR image is not ready.');
-  const canvas=document.createElement('canvas');canvas.width=1200;canvas.height=1200;const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,1200,1200);ctx.drawImage(q,0,0,1200,1200);pmDrawLogoInQr(ctx,0,0,1200,logo);
-  const a=document.createElement('a');a.href=canvas.toDataURL('image/png');a.download=`PingMe_QR_${code}.png`;a.click();toast('Branded PingMe QR PNG downloaded.');
+  const canvas=document.createElement('canvas');canvas.width=1200;canvas.height=1480;const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,1200,1480);pmDrawLogoAbove(ctx,600,40,620,200,logo);ctx.drawImage(q,60,280,1080,1080);ctx.fillStyle='#102b62';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='800 54px Arial';ctx.fillText('SCAN TO CONNECT',600,1425);
+  const a=document.createElement('a');a.href=canvas.toDataURL('image/png');a.download=`PingMe_QR_${code}.png`;a.click();toast('PingMe QR PNG downloaded (logo on top).');
  }catch(e){toast('QR export blocked: '+e.message)}finally{host.remove()}
 }
 async function pmQrDownloadArtwork(url,code,name,format){
@@ -450,13 +476,13 @@ async function pmQrDownloadArtwork(url,code,name,format){
  let logo;try{logo=await pmLoadBrandLogo()}catch(e){toast(e.message);return;}
  const pxmm=300/25.4,W=Math.round(s.w*pxmm),H=Math.round(s.h*pxmm),host=document.createElement('div');host.style.cssText='position:fixed;left:-99999px;top:0;width:1200px;height:1200px;background:#fff';document.body.appendChild(host);
  try{
-  new QRCode(host,{text:url,width:1000,height:1000,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});
+  new QRCode(host,{text:url,width:1000,height:1000,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
   await new Promise(r=>setTimeout(r,350));const q=host.querySelector('canvas');if(!q)throw new Error('QR canvas was not created.');
   const canvas=document.createElement('canvas');canvas.width=W;canvas.height=H;const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
   const qrSize=Math.min(Math.round(W*.76),Math.round(H*.57)),qx=Math.round((W-qrSize)/2),qy=Math.round(H*.245);
-  ctx.fillStyle='#fff';ctx.fillRect(qx-8,qy-8,qrSize+16,qrSize+16);ctx.drawImage(q,qx,qy,qrSize,qrSize);pmDrawLogoInQr(ctx,qx,qy,qrSize,logo);
+  ctx.fillStyle='#fff';ctx.fillRect(qx-8,qy-8,qrSize+16,qrSize+16);ctx.drawImage(q,qx,qy,qrSize,qrSize);pmDrawLogoAbove(ctx,W/2,Math.round(H*.035),Math.round(W*.55),Math.round(H*.17),logo);
   const footSize=Math.max(12,Math.round(Math.min(W,H)*.043));ctx.fillStyle='#123b88';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`800 ${footSize}px Arial`;ctx.fillText(s.foot,W/2,Math.round(H*.925));
-  const a=document.createElement('a');a.href=canvas.toDataURL('image/png');a.download=`PingMe_${code}_${format}_${s.w}x${s.h}mm_300dpi.png`;a.click();toast(format.toUpperCase()+' PNG downloaded with centred PingMe logo.');
+  const a=document.createElement('a');a.href=canvas.toDataURL('image/png');a.download=`PingMe_${code}_${format}_${s.w}x${s.h}mm_300dpi.png`;a.click();toast(format.toUpperCase()+' PNG downloaded (logo on top of QR).');
  }catch(e){toast('Artwork export blocked: '+e.message)}finally{host.remove()}
 }
 async function pmRenderCommunication(){
@@ -996,5 +1022,86 @@ pmRenderDashboard=async function(){await _dash6.apply(this,arguments);pmHealthLi
 
 document.getElementById('pmSignOut').addEventListener('click',signOutAdmin);
 boot();
+
+/* ===================== SIMPLER ADMIN: photo, single-page customer, quick find, grouped menu ===================== */
+function pmToJpeg256(file){return new Promise((res,rej)=>{const u=URL.createObjectURL(file),im=new Image();im.onload=()=>{try{const s=Math.min(im.width,im.height),c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,256,256);x.drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,256,256);URL.revokeObjectURL(u);res(c.toDataURL('image/jpeg',.82))}catch(e){rej(e)}};im.onerror=()=>{URL.revokeObjectURL(u);rej(new Error('bad image'))};im.src=u})}
+async function pmSavePhoto(rowId,dataUrl){
+ const {error}=await db.from('pingme_customer_photos').upsert({customer_row_id:rowId,photo:dataUrl,updated_at:new Date().toISOString(),updated_by:'admin'});
+ if(error){toast('Photo not saved: '+error.message+(/relation|does not exist|schema cache/i.test(error.message)?' (run sql/profile_photo.sql first)':''));return false}return true}
+function pmInitials(n){const p=String(n||'').trim().split(/\s+/).filter(Boolean);return((p[0]||'?')[0]+(p[1]?p[1][0]:'')).toUpperCase()}
+function pmSetCustAvatar(src){const c=selectedCustomer||{},el=document.getElementById('pmCustAv');if(!el)return;
+ el.style.backgroundImage=src?'url("'+src+'")':'';el.textContent=src?'':pmInitials(c.name);const rm=document.getElementById('pmPhotoRemove');if(rm)rm.style.display=src?'':'none'}
+async function pmLoadCustPhoto(c){
+ try{const {data,error}=await db.from('pingme_customer_photos').select('photo').eq('customer_row_id',c.id).maybeSingle();
+  if(selectedCustomer&&selectedCustomer.id===c.id)pmSetCustAvatar(!error&&data?data.photo:null)}catch(e){}}
+const _openCustomer2=openCustomer;
+openCustomer=function(id){
+ _openCustomer2(id);const c=customers.find(x=>String(x.id)===String(id));if(!c)return;
+ // --- photo in the hero (top-left)
+ const hero=document.querySelector('#customerModal .customerhero');
+ if(hero&&!document.getElementById('pmCustAv')){
+  const old=hero.querySelector('.avatar');if(old)old.outerHTML='<div class="pmCAv" id="pmCustAv"></div>';
+  const mid=hero.children[1];
+  mid.insertAdjacentHTML('beforeend','<div class="pmPhotoBtns"><button type="button" class="btn light small" id="pmPhotoPick">📷 Add / change photo</button><button type="button" class="btn light small" id="pmPhotoRemove" style="display:none">Remove photo</button></div><input type="file" id="pmPhotoFile" accept="image/*" style="display:none">');
+  document.getElementById('pmCustAv').onclick=document.getElementById('pmPhotoPick').onclick=()=>document.getElementById('pmPhotoFile').click();
+  document.getElementById('pmPhotoFile').onchange=async e=>{const f=e.target.files[0];e.target.value='';const cc=selectedCustomer;if(!f||!cc)return;
+   try{const d=await pmToJpeg256(f);if(await pmSavePhoto(cc.id,d)){pmSetCustAvatar(d);toast('Photo saved ✓')}}catch(err){toast('Could not read that picture.')}};
+  document.getElementById('pmPhotoRemove').onclick=async()=>{const cc=selectedCustomer;if(!cc||!confirm('Remove this customer\'s photo?'))return;
+   const {error}=await db.from('pingme_customer_photos').delete().eq('customer_row_id',cc.id);if(error){toast('Failed: '+error.message);return}pmSetCustAvatar(null);toast('Photo removed.')};
+ }
+ pmSetCustAvatar(null);pmLoadCustPhoto(c);
+ // --- one-page: alert numbers card with quick name edit
+ const grid=document.querySelector('#customerModal .profilegrid');
+ const old=document.getElementById('pmAlertCard');if(old)old.remove();
+ const has=!!(c.secondary_mobile||c.secondary_pending);
+ const state=c.secondary_mobile?'verified ✓':(c.secondary_pending?'waiting for confirmation':'');
+ const card=document.createElement('div');card.className='card full';card.id='pmAlertCard';
+ card.innerHTML=`<h3>Alert numbers</h3>
+  <div class="healthrow"><span>Primary WhatsApp (locked)</span><b>${safe(c.mobile)}</b></div>
+  <div class="healthrow"><span>Second number</span><b>${has?safe(c.secondary_mobile||c.secondary_pending)+' · '+state:'None'}</b></div>
+  <div class="healthrow"><span>Second person’s name</span><b><span id="pmSNameTxt">${has?safe(c.secondary_name||'(not set)'):'—'}</span> ${has?'<button type="button" class="btn light small" id="pmSNameEdit">✎ Edit name</button>':''}</b></div>
+  <div id="pmSNameBox" style="display:none;margin-top:8px"><div class="field"><label>Name of the second person</label><input id="pmSNameIn" maxlength="30" value="${safe(c.secondary_name||'')}"></div><div class="btnrow"><button type="button" class="btn" id="pmSNameSave">Save name</button><button type="button" class="btn light" id="pmSNameCancel">Cancel</button></div></div>
+  <div class="healthrow"><span>Alerts go to</span><b>Primary ✓ · 2nd number ${c.alert_secondary?'✓':'✗'} · Email ${c.alert_email!==false?'✓':'✗'}</b></div>
+  <div class="btnrow" style="margin-top:10px"><button type="button" class="btn light small" id="pmAlertsCustomer2">Manage alert numbers &amp; email</button></div>`;
+ grid.appendChild(card);
+ document.getElementById('pmAlertsCustomer2').onclick=()=>pmAlertsPanel(c);
+ if(has){
+  document.getElementById('pmSNameEdit').onclick=()=>{document.getElementById('pmSNameBox').style.display='block';document.getElementById('pmSNameIn').focus()};
+  document.getElementById('pmSNameCancel').onclick=()=>document.getElementById('pmSNameBox').style.display='none';
+  document.getElementById('pmSNameSave').onclick=async()=>{const nm=document.getElementById('pmSNameIn').value.trim().replace(/\s+/g,' ');
+   if(nm.length<2||nm.length>30||/[<>{}"`\\]/.test(nm)){toast('Enter a name of 2 to 30 letters.');return}
+   const {data,error}=await db.from('pingme_customers').update({secondary_name:nm,updated_at:new Date().toISOString()}).eq('id',c.id).select().single();
+   if(error){toast('Failed: '+error.message);return}Object.assign(c,data);try{await db.from('pingme_secondary_events').insert({customer_row_id:c.id,event:'admin_renamed',actor:'admin'})}catch(e){}
+   renderCustomers();openCustomer(c.id);toast('Name updated ✓')};
+ }
+};
+/* quick find (top bar) */
+(function(){
+ const inp=document.getElementById('pmQuickIn'),res=document.getElementById('pmQuickRes');if(!inp)return;
+ const close=()=>{res.style.display='none';res.innerHTML=''};
+ inp.addEventListener('input',()=>{const q=inp.value.trim().toLowerCase();if(q.length<2){close();return}
+  const hits=(customers||[]).filter(c=>[c.customer_id,c.name,c.mobile,c.email,c.secondary_mobile].join(' ').toLowerCase().includes(q)).slice(0,6);
+  res.innerHTML=hits.length?hits.map(c=>`<button type="button" data-id="${c.id}"><span class="avatar" style="width:30px;height:30px;font-size:11px;flex:none">${pmInitials(c.name)}</span><span><b>${safe(c.name)}</b><small>${safe(c.customer_id)} · ${safe(c.mobile)} · ${safe(c.status)}</small></span></button>`).join(''):'<div style="padding:12px;color:#66748c">No customer found</div>';
+  res.style.display='block';res.querySelectorAll('button').forEach(b=>b.onclick=()=>{const id=b.dataset.id;close();inp.value='';showPage('customers');openCustomer(id)})});
+ document.addEventListener('click',e=>{if(!e.target.closest('.pmQuick'))close()});
+ inp.addEventListener('keydown',e=>{if(e.key==='Enter'){const b=res.querySelector('button');if(b)b.click()}if(e.key==='Escape'){close();inp.blur()}});
+})();
+/* grouped sidebar */
+(function(){
+ const nav=document.getElementById('sideNav');if(!nav)return;
+ const groups=[['MAIN',['dashboard','customers','add','qr']],['MESSAGES & MONEY',['communication','credits','meta','orders']],['INSIGHTS',['audit','reports','reviews']],['SYSTEM',['automation','backup','settings']]];
+ const btn={};nav.querySelectorAll('button[data-page]').forEach(b=>btn[b.dataset.page]=b);
+ groups.forEach(([label,ids])=>{const h=document.createElement('div');h.className='navgrp';h.textContent=label;nav.appendChild(h);ids.forEach(i=>{if(btn[i]){nav.appendChild(btn[i]);delete btn[i]}})});
+ Object.values(btn).forEach(b=>nav.appendChild(b));
+})();
+/* quick-action row on top of the dashboard (re-added whenever the dashboard re-renders) */
+(function(){
+ const host=document.getElementById('page-dashboard');if(!host)return;
+ const add=()=>{if(host.querySelector('.pmQA')||!host.children.length||host.querySelector('.skel'))return;
+  const d=document.createElement('div');d.className='pmQA';
+  d.innerHTML='<button data-go="add">＋ Add customer</button><button data-go="customers">♙ All customers</button><button data-go="qr">▦ QR Studio</button><button data-go="communication">☏ WhatsApp</button><button data-go="credits">◉ Credits</button>';
+  d.querySelectorAll('button').forEach(b=>b.onclick=()=>showPage(b.dataset.go));host.insertBefore(d,host.firstChild)};
+ new MutationObserver(()=>{if(!host.querySelector('.pmQA'))add()}).observe(host,{childList:true});add();
+})();
 </script>
 </body></html>
