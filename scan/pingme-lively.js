@@ -233,27 +233,57 @@
       "<div class='pm-stage'><div class='pm-ring'></div><div class='pm-ring r2'></div><div class='pm-ring r3'></div>" +
       "<div class='pm-logo3d'><img src='/assets/pingme-logo.png' alt='PingMe'></div>" +
       "<div class='pm-welcome'>Welcome to PingMe</div><div class='pm-tag'>One Scan. Instant Connection.</div></div>" +
-      "<div class='pm-skip'>TAP TO SKIP</div>";
-    var spoken = false, gone = false;
-    function speak() {
-      if (spoken) return;
-      try {
-        if (typeof pingmeSoundEnabled !== "undefined" && !pingmeSoundEnabled) return;
-        if (!("speechSynthesis" in window)) return;
-        spoken = true;
-        var ta = lang() === "ta";
-        var u = new SpeechSynthesisUtterance(ta ? "பிங்மீக்கு வரவேற்கிறோம்" : "Welcome to PingMe");
-        u.lang = ta ? "ta-IN" : "en-IN"; u.rate = 0.92; u.pitch = 1.05; u.volume = 1;
-        var v = speechSynthesis.getVoices();
-        var pick = v.find(function (x) { return ta ? /^ta(-|$)/i.test(x.lang) : /^en-IN$/i.test(x.lang); }) || v.find(function (x) { return ta ? /^ta(-|$)/i.test(x.lang) : /^en(-|$)/i.test(x.lang); });
-        if (pick) u.voice = pick;
-        speechSynthesis.cancel(); speechSynthesis.speak(u);
-      } catch (e) {}
+      "<div class='pm-skip'>🔊 TAP FOR WELCOME SOUND</div>";
+    var spoken = false, gone = false, busy = false, whooshed = false;
+    /* Warm, smiling South-Indian greeting. Uses a recorded voice if /assets/welcome-en.mp3 or welcome-ta.mp3 exists, else the phone's own en-IN / ta-IN voice. */
+    function pickVoice(ta) {
+      var v = []; try { v = speechSynthesis.getVoices() || []; } catch (e) {}
+      var best = null, bs = -1;
+      v.forEach(function (x) {
+        var s = 0, l = String(x.lang || "").replace("_", "-"), n = String(x.name || "");
+        if (ta) { if (/^ta(-|$)/i.test(l)) s += 10; }
+        else { if (/^en-IN$/i.test(l)) s += 10; else if (/^(hi|ta|te|ml|kn)-IN$/i.test(l)) s += 4; else if (/^en(-|$)/i.test(l)) s += 1; }
+        if (s > 0) { if (/female|heera|neerja|veena|lekha|priya|kalpana|google/i.test(n)) s += 3; if (/male/i.test(n) && !/female/i.test(n)) s -= 1; }
+        if (s > bs) { bs = s; best = x; }
+      });
+      return bs > 0 ? best : null;
     }
+    function tts() {
+      try {
+        if (!("speechSynthesis" in window)) { busy = false; return; }
+        var ta = lang() === "ta";
+        var u = new SpeechSynthesisUtterance(ta ? "வணக்கம்! பிங்மீக்கு வரவேற்கிறோம்." : "Vanakkam! Welcome to PingMe.");
+        u.lang = ta ? "ta-IN" : "en-IN"; u.rate = 0.95; u.pitch = 1.12; u.volume = 1;
+        var pv = pickVoice(ta); if (pv) { u.voice = pv; u.lang = pv.lang || u.lang; }
+        u.onstart = function () { spoken = true; };
+        u.onerror = function () { busy = false; };
+        u.onend = function () { busy = false; };
+        speechSynthesis.cancel(); speechSynthesis.speak(u);
+        /* if the browser silently blocked it (no gesture yet), allow a retry on the first tap */
+        setTimeout(function () { if (!spoken) busy = false; }, 900);
+      } catch (e) { busy = false; }
+    }
+    function speak() {
+      if (spoken || busy) return;
+      try { if (typeof pingmeSoundEnabled !== "undefined" && !pingmeSoundEnabled) return; } catch (e) {}
+      busy = true;
+      try {
+        var ta = lang() === "ta", a = new Audio(ta ? "/assets/welcome-ta.mp3" : "/assets/welcome-en.mp3");
+        a.volume = 1;
+        var fb = function () { tts(); };
+        a.addEventListener("error", fb, { once: true });
+        var pr = a.play();
+        if (pr && pr.then) pr.then(function () { spoken = true; }).catch(function (err) {
+          if (err && err.name === "NotAllowedError") { busy = false; } else { fb(); }
+        });
+      } catch (e) { tts(); }
+    }
+    try { if ("speechSynthesis" in window) { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = function () {}; } } catch (e) {}
     function whoosh() {
+      if (whooshed) return;
       try {
         var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
-        var c = new AC(); if (c.state !== "running") { c.close(); return; }
+        var c = new AC(); if (c.state !== "running") { c.close(); return; } whooshed = true;
         var t = c.currentTime + .02, g = c.createGain(); g.connect(c.destination);
         g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(.18, t + .05); g.gain.exponentialRampToValueAtTime(.0001, t + 1.1);
         [523.25, 659.25, 783.99, 1046.5].forEach(function (f, k) { var o = c.createOscillator(); o.type = "sine"; o.frequency.setValueAtTime(f, t + k * .09); o.connect(g); o.start(t + k * .09); o.stop(t + 1.1); });
@@ -270,7 +300,7 @@
       document.body.appendChild(el);
       speak(); whoosh();
       /* browsers often block voice until the first touch: if so, speak on the first tap/touch while the intro is visible */
-      el.addEventListener("pointerdown", function () { speak(); close(); }, { once: true });
+      el.addEventListener("pointerdown", function () { speak(); whoosh(); setTimeout(close, 250); }, { once: true });
       setTimeout(close, reduce ? 600 : 3000);
     }
     if (document.body) start(); else document.addEventListener("DOMContentLoaded", start);
