@@ -16,10 +16,10 @@
 <link rel="icon" href="/assets/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Tamil:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 :root{--navy:#071226;--blue:#1764df;--cyan:#06b6d4;--pink:#db2777;--purple:#6d4ae6;--ink:#102044;--muted:#64748b;--paper:#f7faff;--line:#e4eaf4}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:"Plus Jakarta Sans",Arial,sans-serif;color:var(--ink);background:#fff}a{color:inherit;text-decoration:none}.wrap{width:min(1160px,calc(100% - 40px));margin:auto}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:"Plus Jakarta Sans","Noto Sans Tamil",Arial,sans-serif;color:var(--ink);background:#fff}a{color:inherit;text-decoration:none}.wrap{width:min(1160px,calc(100% - 40px));margin:auto}
 header{height:82px;display:flex;align-items:center;border-bottom:1px solid var(--line);background:#ffffffed;position:sticky;top:0;z-index:10;backdrop-filter:blur(14px)}
 .nav{display:flex;align-items:center;justify-content:space-between;gap:24px}.logo{width:156px;height:auto;display:block}.links{display:flex;align-items:center;gap:26px;font-size:13px;font-weight:700;color:#344563}.links a:hover{color:var(--blue)}.navLogin{white-space:nowrap}.menuToggle{display:none;border:1px solid #d7e2f2;background:#fff;color:#12346c;border-radius:10px;padding:10px 12px;font-weight:800}.mobileMenu{display:none}.btn{display:inline-flex;align-items:center;justify-content:center;border-radius:12px;padding:14px 21px;font-weight:800;font-size:14px;background:var(--blue);color:#fff;box-shadow:0 8px 22px #1764df30;transition:.2s}.btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px #1764df40}.btn.outline{background:#fff;color:var(--blue);border:1px solid #cbd9f2;box-shadow:none}
 .hero{background:radial-gradient(ellipse at 80% 15%,#e8f5ff 0,transparent 38%),linear-gradient(180deg,#f8fbff,#fff);padding:78px 0 70px;overflow:hidden}.heroGrid{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center}.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #d9e8ff;background:#fff;border-radius:999px;color:#2459a9;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.dot{width:7px;height:7px;border-radius:50%;background:#18b978}.hero h1{font-size:clamp(38px,5.2vw,62px);line-height:1.08;letter-spacing:-.055em;margin:20px 0 18px;color:var(--navy)}.hero h1 span{background:linear-gradient(90deg,var(--blue),var(--purple),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}.lead{font-size:17px;line-height:1.8;color:#52627c;max-width:570px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.trust{display:flex;gap:18px;flex-wrap:wrap;margin-top:28px;color:#63718a;font-size:12px;font-weight:700}.trust span:before{content:"✓";color:#159b55;font-weight:900;margin-right:7px}.heroArt{position:relative;min-height:390px;display:grid;place-items:center}.heroArt:before{content:"";position:absolute;width:330px;height:330px;border-radius:50%;background:linear-gradient(135deg,#d9edff,#f0e9ff);filter:blur(1px)}.heroArt img{position:relative;max-width:min(100%,440px);max-height:390px;object-fit:contain;filter:drop-shadow(0 22px 24px #1c3b6720)}
@@ -80,6 +80,21 @@ footer{background:linear-gradient(135deg,#050e20,#0b1831)}
  *,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
 }
 
+/* ---- launch refinements ---- */
+.btn.wa{background:linear-gradient(100deg,#16a34a,#25d366)!important;box-shadow:0 10px 24px rgba(37,211,102,.35)!important;color:#fff!important}
+.priceChip{display:inline-flex;align-items:center;gap:10px;margin:2px 0 18px;padding:9px 16px;border-radius:99px;background:#fff;border:1px solid #dbe6f7;box-shadow:0 8px 22px rgba(23,100,223,.1)}
+.priceChip b{font-size:22px;letter-spacing:-.03em;color:#1764df}.priceChip span{font-size:12px;font-weight:700;color:#52627c}
+.langBtn{margin-left:auto;margin-right:10px;border:1.5px solid #cfdcf3;background:#fff;color:#1764df;font:800 13px "Plus Jakarta Sans",Arial,sans-serif;padding:9px 14px;border-radius:99px;cursor:pointer}
+.langBtn:hover{background:#eef5ff}
+.useEmoji{font-size:64px;line-height:90px;height:90px}
+.useGrid{grid-template-columns:repeat(4,1fr)}
+.privacyBox{display:flex;gap:16px;align-items:center;margin:26px auto 0;max-width:860px;padding:20px 24px;border-radius:20px;background:linear-gradient(120deg,#eefaf3,#eef5ff);border:1px solid #cfe9dc}
+.privacyBox h3{margin:0 0 6px;font-size:16px;color:#102044}.privacyBox p{margin:0;font-size:13px;line-height:1.7;color:#4a5a73}.pbIcon{font-size:34px}
+.waFloat{position:fixed;right:16px;bottom:16px;z-index:30;display:flex;align-items:center;gap:8px;padding:12px 18px;border-radius:99px;background:linear-gradient(100deg,#16a34a,#25d366);color:#fff;font:800 14px "Plus Jakarta Sans",Arial,sans-serif;box-shadow:0 12px 28px rgba(22,163,74,.45)}
+.waFloat .waIc{font-size:20px}
+body{padding-bottom:78px}
+@media(max-width:800px){.useGrid{grid-template-columns:repeat(2,1fr)}.langBtn{margin-left:auto}.privacyBox{flex-direction:column;text-align:center}}
+@media(max-width:420px){.waFloat{left:14px;right:14px;justify-content:center}}
 </style>
 <script>
 /* Backward-compatible QR routing:
@@ -96,61 +111,79 @@ footer{background:linear-gradient(135deg,#050e20,#0b1831)}
 <body>
 <header><div class="wrap nav">
 <a href="/" aria-label="PingMe home"><img class="logo" src="/assets/pingme-logo.png" alt="PingMe — One Scan. Instant Connection."></a>
-<nav class="links"><a href="#how">How it works</a><a href="#why-pingme">Why PingMe</a><a href="#uses">Where to use</a><a href="#kit">Starter Kit</a><a href="#faq">FAQs</a></nav>
-<a class="btn navLogin" href="/account/">Customer Login</a>
+<nav class="links"><a href="#how" data-ta="எப்படி வேலை செய்கிறது">How it works</a><a href="#why-pingme" data-ta="ஏன் PingMe">Why PingMe</a><a href="#uses" data-ta="எங்கே பயன்படுத்தலாம்">Where to use</a><a href="#kit" data-ta="ஸ்டார்டர் கிட்">Starter Kit</a><a href="#faq" data-ta="கேள்விகள்">FAQs</a></nav>
+<button class="langBtn" id="langBtn" type="button" aria-label="Change language">தமிழ்</button>
+<a class="btn navLogin" href="/account/" data-ta="வாடிக்கையாளர் உள்நுழைவு">Customer Login</a>
 <button class="menuToggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu">Menu ☰</button>
-<nav class="mobileMenu" id="mobileMenu" aria-label="Mobile navigation"><a href="#how">How it works</a><a href="#why-pingme">Why PingMe</a><a href="#uses">Where to use</a><a href="#kit">Starter Kit</a><a href="#faq">FAQs</a><a class="mobileLogin" href="/account/">Customer Login</a></nav>
+<nav class="mobileMenu" id="mobileMenu" aria-label="Mobile navigation"><a href="#how" data-ta="எப்படி வேலை செய்கிறது">How it works</a><a href="#why-pingme" data-ta="ஏன் PingMe">Why PingMe</a><a href="#uses" data-ta="எங்கே பயன்படுத்தலாம்">Where to use</a><a href="#kit" data-ta="ஸ்டார்டர் கிட்">Starter Kit</a><a href="#faq" data-ta="கேள்விகள்">FAQs</a><a class="mobileLogin" href="/account/" data-ta="வாடிக்கையாளர் உள்நுழைவு">Customer Login</a></nav>
 </div></header>
 <main>
 <div class="hero"><div class="wrap heroGrid">
 <div><div class="eyebrow"><i class="dot"></i> Smart QR connection</div>
-<h1>One scan.<br><span>Instant connection.</span></h1>
-<p class="lead">A simple, private way for someone to reach you when your vehicle, keys or belongings need your attention. No need to share your phone number publicly.</p>
-<div class="actions"><a class="btn" href="#kit">Explore PingMe Starter Kit</a><a class="btn outline" href="#how">See how it works</a></div>
-<div class="trust"><span>Private contact</span><span>Quick QR scan</span><span>English & Tamil experience</span></div>
+<h1 data-ta="ஒரு ஸ்கேன்.<br><span>உடனடி இணைப்பு.</span>">One scan.<br><span>Instant connection.</span></h1>
+<p class="lead" data-ta="உங்கள் வாகனம், சாவி அல்லது பொருட்களுக்கு உங்கள் கவனம் தேவைப்படும்போது, ஒருவர் உங்களை எளிமையாகவும் தனிப்பட்ட முறையிலும் தொடர்பு கொள்ள ஒரு வழி. உங்கள் மொபைல் எண்ணை பொதுவில் பகிர வேண்டியதில்லை.">A simple, private way for someone to reach you when your vehicle, keys or belongings need your attention. No need to share your phone number publicly.</p>
+<div class="priceChip"><b>₹599</b><span data-ta="ஸ்டார்டர் கிட் · ஒருமுறை கட்டணம்">Starter Kit · one-time price</span></div>
+<div class="actions"><a class="btn wa" href="https://wa.me/919840547587?text=Hi%2C%20I%27m%20interested%20in%20ordering%20the%20PingMe%20Smart%20Connect%20Kit%20priced%20at%20%E2%82%B9599.%20Please%20share%20the%20details." target="_blank" rel="noopener" data-ta="💬 WhatsApp-ல் ஆர்டர் செய்யுங்கள்">💬 Order on WhatsApp</a><a class="btn outline" href="#kit" data-ta="PingMe ஸ்டார்டர் கிட்டைப் பாருங்கள்">Explore PingMe Starter Kit</a><a class="btn outline" href="#how" data-ta="எப்படி வேலை செய்கிறது">See how it works</a></div>
+<div class="trust"><span data-ta="தனிப்பட்ட தொடர்பு">Private contact</span><span data-ta="விரைவான QR ஸ்கேன்">Quick QR scan</span><span data-ta="ஆங்கிலம் & தமிழ்">English & Tamil experience</span></div>
 </div>
 <div class="heroArt"><img src="/assets/pingy-qr-hero.png" alt="PingMe QR connection illustration"></div>
 </div></div>
-<section id="how"><div class="wrap"><div class="sectionHead"><div class="kicker">Simple by design</div><h2>How PingMe works</h2><p>Put your unique PingMe QR on the things you want to keep connected. A scan helps the finder send you an alert through PingMe.</p></div>
+<section id="how"><div class="wrap"><div class="sectionHead"><div class="kicker" data-ta="எளிமையான வடிவமைப்பு">Simple by design</div><h2 data-ta="PingMe எப்படி வேலை செய்கிறது">How PingMe works</h2><p data-ta="உங்கள் தனித்துவமான PingMe QR-ஐ இணைந்திருக்க விரும்பும் பொருட்களில் ஒட்டுங்கள். ஒரு ஸ்கேன் மூலம் கண்டவர் PingMe வழியாக உங்களுக்கு அலர்ட் அனுப்புவார்.">Put your unique PingMe QR on the things you want to keep connected. A scan helps the finder send you an alert through PingMe.</p></div>
 <div class="steps">
-<div class="step"><div class="num">01</div><h3>Place your QR</h3><p>Attach your unique PingMe sticker or keychain to your vehicle, keys, bag or luggage.</p></div>
-<div class="step"><div class="num">02</div><h3>Someone scans</h3><p>The QR opens the PingMe alert page assigned to your registered tag.</p></div>
-<div class="step"><div class="num">03</div><h3>Get connected</h3><p>Receive an alert and respond privately, without displaying your phone number to the finder.</p></div>
+<div class="step"><div class="num">01</div><h3 data-ta="QR-ஐ ஒட்டுங்கள்">Place your QR</h3><p data-ta="உங்கள் PingMe ஸ்டிக்கர் அல்லது கீசெயினை வாகனம், சாவி, பை அல்லது லக்கேஜில் இணைக்கவும்.">Attach your unique PingMe sticker or keychain to your vehicle, keys, bag or luggage.</p></div>
+<div class="step"><div class="num">02</div><h3 data-ta="யாராவது ஸ்கேன் செய்கிறார்">Someone scans</h3><p data-ta="QR உங்கள் பதிவு செய்த tag-க்கான PingMe அலர்ட் பக்கத்தைத் திறக்கும்.">The QR opens the PingMe alert page assigned to your registered tag.</p></div>
+<div class="step"><div class="num">03</div><h3 data-ta="இணைந்து கொள்ளுங்கள்">Get connected</h3><p data-ta="அலர்ட் பெற்று, உங்கள் மொபைல் எண்ணைக் காட்டாமல் தனிப்பட்ட முறையில் பதில் அளியுங்கள்.">Receive an alert and respond privately, without displaying your phone number to the finder.</p></div>
 </div></div></section>
 
 <section class="benefits" id="why-pingme"><div class="wrap">
-<div class="sectionHead"><div class="kicker">Made for everyday peace of mind</div><h2>A simple connection, without sharing your number</h2><p>PingMe gives a finder a straightforward way to send an alert to the registered owner through a unique QR tag.</p></div>
+<div class="sectionHead"><div class="kicker" data-ta="தினசரி நிம்மதிக்காக">Made for everyday peace of mind</div><h2 data-ta="எண்ணைப் பகிராமல் எளிய இணைப்பு">A simple connection, without sharing your number</h2><p data-ta="தனித்துவமான QR tag மூலம் பதிவு செய்த உரிமையாளருக்கு அலர்ட் அனுப்ப PingMe கண்டவருக்கு எளிய வழி தருகிறது.">PingMe gives a finder a straightforward way to send an alert to the registered owner through a unique QR tag.</p></div>
 <div class="benefitGrid">
-<div class="benefit"><div class="benefitIcon">⌁</div><h3>Private by design</h3><p>The public scan page is designed to connect the finder and owner without displaying the owner's phone number.</p></div>
-<div class="benefit"><div class="benefitIcon">◉</div><h3>No app needed to scan</h3><p>A compatible phone camera or QR scanner opens the web experience in the browser.</p></div>
-<div class="benefit"><div class="benefitIcon">⌖</div><h3>Useful context with alerts</h3><p>The finder can choose an alert reason and, when appropriate, add optional details, a photo or location.</p></div>
-</div></div></section>
+<div class="benefit"><div class="benefitIcon">⌁</div><h3 data-ta="தனியுரிமைக்காகவே வடிவமைக்கப்பட்டது">Private by design</h3><p data-ta="பொது ஸ்கேன் பக்கம் உரிமையாளரின் மொபைல் எண்ணைக் காட்டாமல் கண்டவரையும் உரிமையாளரையும் இணைக்க வடிவமைக்கப்பட்டது.">The public scan page is designed to connect the finder and owner without displaying the owner's phone number.</p></div>
+<div class="benefit"><div class="benefitIcon">◉</div><h3 data-ta="ஸ்கேன் செய்ய ஆப் தேவையில்லை">No app needed to scan</h3><p data-ta="மொபைல் கேமரா அல்லது QR ஸ்கேனர் இணைய பக்கத்தை உலாவியில் திறக்கும்.">A compatible phone camera or QR scanner opens the web experience in the browser.</p></div>
+<div class="benefit"><div class="benefitIcon">⌖</div><h3 data-ta="அலர்ட்டுடன் பயனுள்ள தகவல்">Useful context with alerts</h3><p data-ta="கண்டவர் அலர்ட் காரணத்தைத் தேர்ந்தெடுத்து, தேவைப்பட்டால் விவரம், புகைப்படம் அல்லது இருப்பிடத்தையும் சேர்க்கலாம்.">The finder can choose an alert reason and, when appropriate, add optional details, a photo or location.</p></div>
+</div>
+<div class="privacyBox"><div class="pbIcon">🔒</div><div><h3 data-ta="உங்கள் எண் உங்களிடமே இருக்கும்">Your number stays with you</h3><p data-ta="கண்டவர் உங்கள் மொபைல் எண்ணைப் பார்ப்பதில்லை. அலர்ட் PingMe வழியாக உங்கள் WhatsApp-க்கு வரும், உங்கள் பதில் அவரது திரையில் தெரியும். ஒரு குடும்ப உறுப்பினரின் இரண்டாவது எண்ணையும் சேர்க்கலாம்.">The finder never sees your phone number. The alert reaches your WhatsApp through PingMe, and your reply appears on their screen. You can also add a family member's second number.</p></div></div>
+</div></section>
 
-<section class="uses" id="uses"><div class="wrap"><div class="sectionHead"><div class="kicker">One kit, many uses</div><h2>Keep important things connected</h2><p>Use PingMe QR tags across everyday essentials.</p></div>
+<section class="uses" id="uses"><div class="wrap"><div class="sectionHead"><div class="kicker" data-ta="ஒரு கிட், பல பயன்கள்">One kit, many uses</div><h2 data-ta="முக்கியமானவற்றை இணைத்து வையுங்கள்">Keep important things connected</h2><p data-ta="தினசரி அத்தியாவசியப் பொருட்களில் PingMe QR tag பயன்படுத்துங்கள்.">Use PingMe QR tags across everyday essentials.</p></div>
 <div class="useGrid">
-<div class="use"><img src="/assets/icon-vehicle.png" alt=""><h3>Cars & bikes</h3><p>For parking, vehicle attention and contact alerts.</p></div>
-<div class="use"><img src="/assets/icon-lostfound.png" alt=""><h3>Keys</h3><p>Help someone reach you if your keys are found.</p></div>
-<div class="use"><img src="/assets/icon-keys-luggage.png" alt=""><h3>Bags & luggage</h3><p>Keep your travel belongings connected.</p></div>
-<div class="use"><img src="/assets/icon-other.png" alt=""><h3>Everyday items</h3><p>Add a QR tag to other things that matter.</p></div>
+<div class="use"><img src="/assets/icon-vehicle.png" alt=""><h3 data-ta="கார் & பைக்">Cars & bikes</h3><p data-ta="பார்க்கிங் மற்றும் வாகனம் தொடர்பான அலர்ட்டுகளுக்கு.">For parking, vehicle attention and contact alerts.</p></div>
+<div class="use"><img src="/assets/icon-lostfound.png" alt=""><h3 data-ta="சாவிகள்">Keys</h3><p data-ta="சாவி கிடைத்தால் உங்களை அடைய உதவும்.">Help someone reach you if your keys are found.</p></div>
+<div class="use"><img src="/assets/icon-keys-luggage.png" alt=""><h3 data-ta="பைகள் & லக்கேஜ்">Bags & luggage</h3><p data-ta="பயணப் பொருட்களை இணைப்பில் வைத்திருங்கள்.">Keep your travel belongings connected.</p></div>
+<div class="use"><div class="useEmoji">🐕</div><h3 data-ta="செல்லப்பிராணிகள்">Pets</h3><p data-ta="செல்லப்பிராணி தொலைந்தால், காலர் tag உதவி செய்பவரை உங்களுடன் இணைக்கும்.">Collar tag helps a kind stranger reach you if your pet is lost.</p></div>
+<div class="use"><div class="useEmoji">🎒</div><h3 data-ta="குழந்தைகளின் பள்ளிப் பை">Kids' school bags</h3><p data-ta="பள்ளிப் பையில் tag வைத்தால் திரும்ப வந்து சேரும்.">Tag the school bag so it finds its way back.</p></div>
+<div class="use"><div class="useEmoji">🚪</div><h3 data-ta="வீட்டு வாசல்">Home door</h3><p data-ta="நீங்கள் இல்லாதபோது பார்வையாளர்/டெலிவரி அலர்ட்டுக்கு வாசலில் QR.">A QR at your door for visitor or delivery alerts when you are away.</p></div>
+<div class="use"><img src="/assets/icon-other.png" alt=""><h3 data-ta="தினசரிப் பொருட்கள்">Everyday items</h3><p data-ta="முக்கியமான மற்ற பொருட்களிலும் QR tag சேர்க்கலாம்.">Add a QR tag to other things that matter.</p></div>
 </div></div></section>
 <section class="offer" id="kit"><div class="wrap offerGrid">
-<div><div class="kicker" style="color:#72c8ff">PingMe Starter Kit</div><h2>Start connecting your essentials.</h2><p>Get your personal QR kit and activate your tags with PingMe. Your QR codes are assigned to your registered customer profile.</p></div>
-<div class="kit"><div class="kitTop"><div><h3>PingMe Starter Kit</h3><p style="margin:5px 0;color:#64748b;font-size:12px">Smart Connect Kit</p></div><div class="price">₹599</div></div>
-<ul><li>Personalised QR stickers and tags</li><li>QR keychains and reusable tags included in the confirmed kit configuration</li><li>250 included message credits</li><li>1-year subscription included</li><li>English and Tamil support experience</li></ul>
-<a class="btn" href="#launch" target="_blank" rel="noopener">Ordering opens soon</a>
-<p style="font-size:11px;color:#718096;margin:12px 0 0" id="launch">We are preparing the secure ordering experience. Ordering details will be published before launch.</p>
-<p style="font-size:12px;color:#52627c;margin:14px 0 0;text-align:center">Already a PingMe customer? <a href="/account/" style="color:#1764df;font-weight:800;text-decoration:underline;text-underline-offset:3px">Customer Login</a></p>
+<div><div class="kicker" style="color:#72c8ff" data-ta="PingMe ஸ்டார்டர் கிட்">PingMe Starter Kit</div><h2 data-ta="உங்கள் அத்தியாவசியப் பொருட்களை இணைக்கத் தொடங்குங்கள்.">Start connecting your essentials.</h2><p data-ta="உங்கள் தனிப்பட்ட QR கிட்டைப் பெற்று PingMe மூலம் tag-களை செயல்படுத்துங்கள். உங்கள் QR கோடுகள் பதிவு செய்த வாடிக்கையாளர் சுயவிவரத்துடன் இணைக்கப்படும்.">Get your personal QR kit and activate your tags with PingMe. Your QR codes are assigned to your registered customer profile.</p></div>
+<div class="kit"><div class="kitTop"><div><h3 data-ta="PingMe ஸ்டார்டர் கிட்">PingMe Starter Kit</h3><p style="margin:5px 0;color:#64748b;font-size:12px">Smart Connect Kit</p></div><div class="price">₹599</div></div>
+<ul><li data-ta="தனிப்பயன் QR ஸ்டிக்கர்கள் & tag-கள்">Personalised QR stickers and tags</li><li data-ta="உறுதி செய்யப்பட்ட கிட் அமைப்பில் QR கீசெயின்கள் & மறுபயன்பாட்டு tag-கள்">QR keychains and reusable tags included in the confirmed kit configuration</li><li data-ta="250 மெசேஜ் கிரெடிட்கள் உள்ளடக்கம்">250 included message credits</li><li data-ta="1 ஆண்டு சந்தா உள்ளடக்கம்">1-year subscription included</li><li data-ta="ஆங்கிலம் & தமிழ் ஆதரவு">English and Tamil support experience</li></ul>
+<a class="btn wa" href="https://wa.me/919840547587?text=Hi%2C%20I%27m%20interested%20in%20ordering%20the%20PingMe%20Smart%20Connect%20Kit%20priced%20at%20%E2%82%B9599.%20Please%20share%20the%20details." target="_blank" rel="noopener" data-ta="💬 WhatsApp-ல் ஆர்டர் செய்யுங்கள்">💬 Order on WhatsApp</a>
+<p style="font-size:11px;color:#718096;margin:12px 0 0" id="launch" data-ta="WhatsApp-ல் செய்தி அனுப்புங்கள் — விவரங்கள், கட்டணம் மற்றும் டெலிவரியை நாங்கள் உறுதி செய்வோம்.">Tap to message us on WhatsApp. We will confirm the details, payment and delivery with you.</p>
+<p style="font-size:12px;color:#52627c;margin:14px 0 0;text-align:center">Already a PingMe customer? <a href="/account/" style="color:#1764df;font-weight:800;text-decoration:underline;text-underline-offset:3px" data-ta="வாடிக்கையாளர் உள்நுழைவு">Customer Login</a></p>
 </div></div></section>
-<section id="faq"><div class="wrap"><div class="sectionHead"><div class="kicker">Need to know</div><h2>Frequently asked questions</h2></div><div class="faq">
-<details><summary>Does the person scanning need the PingMe app?</summary><p>No. The QR opens a web page in the phone browser. The scanner does not need to install an app or sign in.</p></details>
-<details><summary>Will my phone number be shown publicly?</summary><p>The public scan page is designed not to display the owner's phone number. Alerts are routed through PingMe using the configured contact channels.</p></details>
-<details><summary>Does every QR belong to a different customer?</summary><p>Yes. Each registered QR uses its own unique customer/tag identifier to load the corresponding owner's alert flow.</p></details>
-<details><summary>Can I use PingMe in Tamil?</summary><p>The customer scan experience supports English and Tamil.</p></details>
+<section id="faq"><div class="wrap"><div class="sectionHead"><div class="kicker" data-ta="தெரிந்து கொள்ள">Need to know</div><h2 data-ta="அடிக்கடி கேட்கப்படும் கேள்விகள்">Frequently asked questions</h2></div><div class="faq">
+<details><summary data-ta="ஸ்கேன் செய்பவருக்கு PingMe ஆப் தேவையா?">Does the person scanning need the PingMe app?</summary><p data-ta="தேவையில்லை. QR மொபைல் உலாவியில் இணையப் பக்கத்தைத் திறக்கும். ஆப் நிறுவவோ உள்நுழையவோ தேவையில்லை.">No. The QR opens a web page in the phone browser. The scanner does not need to install an app or sign in.</p></details>
+<details><summary data-ta="என் மொபைல் எண் பொதுவில் தெரியுமா?">Will my phone number be shown publicly?</summary><p data-ta="பொது ஸ்கேன் பக்கம் உரிமையாளரின் எண்ணைக் காட்டாது. அலர்ட்டுகள் PingMe வழியாக அமைக்கப்பட்ட தொடர்பு வழிகளில் செல்லும்.">The public scan page is designed not to display the owner's phone number. Alerts are routed through PingMe using the configured contact channels.</p></details>
+<details><summary data-ta="ஒவ்வொரு QR-ம் வெவ்வேறு வாடிக்கையாளருக்கா?">Does every QR belong to a different customer?</summary><p data-ta="ஆம். ஒவ்வொரு பதிவு செய்த QR-ம் தனக்கான தனித்துவ அடையாளத்தைக் கொண்டு அந்த உரிமையாளருக்கான அலர்ட் பக்கத்தைத் திறக்கும்.">Yes. Each registered QR uses its own unique customer/tag identifier to load the corresponding owner's alert flow.</p></details>
+<details><summary data-ta="PingMe-ஐ தமிழில் பயன்படுத்தலாமா?">Can I use PingMe in Tamil?</summary><p data-ta="ஆம், ஸ்கேன் அனுபவம் ஆங்கிலத்திலும் தமிழிலும் உள்ளது.">The customer scan experience supports English and Tamil.</p></details>
+<details><summary data-ta="ஸ்கேன் செய்தவருக்கு எப்படி பதில் சொல்வது?">How do I reply to the person who scanned?</summary><p data-ta="அலர்ட் உங்கள் WhatsApp-க்கு வரும். அதற்கு பதில் அனுப்பினால், கண்டவரின் திரையில் தெரியும். அவரது திரை சுமார் 3 நிமிடங்கள் உங்கள் பதிலுக்காகக் காத்திருக்கும்.">You get the alert on WhatsApp. Reply to it, and your reply appears on the finder's screen. Their screen waits for your reply for about 3 minutes.</p></details>
+<details><summary data-ta="குடும்பத்தில் வேறு ஒருவரும் அலர்ட் பெறலாமா?">Can someone else in my family also receive the alert?</summary><p data-ta="ஆம். இரண்டாவது WhatsApp எண்ணைச் சேர்க்கலாம். முதலில் பதில் அளிப்பவரின் பதில் கண்டவருக்குக் காட்டப்படும்; மற்றவருக்கு பதில் சொல்லப்பட்டுவிட்டது என்று தெரிவிக்கப்படும்.">Yes. You can add a second WhatsApp number. Whoever replies first is shown to the finder, and the other person is told it has been answered.</p></details>
+<details><summary data-ta="செல்லப்பிராணி அல்லது குழந்தையின் பள்ளிப் பைக்கு பயன்படுத்தலாமா?">Can I use it for pets or my child's school bag?</summary><p data-ta="ஆம். PingMe QR tag-ஐ செல்லப்பிராணி காலர், பள்ளிப் பை, லக்கேஜ், சாவி அல்லது கதவில் வைக்கலாம். கண்டவர் ஸ்கேன் செய்தால் உங்களுக்கு அலர்ட் வரும்.">Yes. A PingMe QR tag works on a pet collar, a school bag, luggage, keys or a door. The finder scans it and you get the alert.</p></details>
+<details><summary data-ta="மெசேஜ் கிரெடிட்கள் என்றால் என்ன?">What are message credits?</summary><p data-ta="ஒவ்வொரு WhatsApp எண்ணுக்கும் அனுப்பப்படும் அலர்ட் கிரெடிட்களைப் பயன்படுத்தும். ஸ்டார்டர் கிட்டில் 250 உள்ளன. விவரங்களுக்கு கீழே உள்ள கிரெடிட் கொள்கையைப் பாருங்கள்.">Each alert sent to a WhatsApp number uses message credits. The Starter Kit includes 250. See the Credits policy in the footer for details.</p></details>
 </div></div></section>
 </main>
+<a class="waFloat" href="https://wa.me/919840547587?text=Hi%2C%20I%27m%20interested%20in%20ordering%20the%20PingMe%20Smart%20Connect%20Kit%20priced%20at%20%E2%82%B9599.%20Please%20share%20the%20details." target="_blank" rel="noopener" aria-label="Order on WhatsApp"><span class="waIc">💬</span><span class="waTx" data-ta="WhatsApp-ல் ஆர்டர்">Order on WhatsApp</span></a>
 <footer><div class="wrap"><div class="foot">
 <div><img src="/assets/pingme-logo.png" alt="PingMe"><p>PingMe — One Scan. Instant Connection.<br>By Bharani Innovations, Madambakkam, Chennai – 600 126, Tamil Nadu, India.</p></div>
-<div class="footlinks"><a href="/account/" style="font-weight:800;color:#fff">Customer Login</a><a href="/legal/terms.html">Terms</a><a href="/legal/privacy.html">Privacy</a><a href="/legal/refund-policy.html">Refunds</a><a href="/legal/shipping-policy.html">Shipping</a><a href="/legal/credits-policy.html">Credits</a><a href="/legal/contact.html">Contact</a></div>
+<div class="footlinks"><a href="/account/" style="font-weight:800;color:#fff" data-ta="வாடிக்கையாளர் உள்நுழைவு">Customer Login</a><a href="/legal/terms.html">Terms</a><a href="/legal/privacy.html">Privacy</a><a href="/legal/refund-policy.html">Refunds</a><a href="/legal/shipping-policy.html">Shipping</a><a href="/legal/credits-policy.html">Credits</a><a href="/legal/contact.html">Contact</a></div>
 </div><div class="copy">© <span id="year"></span> Bharani Innovations. All rights reserved.</div></div></footer>
 <script>document.getElementById("year").textContent=new Date().getFullYear();const mt=document.getElementById("menuToggle"),mm=document.getElementById("mobileMenu");if(mt&&mm){mt.addEventListener("click",()=>{const open=mm.classList.toggle("open");mt.setAttribute("aria-expanded",String(open));mt.textContent=open?"Close ✕":"Menu ☰"});mm.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{mm.classList.remove("open");mt.setAttribute("aria-expanded","false");mt.textContent="Menu ☰"}));}</script>
+<script>
+(function(){var els=[].slice.call(document.querySelectorAll("[data-ta]"));els.forEach(function(e){e.setAttribute("data-en",e.innerHTML)});
+function apply(l){els.forEach(function(e){e.innerHTML=l==="ta"?e.getAttribute("data-ta"):e.getAttribute("data-en")});document.documentElement.lang=l==="ta"?"ta":"en";var b=document.getElementById("langBtn");if(b)b.textContent=l==="ta"?"English":"தமிழ்";try{localStorage.setItem("pmLang",l)}catch(x){}}
+var cur="en";try{cur=localStorage.getItem("pmLang")||((navigator.language||"").slice(0,2)==="ta"?"ta":"en")}catch(x){}
+var b=document.getElementById("langBtn");if(b)b.addEventListener("click",function(){cur=cur==="ta"?"en":"ta";apply(cur)});if(cur==="ta")apply("ta");})();
+</script>
 </body></html>
