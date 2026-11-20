@@ -19,6 +19,22 @@ button,.btn{border:0;background:var(--blue);color:white;border-radius:10px;paddi
 button:disabled{opacity:.55;cursor:not-allowed}.secondary{background:#edf3fb;color:var(--navy)}.outline{background:#fff;color:var(--blue);border:1px solid #cbd9f2}
 .notice{background:#eef7ff;border:1px solid #cfe6ff;border-radius:12px;padding:13px;color:#214d7b;font-size:13px}.warning{background:#fff8e7;border-color:#f1d28c;color:#76530d}.success{background:#effaf4;border-color:#c7ecd7;color:#146b43}
 .hidden{display:none!important}.row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.field{min-width:0}.field label{font-size:12px;font-weight:750;color:#344563}.qrCanvas{width:min(100%,340px);height:auto;border:1px solid var(--line);border-radius:14px;background:white;padding:8px}.qrTools{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.status{font-size:12px;min-height:18px;margin-top:8px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}.tabs a{font-size:12px;font-weight:750;padding:8px 11px;border:1px solid var(--line);border-radius:9px;background:#fff;color:#24416f;text-decoration:none}
+/* dashboard */
+.hero{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.pmAv{width:76px;height:76px;border-radius:50%;background:linear-gradient(135deg,#1768c5,#20bfd2) center/cover no-repeat;color:#fff;font-weight:800;font-size:28px;display:flex;align-items:center;justify-content:center;flex:none;border:3px solid #fff;box-shadow:0 4px 14px #12315b33;position:relative;cursor:pointer}
+.pmAv .cam{position:absolute;right:-4px;bottom:-4px;width:26px;height:26px;border-radius:50%;background:#fff;color:#1768c5;font-size:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px #0003}
+.heroTxt{flex:1;min-width:170px}.heroTxt h1{margin:0;font-size:22px;overflow-wrap:anywhere}.pill{display:inline-block;font-size:12px;font-weight:800;padding:3px 10px;border-radius:99px;background:#effaf4;color:#146b43;border:1px solid #c7ecd7}.pill.off{background:#fff1f1;color:#9b1c1c;border-color:#f3c4c4}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.tile{all:unset;box-sizing:border-box;cursor:pointer;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:4px;box-shadow:0 6px 20px #12315b0d;transition:transform .12s,box-shadow .12s}
+.tile:hover,.tile:focus-visible{transform:translateY(-2px);box-shadow:0 10px 26px #12315b1f;outline:2px solid #bcd3f5}
+.tile .ic{font-size:28px;line-height:1}.tile b{font-size:16px;color:var(--navy)}.tile span.sub{font-size:12.5px;color:var(--muted);overflow-wrap:anywhere}
+.backBtn{margin:0 0 12px;background:#edf3fb;color:var(--navy)}
+.linkBtn{all:unset;cursor:pointer;color:var(--blue);font-weight:750;font-size:13px}
+.secCard{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fbfdff}
+.secTop{display:flex;gap:12px;align-items:center}.secAv{width:44px;height:44px;border-radius:50%;background:#e8f1fd;display:flex;align-items:center;justify-content:center;font-size:22px;flex:none}
+.secName{font-size:17px;font-weight:800;color:var(--navy)}.secNum{font-size:13px;color:var(--muted)}
+.dashGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:14px}
+.dashGrid .metric{padding:12px}.dashGrid .metric b{font-size:16px;overflow-wrap:normal;white-space:nowrap}
 footer{text-align:center;color:var(--muted);padding:26px 16px;font-size:12px}
 #qrStage{position:absolute;left:-10000px;top:0;width:600px;height:600px;overflow:hidden}
 @media(max-width:600px){header{padding:14px 16px}.brand img{width:145px}main{margin-top:16px;padding:0 12px}.panel{padding:17px}h1{font-size:22px}.metric b{font-size:20px}.row>*{max-width:100%}.qrTools button{flex:1}}
@@ -52,22 +68,38 @@ footer{text-align:center;color:var(--muted);padding:26px 16px;font-size:12px}
 </section>
 
 <section id="accountPanel" class="hidden">
-  <div class="panel row"><div><h1>My PingMe Account</h1><div id="accountEmail" class="muted small"></div></div><button id="signOut" class="secondary">Sign out</button></div>
-  <nav class="tabs" aria-label="Account sections">
-    <a href="#overview">Overview</a><a href="#profilePanel">My Profile</a><a href="#qrPanel">My QR Code</a><a href="#creditsPanel">Credits & Subscription</a><a href="#activityPanel">Activity</a><a href="#morePanel">More</a>
-  </nav>
-  <section id="overview" class="panel">
+  <div class="panel" id="dashPanel">
+    <div class="hero">
+      <div class="pmAv" id="heroAv" role="button" tabindex="0" title="Add or change your photo" aria-label="Add or change your photo"><span id="heroAvTxt">?</span><span class="cam">📷</span></div>
+      <div class="heroTxt"><h1 id="heroName">My PingMe Account</h1><div class="muted small" id="accountEmail"></div><div style="margin-top:6px"><span class="pill" id="heroPill">—</span></div></div>
+      <button id="signOut" class="secondary">Sign out</button>
+    </div>
+    <input type="file" id="photoFile" accept="image/*" class="hidden">
+  </div>
+  <section id="overview">
     <div id="lowCreditBanner" class="notice warning" style="display:none;margin-bottom:12px"></div>
-    <h2>Account overview</h2>
-    <div class="grid">
-      <div class="metric"><small>Customer ID</small><b id="customerId">—</b></div>
-      <div class="metric"><small>Account status</small><b id="status">—</b></div>
-      <div class="metric"><small>Paid credits</small><b id="paidCredits">—</b></div>
-      <div class="metric"><small>Free test credits</small><b id="testCredits">—</b></div>
+    <div class="tiles" id="tiles">
+      <button class="tile" data-view="qr"><span class="ic">🔳</span><b>My QR code</b><span class="sub" id="tQr">Download or print</span></button>
+      <button class="tile" data-view="alerts"><span class="ic">🔔</span><b>Alert numbers</b><span class="sub" id="tAlerts">—</span></button>
+      <button class="tile" data-view="profile"><span class="ic">👤</span><b>My profile</b><span class="sub" id="tProfile">Name, photo, address</span></button>
+      <button class="tile" data-view="credits"><span class="ic">💳</span><b>Credits &amp; plan</b><span class="sub" id="tCredits">—</span></button>
+      <button class="tile" data-view="pw"><span class="ic">🔑</span><b>Password</b><span class="sub">Change my password</span></button>
+      <button class="tile" data-view="help"><span class="ic">💬</span><b>Help &amp; support</b><span class="sub">Orders · WhatsApp</span></button>
+    </div>
+    <div class="panel" style="margin-top:14px">
+      <h2 style="font-size:15px">At a glance</h2>
+      <div class="dashGrid">
+        <div class="metric"><small>Customer ID</small><b id="customerId">—</b></div>
+        <div class="metric"><small>Account status</small><b id="status">—</b></div>
+        <div class="metric"><small>Paid credits</small><b id="paidCredits">—</b></div>
+        <div class="metric"><small>Free test credits</small><b id="testCredits">—</b></div>
+      </div>
     </div>
   </section>
   <section id="profilePanel" class="panel">
     <h2>My Profile</h2>
+    <div class="hero" style="margin-bottom:14px"><div class="pmAv" id="profAv" role="button" tabindex="0" title="Add or change your photo"><span id="profAvTxt">?</span><span class="cam">📷</span></div>
+      <div><button id="photoPick" class="secondary">Add / change photo</button> <button id="photoRemove" class="outline hidden">Remove photo</button><div class="muted small" style="margin-top:6px">Optional. A small clear face photo works best.</div><div id="photoMsg" class="status muted" role="status"></div></div></div>
     <p class="muted small">You can update your name and address. Mobile number changes require admin review until secure SMS verification is enabled.</p>
     <div class="grid">
       <div class="field"><label for="profileName">Name</label><input id="profileName" maxlength="120"></div>
@@ -87,9 +119,9 @@ footer{text-align:center;color:var(--muted);padding:26px 16px;font-size:12px}
   </section>
   <section id="qrPanel" class="panel">
     <h2>My PingMe QR Code</h2>
-    <p class="muted small">Download or print your existing QR. Every copy keeps the same customer identity. The official PingMe logo is included in every export.</p>
+    <p class="muted small">Download or print your QR. Every copy keeps the same customer identity. The PingMe logo is placed above the QR so scanning is never disturbed.</p>
     <div class="row" style="align-items:flex-start">
-      <div style="flex:1;min-width:240px"><p><b id="qrCustomer">—</b></p><p class="muted small">SCAN TO CONNECT</p><canvas id="qrCanvas" class="qrCanvas" width="600" height="600" aria-label="Branded PingMe QR code"></canvas>
+      <div style="flex:1;min-width:240px"><p><b id="qrCustomer">—</b></p><p class="muted small">SCAN TO CONNECT</p><canvas id="qrCanvas" class="qrCanvas" width="600" height="740" aria-label="Branded PingMe QR code"></canvas>
         <div class="qrTools"><button id="downloadQr">Download branded QR PNG</button><button id="printQr" class="secondary">Print branded QR</button></div>
         <p id="qrMessage" class="status muted" role="status">Preparing your branded QR…</p>
       </div>
@@ -161,19 +193,17 @@ async function buildBrandedQr(){
  if(typeof QRCode==='undefined'){showStatus('qrMessage','QR generator did not load. Refresh and try again.','warning');return}
  const stage=$('qrStage');stage.innerHTML='';
  const node=document.createElement('div');stage.appendChild(node);
- new QRCode(node,{text:qrDestination,width:520,height:520,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});
+ new QRCode(node,{text:qrDestination,width:520,height:520,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
  let qrImg=node.querySelector('img'),qrCanvas=node.querySelector('canvas');
  if(qrImg){await new Promise((resolve,reject)=>{if(qrImg.complete&&qrImg.naturalWidth)resolve();else{qrImg.onload=resolve;qrImg.onerror=reject}})}
  const source=qrCanvas||qrImg;
  if(!source){showStatus('qrMessage','QR generation failed. Download and print are disabled.','warning');return}
- const out=$('qrCanvas'),ctx=out.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,600,600);
- ctx.drawImage(source,35,35,530,530);
- // Place the actual official logo in a white centre plate, using high QR error correction.
- const logoW=108,logoH=logo.height*(logoW/logo.width),cx=300,cy=300;
- ctx.fillStyle='#fff';ctx.beginPath();ctx.roundRect(cx-logoW/2-13,cy-logoH/2-13,logoW+26,logoH+26,14);ctx.fill();
- ctx.drawImage(logo,cx-logoW/2,cy-logoH/2,logoW,logoH);
+ const out=$('qrCanvas'),ctx=out.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,600,740);
+ ctx.drawImage(source,40,150,520,520);
+ // Logo sits ABOVE the QR (never on it) so scanning is never disturbed.
+ {const mw=330,mh=105,r=logo.width/logo.height;let w=mw,h=w/r;if(h>mh){h=mh;w=h*r}ctx.drawImage(logo,300-w/2,20+(mh-h)/2,w,h);}
  // Brand footer is embedded in the exported canvas itself.
- ctx.fillStyle='#102b62';ctx.textAlign='center';ctx.font='800 22px Arial';ctx.fillText('SCAN TO CONNECT',300,590);
+ ctx.fillStyle='#102b62';ctx.textAlign='center';ctx.font='800 22px Arial';ctx.fillText('SCAN TO CONNECT',300,710);
  brandedQrReady=true;showStatus('qrMessage','Your PingMe-branded QR is ready. Download or print this same QR anytime.','success');
 }
 function exportQrBlob(){return new Promise(resolve=> $('qrCanvas').toBlob(resolve,'image/png'))}
@@ -210,8 +240,10 @@ async function loadAccount(){
  qrDestination=location.origin+'/?t='+encodeURIComponent(data.customer_id);
  $('openScanner').href=qrDestination;
  renderAlerts(data);
+ loadPhoto();
+ if(!window.__viewInit){window.__viewInit=1;const h=(location.hash||'').slice(1);showView(VIEWS[h]?h:undefined)}
  await buildBrandedQr();
- if(recoveryMode){showStatus('pwMessage','Choose your new password below.','warning');$('pwPanel').scrollIntoView({behavior:'smooth',block:'start'})}
+ if(recoveryMode){showStatus('pwMessage','Choose your new password below.','warning');showView('pw')}
 }
 const PM_API='https://pingme-api.pingmeconnect.workers.dev',PM_WA='919150047587';
 let recoveryMode=/type=recovery/.test(location.hash);
@@ -262,28 +294,82 @@ $('savePw').onclick=async()=>{
  $('newPw').value='';$('newPw2').value='';recoveryMode=false;showStatus('pwMessage','Password updated. Use it next time you sign in.','success');
 };
 
+
+/* ===== Dashboard views ===== */
+const VIEWS={qr:['qrPanel'],alerts:['alertPanel'],profile:['profilePanel'],credits:['creditsPanel','activityPanel'],pw:['pwPanel'],help:['morePanel']};
+const ALLV=[].concat(...Object.values(VIEWS));
+function showView(v){
+ const home=!v||!VIEWS[v];
+ $('overview').classList.toggle('hidden',!home);
+ ALLV.forEach(id=>$(id).classList.add('hidden'));
+ if(!home)VIEWS[v].forEach(id=>$(id).classList.remove('hidden'));
+ try{history.replaceState(null,'',home?location.pathname+location.search:'#'+v)}catch(e){}
+ window.scrollTo({top:0});
+}
+document.querySelectorAll('#tiles .tile').forEach(b=>b.onclick=()=>showView(b.dataset.view));
+ALLV.forEach(id=>{const s=$(id);if(s.querySelector('.backBtn'))return;const b=document.createElement('button');b.className='backBtn';b.type='button';b.textContent='← Back to dashboard';b.onclick=()=>showView();s.insertBefore(b,s.firstChild)});
+function initials(n){const p=String(n||'').trim().split(/\s+/).filter(Boolean);return ((p[0]||'?')[0]+(p[1]?p[1][0]:'')).toUpperCase()}
+function setAvatar(src){
+ const nm=(currentCustomer&&currentCustomer.name)||'';
+ [['heroAv','heroAvTxt'],['profAv','profAvTxt']].forEach(([a,tx])=>{const el=$(a);if(src){el.style.backgroundImage='url("'+src+'")';$(tx).textContent=''}else{el.style.backgroundImage='';$(tx).textContent=initials(nm)}});
+ $('photoRemove').classList.toggle('hidden',!src);
+}
+async function loadPhoto(){try{const {data,error}=await db.rpc('pingme_photo_get');setAvatar(!error&&typeof data==='string'?data:null)}catch(e){setAvatar(null)}}
+function toJpeg256(file){return new Promise((res,rej)=>{const u=URL.createObjectURL(file),im=new Image();im.onload=()=>{try{const s=Math.min(im.width,im.height),c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,256,256);x.drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,256,256);URL.revokeObjectURL(u);res(c.toDataURL('image/jpeg',.82))}catch(e){rej(e)}};im.onerror=()=>{URL.revokeObjectURL(u);rej(new Error('bad image'))};im.src=u})}
+['heroAv','profAv'].forEach(id=>{$(id).onclick=()=>$('photoFile').click();$(id).onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('photoFile').click()}}});
+$('photoPick').onclick=()=>$('photoFile').click();
+$('photoFile').onchange=async()=>{
+ const f=$('photoFile').files[0];$('photoFile').value='';if(!f)return;
+ if(!/^image\//.test(f.type)){showStatus('photoMsg','Please choose a picture (JPG or PNG).','warning');return}
+ try{
+  showStatus('photoMsg','Saving your photo…');const d=await toJpeg256(f);
+  const {data,error}=await db.rpc('pingme_photo_set',{p_photo:d});
+  if(error||!data||data.result!=='ok'){showStatus('photoMsg',error?'Photo saving is not enabled yet. Please try again later.':'Could not save this picture. Try a different one.','warning');return}
+  setAvatar(d);showStatus('photoMsg','Photo saved ✓','success');
+ }catch(e){showStatus('photoMsg','Could not read this picture. Try a different one.','warning')}
+};
+$('photoRemove').onclick=async()=>{if(!confirm('Remove your photo?'))return;const {data,error}=await db.rpc('pingme_photo_remove');if(error||!data||data.result!=='ok'){showStatus('photoMsg','Could not remove it. Please try again.','warning');return}setAvatar(null);showStatus('photoMsg','Photo removed.','success')};
+function renderTiles(c){
+ try{
+  const act=c.status==='Active';$('heroPill').textContent=c.status||'—';$('heroPill').className='pill'+(act?'':' off');
+  $('heroName').textContent=c.name||'My PingMe Account';
+  const nm=(c.secondary_name||'').replace(/[<>&"]/g,'');
+  $('tAlerts').textContent=c.secondary_mobile?'You + '+(nm||'2nd number')+' ✓':c.secondary_pending?'Waiting for confirmation…':'Only your number';
+  $('tProfile').textContent=c.name||'Name, photo, address';
+  $('tCredits').textContent=(c.paid_credits??0)+' credits'+(c.subscription_expiry?' · till '+friendlyDate(c.subscription_expiry):'');
+  if(!$('profAv').style.backgroundImage)setAvatar(null);
+ }catch(e){}
+}
+
 /* ===== Alert numbers & email ===== */
 const PM_WA_NUMBER='+91 91500 47587';
 const fmtNum=n=>{const d=String(n||'').replace(/\D/g,'').slice(-10);return d.length===10?d.slice(0,5)+' '+d.slice(5):d};
-const SEC_MSG={invalid_name:'Please enter a name of 2 to 30 letters.',invalid_number:'Enter a valid 10-digit Indian mobile number.',same_as_primary:'That is already your primary number.',already:'That number is already added.',number_limit:'This number is already linked to the maximum number of PingMe accounts.',not_eligible:'Alert numbers are available for active accounts only.',auth_required:'Please sign in again.',invalid_email:'Enter a valid email address.'};
+const SEC_MSG={invalid_name:'Please enter a name of 2 to 30 letters.',invalid_number:'Enter a valid 10-digit Indian mobile number.',same_as_primary:'That is already your primary number.',already:'That number is already added.',number_limit:'This number is already linked to the maximum number of PingMe accounts.',not_eligible:'Alert numbers are available for active accounts only.',auth_required:'Please sign in again.',invalid_email:'Enter a valid email address.',no_secondary:'Add a second number first.'};
 const secMsg=r=>r&&r.result==='change_limit'?'You changed your alert number recently. You can change it again in '+r.days_left+' day(s). Contact PingMe if it is urgent.':(SEC_MSG[r&&r.result]||'Something went wrong. Please try again.');
 async function refreshAlerts(){const {data:{user}}=await db.auth.getUser();if(!user)return;const {data}=await db.from('pingme_customers').select('*').eq('auth_user_id',user.id).maybeSingle();if(data){currentCustomer=data;renderAlerts(data)}}
 function renderAlerts(c){
  setText('alPrimary',fmtNum(c.mobile));
  const box=$('alSecondary');
- if(c.secondary_pending){
-  box.innerHTML=`<div class="notice warning"><b>Waiting for ${fmtNum(c.secondary_pending)} to confirm</b><br>Ask that person to open WhatsApp and send <b>JOIN ${c.customer_id}</b> to <b>${PM_WA_NUMBER}</b> from <b>that number</b>. They will get a 6-digit code. Enter it here:</div>
-   <div class="field" style="margin-top:10px"><label for="alCode">6-digit code</label><input id="alCode" inputmode="numeric" maxlength="6" placeholder="123456"></div>
-   <div class="row"><button id="alVerify">Confirm number</button><button id="alCancel" class="secondary">Cancel</button></div>`;
-  $('alVerify').onclick=verifySecondary;$('alCancel').onclick=removeSecondary;
- }else if(c.secondary_mobile){
-  box.innerHTML=`<div class="metric"><small>Second WhatsApp number (verified ✓)</small><b>${fmtNum(c.secondary_mobile)}</b>${c.secondary_name?'<small>'+String(c.secondary_name).replace(/[<>&"]/g,'')+'</small>':''}</div>
-   <label style="display:flex;gap:10px;align-items:center;font-weight:700;margin-top:10px"><input type="checkbox" id="alSecOn" style="width:20px;height:20px" ${c.alert_secondary?'checked':''}> Send alerts to this number too (1 extra credit per alert)</label>
-   <div class="row" style="margin-top:10px"><button id="alChange" class="secondary">Change number</button><button id="alRemove" class="secondary">Remove</button></div>
-   <div id="alChangeBox" class="hidden" style="margin-top:10px"><div class="field"><label for="alNewName">Name of this person</label><input id="alNewName" maxlength="30" placeholder="e.g. Meena" value="${(c.secondary_name||'').replace(/[<>&"]/g,'')}"></div><div class="field"><label for="alNewSec">New number</label><input id="alNewSec" type="tel" placeholder="98765 43210"></div><button id="alChangeGo">Continue</button><p class="muted small">You can change this number once every 30 days. The new number must confirm with a code.</p></div>`;
+  if(c.secondary_pending||c.secondary_mobile){
+  const ok=!!c.secondary_mobile&&!c.secondary_pending,num=c.secondary_pending||c.secondary_mobile,nm=String(c.secondary_name||'').replace(/[<>&"]/g,'');
+  const head=`<div class="secCard"><div class="secTop"><div class="secAv">👤</div><div style="flex:1;min-width:0"><div class="secName"><span id="alNameTxt">${nm||'(no name yet)'}</span> <button id="alRenameBtn" class="linkBtn" type="button">✎ Edit name</button></div><div class="secNum">${fmtNum(num)} · ${ok?'verified ✓':'waiting for confirmation'}</div></div></div>
+   <div id="alRenameBox" class="hidden" style="margin-top:10px"><div class="field"><label for="alRenameIn">Name of this person</label><input id="alRenameIn" maxlength="30" value="${nm}" placeholder="e.g. Meena"></div><div class="row" style="justify-content:flex-start"><button id="alRenameGo" type="button">Save name</button><button id="alRenameNo" type="button" class="secondary">Cancel</button></div></div>`;
+  if(ok){
+  box.innerHTML=head+`<label style="display:flex;gap:10px;align-items:center;font-weight:700;margin-top:12px"><input type="checkbox" id="alSecOn" style="width:20px;height:20px" ${c.alert_secondary?'checked':''}> Send alerts to this number too (1 extra credit per alert)</label>
+   <div class="row" style="margin-top:10px;justify-content:flex-start"><button id="alChange" class="secondary">Change number</button><button id="alRemove" class="secondary">Remove</button></div>
+   <div id="alChangeBox" class="hidden" style="margin-top:10px"><div class="field"><label for="alNewName">Name of this person</label><input id="alNewName" maxlength="30" placeholder="e.g. Meena" value="${nm}"></div><div class="field"><label for="alNewSec">New number</label><input id="alNewSec" type="tel" placeholder="98765 43210"></div><button id="alChangeGo">Continue</button><p class="muted small">Only the <b>number</b> is limited to one change every 30 days. You can edit the <b>name</b> anytime. The new number must confirm with a code.</p></div></div>`;
   $('alChange').onclick=()=>$('alChangeBox').classList.toggle('hidden');
   $('alChangeGo').onclick=()=>addSecondary($('alNewSec').value,$('alNewName').value);
   $('alRemove').onclick=removeSecondary;
+  }else{
+  box.innerHTML=head+`<div class="notice warning" style="margin-top:12px"><b>Last step:</b> ask that person to open WhatsApp and send <b>JOIN ${c.customer_id}</b> to <b>${PM_WA_NUMBER}</b> from <b>that number</b>. They will get a 6-digit code. Enter it here:</div>
+   <div class="field" style="margin-top:10px"><label for="alCode">6-digit code</label><input id="alCode" inputmode="numeric" maxlength="6" placeholder="123456"></div>
+   <div class="row" style="justify-content:flex-start"><button id="alVerify">Confirm number</button><button id="alCancel" class="secondary">Cancel</button></div></div>`;
+  $('alVerify').onclick=verifySecondary;$('alCancel').onclick=removeSecondary;
+  }
+  $('alRenameBtn').onclick=()=>{$('alRenameBox').classList.remove('hidden');$('alRenameIn').focus()};
+  $('alRenameNo').onclick=()=>$('alRenameBox').classList.add('hidden');
+  $('alRenameGo').onclick=renameSecondary;
  }else{
   box.innerHTML=`<div class="field"><label for="alNewName">Name of this person *</label><input id="alNewName" maxlength="30" placeholder="e.g. Meena (wife)"></div><div class="field"><label for="alNewSec">Add a second WhatsApp number (optional)</label><input id="alNewSec" type="tel" placeholder="98765 43210"></div>
    <button id="alAdd" class="secondary">Add number</button>
@@ -292,6 +378,15 @@ function renderAlerts(c){
  }
  $('alEmailOn').checked=c.alert_email!==false;
  $('alEmail').value=c.alert_email_address||c.email||'';
+ renderTiles(c);
+}
+async function renameSecondary(){
+ const nm=String($('alRenameIn').value||'').trim().replace(/\s+/g,' ');
+ if(nm.length<2||nm.length>30){showStatus('alertMessage','Please enter a name of 2 to 30 letters.','warning');return}
+ showStatus('alertMessage','Saving name…');
+ const {data,error}=await db.rpc('pingme_secondary_rename',{p_name:nm});
+ if(error||!data||data.result!=='ok'){showStatus('alertMessage',error?'Name change is not enabled yet. Please try again later.':secMsg(data),'warning');return}
+ showStatus('alertMessage','Name updated ✓','success');await refreshAlerts();
 }
 async function addSecondary(v,nm){
  nm=String(nm||'').trim();
