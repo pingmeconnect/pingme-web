@@ -1371,7 +1371,7 @@
       const fill = document.getElementById("storyProgressFill");
       if(!img || !cap) return;
       const token = ++waitingStoryRenderToken;
-      const nextSrc = "/assets/pingme-stories/" + item[0];
+      const nextSrc = "/assets/pingme-stories/" + item[0].replace(".png", ".webp");
       // Preload first: keep the previous caption visible until its matching image is ready.
       // Then swap image, caption, counter and progress together in one paint.
       const applyStory = () => {
@@ -1408,7 +1408,7 @@
     }
     function renderDemoStory(){
       const item = pingMeStories[demoStoryIndex];
-      document.getElementById("storyDemoImage").src = "/assets/pingme-stories/" + item[0];
+      document.getElementById("storyDemoImage").src = "/assets/pingme-stories/" + item[0].replace(".png", ".webp");
       document.getElementById("storyDemoImage").alt = storyLabel(item);
       document.getElementById("storyDemoCaption").textContent = storyText(item);
       document.getElementById("storyDemoCount").textContent = (demoStoryIndex+1) + "/" + pingMeStories.length;
