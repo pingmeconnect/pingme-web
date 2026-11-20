@@ -915,7 +915,7 @@ pmExtraButtons=function(c){_extra2(c);const row=document.querySelector('#custome
 /* ===================== META & BILLING ===================== */
 const PM_META_URL='https://business.facebook.com/';
 function pmTier(t){if(!t)return '—';const m=String(t).match(/TIER_(\d+)(K?)/i);if(m)return Number(m[1])*(m[2]?1000:1)+' people / 24h';return /UNLIMITED/i.test(t)?'Unlimited':String(t)}
-function pmErrBox(e,what){return `<div class="warnbox" style="margin:8px 0"><b>${what} not available.</b> ${safe(e.message)}${e.hint?'<br><b>Fix:</b> '+safe(e.hint):''}</div>`}
+function pmErrBox(e,what){return `<div class="warnbox" style="margin:8px 0"><b>${what} not available.</b> ${safe(e.message)}${e.hint?'<br><b>Fix:</b> '+safe(e.hint):''}${e.detail?'<br><small>Meta detail: '+safe(e.detail)+'</small>':''}</div>`}
 async function pmRenderMeta(){
  const el=document.getElementById('page-meta');if(!el)return;await pmLoadSettings();
  el.innerHTML=`<div class="panelhead"><div><h1>◈ Meta &amp; Billing</h1><p>Your WhatsApp number, limits and message costs, live from Meta</p></div><button class="btn light small" id="pmMetaRef">↻ Refresh</button></div><div id="pmMetaBody"><div class="skel" style="height:120px"></div></div>`;
