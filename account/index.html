@@ -34,12 +34,19 @@ footer{text-align:center;color:var(--muted);padding:26px 16px;font-size:12px}
 <main>
 <section id="loginPanel" class="panel">
   <h1>Welcome to your PingMe account</h1>
-  <p class="muted">Already activated? Sign in with your registered email (or mobile) and the password you created. Not activated yet? Send ACTIVATE and your Customer ID to PingMe on WhatsApp, then finish at <a href="/activate/">pingmeconnect.in/activate</a>.</p>
-  <div class="field"><label for="email">Registered email or mobile number</label><input id="email" type="text" autocomplete="username" placeholder="you@example.com" required></div>
-  <div class="field"><label for="loginPassword">Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Your PingMe password"></div>
+  <p class="muted">Sign in with your <b>registered email</b> or <b>mobile number</b> and your PingMe password.</p>
+  <div class="field"><label for="email">Email or mobile number</label><input id="email" type="text" autocomplete="username" inputmode="email" placeholder="you@example.com  or  9876543210" required></div>
+  <div class="field"><label for="loginPassword">Password</label><div style="display:flex;gap:8px"><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Your PingMe password" style="flex:1"><button type="button" id="showPw" class="secondary" aria-label="Show or hide password">Show</button></div></div>
   <button id="signInPw">Sign in</button>
-  <p class="muted small" style="margin:14px 0 6px">Forgot your password or never set one? Get a one-time email link instead:</p>
-  <button id="sendLink" class="secondary">Send secure sign-in link</button>
+  <p class="small" style="margin:14px 0 0"><a href="#" id="forgotLink">Forgot your password?</a> &nbsp;·&nbsp; <a href="/activate/">Activate my account</a></p>
+  <div id="forgotBox" class="hidden" style="margin-top:14px;border-top:1px solid var(--line);padding-top:14px">
+    <b>Reset your password</b>
+    <p class="muted small" style="margin:6px 0 10px"><b>Have an email on your account?</b> Enter it and we’ll email you a reset link (free).</p>
+    <div class="field"><label for="resetEmail">Registered email</label><input id="resetEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
+    <button id="sendReset" class="secondary">Email me a reset link</button>
+    <p class="muted small" style="margin:14px 0 8px"><b>No email, or no mail arrived?</b> Message PingMe on WhatsApp. We’ll verify you and set a temporary password.</p>
+    <a id="waHelp" class="btn outline" target="_blank" rel="noopener">Ask PingMe on WhatsApp</a>
+  </div>
   <p id="loginMessage" class="status muted" role="status" aria-live="polite"></p>
   <div class="notice">This portal is for existing registered customers. New customers must first be registered by PingMe. Public QR scanning does not require customer login.</div>
 </section>
@@ -50,6 +57,7 @@ footer{text-align:center;color:var(--muted);padding:26px 16px;font-size:12px}
     <a href="#overview">Overview</a><a href="#profilePanel">My Profile</a><a href="#qrPanel">My QR Code</a><a href="#creditsPanel">Credits & Subscription</a><a href="#activityPanel">Activity</a><a href="#morePanel">More</a>
   </nav>
   <section id="overview" class="panel">
+    <div id="lowCreditBanner" class="notice warning" style="display:none;margin-bottom:12px"></div>
     <h2>Account overview</h2>
     <div class="grid">
       <div class="metric"><small>Customer ID</small><b id="customerId">—</b></div>
@@ -99,6 +107,28 @@ footer{text-align:center;color:var(--muted);padding:26px 16px;font-size:12px}
   <section id="activityPanel" class="panel">
     <h2>Scan & Alert History</h2>
     <p class="muted">Activity history will appear here when the customer-safe activity feed is connected. No sample or estimated activity is shown.</p>
+  </section>
+  <section id="alertPanel" class="panel">
+    <h2>Where should we send your alerts?</h2>
+    <p class="muted small">Every <b>WhatsApp number</b> that receives an alert uses <b>1 credit</b>. <b>Email alerts are free.</b> Your primary number is always on.</p>
+    <div class="metric"><small>Primary WhatsApp number (always on)</small><b id="alPrimary">—</b><small>This number is locked. To change it, use “Request mobile number change” above.</small></div>
+    <div id="alSecondary" style="margin-top:14px"></div>
+    <div style="margin-top:14px;border-top:1px solid var(--line);padding-top:14px">
+      <label style="display:flex;gap:10px;align-items:center;font-weight:700"><input type="checkbox" id="alEmailOn" style="width:20px;height:20px"> Send alerts to my email too</label>
+      <div class="field" style="margin-top:8px"><label for="alEmail">Alert email address</label><input id="alEmail" type="email" autocomplete="email" placeholder="alerts@example.com"></div>
+    </div>
+    <div class="row" style="margin-top:12px"><button id="saveAlerts">Save alert settings</button></div>
+    <p id="alertMessage" class="status muted" role="status"></p>
+  </section>
+  <section id="pwPanel" class="panel">
+    <h2>Password</h2>
+    <p id="pwHint" class="muted small">Change the password you use to sign in. Use at least 8 characters with a letter and a number.</p>
+    <div class="grid">
+      <div class="field"><label for="newPw">New password</label><input id="newPw" type="password" autocomplete="new-password"></div>
+      <div class="field"><label for="newPw2">Confirm new password</label><input id="newPw2" type="password" autocomplete="new-password"></div>
+    </div>
+    <div class="row"><button id="savePw">Update password</button></div>
+    <p id="pwMessage" class="status muted" role="status"></p>
   </section>
   <section id="morePanel" class="panel">
     <h2>Orders, Referrals & Support</h2>
@@ -169,35 +199,136 @@ async function loadAccount(){
  const already=await db.from('pingme_customers').select('id').eq('auth_user_id',user.id).maybeSingle();
  const {error:claimError}=already.data?{error:null}:await db.rpc('pingme_claim_customer_account');
  if(claimError){$('loginPanel').classList.remove('hidden');showStatus('loginMessage',safeError(claimError,'Account linking is not ready. Please contact PingMe support.'),'warning');return}
- const {data,error}=await db.from('pingme_customers').select('id,customer_id,qr_token,name,mobile,email,address,status,subscription_start,subscription_expiry,paid_credits,test_credits').eq('auth_user_id',user.id).maybeSingle();
+ const {data,error}=await db.from('pingme_customers').select('*').eq('auth_user_id',user.id).maybeSingle();
  if(error||!data){$('loginPanel').classList.remove('hidden');showStatus('loginMessage','Your verified email is not linked to a PingMe customer account. Please contact PingMe support.','warning');return}
  currentCustomer=data;$('accountPanel').classList.remove('hidden');setText('accountEmail',user.email||'');
- setText('customerId',data.customer_id);setText('status',data.status);setText('paidCredits',data.paid_credits);setText('testCredits',data.test_credits);
+ setText('customerId',data.customer_id);setText('status',data.status);setText('paidCredits',data.paid_credits);try{const lc=document.getElementById('lowCreditBanner'),pc=Number(data.paid_credits)||0;if(data.status==='Active'&&pc<=20){lc.style.display='block';lc.innerHTML='<b>'+(pc<=0?'You have no credits left – alerts will stop.':'Only '+pc+' credits left.')+'</b> Recharge on WhatsApp: <a href="https://wa.me/919150047587?text='+encodeURIComponent('Hi PingMe, please recharge my account '+data.customer_id)+'" target="_blank" rel="noopener">message PingMe</a>'}else lc.style.display='none'}catch(e){}setText('testCredits',data.test_credits);
  setText('subscriptionStart',friendlyDate(data.subscription_start));setText('subscriptionExpiry',friendlyDate(data.subscription_expiry));
  $('profileName').value=data.name||'';$('profileMobile').value=data.mobile||'';$('profileEmail').value=data.email||user.email||'';$('profileAddress').value=data.address||'';
  setText('qrCustomer',data.customer_id);
  // Preserve the existing public route and identifier already used by Admin-generated QR codes.
  qrDestination=location.origin+'/?t='+encodeURIComponent(data.customer_id);
  $('openScanner').href=qrDestination;
+ renderAlerts(data);
  await buildBrandedQr();
+ if(recoveryMode){showStatus('pwMessage','Choose your new password below.','warning');$('pwPanel').scrollIntoView({behavior:'smooth',block:'start'})}
 }
+const PM_API='https://pingme-api.pingmeconnect.workers.dev',PM_WA='919150047587';
+let recoveryMode=/type=recovery/.test(location.hash);
+db.auth.onAuthStateChange(ev=>{if(ev==='PASSWORD_RECOVERY')recoveryMode=true});
+const PW_RULE=/^(?=.*[A-Za-z])(?=.*\d).{8,72}$/;
+$('showPw').onclick=()=>{const i=$('loginPassword'),s=i.type==='password';i.type=s?'text':'password';$('showPw').textContent=s?'Hide':'Show'};
 $('signInPw').onclick=async()=>{
  const id=$('email').value.trim(),pw=$('loginPassword').value;
- if(!id||!pw){showStatus('loginMessage','Enter your email (or mobile) and password.','warning');return}
+ if(!id||!pw){showStatus('loginMessage','Enter your email or mobile number and your password.','warning');return}
  const digits=id.replace(/\D/g,'');
- const cred=id.includes('@')?{email:id,password:pw}:(digits.length>=10&&digits.length<=12?{phone:'+'+(digits.length===10?'91'+digits:digits),password:pw}:null);
- if(!cred){showStatus('loginMessage','Enter a valid email address or 10-digit mobile number.','warning');return}
+ if(!id.includes('@')&&(digits.length<10||digits.length>12)){showStatus('loginMessage','Enter a valid email address or 10-digit mobile number.','warning');return}
  $('signInPw').disabled=true;showStatus('loginMessage','Signing in…');
- const {error}=await db.auth.signInWithPassword(cred);
+ let err=null;
+ try{
+  if(id.includes('@')){({error:err}=await db.auth.signInWithPassword({email:id,password:pw}))}
+  else{
+   const r=await fetch(PM_API+'/api/customer/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({identifier:id,password:pw})});
+   const j=await r.json().catch(()=>({}));
+   if(!r.ok)err={message:j.error||'failed'};
+   else{const s=await db.auth.setSession({access_token:j.access_token,refresh_token:j.refresh_token});err=s.error}
+  }
+ }catch(e){err=e}
  $('signInPw').disabled=false;
- if(error){showStatus('loginMessage','Sign-in failed. Check your email/mobile and password, or use the email link below.','warning');return}
- $('loginPassword').value='';showStatus('loginMessage','');await loadAccount();};
+ if(err){showStatus('loginMessage','Sign-in failed. Check your email or mobile and your password. Forgot it? Tap “Forgot your password?”.','warning');return}
+ $('loginPassword').value='';showStatus('loginMessage','');await loadAccount();
+};
 $('loginPassword').addEventListener('keydown',e=>{if(e.key==='Enter')$('signInPw').click()});
-$('sendLink').onclick=async()=>{const email=$('email').value.trim();if(!email){showStatus('loginMessage','Enter your registered email.','warning');return}
- $('sendLink').disabled=true;showStatus('loginMessage','Sending secure sign-in link…');
- if(!email.includes('@')){showStatus('loginMessage','The email link needs your registered email address.','warning');return}
- const {error}=await db.auth.signInWithOtp({email,options:{emailRedirectTo:location.origin+'/account/'}});
- $('sendLink').disabled=false;showStatus('loginMessage',error?error.message:'Check your email for the secure PingMe sign-in link.');};
+$('email').addEventListener('keydown',e=>{if(e.key==='Enter')$('loginPassword').focus()});
+const waText=()=>'Hello PingMe, I forgot my password. My registered mobile/email: '+($('email').value.trim()||'(please add)')+'.';
+$('forgotLink').onclick=e=>{e.preventDefault();$('forgotBox').classList.toggle('hidden');const em=$('email').value.trim();if(em.includes('@'))$('resetEmail').value=em;$('waHelp').href='https://wa.me/'+PM_WA+'?text='+encodeURIComponent(waText())};
+$('email').addEventListener('input',()=>{$('waHelp').href='https://wa.me/'+PM_WA+'?text='+encodeURIComponent(waText())});
+$('sendReset').onclick=async()=>{
+ const email=$('resetEmail').value.trim();
+ if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){showStatus('loginMessage','Enter the email registered with PingMe.','warning');return}
+ $('sendReset').disabled=true;
+ await db.auth.resetPasswordForEmail(email,{redirectTo:location.origin+'/account/'});
+ $('sendReset').disabled=false;
+ showStatus('loginMessage','If that email is registered, a reset link is on its way. Check your inbox and spam folder. Nothing arrived? Use the WhatsApp option below.','success');
+};
+$('savePw').onclick=async()=>{
+ const a=$('newPw').value,b=$('newPw2').value;
+ if(!PW_RULE.test(a)){showStatus('pwMessage','Use at least 8 characters with a letter and a number.','warning');return}
+ if(a!==b){showStatus('pwMessage','The two passwords do not match.','warning');return}
+ $('savePw').disabled=true;
+ const {error}=await db.auth.updateUser({password:a});
+ $('savePw').disabled=false;
+ if(error){showStatus('pwMessage','Could not update the password. Please sign in again and retry.','warning');return}
+ $('newPw').value='';$('newPw2').value='';recoveryMode=false;showStatus('pwMessage','Password updated. Use it next time you sign in.','success');
+};
+
+/* ===== Alert numbers & email ===== */
+const PM_WA_NUMBER='+91 91500 47587';
+const fmtNum=n=>{const d=String(n||'').replace(/\D/g,'').slice(-10);return d.length===10?d.slice(0,5)+' '+d.slice(5):d};
+const SEC_MSG={invalid_number:'Enter a valid 10-digit Indian mobile number.',same_as_primary:'That is already your primary number.',already:'That number is already added.',number_limit:'This number is already linked to the maximum number of PingMe accounts.',not_eligible:'Alert numbers are available for active accounts only.',auth_required:'Please sign in again.',invalid_email:'Enter a valid email address.'};
+const secMsg=r=>r&&r.result==='change_limit'?'You changed your alert number recently. You can change it again in '+r.days_left+' day(s). Contact PingMe if it is urgent.':(SEC_MSG[r&&r.result]||'Something went wrong. Please try again.');
+async function refreshAlerts(){const {data:{user}}=await db.auth.getUser();if(!user)return;const {data}=await db.from('pingme_customers').select('*').eq('auth_user_id',user.id).maybeSingle();if(data){currentCustomer=data;renderAlerts(data)}}
+function renderAlerts(c){
+ setText('alPrimary',fmtNum(c.mobile));
+ const box=$('alSecondary');
+ if(c.secondary_pending){
+  box.innerHTML=`<div class="notice warning"><b>Waiting for ${fmtNum(c.secondary_pending)} to confirm</b><br>Ask that person to open WhatsApp and send <b>JOIN ${c.customer_id}</b> to <b>${PM_WA_NUMBER}</b> from <b>that number</b>. They will get a 6-digit code. Enter it here:</div>
+   <div class="field" style="margin-top:10px"><label for="alCode">6-digit code</label><input id="alCode" inputmode="numeric" maxlength="6" placeholder="123456"></div>
+   <div class="row"><button id="alVerify">Confirm number</button><button id="alCancel" class="secondary">Cancel</button></div>`;
+  $('alVerify').onclick=verifySecondary;$('alCancel').onclick=removeSecondary;
+ }else if(c.secondary_mobile){
+  box.innerHTML=`<div class="metric"><small>Second WhatsApp number (verified ✓)</small><b>${fmtNum(c.secondary_mobile)}</b></div>
+   <label style="display:flex;gap:10px;align-items:center;font-weight:700;margin-top:10px"><input type="checkbox" id="alSecOn" style="width:20px;height:20px" ${c.alert_secondary?'checked':''}> Send alerts to this number too (1 extra credit per alert)</label>
+   <div class="row" style="margin-top:10px"><button id="alChange" class="secondary">Change number</button><button id="alRemove" class="secondary">Remove</button></div>
+   <div id="alChangeBox" class="hidden" style="margin-top:10px"><div class="field"><label for="alNewSec">New number</label><input id="alNewSec" type="tel" placeholder="98765 43210"></div><button id="alChangeGo">Continue</button><p class="muted small">You can change this number once every 30 days. The new number must confirm with a code.</p></div>`;
+  $('alChange').onclick=()=>$('alChangeBox').classList.toggle('hidden');
+  $('alChangeGo').onclick=()=>addSecondary($('alNewSec').value);
+  $('alRemove').onclick=removeSecondary;
+ }else{
+  box.innerHTML=`<div class="field"><label for="alNewSec">Add a second WhatsApp number (optional)</label><input id="alNewSec" type="tel" placeholder="98765 43210"></div>
+   <button id="alAdd" class="secondary">Add number</button>
+   <p class="muted small">Useful if you might miss an alert on your primary number, for example a family member's number. That person must confirm by sending a WhatsApp message, so nobody is added without agreeing.</p>`;
+  $('alAdd').onclick=()=>addSecondary($('alNewSec').value);
+ }
+ $('alEmailOn').checked=c.alert_email!==false;
+ $('alEmail').value=c.alert_email_address||c.email||'';
+}
+async function addSecondary(v){
+ showStatus('alertMessage','Saving…');
+ const {data,error}=await db.rpc('pingme_secondary_set',{p_mobile:String(v||'')});
+ if(error||!data||data.result!=='ok'){showStatus('alertMessage',error?'Could not save. Please try again.':secMsg(data),'warning');return}
+ showStatus('alertMessage','Saved. Now the second number must confirm it (see the steps above).','success');await refreshAlerts();
+}
+async function removeSecondary(){
+ if(!confirm('Remove the second number? You can add a different one again only after 30 days.'))return;
+ const {data,error}=await db.rpc('pingme_secondary_remove');
+ if(error||!data||!['ok','nothing'].includes(data.result)){showStatus('alertMessage','Could not remove it. Please try again.','warning');return}
+ showStatus('alertMessage','Removed.','success');await refreshAlerts();
+}
+async function verifySecondary(){
+ const code=($('alCode').value||'').trim();
+ if(!/^\d{6}$/.test(code)){showStatus('alertMessage','Enter the 6-digit code.','warning');return}
+ $('alVerify').disabled=true;showStatus('alertMessage','Checking…');
+ try{
+  const {data:{session}}=await db.auth.getSession();
+  const r=await fetch(PM_API+'/api/customer/secondary-verify',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+(session?.access_token||'')},body:JSON.stringify({code})});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok){showStatus('alertMessage',j.error||'Could not verify the code.','warning');$('alVerify').disabled=false;return}
+  showStatus('alertMessage','Number confirmed. It will now receive your alerts.','success');await refreshAlerts();
+ }catch(e){showStatus('alertMessage','Network problem. Please try again.','warning');$('alVerify').disabled=false}
+}
+$('saveAlerts').onclick=async()=>{
+ const c=currentCustomer||{};const typed=$('alEmail').value.trim();
+ const addr=typed&&typed.toLowerCase()!==String(c.email||'').toLowerCase()?typed:'';
+ if(typed&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(typed)){showStatus('alertMessage','Enter a valid email address.','warning');return}
+ if($('alEmailOn').checked&&!typed){showStatus('alertMessage','Enter an email address to receive email alerts.','warning');return}
+ $('saveAlerts').disabled=true;
+ const sec=$('alSecOn')?$('alSecOn').checked:false;
+ const {data,error}=await db.rpc('pingme_set_alert_prefs',{p_alert_secondary:sec,p_alert_email:$('alEmailOn').checked,p_email_address:addr});
+ $('saveAlerts').disabled=false;
+ if(error||!data||data.result!=='ok'){showStatus('alertMessage',error?'Could not save. Please try again.':secMsg(data),'warning');return}
+ showStatus('alertMessage','Alert settings saved. They apply to your next alert.','success');await refreshAlerts();
+};
 $('signOut').onclick=async()=>{await db.auth.signOut();location.reload()};
 $('saveProfile').onclick=async()=>{
  if(!currentCustomer)return;const name=$('profileName').value.trim(),address=$('profileAddress').value.trim();
