@@ -40,7 +40,7 @@
     "@keyframes pmBuyPulse{0%,100%{box-shadow:0 8px 20px rgba(0,0,60,.4),0 0 0 0 rgba(255,77,109,.55)}50%{box-shadow:0 8px 20px rgba(0,0,60,.4),0 0 0 9px rgba(255,77,109,0)}}",
     "#buyModal button[onclick=\"orderStarterKitWhatsApp()\"]{background:linear-gradient(115deg,#25d366,#0a8f43)!important;color:#fff!important}",
     "@media (prefers-reduced-motion:reduce){html body #appShell .action-button,html body #appShell .action-button::after{animation:none!important}}",
-    "html body #appShell .story-image-frame{background:radial-gradient(circle at 50% 40%,#2b3fd1,#10104f)!important;box-shadow:0 18px 38px rgba(0,0,40,.55),0 0 0 3px rgba(255,255,255,.35),inset 0 2px 0 rgba(255,255,255,.4)!important;border-radius:24px!important;overflow:hidden;aspect-ratio:16/9!important;max-height:none!important;height:auto!important;min-height:0!important;flex:0 0 auto!important;align-self:center!important}",
+    "html body #appShell .story-image-frame{background:radial-gradient(circle at 50% 40%,#2b3fd1,#10104f)!important;box-shadow:0 18px 38px rgba(0,0,40,.55),0 0 0 3px rgba(255,255,255,.35),inset 0 2px 0 rgba(255,255,255,.4)!important;border-radius:24px!important;overflow:hidden;aspect-ratio:3/2!important;max-height:none!important;height:auto!important;min-height:0!important;flex:0 0 auto!important;align-self:center!important}",
     "html body #appShell #waitingStoryImage,html body #storyDemoImage{object-fit:contain!important;object-position:center!important;width:100%!important;height:100%!important;image-rendering:auto;filter:drop-shadow(0 8px 14px rgba(0,0,0,.35))}",
     "html body #appShell #waitingState .waiting-visual{padding-top:50px!important;margin-bottom:8px!important}",
     "html body #appShell #waitingState .waiting-visual img.waiting-mascot{width:132px!important;height:132px!important;max-width:none!important;border-radius:50%!important;object-fit:contain!important;background:radial-gradient(circle at 35% 30%,#fff,#d6e6ff)!important;box-shadow:0 14px 26px rgba(0,0,50,.5),0 0 0 4px rgba(255,255,255,.85),inset 0 -6px 12px rgba(40,70,200,.25)!important;padding:4px}",
@@ -506,5 +506,136 @@
     var mo2 = new MutationObserver(sync);
     function boot() { mo2.observe(document.getElementById("appShell") || document.body, { subtree: true, attributes: true, attributeFilter: ["class"] }); sync(); }
     if (document.body) boot(); else document.addEventListener("DOMContentLoaded", boot);
+  })();
+
+  /* ---- (7) Fresh story scenes drawn in code (no picture files): instant load, always sharp, text follows the chosen language. ---- */
+  (function () {
+    var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion:reduce)").matches;
+    var css5 = [
+      ".pm-scene{position:absolute;inset:0;overflow:hidden;border-radius:inherit;font-size:4px;isolation:isolate}",
+      ".pm-scene .bg{position:absolute;inset:0}",
+      ".pm-scene .ground{position:absolute;left:-5%;right:-5%;bottom:0;height:30%}",
+      ".pm-scene .it{position:absolute;line-height:1;transform:translate(-50%,-50%);filter:drop-shadow(0 .7em .5em rgba(0,0,40,.4));animation:pmzIn .7s cubic-bezier(.2,1.4,.4,1) both}",
+      ".pm-scene .it>b{display:block;font-weight:400;animation:pmzFl 3s ease-in-out infinite}",
+      ".pm-scene .it.sw>b{animation:pmzSw 2.4s ease-in-out infinite}",
+      ".pm-scene .it.pu>b{animation:pmzPu 1.4s ease-in-out infinite}",
+      ".pm-scene .it.st>b{animation:none}",
+      "@keyframes pmzIn{from{opacity:0;scale:.4}to{opacity:1;scale:1}}",
+      "@keyframes pmzFl{0%,100%{transform:translateY(0)}50%{transform:translateY(-.9em)}}",
+      "@keyframes pmzSw{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}",
+      "@keyframes pmzPu{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}",
+      ".pm-scene .head{position:absolute;left:50%;top:4%;transform:translateX(-50%);max-width:92%;padding:1em 2.6em;border-radius:99em;background:#fff;color:#14123f;font:900 5.2em/1.1 'Plus Jakarta Sans','Noto Sans Tamil',system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 .8em 2em rgba(0,0,50,.35);z-index:5;animation:pmzIn .6s ease both}",
+      ".pm-scene .ph{position:absolute;transform:translate(-50%,-50%) rotate(var(--r,0deg));border-radius:6em;background:linear-gradient(160deg,#1e293b,#020617);padding:1.6em;box-shadow:0 1.6em 3em rgba(0,0,40,.55),inset 0 0 0 .5em #475569;animation:pmzIn .7s cubic-bezier(.2,1.4,.4,1) both}",
+      ".pm-scene .ph .sc{position:absolute;inset:1.6em;border-radius:4.6em;background:linear-gradient(180deg,#eff6ff,#c7d2fe);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.4em;overflow:hidden}",
+      ".pm-scene .ph .scan{position:absolute;left:8%;right:8%;height:.9em;background:#22d3ee;box-shadow:0 0 2em 1em rgba(34,211,238,.7);animation:pmzScan 1.6s ease-in-out infinite}",
+      "@keyframes pmzScan{0%,100%{top:20%}50%{top:78%}}",
+      ".pm-scene .msg{background:#fff;color:#14123f;border-radius:2.4em;padding:1.2em 2.2em;font:800 3.8em/1.2 'Plus Jakarta Sans','Noto Sans Tamil',system-ui,sans-serif;box-shadow:0 .5em 1.2em rgba(0,0,50,.25);margin:0 1.6em}",
+      ".pm-scene .msg.g{background:#25d366;color:#fff}",
+      ".pm-scene .tag{position:absolute;transform:translate(-50%,-50%) rotate(-6deg);background:linear-gradient(135deg,#facc15,#f97316);color:#14123f;padding:1em 3em;border-radius:3em;font:900 8em/1 'Plus Jakarta Sans',system-ui,sans-serif;box-shadow:0 1em 2em rgba(0,0,40,.4);animation:pmzPuT 1.4s ease-in-out infinite}",
+      "@keyframes pmzPuT{0%,100%{transform:translate(-50%,-50%) rotate(-6deg) scale(1)}50%{transform:translate(-50%,-50%) rotate(-6deg) scale(1.12)}}",
+      ".pm-scene .spk{position:absolute;width:1.6em;height:1.6em;border-radius:50%;background:#fff;opacity:.8;box-shadow:0 0 1.6em .5em rgba(255,255,255,.8);animation:pmzSp 2.6s ease-in-out infinite}",
+      "@keyframes pmzSp{0%,100%{opacity:.1;transform:scale(.5)}50%{opacity:.95;transform:scale(1.3)}}",
+      "html body #appShell .story-image-frame #waitingStoryImage,html body #appShell #waitingStoryImage,html body #waitingStoryImage,html body #storyDemoImage,html body .story-demo-overlay #storyDemoImage{display:none!important;visibility:hidden!important;width:0!important;height:0!important}",
+      "#pmSceneDemo{position:relative;width:100%;aspect-ratio:3/2;border-radius:18px;overflow:hidden}",
+      "@media (prefers-reduced-motion:reduce){.pm-scene *{animation:none!important}}"
+    ].join("");
+    var st5 = document.createElement("style"); st5.textContent = css5; document.head.appendChild(st5);
+
+    /* simple fixed QR-looking tile drawn as crisp SVG */
+    function qr(size) {
+      var g = ["1111111", "1000001", "1011101", "1011101", "1011101", "1000001", "1111111"], r = "";
+      var pat = "0101101001011010010110100101101001011010".split("");
+      for (var y = 0; y < 9; y++) for (var x = 0; x < 9; x++) {
+        var fx = (x < 7 && y < 7) ? g[y][x] === "1" : null;
+        var on = fx !== null ? fx : (pat[(x * 7 + y * 3) % pat.length] === "1");
+        if (x >= 7 && y < 7 && x === 7) on = false;
+        if (on) r += "<rect x='" + x + "' y='" + y + "' width='1' height='1'/>";
+      }
+      return "<svg viewBox='0 0 9 9' width='" + size + "' height='" + size + "' style='background:#fff;border-radius:6px;padding:2px;box-shadow:0 .4em .8em rgba(0,0,0,.3)' shape-rendering='crispEdges'><g fill='#14123f'>" + r + "</g></svg>";
+    }
+    function I(e, x, y, s, cls, d) { s = s * 0.72; y = y + 7; return "<div class='it " + (cls || "") + "' style='left:" + x + "%;top:" + y + "%;font-size:" + s + "em;animation-delay:" + (d || 0) + "s'><b>" + e + "</b></div>"; }
+    function PH(x, y, w, h, inner, rot, d) { w = w * 0.85; h = h * 0.82; y = y + 6; return "<div class='ph' style='left:" + x + "%;top:" + y + "%;width:" + w + "em;height:" + h + "em;--r:" + (rot || 0) + "deg;animation-delay:" + (d || 0) + "s'><div class='sc'>" + inner + "</div></div>"; }
+    function SP() { var o = ""; for (var i = 0; i < 7; i++) o += "<i class='spk' style='left:" + (8 + i * 13) + "%;top:" + (22 + (i * 17) % 55) + "%;animation-delay:" + (i * .35) + "s'></i>"; return o; }
+    var TH = {
+      v: ["linear-gradient(165deg,#ffb36b 0%,#ff6b8b 42%,#5b4bdb 100%)", "linear-gradient(180deg,#334155,#0f172a)"],
+      b: ["linear-gradient(165deg,#5eead4 0%,#38bdf8 45%,#7c3aed 100%)", "linear-gradient(180deg,#a78bfa,#6d28d9)"],
+      p: ["linear-gradient(165deg,#fde68a 0%,#86efac 45%,#38bdf8 100%)", "linear-gradient(180deg,#4ade80,#15803d)"]
+    };
+    var QRBIG = function (n) { return qr(n); };
+    var SC = {
+      "vehicle_01_blocked": ["v", ["CAR BLOCKED!", "வண்டி அடைத்துவிட்டது!"], function () { return I("🚗", 26, 66, 26, "st", .1) + I("🚙", 58, 66, 30, "sw", .3) + I("😟", 84, 52, 15, "", .6) + I("❓", 70, 30, 10, "pu", .8) + I("🕒", 12, 36, 9, "", .9); }],
+      "vehicle_02_qr_found": ["v", ["QR STICKER FOUND!", "QR ஸ்டிக்கர் இருக்கு!"], function () { return I("🚗", 40, 64, 42, "st", .1) + "<div style='position:absolute;left:62%;top:58%;transform:translate(-50%,-50%) rotate(-6deg);animation:pmzIn .7s .5s both'>" + qr(46) + "</div>" + I("👀", 82, 44, 14, "", .9) + I("✨", 18, 40, 9, "pu", .8); }],
+      "vehicle_03_scan": ["v", ["SCAN & SEND", "ஸ்கேன் பண்ணி அனுப்புங்க"], function () { return PH(50, 60, 34, 62, qr(96) + "<i class='scan'></i>", -4, .1) + I("📸", 20, 58, 16, "pu", .5) + I("📍", 80, 52, 14, "", .7) + I("🚗", 14, 34, 11, "", .3); }],
+      "vehicle_04_alert_sent": ["v", ["ALERT SENT!", "தகவல் போயிடுச்சு!"], function () { return PH(30, 62, 34, 58, "<div class='msg g'>" + M("Alert sent ✓", "தகவல் அனுப்பப்பட்டது ✓") + "</div>", -5, .1) + I("✈️", 52, 46, 12, "", .5) + I("🙋‍♂️", 76, 62, 26, "", .7) + I("🔔", 84, 34, 10, "sw", .9); }],
+      "vehicle_05_owner_moves": ["v", ["PROBLEM SOLVED!", "பிரச்சினை முடிஞ்சது!"], function () { return I("🙋‍♂️", 22, 64, 24, "", .1) + I("🚙", 54, 64, 30, "sw", .3) + I("💨", 32, 70, 11, "", .5) + I("✅", 82, 40, 18, "pu", .8) + I("😊", 78, 70, 13, "", .6); }],
+      "vehicle_06_buy": ["v", ["GET PINGME", "PINGME வாங்குங்க"], function () { return I("📦", 28, 62, 28, "", .1) + "<div style='position:absolute;left:30%;top:50%;transform:translate(-50%,-50%);animation:pmzIn .7s .4s both'>" + qr(34) + "</div>" + I("🛒", 66, 62, 24, "sw", .4) + "<div class='tag' style='left:72%;top:36%'>₹599</div>"; }],
+      "bag_01_found": ["b", ["BAG FOUND", "பை கிடைத்தது"], function () { return I("🎒", 38, 66, 32, "", .1) + I("🤔", 68, 52, 18, "", .5) + I("🚶", 86, 66, 15, "", .7) + I("❓", 52, 30, 9, "pu", .8); }],
+      "bag_02_qr_tag": ["b", ["QR TAG ON BAG", "பையில் QR tag"], function () { return I("🎒", 40, 64, 40, "st", .1) + "<div style='position:absolute;left:62%;top:60%;transform:translate(-50%,-50%) rotate(8deg);animation:pmzIn .7s .5s both'>" + qr(42) + "</div>" + I("👀", 84, 42, 13, "", .8); }],
+      "bag_03_scan": ["b", ["SCAN & SEND", "ஸ்கேன் பண்ணி அனுப்புங்க"], function () { return PH(50, 60, 34, 62, qr(96) + "<i class='scan'></i>", 4, .1) + I("🎒", 20, 62, 16, "", .4) + I("📸", 80, 56, 14, "pu", .6) + I("📍", 80, 32, 10, "", .8); }],
+      "bag_04_alert_sent": ["b", ["OWNER REPLIED", "owner reply பண்ணாங்க"], function () { return PH(30, 62, 34, 58, "<div class='msg g'>" + M("On my way 👍", "வந்துட்டேன் 👍") + "</div>", -5, .1) + I("🙋‍♀️", 72, 62, 26, "", .5) + I("💬", 86, 36, 11, "sw", .8) + I("🚫📞", 54, 36, 8, "pu", .9); }],
+      "bag_05_returned": ["b", ["BAG RETURNED!", "பை திரும்ப கிடைத்தது!"], function () { return I("🙋‍♀️", 30, 62, 26, "", .1) + I("🎒", 52, 68, 22, "sw", .3) + I("🤝", 68, 56, 14, "pu", .5) + I("😊", 82, 62, 18, "", .7) + I("🎉", 50, 32, 12, "pu", .9); }],
+      "bag_06_buy": ["b", ["GET PINGME", "PINGME வாங்குங்க"], function () { return I("🎒", 26, 64, 28, "", .1) + "<div style='position:absolute;left:30%;top:60%;transform:translate(-50%,-50%) rotate(6deg);animation:pmzIn .7s .4s both'>" + qr(26) + "</div>" + I("🛒", 66, 62, 24, "sw", .4) + "<div class='tag' style='left:72%;top:36%'>₹599</div>"; }],
+      "pet_01_family": ["p", ["PETS ARE FAMILY", "செல்லப்பிராணி குடும்பம்"], function () { return I("🐶", 30, 64, 32, "sw", .1) + I("👨‍👩‍👧", 62, 62, 28, "", .3) + I("❤️", 46, 34, 12, "pu", .6); }],
+      "pet_02_missing": ["p", ["PET IS LOST!", "செல்லப்பிராணி காணோம்!"], function () { return I("🌳", 18, 60, 22, "st", .1) + I("🐕", 50, 66, 24, "sw", .3) + I("😢", 78, 52, 16, "", .6) + I("❓", 52, 34, 11, "pu", .8); }],
+      "pet_03_found": ["p", ["PET FOUND", "பிராணி கிடைத்தது"], function () { return I("🧑", 32, 62, 26, "", .1) + I("🐕", 62, 68, 22, "sw", .3) + I("💡", 48, 32, 11, "pu", .6) + I("😮", 80, 52, 14, "", .8); }],
+      "pet_04_scan": ["p", ["SCAN THE COLLAR TAG", "காலர் tag-ஐ ஸ்கேன்"], function () { return PH(34, 60, 32, 60, qr(90) + "<i class='scan'></i>", -4, .1) + I("🐕", 70, 66, 22, "sw", .4) + "<div style='position:absolute;left:62%;top:56%;transform:translate(-50%,-50%);animation:pmzIn .7s .7s both'>" + qr(16) + "</div>"; }],
+      "pet_05_owner_alert": ["p", ["OWNER ALERTED", "owner-க்கு alert"], function () { return PH(30, 62, 34, 58, "<div class='msg g'>" + M("Found your pet 🐾", "உங்கள் செல்லப்பிராணி கிடைச்சுது 🐾") + "</div>", -5, .1) + I("😮", 72, 56, 22, "", .5) + I("🔔", 86, 30, 11, "sw", .8) + I("✈️", 52, 44, 11, "", .6); }],
+      "pet_06_reunion": ["p", ["HAPPY REUNION!", "சந்தோஷ சந்திப்பு!"], function () { return I("🧑", 34, 62, 26, "", .1) + I("🐶", 64, 68, 22, "sw", .3) + I("❤️", 49, 38, 14, "pu", .5) + I("🎉", 82, 38, 12, "pu", .8); }],
+      "pet_07_message": ["p", ["THANK YOU!", "நன்றி!"], function () { return PH(30, 62, 34, 58, "<div class='msg g'>" + M("Thank you! 🙏", "நன்றி! 🙏") + "</div>", -4, .1) + I("🐕", 68, 68, 22, "sw", .4) + I("🧑", 86, 62, 16, "", .6) + I("💛", 52, 32, 11, "pu", .8); }]
+    };
+    /* add the pet slides to the story list (page had only vehicle + lost&found) */
+    try {
+      if (typeof pingMeStories !== "undefined" && !pingMeStories.some(function (x) { return /^pet_/.test(x[0]); })) {
+        [["pet_01_family.png", "pet", "Our pet is part of the family.", "நம்ம செல்லப்பிராணி குடும்பத்தில் ஒருத்தர்!"],
+         ["pet_02_missing.png", "pet", "Oh no! Our pet is missing!", "ஐயோ! நம்ம செல்லப்பிராணியைக் காணோமே!"],
+         ["pet_03_found.png", "pet", "A kind person finds the pet.", "ஒரு நல்லவர் அந்தப் பிராணியைக் கண்டுபிடிக்கிறார்."],
+         ["pet_04_scan.png", "pet", "They scan the PingMe QR on the collar.", "காலர்ல இருக்கிற PingMe QR-ஐ ஸ்கேன் பண்றாங்க."],
+         ["pet_05_owner_alert.png", "pet", "The owner gets the alert instantly.", "owner-க்கு உடனே alert போயிடுது."],
+         ["pet_06_reunion.png", "pet", "Happy reunion! The pet is back home.", "சந்தோஷமான சந்திப்பு! செல்லப்பிராணி வீடு திரும்பியது."],
+         ["pet_07_message.png", "pet", "Thank you! No phone number needed.", "நன்றி! நம்பர் சொல்லவே வேண்டாம்."]].forEach(function (x) { pingMeStories.push(x); });
+      }
+    } catch (e) {}
+
+    function M(en, ta) { return langIdx() ? ta : en; }
+    function langIdx() { return (typeof currentLang !== "undefined" && currentLang === "ta") ? 1 : 0; }
+    function paint(host, item) {
+      if (!host) return;
+      var key = String(item[0]).replace(/\.(png|webp)$/, ""), d = SC[key];
+      var w = host.clientWidth || 340;
+      var html;
+      if (!d) html = "<div class='bg' style='background:" + TH.v[0] + "'></div>";
+      else html = "<div class='bg' style='background:" + TH[d[0]][0] + "'></div><div class='ground' style='background:" + TH[d[0]][1] + "'></div>" + SP() + d[2]() + "<div class='head'>" + d[1][langIdx()] + "</div>";
+      var sc = host.querySelector(".pm-scene");
+      if (!sc) { sc = document.createElement("div"); sc.className = "pm-scene"; host.insertBefore(sc, host.firstChild); }
+      sc.style.fontSize = (w / 100) + "px";
+      sc.innerHTML = html;
+    }
+    /* stop the old <img> from downloading anything */
+    function mute(img) { if (!img || img.__pmMuted) return; img.__pmMuted = 1; try { Object.defineProperty(img, "src", { configurable: true, get: function () { return ""; }, set: function () {} }); img.removeAttribute("src"); } catch (e) {} }
+
+    var origDemo = window.renderDemoStory;
+    window.renderWaitingStory = function () {
+      var item = pingMeStories[storyIndex % pingMeStories.length];
+      var frame = document.querySelector("#waitingStoryModule .story-image-frame"), cap = document.getElementById("waitingStoryCaption"),
+          count = document.getElementById("storyCount"), fill = document.getElementById("storyProgressFill");
+      if (!frame || !cap) return;
+      mute(document.getElementById("waitingStoryImage"));
+      paint(frame, item);
+      cap.textContent = storyText(item);
+      var bo = document.getElementById("storyBuyOverlay"); if (bo) bo.hidden = item[0] !== "vehicle_06_buy.png";
+      var db = document.querySelector("#waitingStoryModule .story-demo-button"); if (db) db.textContent = langIdx() ? "PINGME எப்படி வேலை செய்கிறது?" : "WHY PINGME?";
+      if (count) count.textContent = (storyIndex + 1) + "/" + pingMeStories.length;
+      if (fill) fill.style.width = (((storyIndex + 1) / pingMeStories.length) * 100) + "%";
+    };
+    if (typeof origDemo === "function") window.renderDemoStory = function () {
+      var img = document.getElementById("storyDemoImage"); mute(img);
+      try { origDemo(); } catch (e) {}
+      if (!img) return;
+      var host = document.getElementById("pmSceneDemo");
+      if (!host) { host = document.createElement("div"); host.id = "pmSceneDemo"; img.parentNode.insertBefore(host, img); }
+      paint(host, pingMeStories[demoStoryIndex]);
+    };
+    /* if a story is already on screen when this file loads, redraw it now */
+    try { if (document.getElementById("waitingStoryModule")) window.renderWaitingStory(); } catch (e) {}
   })();
 })();
