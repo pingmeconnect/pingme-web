@@ -9,6 +9,16 @@
   var cid = document.getElementById("cid"), otp = document.getElementById("otp");
   var pw = document.getElementById("pw"), pw2 = document.getElementById("pw2");
 
+  var agree = document.getElementById("agree"), agreeVersion = "";
+  function syncBtn() { submit.disabled = !agree.checked || !agreeVersion; }
+  agree.addEventListener("change", syncBtn);
+  submit.disabled = true;
+  fetch(API_BASE + "/api/agreement").then(function (r) { return r.json(); }).then(function (d) {
+    agreeVersion = d.version; var ol = document.getElementById("agreeText"); ol.textContent = "";
+    d.items.forEach(function (s) { var li = document.createElement("li"); li.textContent = s; ol.appendChild(li); });
+    document.getElementById("agreeTa").textContent = d.ta_summary || ""; syncBtn();
+  }).catch(function () { document.getElementById("agreeText").innerHTML = "<li>Could not load. Please open the Genuine Use Declaration link above.</li>"; });
+
   function showError(text) { msg.textContent = text; msg.className = "msg err"; msg.hidden = false; }
   function clearMsg() { msg.hidden = true; msg.textContent = ""; }
 
@@ -29,6 +39,7 @@
     if (!/^\d{6}$/.test(code)) return showError("Please enter the six-digit code sent to your WhatsApp.");
     if (p1.length < 8 || p1.length > 72 || !/[A-Za-z]/.test(p1) || !/\d/.test(p1)) return showError("Password must be at least 8 characters and include a letter and a number.");
     if (p1 !== p2) return showError("The two passwords do not match.");
+    if (!agree.checked || !agreeVersion) return showError("Please tick the box to accept the Genuine Use Declaration and Terms.");
     if (/REPLACE-WITH/.test(API_BASE)) return showError("This page is not configured yet (API address missing).");
 
     submit.disabled = true; submit.textContent = "Activating…";
@@ -36,7 +47,7 @@
       var res = await fetch(API_BASE + "/api/activation/complete", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ customer_id: id, otp: code, password: p1, confirm_password: p2 })
+        body: JSON.stringify({ customer_id: id, otp: code, password: p1, confirm_password: p2, agree: true, agreement_version: agreeVersion })
       });
       var data = await res.json().catch(function () { return {}; });
       if (res.ok && data.success) {
@@ -49,7 +60,7 @@
     } catch (e) {
       showError("Could not reach PingMe. Check your internet connection and try again.");
     } finally {
-      submit.disabled = false; submit.textContent = "Activate Account";
+      submit.textContent = "Activate Account"; syncBtn();
     }
   });
 })();

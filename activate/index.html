@@ -48,6 +48,13 @@
       <label for="pw2">Confirm password</label>
       <input id="pw2" name="pw2" type="password" autocomplete="new-password" maxlength="72" required>
 
+      <div class="agree" id="agreeBox" style="margin:14px 0;padding:12px;border:1px solid #d8dee9;border-radius:10px;background:#f8fafc;font-size:14px;line-height:1.5">
+        <label style="display:flex;gap:10px;align-items:flex-start;cursor:pointer">
+          <input type="checkbox" id="agree" style="width:20px;height:20px;margin-top:2px;flex:none">
+          <span>I have read and agree to the <a href="/legal/genuine-use.html" target="_blank" rel="noopener">Genuine Use Declaration</a>, the <a href="/legal/terms.html" target="_blank" rel="noopener">Terms</a> and the <a href="/legal/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>. I will use PingMe only for genuine purposes.</span>
+        </label>
+        <details style="margin-top:8px"><summary style="cursor:pointer;color:#0b5ed7">Read the declaration here</summary><ol id="agreeText" style="margin:8px 0 0 18px;padding:0"><li>Loading…</li></ol><p id="agreeTa" style="margin:8px 0 0"></p></details>
+      </div>
       <div id="msg" class="msg" role="alert" aria-live="polite" hidden></div>
       <button type="submit" class="primary" id="submit">Activate Account</button>
     </form>
