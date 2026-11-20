@@ -279,4 +279,19 @@ if(x.payee_name){var pn=document.createElement("div");pn.style.cssText="font-siz
 if(x.note){var n=document.createElement("div");n.style.cssText="font-size:12px;color:#52627c;margin-top:4px";n.textContent=x.note;c.appendChild(n)}
 g.appendChild(c)})}).catch(function(){})})();
 </script>
+<script id="pmWelcomeVoice">
+/* Warm "Vanakkam! Welcome to PingMe" voice, once per visit. Browsers allow sound only after a first tap/click, so it plays on the first touch (or at once where the browser allows it).
+   To use a real recorded voice, upload /assets/welcome-en.mp3 and /assets/welcome-ta.mp3 - they are used automatically; otherwise the phone's en-IN / ta-IN voice speaks. */
+(function(){
+  var done=false,busy=false;
+  try{if(sessionStorage.getItem("pmWelcomed")==="1")return}catch(e){}
+  function ta(){try{return document.documentElement.lang==="ta"}catch(e){return false}}
+  function pick(t){var v=[];try{v=speechSynthesis.getVoices()||[]}catch(e){}var best=null,bs=-1;v.forEach(function(x){var s=0,l=String(x.lang||"").replace("_","-"),n=String(x.name||"");if(t){if(/^ta(-|$)/i.test(l))s+=10}else{if(/^en-IN$/i.test(l))s+=10;else if(/^(hi|ta|te|ml|kn)-IN$/i.test(l))s+=4;else if(/^en(-|$)/i.test(l))s+=1}if(s>0){if(/female|heera|neerja|veena|lekha|priya|kalpana|google/i.test(n))s+=3;if(/male/i.test(n)&&!/female/i.test(n))s-=1}if(s>bs){bs=s;best=x}});return bs>0?best:null}
+  function tts(){try{if(!("speechSynthesis" in window)){busy=false;return}var t=ta(),u=new SpeechSynthesisUtterance(t?"வணக்கம்! பிங்மீக்கு வரவேற்கிறோம்.":"Vanakkam! Welcome to PingMe.");u.lang=t?"ta-IN":"en-IN";u.rate=.95;u.pitch=1.12;u.volume=1;var pv=pick(t);if(pv){u.voice=pv;u.lang=pv.lang||u.lang}u.onstart=function(){done=true;try{sessionStorage.setItem("pmWelcomed","1")}catch(e){}};u.onerror=function(){busy=false};u.onend=function(){busy=false};speechSynthesis.cancel();speechSynthesis.speak(u);setTimeout(function(){if(!done)busy=false},900)}catch(e){busy=false}}
+  function play(){if(done||busy)return;busy=true;try{var a=new Audio(ta()?"/assets/welcome-ta.mp3":"/assets/welcome-en.mp3");a.volume=1;a.addEventListener("error",tts,{once:true});var p=a.play();if(p&&p.then)p.then(function(){done=true;try{sessionStorage.setItem("pmWelcomed","1")}catch(e){}}).catch(function(err){if(err&&err.name==="NotAllowedError")busy=false;else tts()})}catch(e){tts()}}
+  try{if("speechSynthesis" in window){speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=function(){}}}catch(e){}
+  setTimeout(play,600);
+  ["pointerdown","touchstart","click","keydown"].forEach(function(ev){document.addEventListener(ev,function h(){if(done){document.removeEventListener(ev,h,true);return}play()},{capture:true,passive:true})});
+})();
+</script>
 </body></html>
