@@ -39,13 +39,13 @@ footer a{color:#1764df;text-decoration:none}
 <h1>Subscription, Credits &amp; Recharge Policy</h1>
 <div class="intro">Bharani Innovations · Madambakkam, Chennai – 600 126, Tamil Nadu, India</div>
 <p>============================================================</p>
-<p>The following are the intended launch prices only. Confirm that these match the live checkout before publishing:</p>
-<p>- PingMe Starter Kit: INR 599</p>
-<p>- Starter allowance: 250 credits</p>
+<p>The prices of the Starter Kit, the annual renewal and the recharge packs are published on pingmeconnect.in and are confirmed to you before you pay. The price shown at the time of your purchase or recharge applies to that transaction.</p>
+<p>- PingMe Starter Kit: <span data-price="kit" data-pre="INR ">as published on pingmeconnect.in</span></p>
+<p>- Starter allowance: <span data-price="included_credits" data-post=" credits">as published on pingmeconnect.in</span></p>
 <p>- Initial subscription: one year, if included with the purchased kit</p>
-<p>- Annual renewal: INR 149</p>
-<p>- Recharge: 250 credits for INR 99</p>
-<p>- Recharge: 500 credits for INR 149</p>
+<p>- Annual renewal: <span data-price="renewal" data-pre="INR ">as published on pingmeconnect.in</span></p>
+<p>- Recharge 1: <span data-price="recharge1_credits"></span> credits for <span data-price="recharge1_price" data-pre="INR "></span></p>
+<p>- Recharge 2: <span data-price="recharge2_credits"></span> credits for <span data-price="recharge2_price" data-pre="INR "></span></p>
 <h2>6.1 Credits</h2>
 <p>Credits are account-specific and cannot be transferred or exchanged for cash unless required by law or expressly approved by Bharani Innovations. Credit deductions, delivery status and balance are shown in the customer account/history.</p>
 <h2>6.2 Delivery-based deduction</h2>
@@ -60,4 +60,9 @@ footer a{color:#1764df;text-decoration:none}
 <a class="back" href="../index.html">← Back to PingMe</a>
 </article></main>
 <footer>© 2026 Bharani Innovations. All rights reserved. · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></footer>
+<script>
+(function(){fetch("https://pingme-api.pingmeconnect.workers.dev/api/prices").then(function(r){return r.json()}).then(function(p){
+document.querySelectorAll("[data-price]").forEach(function(e){var v=p[e.getAttribute("data-price")];if(!v)return;e.textContent=(e.getAttribute("data-pre")||"")+v+(e.getAttribute("data-post")||"");e.removeAttribute("hidden")});
+if(p.kit)document.querySelectorAll("a[data-order]").forEach(function(a){a.href=a.href.replace("Connect%20Kit.","Connect%20Kit%20priced%20at%20%E2%82%B9"+encodeURIComponent(p.kit)+".")})}).catch(function(){})})();
+</script>
 </body></html>
