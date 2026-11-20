@@ -3,455 +3,207 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#102b62">
-<title>My PingMe Account</title>
-<meta name="description" content="Secure PingMe customer account portal.">
+<meta name="theme-color" content="#071226">
+<meta name="description" content="PingMe helps people contact you privately when your vehicle, keys, luggage or belongings need attention. One scan. Instant connection.">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PingMe — One Scan. Instant Connection.">
+<meta property="og:description" content="A simple, private way to connect with the owner of a PingMe-tagged vehicle or belonging.">
+<meta property="og:image" content="https://pingmeconnect.in/assets/og-preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://pingmeconnect.in/">
+<title>PingMe — One Scan. Instant Connection.</title>
+<link rel="icon" href="/assets/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Tamil:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-:root{--navy:#0b1e45;--blue:#1768c5;--cyan:#20bfd2;--pink:#e64d91;--ink:#17233d;--muted:#66748c;--line:#e5ebf4;--bg:#f4f7fc;--green:#168653;--amber:#9a6500}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Inter,system-ui,Arial,sans-serif}
-header{background:linear-gradient(120deg,#0b1e45,#174b9b);color:#fff;padding:16px max(18px,calc((100vw - 1120px)/2));display:flex;align-items:center;justify-content:space-between;gap:18px}
-.brand img{width:170px;max-width:42vw;height:auto;display:block;background:#fff;border-radius:8px;padding:5px}.tag{font-size:11px;color:#d7e8ff;margin-top:5px;letter-spacing:.06em}
-main{max-width:1120px;margin:28px auto;padding:0 18px}.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 8px 28px #12315b0a;margin-bottom:17px}
-h1,h2,h3{margin:0 0 12px}h1{font-size:26px}h2{font-size:18px}h3{font-size:15px}.muted{color:var(--muted)}.small{font-size:12px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:12px}
-.metric{padding:16px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,#fff,#fbfdff)}.metric small{display:block;color:var(--muted)}.metric b{font-size:23px;color:var(--navy);overflow-wrap:anywhere}
-input,textarea,button{font:inherit}input,textarea{width:100%;padding:12px;border:1px solid #cdd7e6;border-radius:10px;margin:7px 0 13px;background:#fff}textarea{min-height:84px;resize:vertical}
-button,.btn{border:0;background:var(--blue);color:white;border-radius:10px;padding:11px 17px;font-weight:750;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:7px}
-button:disabled{opacity:.55;cursor:not-allowed}.secondary{background:#edf3fb;color:var(--navy)}.outline{background:#fff;color:var(--blue);border:1px solid #cbd9f2}
-.notice{background:#eef7ff;border:1px solid #cfe6ff;border-radius:12px;padding:13px;color:#214d7b;font-size:13px}.warning{background:#fff8e7;border-color:#f1d28c;color:#76530d}.success{background:#effaf4;border-color:#c7ecd7;color:#146b43}
-.hidden{display:none!important}.row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.field{min-width:0}.field label{font-size:12px;font-weight:750;color:#344563}.qrCanvas{width:min(100%,340px);height:auto;border:1px solid var(--line);border-radius:14px;background:white;padding:8px}.qrTools{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.status{font-size:12px;min-height:18px;margin-top:8px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}.tabs a{font-size:12px;font-weight:750;padding:8px 11px;border:1px solid var(--line);border-radius:9px;background:#fff;color:#24416f;text-decoration:none}
-/* dashboard */
-.hero{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.pmAv{width:76px;height:76px;border-radius:50%;background:linear-gradient(135deg,#1768c5,#20bfd2) center/cover no-repeat;color:#fff;font-weight:800;font-size:28px;display:flex;align-items:center;justify-content:center;flex:none;border:3px solid #fff;box-shadow:0 4px 14px #12315b33;position:relative;cursor:pointer}
-.pmAv .cam{position:absolute;right:-4px;bottom:-4px;width:26px;height:26px;border-radius:50%;background:#fff;color:#1768c5;font-size:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px #0003}
-.heroTxt{flex:1;min-width:170px}.heroTxt h1{margin:0;font-size:22px;overflow-wrap:anywhere}.pill{display:inline-block;font-size:12px;font-weight:800;padding:3px 10px;border-radius:99px;background:#effaf4;color:#146b43;border:1px solid #c7ecd7}.pill.off{background:#fff1f1;color:#9b1c1c;border-color:#f3c4c4}
-.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
-.tile{all:unset;box-sizing:border-box;cursor:pointer;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:4px;box-shadow:0 6px 20px #12315b0d;transition:transform .12s,box-shadow .12s}
-.tile:hover,.tile:focus-visible{transform:translateY(-2px);box-shadow:0 10px 26px #12315b1f;outline:2px solid #bcd3f5}
-.tile .ic{font-size:28px;line-height:1}.tile b{font-size:16px;color:var(--navy)}.tile span.sub{font-size:12.5px;color:var(--muted);overflow-wrap:anywhere}
-.backBtn{margin:0 0 12px;background:#edf3fb;color:var(--navy)}
-.linkBtn{all:unset;cursor:pointer;color:var(--blue);font-weight:750;font-size:13px}
-.secCard{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fbfdff}
-.secTop{display:flex;gap:12px;align-items:center}.secAv{width:44px;height:44px;border-radius:50%;background:#e8f1fd;display:flex;align-items:center;justify-content:center;font-size:22px;flex:none}
-.secName{font-size:17px;font-weight:800;color:var(--navy)}.secNum{font-size:13px;color:var(--muted)}
-.dashGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:14px}
-.dashGrid .metric{padding:12px}.dashGrid .metric b{font-size:16px;overflow-wrap:normal;white-space:nowrap}
-footer{text-align:center;color:var(--muted);padding:26px 16px;font-size:12px}
-#qrStage{position:absolute;left:-10000px;top:0;width:600px;height:600px;overflow:hidden}
-@media(max-width:600px){header{padding:14px 16px}.brand img{width:145px}main{margin-top:16px;padding:0 12px}.panel{padding:17px}h1{font-size:22px}.metric b{font-size:20px}.row>*{max-width:100%}.qrTools button{flex:1}}
+:root{--navy:#071226;--blue:#1764df;--cyan:#06b6d4;--pink:#db2777;--purple:#6d4ae6;--ink:#102044;--muted:#64748b;--paper:#f7faff;--line:#e4eaf4}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:"Plus Jakarta Sans","Noto Sans Tamil",Arial,sans-serif;color:var(--ink);background:#fff}a{color:inherit;text-decoration:none}.wrap{width:min(1160px,calc(100% - 40px));margin:auto}
+header{height:82px;display:flex;align-items:center;border-bottom:1px solid var(--line);background:#ffffffed;position:sticky;top:0;z-index:10;backdrop-filter:blur(14px)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:24px}.logo{width:156px;height:auto;display:block}.links{display:flex;align-items:center;gap:26px;font-size:13px;font-weight:700;color:#344563}.links a:hover{color:var(--blue)}.navLogin{white-space:nowrap}.menuToggle{display:none;border:1px solid #d7e2f2;background:#fff;color:#12346c;border-radius:10px;padding:10px 12px;font-weight:800}.mobileMenu{display:none}.btn{display:inline-flex;align-items:center;justify-content:center;border-radius:12px;padding:14px 21px;font-weight:800;font-size:14px;background:var(--blue);color:#fff;box-shadow:0 8px 22px #1764df30;transition:.2s}.btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px #1764df40}.btn.outline{background:#fff;color:var(--blue);border:1px solid #cbd9f2;box-shadow:none}
+.hero{background:radial-gradient(ellipse at 80% 15%,#e8f5ff 0,transparent 38%),linear-gradient(180deg,#f8fbff,#fff);padding:78px 0 70px;overflow:hidden}.heroGrid{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center}.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #d9e8ff;background:#fff;border-radius:999px;color:#2459a9;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.dot{width:7px;height:7px;border-radius:50%;background:#18b978}.hero h1{font-size:clamp(38px,5.2vw,62px);line-height:1.08;letter-spacing:-.055em;margin:20px 0 18px;color:var(--navy)}.hero h1 span{background:linear-gradient(90deg,var(--blue),var(--purple),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}.lead{font-size:17px;line-height:1.8;color:#52627c;max-width:570px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.trust{display:flex;gap:18px;flex-wrap:wrap;margin-top:28px;color:#63718a;font-size:12px;font-weight:700}.trust span:before{content:"✓";color:#159b55;font-weight:900;margin-right:7px}.heroArt{position:relative;min-height:390px;display:grid;place-items:center}.heroArt:before{content:"";position:absolute;width:330px;height:330px;border-radius:50%;background:linear-gradient(135deg,#d9edff,#f0e9ff);filter:blur(1px)}.heroArt img{position:relative;max-width:min(100%,440px);max-height:390px;object-fit:contain;filter:drop-shadow(0 22px 24px #1c3b6720)}
+section{padding:76px 0}.sectionHead{text-align:center;max-width:700px;margin:0 auto 38px}.kicker{color:var(--blue);font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.sectionHead h2{font-size:clamp(28px,3vw,39px);letter-spacing:-.04em;color:var(--navy);margin:12px 0}.sectionHead p{color:var(--muted);line-height:1.75;font-size:15px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.step,.use{border:1px solid var(--line);border-radius:20px;padding:25px;background:#fff;box-shadow:0 12px 34px #173b6b08}.num{width:38px;height:38px;border-radius:12px;background:#eaf2ff;color:var(--blue);display:grid;place-items:center;font-weight:900}.step h3,.use h3{margin:18px 0 8px;font-size:17px}.step p,.use p{color:var(--muted);font-size:13px;line-height:1.75;margin:0}
+.uses{background:var(--paper)}.useGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.use{text-align:center;padding:22px 16px}.use img{width:86px;height:86px;object-fit:contain}.use h3{margin:12px 0 7px}
+.offer{background:var(--navy);color:#fff;position:relative;overflow:hidden}.offer:before{content:"";position:absolute;width:460px;height:460px;border-radius:50%;background:#1764df35;filter:blur(65px);right:-100px;top:-190px}.offerGrid{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:45px;align-items:center}.offer h2{font-size:clamp(30px,4vw,44px);line-height:1.15;letter-spacing:-.04em;margin:12px 0}.offer p{color:#c1cce0;line-height:1.8;font-size:14px}.kit{background:#fff;color:var(--ink);border-radius:22px;padding:28px;box-shadow:0 24px 70px #0003}.kitTop{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.kit h3{font-size:20px;margin:0}.price{font-size:34px;font-weight:900;color:var(--navy)}.price small{font-size:12px;color:var(--muted);font-weight:600}.kit ul{padding-left:20px;color:#52627c;font-size:13px;line-height:2}.kit .btn{width:100%;margin-top:8px}
+.faq{max-width:780px;margin:auto}.faq details{border-bottom:1px solid var(--line);padding:18px 2px}.faq summary{font-weight:800;cursor:pointer;font-size:14px}.faq p{color:var(--muted);font-size:13px;line-height:1.7}
+footer{background:#050e20;color:#dce6f7;padding:42px 0 24px}.foot{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap}.foot img{width:142px;background:#fff;border-radius:8px;padding:5px}.foot p{font-size:12px;color:#9eacc3;line-height:1.8;max-width:360px}.footlinks{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:#c6d2e6}.copy{border-top:1px solid #26344c;margin-top:28px;padding-top:18px;color:#8292ad;font-size:11px}
+@media(max-width:800px){.links{display:none}.menuToggle{display:inline-flex}.navLogin{display:none}.mobileMenu.open{display:flex;position:absolute;top:81px;left:0;right:0;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 14px 24px #07122612;padding:16px 22px;flex-direction:column;gap:14px;z-index:20;font-size:14px;font-weight:800}.mobileMenu a{padding:8px 4px}.mobileMenu .mobileLogin{background:#1764df;color:#fff;border-radius:10px;text-align:center;padding:12px}.hero{padding:52px 0 42px}.heroGrid,.offerGrid{grid-template-columns:1fr}.heroArt{min-height:280px;grid-row:1}.heroArt img{max-height:280px}.hero h1{font-size:42px}.steps{grid-template-columns:1fr}.useGrid{grid-template-columns:repeat(2,1fr)}section{padding:56px 0}.offerGrid{gap:26px}}
+@media(max-width:420px){.wrap{width:min(100% - 30px,1160px)}.logo{width:132px}.hero h1{font-size:37px}.lead{font-size:15px}.useGrid{gap:10px}.use{padding:17px 10px}.actions .btn{width:100%}}
+
+/* Premium refinement: restrained surfaces, clearer hierarchy and accessible motion. */
+:root{scroll-padding-top:92px}
+header{box-shadow:0 4px 22px rgba(7,18,38,.045)}
+.logo{width:164px}
+.hero{padding:84px 0 78px;background:radial-gradient(ellipse at 78% 22%,rgba(115,91,238,.13),transparent 34%),radial-gradient(ellipse at 8% 8%,rgba(6,182,212,.10),transparent 32%),linear-gradient(180deg,#f7faff 0%,#fff 100%)}
+.hero h1{max-width:650px}
+.heroArt{min-height:420px}
+.heroArt:before{width:360px;height:360px;background:linear-gradient(140deg,#dff4ff,#eee8ff 58%,#ffe8f3);box-shadow:0 28px 80px rgba(35,78,150,.10)}
+.heroArt img{width:min(100%,460px);height:410px;object-fit:contain;transform:scale(1.02)}
+.eyebrow{box-shadow:0 5px 18px rgba(29,78,216,.05)}
+.btn{min-height:48px}
+.sectionHead{margin-bottom:42px}
+.step,.use{box-shadow:0 12px 36px rgba(18,48,92,.055);transition:transform .2s ease,box-shadow .2s ease}
+.step:hover,.use:hover{transform:translateY(-3px);box-shadow:0 18px 42px rgba(18,48,92,.09)}
+.step .num{border-radius:13px;background:linear-gradient(135deg,#e4f5ff,#eeeaff);color:#245bd3}
+.use img{width:92px;height:92px;object-fit:contain}
+.benefits{background:#fff}
+.benefitGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.benefit{padding:23px;border:1px solid #e4eaf4;border-radius:18px;background:linear-gradient(180deg,#fff,#fbfdff)}
+.benefitIcon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:#edf5ff;color:#1c63d5;font-size:20px}
+.benefit h3{font-size:15px;margin:14px 0 7px;color:#102044}
+.benefit p{font-size:13px;line-height:1.75;color:#64748b;margin:0}
+.offer{background:radial-gradient(ellipse at 82% 5%,rgba(96,75,220,.34),transparent 38%),linear-gradient(120deg,#071226,#101f43 65%,#17204b)}
+.kit{box-shadow:0 26px 75px rgba(0,0,0,.24);border:1px solid rgba(255,255,255,.55)}
+.price{letter-spacing:-.05em}
+.kit .btn{background:linear-gradient(100deg,#1764df,#5b50e6);box-shadow:0 10px 24px rgba(23,100,223,.22)}
+.faq details{padding:20px 4px}
+.faq summary{list-style:none;position:relative;padding-right:30px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:after{content:"+";position:absolute;right:4px;top:-4px;color:#2563eb;font-size:22px;font-weight:500}
+.faq details[open] summary:after{content:"−"}
+footer{background:linear-gradient(135deg,#050e20,#0b1831)}
+.footlinks a:hover{color:#fff;text-decoration:underline;text-underline-offset:4px}
+@media(max-width:800px){
+ .hero{padding:48px 0 46px}
+ .heroArt{min-height:260px;grid-row:1}
+ .heroArt:before{width:240px;height:240px}
+ .heroArt img{height:270px;max-height:270px}
+ .benefitGrid{grid-template-columns:1fr}
+}
+@media(max-width:420px){
+ .heroArt img{height:240px;max-height:240px}
+ .logo{width:138px}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
+}
+
+/* ---- launch refinements ---- */
+.btn.wa{background:linear-gradient(100deg,#16a34a,#25d366)!important;box-shadow:0 10px 24px rgba(37,211,102,.35)!important;color:#fff!important}
+.priceChip{display:inline-flex;align-items:center;gap:10px;margin:2px 0 18px;padding:9px 16px;border-radius:99px;background:#fff;border:1px solid #dbe6f7;box-shadow:0 8px 22px rgba(23,100,223,.1)}
+.priceChip b{font-size:22px;letter-spacing:-.03em;color:#1764df}.priceChip span{font-size:12px;font-weight:700;color:#52627c}
+.langBtn{margin-left:auto;margin-right:10px;border:1.5px solid #cfdcf3;background:#fff;color:#1764df;font:800 13px "Plus Jakarta Sans",Arial,sans-serif;padding:9px 14px;border-radius:99px;cursor:pointer}
+.langBtn:hover{background:#eef5ff}
+.useEmoji{font-size:64px;line-height:90px;height:90px}
+.useGrid{grid-template-columns:repeat(4,1fr)}
+.privacyBox{display:flex;gap:16px;align-items:center;margin:26px auto 0;max-width:860px;padding:20px 24px;border-radius:20px;background:linear-gradient(120deg,#eefaf3,#eef5ff);border:1px solid #cfe9dc}
+.privacyBox h3{margin:0 0 6px;font-size:16px;color:#102044}.privacyBox p{margin:0;font-size:13px;line-height:1.7;color:#4a5a73}.pbIcon{font-size:34px}
+.waFloat{position:fixed;right:16px;bottom:16px;z-index:30;display:flex;align-items:center;gap:8px;padding:12px 18px;border-radius:99px;background:linear-gradient(100deg,#16a34a,#25d366);color:#fff;font:800 14px "Plus Jakarta Sans",Arial,sans-serif;box-shadow:0 12px 28px rgba(22,163,74,.45)}
+.waFloat .waIc{font-size:20px}
+body{padding-bottom:78px}
+@media(max-width:800px){.useGrid{grid-template-columns:repeat(2,1fr)}.langBtn{margin-left:auto}.privacyBox{flex-direction:column;text-align:center}}
+@media(max-width:420px){.waFloat{left:14px;right:14px;justify-content:center}}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+/* Backward-compatible QR routing:
+   Existing Admin-generated QR codes use /?t=CUSTOMER_ID.
+   Keep those URLs unchanged and send scanners to the preserved scanner app. */
+(function(){
+  var p=new URLSearchParams(window.location.search);
+  if(p.has("t") && p.get("t")){
+    window.location.replace("/scan/?t="+encodeURIComponent(p.get("t")));
+  }
+})();
+</script>
 </head>
 <body>
-<header>
-  <div class="brand"><img src="/assets/pingme-logo.png" alt="Official PingMe logo"><div class="tag">ONE SCAN. INSTANT CONNECTION.</div></div>
-  <a class="btn secondary" href="/">Back to website</a>
-</header>
+<header><div class="wrap nav">
+<a href="/" aria-label="PingMe home"><img class="logo" src="/assets/pingme-logo.png" alt="PingMe — One Scan. Instant Connection."></a>
+<nav class="links"><a href="#how" data-ta="எப்படி வேலை செய்கிறது">How it works</a><a href="#why-pingme" data-ta="ஏன் PingMe">Why PingMe</a><a href="#uses" data-ta="எங்கே பயன்படுத்தலாம்">Where to use</a><a href="#kit" data-ta="ஸ்டார்டர் கிட்">Starter Kit</a><a href="#faq" data-ta="கேள்விகள்">FAQs</a></nav>
+<button class="langBtn" id="langBtn" type="button" aria-label="Change language">தமிழ்</button>
+<a class="btn navLogin" href="/account/" data-ta="வாடிக்கையாளர் உள்நுழைவு">Customer Login</a>
+<button class="menuToggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu">Menu ☰</button>
+<nav class="mobileMenu" id="mobileMenu" aria-label="Mobile navigation"><a href="#how" data-ta="எப்படி வேலை செய்கிறது">How it works</a><a href="#why-pingme" data-ta="ஏன் PingMe">Why PingMe</a><a href="#uses" data-ta="எங்கே பயன்படுத்தலாம்">Where to use</a><a href="#kit" data-ta="ஸ்டார்டர் கிட்">Starter Kit</a><a href="#faq" data-ta="கேள்விகள்">FAQs</a><a class="mobileLogin" href="/account/" data-ta="வாடிக்கையாளர் உள்நுழைவு">Customer Login</a></nav>
+</div></header>
 <main>
-<section id="loginPanel" class="panel">
-  <h1>Welcome to your PingMe account</h1>
-  <p class="muted">Sign in with your <b>registered email</b> or <b>mobile number</b> and your PingMe password.</p>
-  <div class="field"><label for="email">Email or mobile number</label><input id="email" type="text" autocomplete="username" inputmode="email" placeholder="you@example.com  or  9876543210" required></div>
-  <div class="field"><label for="loginPassword">Password</label><div style="display:flex;gap:8px"><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Your PingMe password" style="flex:1"><button type="button" id="showPw" class="secondary" aria-label="Show or hide password">Show</button></div></div>
-  <button id="signInPw">Sign in</button>
-  <p class="small" style="margin:14px 0 0"><a href="#" id="forgotLink">Forgot your password?</a> &nbsp;·&nbsp; <a href="/activate/" style="font-weight:800">New here? Activate my account →</a></p>
-  <div id="forgotBox" class="hidden" style="margin-top:14px;border-top:1px solid var(--line);padding-top:14px">
-    <b>Reset your password</b>
-    <p class="muted small" style="margin:6px 0 10px"><b>Have an email on your account?</b> Enter it and we’ll email you a reset link (free).</p>
-    <div class="field"><label for="resetEmail">Registered email</label><input id="resetEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
-    <button id="sendReset" class="secondary">Email me a reset link</button>
-    <p class="muted small" style="margin:14px 0 8px"><b>No email, or no mail arrived?</b> Message PingMe on WhatsApp. We’ll verify you and set a temporary password.</p>
-    <a id="waHelp" class="btn outline" target="_blank" rel="noopener">Ask PingMe on WhatsApp</a>
-  </div>
-  <p id="loginMessage" class="status muted" role="status" aria-live="polite"></p>
-  <div class="notice">This portal is for existing registered customers. New customers must first be registered by PingMe. Public QR scanning does not require customer login.</div>
-</section>
+<div class="hero"><div class="wrap heroGrid">
+<div><div class="eyebrow"><i class="dot"></i> Smart QR connection</div>
+<h1 data-ta="ஒரு ஸ்கேன்.<br><span>உடனடி இணைப்பு.</span>">One scan.<br><span>Instant connection.</span></h1>
+<p class="lead" data-ta="உங்கள் வாகனம், சாவி அல்லது பொருட்களுக்கு உங்கள் கவனம் தேவைப்படும்போது, ஒருவர் உங்களை எளிமையாகவும் தனிப்பட்ட முறையிலும் தொடர்பு கொள்ள ஒரு வழி. உங்கள் மொபைல் எண்ணை பொதுவில் பகிர வேண்டியதில்லை.">A simple, private way for someone to reach you when your vehicle, keys or belongings need your attention. No need to share your phone number publicly.</p>
+<div class="priceChip"><b data-price="kit" data-pre="₹">Price on WhatsApp</b><span data-ta="கிட் · 1 வருட சேவை + 250 அலர்ட்கள் உட்பட">Kit · 1-year service + 250 alerts included</span><span data-price="renewal" data-pre=" · renew ₹" data-post="/year" hidden></span></div>
+<div class="actions"><a data-order class="btn wa" href="https://wa.me/919840547587?text=Hi%2C%20I%27m%20interested%20in%20ordering%20the%20PingMe%20Smart%20Connect%20Kit.%20Please%20share%20the%20details.%0A%0AI%20agree%20to%20the%20PingMe%20Terms%20and%20Genuine%20Use%20Declaration%3A%20https%3A%2F%2Fpingmeconnect.in%2Flegal%2Fgenuine-use.html" target="_blank" rel="noopener" data-ta="💬 WhatsApp-ல் ஆர்டர் செய்யுங்கள்">💬 Order on WhatsApp</a><a class="btn outline" href="#kit" data-ta="PingMe ஸ்டார்டர் கிட்டைப் பாருங்கள்">Explore PingMe Starter Kit</a><a class="btn outline" href="#how" data-ta="எப்படி வேலை செய்கிறது">See how it works</a></div>
+<div class="trust"><span data-ta="தனிப்பட்ட தொடர்பு">Private contact</span><span data-ta="விரைவான QR ஸ்கேன்">Quick QR scan</span><span data-ta="ஆங்கிலம் & தமிழ்">English & Tamil experience</span></div>
+</div>
+<div class="heroArt"><img src="/assets/pingy-qr-hero.png" alt="PingMe QR connection illustration"></div>
+</div></div>
+<section id="how"><div class="wrap"><div class="sectionHead"><div class="kicker" data-ta="எளிமையான வடிவமைப்பு">Simple by design</div><h2 data-ta="PingMe எப்படி வேலை செய்கிறது">How PingMe works</h2><p data-ta="உங்கள் தனித்துவமான PingMe QR-ஐ இணைந்திருக்க விரும்பும் பொருட்களில் ஒட்டுங்கள். ஒரு ஸ்கேன் மூலம் கண்டவர் PingMe வழியாக உங்களுக்கு அலர்ட் அனுப்புவார்.">Put your unique PingMe QR on the things you want to keep connected. A scan helps the finder send you an alert through PingMe.</p></div>
+<div class="steps">
+<div class="step"><div class="num">01</div><h3 data-ta="QR-ஐ ஒட்டுங்கள்">Place your QR</h3><p data-ta="உங்கள் PingMe ஸ்டிக்கர் அல்லது கீசெயினை வாகனம், சாவி, பை அல்லது லக்கேஜில் இணைக்கவும்.">Attach your unique PingMe sticker or keychain to your vehicle, keys, bag or luggage.</p></div>
+<div class="step"><div class="num">02</div><h3 data-ta="யாராவது ஸ்கேன் செய்கிறார்">Someone scans</h3><p data-ta="QR உங்கள் பதிவு செய்த tag-க்கான PingMe அலர்ட் பக்கத்தைத் திறக்கும்.">The QR opens the PingMe alert page assigned to your registered tag.</p></div>
+<div class="step"><div class="num">03</div><h3 data-ta="இணைந்து கொள்ளுங்கள்">Get connected</h3><p data-ta="அலர்ட் பெற்று, உங்கள் மொபைல் எண்ணைக் காட்டாமல் தனிப்பட்ட முறையில் பதில் அளியுங்கள்.">Receive an alert and respond privately, without displaying your phone number to the finder.</p></div>
+</div></div></section>
 
-<section id="accountPanel" class="hidden">
-  <div class="panel" id="dashPanel">
-    <div class="hero">
-      <div class="pmAv" id="heroAv" role="button" tabindex="0" title="Add or change your photo" aria-label="Add or change your photo"><span id="heroAvTxt">?</span><span class="cam">📷</span></div>
-      <div class="heroTxt"><h1 id="heroName">My PingMe Account</h1><div class="muted small" id="accountEmail"></div><div style="margin-top:6px"><span class="pill" id="heroPill">—</span></div></div>
-      <button id="signOut" class="secondary">Sign out</button>
-    </div>
-    <input type="file" id="photoFile" accept="image/*" class="hidden">
-  </div>
-  <section id="overview">
-    <div id="lowCreditBanner" class="notice warning" style="display:none;margin-bottom:12px"></div>
-    <div class="tiles" id="tiles">
-      <button class="tile" data-view="qr"><span class="ic">🔳</span><b>My QR code</b><span class="sub" id="tQr">Download or print</span></button>
-      <button class="tile" data-view="alerts"><span class="ic">🔔</span><b>Alert numbers</b><span class="sub" id="tAlerts">—</span></button>
-      <button class="tile" data-view="profile"><span class="ic">👤</span><b>My profile</b><span class="sub" id="tProfile">Name, photo, address</span></button>
-      <button class="tile" data-view="credits"><span class="ic">💳</span><b>Credits &amp; plan</b><span class="sub" id="tCredits">—</span></button>
-      <button class="tile" data-view="pw"><span class="ic">🔑</span><b>Password</b><span class="sub">Change my password</span></button>
-      <button class="tile" data-view="help"><span class="ic">💬</span><b>Help &amp; support</b><span class="sub">Orders · WhatsApp</span></button>
-    </div>
-    <div class="panel" style="margin-top:14px">
-      <h2 style="font-size:15px">At a glance</h2>
-      <div class="dashGrid">
-        <div class="metric"><small>Customer ID</small><b id="customerId">—</b></div>
-        <div class="metric"><small>Account status</small><b id="status">—</b></div>
-        <div class="metric"><small>Paid credits</small><b id="paidCredits">—</b></div>
-        <div class="metric"><small>Free test credits</small><b id="testCredits">—</b></div>
-      </div>
-    </div>
-  </section>
-  <section id="profilePanel" class="panel">
-    <h2>My Profile</h2>
-    <div class="hero" style="margin-bottom:14px"><div class="pmAv" id="profAv" role="button" tabindex="0" title="Add or change your photo"><span id="profAvTxt">?</span><span class="cam">📷</span></div>
-      <div><button id="photoPick" class="secondary">Add / change photo</button> <button id="photoRemove" class="outline hidden">Remove photo</button><div class="muted small" style="margin-top:6px">Optional. A small clear face photo works best.</div><div id="photoMsg" class="status muted" role="status"></div></div></div>
-    <p class="muted small">You can update your name and address. Mobile number changes require admin review until secure SMS verification is enabled.</p>
-    <div class="grid">
-      <div class="field"><label for="profileName">Name</label><input id="profileName" maxlength="120"></div>
-      <div class="field"><label for="profileMobile">Registered mobile (read-only)</label><input id="profileMobile" readonly></div>
-      <div class="field"><label for="profileEmail">Registered email (read-only)</label><input id="profileEmail" readonly></div>
-      <div class="field"><label for="profileAddress">Address</label><textarea id="profileAddress" maxlength="500"></textarea></div>
-    </div>
-    <div class="row"><button id="saveProfile">Save profile</button><button id="requestMobile" class="secondary">Request mobile number change</button></div>
-    <div id="profileMessage" class="status muted" role="status"></div>
-    <div id="mobileRequestBox" class="hidden" style="margin-top:14px;border-top:1px solid var(--line);padding-top:14px">
-      <h3>Request a mobile number change</h3>
-      <p class="muted small">Your registered number will not change until PingMe reviews and verifies your request.</p>
-      <label for="newMobile">New mobile number</label><input id="newMobile" inputmode="tel" maxlength="20" placeholder="+91 98765 43210">
-      <label for="mobileReason">Reason (optional)</label><textarea id="mobileReason" maxlength="300" placeholder="Tell us why you need to change it"></textarea>
-      <button id="submitMobileRequest">Submit request</button><p id="mobileMessage" class="status muted"></p>
-    </div>
-  </section>
-  <section id="qrPanel" class="panel">
-    <h2>My PingMe QR Code</h2>
-    <p class="muted small">Download or print your QR. Every copy keeps the same customer identity. The PingMe logo is placed above the QR so scanning is never disturbed.</p>
-    <div class="row" style="align-items:flex-start">
-      <div style="flex:1;min-width:240px"><p><b id="qrCustomer">—</b></p><p class="muted small">SCAN TO CONNECT</p><canvas id="qrCanvas" class="qrCanvas" width="600" height="740" aria-label="Branded PingMe QR code"></canvas>
-        <div class="qrTools"><button id="downloadQr">Download branded QR PNG</button><button id="printQr" class="secondary">Print branded QR</button></div>
-        <p id="qrMessage" class="status muted" role="status">Preparing your branded QR…</p>
-      </div>
-      <div style="flex:1;min-width:220px"><a id="openScanner" class="btn outline" target="_blank" rel="noopener">Open my scanner page</a><div class="notice warning" style="margin-top:14px">QR copies all point to the same customer account. Reprinting does not create a new QR identity, credits or subscription. If your QR is lost or misused, contact PingMe support.</div></div>
-    </div>
-  </section>
-  <section id="creditsPanel" class="panel">
-    <h2>Credits & Subscription</h2>
-    <div class="grid">
-      <div class="metric"><small>Subscription start</small><b id="subscriptionStart">Not set</b></div>
-      <div class="metric"><small>Subscription expiry</small><b id="subscriptionExpiry">Not set</b></div>
-    </div>
-    <p class="muted small" style="margin-top:12px">Credit recharge and payment history will appear here when the verified payment integration is enabled. Your balances are read-only in this portal.</p>
-  </section>
-  <section id="activityPanel" class="panel">
-    <h2>Scan & Alert History</h2>
-    <p class="muted">Activity history will appear here when the customer-safe activity feed is connected. No sample or estimated activity is shown.</p>
-  </section>
-  <section id="alertPanel" class="panel">
-    <h2>Where should we send your alerts?</h2>
-    <p class="muted small">Every <b>WhatsApp number</b> that receives an alert uses <b>1 credit</b>. <b>Email alerts are free.</b> Your primary number is always on.</p>
-    <div class="metric"><small>Primary WhatsApp number (always on)</small><b id="alPrimary">—</b><small>This number is locked. To change it, use “Request mobile number change” above.</small></div>
-    <div id="alSecondary" style="margin-top:14px"></div>
-    <div style="margin-top:14px;border-top:1px solid var(--line);padding-top:14px">
-      <label style="display:flex;gap:10px;align-items:center;font-weight:700"><input type="checkbox" id="alEmailOn" style="width:20px;height:20px"> Send alerts to my email too</label>
-      <div class="field" style="margin-top:8px"><label for="alEmail">Alert email address</label><input id="alEmail" type="email" autocomplete="email" placeholder="alerts@example.com"></div>
-    </div>
-    <div class="row" style="margin-top:12px"><button id="saveAlerts">Save alert settings</button></div>
-    <p id="alertMessage" class="status muted" role="status"></p>
-  </section>
-  <section id="pwPanel" class="panel">
-    <h2>Password</h2>
-    <p id="pwHint" class="muted small">Change the password you use to sign in. Use at least 8 characters with a letter and a number.</p>
-    <div class="grid">
-      <div class="field"><label for="newPw">New password</label><input id="newPw" type="password" autocomplete="new-password"></div>
-      <div class="field"><label for="newPw2">Confirm new password</label><input id="newPw2" type="password" autocomplete="new-password"></div>
-    </div>
-    <div class="row"><button id="savePw">Update password</button></div>
-    <p id="pwMessage" class="status muted" role="status"></p>
-  </section>
-  <section id="morePanel" class="panel">
-    <h2>Orders, Referrals & Support</h2>
-    <div class="grid">
-      <div class="metric"><b>My Orders</b><small>Order and courier tracking will appear when connected.</small></div>
-      <div class="metric"><b>Referrals</b><small>Referral activity and rewards will appear when enabled.</small></div>
-      <div class="metric"><b>Help & Support</b><small>For account changes, contact the support channel provided with your PingMe kit or on the official contact page.</small></div>
-    </div>
-    <p style="margin-top:14px"><a href="/legal/contact.html" class="btn outline">PingMe Contact</a></p>
-  </section>
-</section>
-<div id="qrStage" aria-hidden="true"></div>
+<section class="benefits" id="why-pingme"><div class="wrap">
+<div class="sectionHead"><div class="kicker" data-ta="தினசரி நிம்மதிக்காக">Made for everyday peace of mind</div><h2 data-ta="எண்ணைப் பகிராமல் எளிய இணைப்பு">A simple connection, without sharing your number</h2><p data-ta="தனித்துவமான QR tag மூலம் பதிவு செய்த உரிமையாளருக்கு அலர்ட் அனுப்ப PingMe கண்டவருக்கு எளிய வழி தருகிறது.">PingMe gives a finder a straightforward way to send an alert to the registered owner through a unique QR tag.</p></div>
+<div class="benefitGrid">
+<div class="benefit"><div class="benefitIcon">⌁</div><h3 data-ta="தனியுரிமைக்காகவே வடிவமைக்கப்பட்டது">Private by design</h3><p data-ta="பொது ஸ்கேன் பக்கம் உரிமையாளரின் மொபைல் எண்ணைக் காட்டாமல் கண்டவரையும் உரிமையாளரையும் இணைக்க வடிவமைக்கப்பட்டது.">The public scan page is designed to connect the finder and owner without displaying the owner's phone number.</p></div>
+<div class="benefit"><div class="benefitIcon">◉</div><h3 data-ta="ஸ்கேன் செய்ய ஆப் தேவையில்லை">No app needed to scan</h3><p data-ta="மொபைல் கேமரா அல்லது QR ஸ்கேனர் இணைய பக்கத்தை உலாவியில் திறக்கும்.">A compatible phone camera or QR scanner opens the web experience in the browser.</p></div>
+<div class="benefit"><div class="benefitIcon">⌖</div><h3 data-ta="அலர்ட்டுடன் பயனுள்ள தகவல்">Useful context with alerts</h3><p data-ta="கண்டவர் அலர்ட் காரணத்தைத் தேர்ந்தெடுத்து, தேவைப்பட்டால் விவரம், புகைப்படம் அல்லது இருப்பிடத்தையும் சேர்க்கலாம்.">The finder can choose an alert reason and, when appropriate, add optional details, a photo or location.</p></div>
+</div>
+<div class="privacyBox"><div class="pbIcon">🔒</div><div><h3 data-ta="உங்கள் எண் உங்களிடமே இருக்கும்">Your number stays with you</h3><p data-ta="கண்டவர் உங்கள் மொபைல் எண்ணைப் பார்ப்பதில்லை. அலர்ட் PingMe வழியாக உங்கள் WhatsApp-க்கு வரும், உங்கள் பதில் அவரது திரையில் தெரியும். ஒரு குடும்ப உறுப்பினரின் இரண்டாவது எண்ணையும் சேர்க்கலாம்.">The finder never sees your phone number. The alert reaches your WhatsApp through PingMe, and your reply appears on their screen. You can also add a family member's second number.</p></div></div>
+</div></section>
+
+<section class="uses" id="uses"><div class="wrap"><div class="sectionHead"><div class="kicker" data-ta="ஒரு கிட், பல பயன்கள்">One kit, many uses</div><h2 data-ta="முக்கியமானவற்றை இணைத்து வையுங்கள்">Keep important things connected</h2><p data-ta="தினசரி அத்தியாவசியப் பொருட்களில் PingMe QR tag பயன்படுத்துங்கள்.">Use PingMe QR tags across everyday essentials.</p></div>
+<div class="useGrid">
+<div class="use"><img src="/assets/icon-vehicle.png" alt=""><h3 data-ta="கார் & பைக்">Cars & bikes</h3><p data-ta="பார்க்கிங் மற்றும் வாகனம் தொடர்பான அலர்ட்டுகளுக்கு.">For parking, vehicle attention and contact alerts.</p></div>
+<div class="use"><img src="/assets/icon-lostfound.png" alt=""><h3 data-ta="சாவிகள்">Keys</h3><p data-ta="சாவி கிடைத்தால் உங்களை அடைய உதவும்.">Help someone reach you if your keys are found.</p></div>
+<div class="use"><img src="/assets/icon-keys-luggage.png" alt=""><h3 data-ta="பைகள் & லக்கேஜ்">Bags & luggage</h3><p data-ta="பயணப் பொருட்களை இணைப்பில் வைத்திருங்கள்.">Keep your travel belongings connected.</p></div>
+<div class="use"><div class="useEmoji">🐕</div><h3 data-ta="செல்லப்பிராணிகள்">Pets</h3><p data-ta="செல்லப்பிராணி தொலைந்தால், காலர் tag உதவி செய்பவரை உங்களுடன் இணைக்கும்.">Collar tag helps a kind stranger reach you if your pet is lost.</p></div>
+<div class="use"><div class="useEmoji">🎒</div><h3 data-ta="குழந்தைகளின் பள்ளிப் பை">Kids' school bags</h3><p data-ta="பள்ளிப் பையில் tag வைத்தால் திரும்ப வந்து சேரும்.">Tag the school bag so it finds its way back.</p></div>
+<div class="use"><div class="useEmoji">🚪</div><h3 data-ta="வீட்டு வாசல்">Home door</h3><p data-ta="நீங்கள் இல்லாதபோது பார்வையாளர்/டெலிவரி அலர்ட்டுக்கு வாசலில் QR.">A QR at your door for visitor or delivery alerts when you are away.</p></div>
+<div class="use"><img src="/assets/icon-other.png" alt=""><h3 data-ta="தினசரிப் பொருட்கள்">Everyday items</h3><p data-ta="முக்கியமான மற்ற பொருட்களிலும் QR tag சேர்க்கலாம்.">Add a QR tag to other things that matter.</p></div>
+</div></div></section>
+<section class="offer" id="kit"><div class="wrap offerGrid">
+<div><div class="kicker" style="color:#72c8ff" data-ta="PingMe ஸ்டார்டர் கிட்">PingMe Starter Kit</div><h2 data-ta="உங்கள் அத்தியாவசியப் பொருட்களை இணைக்கத் தொடங்குங்கள்.">Start connecting your essentials.</h2><p data-ta="உங்கள் தனிப்பட்ட QR கிட்டைப் பெற்று PingMe மூலம் tag-களை செயல்படுத்துங்கள். உங்கள் QR கோடுகள் பதிவு செய்த வாடிக்கையாளர் சுயவிவரத்துடன் இணைக்கப்படும்.">Get your personal QR kit and activate your tags with PingMe. Your QR codes are assigned to your registered customer profile.</p></div>
+<div class="kit"><div class="kitTop"><div><h3 data-ta="PingMe ஸ்டார்டர் கிட்">PingMe Starter Kit</h3><p style="margin:5px 0;color:#64748b;font-size:12px">Smart Connect Kit</p></div><div class="price" data-price="kit" data-pre="₹">Ask on WhatsApp</div></div>
+<ul><li data-ta="தனிப்பயன் QR ஸ்டிக்கர்கள் & tag-கள்">Personalised QR stickers and tags</li><li data-ta="உறுதி செய்யப்பட்ட கிட் அமைப்பில் QR கீசெயின்கள் & மறுபயன்பாட்டு tag-கள்">QR keychains and reusable tags included in the confirmed kit configuration</li><li data-ta="250 மெசேஜ் கிரெடிட்கள் உள்ளடக்கம்">250 included message credits</li><li data-ta="1 ஆண்டு சந்தா உள்ளடக்கம்">1-year subscription included</li><li data-ta="ஆங்கிலம் & தமிழ் ஆதரவு">English and Tamil support experience</li></ul>
+<a data-order class="btn wa" href="https://wa.me/919840547587?text=Hi%2C%20I%27m%20interested%20in%20ordering%20the%20PingMe%20Smart%20Connect%20Kit.%20Please%20share%20the%20details.%0A%0AI%20agree%20to%20the%20PingMe%20Terms%20and%20Genuine%20Use%20Declaration%3A%20https%3A%2F%2Fpingmeconnect.in%2Flegal%2Fgenuine-use.html" target="_blank" rel="noopener" data-ta="💬 WhatsApp-ல் ஆர்டர் செய்யுங்கள்">💬 Order on WhatsApp</a>
+<p style="font-size:11px;color:#718096;margin:12px 0 0" id="launch" data-ta="WhatsApp-ல் செய்தி அனுப்புங்கள் — விவரங்கள், கட்டணம் மற்றும் டெலிவரியை நாங்கள் உறுதி செய்வோம்.">Tap to message us on WhatsApp. We will confirm the details, payment and delivery with you.</p>
+<p style="font-size:12px;color:#52627c;margin:14px 0 0;text-align:center">Already a PingMe customer? <a href="/account/" style="color:#1764df;font-weight:800;text-decoration:underline;text-underline-offset:3px" data-ta="வாடிக்கையாளர் உள்நுழைவு">Customer Login</a></p>
+</div></div></section>
+<section id="pay" hidden style="background:#f5f8ff"><div class="wrap"><div class="sectionHead"><div class="kicker" data-ta="கட்டணம்">Payment</div><h2 data-ta="பணம் செலுத்துவது எப்படி">How to pay</h2><p data-ta="எந்த UPI செயலியிலும் QR-ஐ ஸ்கேன் செய்து பணம் செலுத்துங்கள். பின்னர் பணம் செலுத்திய ஸ்கிரீன்ஷாட்டை WhatsApp +91 98405 47587 எண்ணுக்கு அனுப்புங்கள்; உங்கள் ஆர்டரை உறுதி செய்வோம்.">Scan the QR with any UPI app and pay. Then send the payment screenshot to WhatsApp +91 98405 47587 and we will confirm your order.</p></div><div id="payGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;max-width:820px;margin:auto"></div><p style="text-align:center;font-size:12px;color:#52627c;margin-top:16px" data-ta="கவனம்: பணம் செலுத்தும் முன் பெறுநர் பெயர் “Bharani Innovations” என இருப்பதைச் சரிபாருங்கள்.">Please check that the payee name shows “Bharani Innovations” before you pay.</p></div></section>
+<section id="faq"><div class="wrap"><div class="sectionHead"><div class="kicker" data-ta="தெரிந்து கொள்ள">Need to know</div><h2 data-ta="அடிக்கடி கேட்கப்படும் கேள்விகள்">Frequently asked questions</h2></div><div class="faq">
+<details><summary data-ta="ஸ்கேன் செய்பவருக்கு PingMe ஆப் தேவையா?">Does the person scanning need the PingMe app?</summary><p data-ta="தேவையில்லை. QR மொபைல் உலாவியில் இணையப் பக்கத்தைத் திறக்கும். ஆப் நிறுவவோ உள்நுழையவோ தேவையில்லை.">No. The QR opens a web page in the phone browser. The scanner does not need to install an app or sign in.</p></details>
+<details><summary data-ta="என் மொபைல் எண் பொதுவில் தெரியுமா?">Will my phone number be shown publicly?</summary><p data-ta="பொது ஸ்கேன் பக்கம் உரிமையாளரின் எண்ணைக் காட்டாது. அலர்ட்டுகள் PingMe வழியாக அமைக்கப்பட்ட தொடர்பு வழிகளில் செல்லும்.">The public scan page is designed not to display the owner's phone number. Alerts are routed through PingMe using the configured contact channels.</p></details>
+<details><summary data-ta="ஒவ்வொரு QR-ம் வெவ்வேறு வாடிக்கையாளருக்கா?">Does every QR belong to a different customer?</summary><p data-ta="ஆம். ஒவ்வொரு பதிவு செய்த QR-ம் தனக்கான தனித்துவ அடையாளத்தைக் கொண்டு அந்த உரிமையாளருக்கான அலர்ட் பக்கத்தைத் திறக்கும்.">Yes. Each registered QR uses its own unique customer/tag identifier to load the corresponding owner's alert flow.</p></details>
+<details><summary data-ta="PingMe-ஐ தமிழில் பயன்படுத்தலாமா?">Can I use PingMe in Tamil?</summary><p data-ta="ஆம், ஸ்கேன் அனுபவம் ஆங்கிலத்திலும் தமிழிலும் உள்ளது.">The customer scan experience supports English and Tamil.</p></details>
+<details><summary data-ta="ஸ்கேன் செய்தவருக்கு எப்படி பதில் சொல்வது?">How do I reply to the person who scanned?</summary><p data-ta="அலர்ட் உங்கள் WhatsApp-க்கு வரும். அதற்கு பதில் அனுப்பினால், கண்டவரின் திரையில் தெரியும். அவரது திரை சுமார் 3 நிமிடங்கள் உங்கள் பதிலுக்காகக் காத்திருக்கும்.">You get the alert on WhatsApp. Reply to it, and your reply appears on the finder's screen. Their screen waits for your reply for about 3 minutes.</p></details>
+<details><summary data-ta="குடும்பத்தில் வேறு ஒருவரும் அலர்ட் பெறலாமா?">Can someone else in my family also receive the alert?</summary><p data-ta="ஆம். இரண்டாவது WhatsApp எண்ணைச் சேர்க்கலாம். முதலில் பதில் அளிப்பவரின் பதில் கண்டவருக்குக் காட்டப்படும்; மற்றவருக்கு பதில் சொல்லப்பட்டுவிட்டது என்று தெரிவிக்கப்படும்.">Yes. You can add a second WhatsApp number. Whoever replies first is shown to the finder, and the other person is told it has been answered.</p></details>
+<details><summary data-ta="செல்லப்பிராணி அல்லது குழந்தையின் பள்ளிப் பைக்கு பயன்படுத்தலாமா?">Can I use it for pets or my child's school bag?</summary><p data-ta="ஆம். PingMe QR tag-ஐ செல்லப்பிராணி காலர், பள்ளிப் பை, லக்கேஜ், சாவி அல்லது கதவில் வைக்கலாம். கண்டவர் ஸ்கேன் செய்தால் உங்களுக்கு அலர்ட் வரும்.">Yes. A PingMe QR tag works on a pet collar, a school bag, luggage, keys or a door. The finder scans it and you get the alert.</p></details>
+<details><summary data-ta="மெசேஜ் கிரெடிட்கள் என்றால் என்ன?">What are message credits?</summary><p data-ta="ஒவ்வொரு WhatsApp எண்ணுக்கும் அனுப்பப்படும் அலர்ட் கிரெடிட்களைப் பயன்படுத்தும். ஸ்டார்டர் கிட்டில் 250 உள்ளன. விவரங்களுக்கு கீழே உள்ள கிரெடிட் கொள்கையைப் பாருங்கள்.">Each alert sent to a WhatsApp number uses message credits. The Starter Kit includes 250. See the Credits policy in the footer for details.</p></details>
+</div></div></section>
 </main>
-<footer>PingMe · ONE SCAN. INSTANT CONNECTION.</footer>
+<a data-order class="waFloat" href="https://wa.me/919840547587?text=Hi%2C%20I%27m%20interested%20in%20ordering%20the%20PingMe%20Smart%20Connect%20Kit.%20Please%20share%20the%20details.%0A%0AI%20agree%20to%20the%20PingMe%20Terms%20and%20Genuine%20Use%20Declaration%3A%20https%3A%2F%2Fpingmeconnect.in%2Flegal%2Fgenuine-use.html" target="_blank" rel="noopener" aria-label="Order on WhatsApp"><span class="waIc">💬</span><span class="waTx" data-ta="WhatsApp-ல் ஆர்டர்">Order on WhatsApp</span></a>
+<footer><div class="wrap"><div class="foot">
+<div><img src="/assets/pingme-logo.png" alt="PingMe"><p>PingMe — One Scan. Instant Connection.<br><span style="font-size:11px;opacity:.85">PingMe is a product of Bharani Innovations (proprietorship), Madambakkam, Chennai – 600 126, Tamil Nadu, India.</span><br>Support &amp; orders: WhatsApp +91 98405 47587 · Mon–Sat, 10 AM–6 PM</p></div>
+<div class="footlinks"><a href="/account/" style="font-weight:800;color:#fff" data-ta="வாடிக்கையாளர் உள்நுழைவு">Customer Login</a><a href="/guide/" data-ta="பயனர் வழிகாட்டி">User Guide</a><a href="/legal/terms.html">Terms</a><a href="/legal/genuine-use.html">Genuine Use Declaration</a><a href="/legal/privacy.html">Privacy</a><a href="/legal/refund-policy.html">Refunds</a><a href="/legal/shipping-policy.html">Shipping</a><a href="/legal/credits-policy.html">Credits</a><a href="/legal/contact.html">Contact</a></div>
+</div><div class="copy">© <span id="year"></span> Bharani Innovations. All rights reserved.</div></div></footer>
+<script>document.getElementById("year").textContent=new Date().getFullYear();const mt=document.getElementById("menuToggle"),mm=document.getElementById("mobileMenu");if(mt&&mm){mt.addEventListener("click",()=>{const open=mm.classList.toggle("open");mt.setAttribute("aria-expanded",String(open));mt.textContent=open?"Close ✕":"Menu ☰"});mm.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{mm.classList.remove("open");mt.setAttribute("aria-expanded","false");mt.textContent="Menu ☰"}));}</script>
 <script>
-const SUPABASE_URL='https://vlmlcwzyfummpwxuitcn.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY='sb_publishable_a2PPtTLwt8Uf1CcW6ZsWKg_YOZ1E9BC';
-const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
-const $=id=>document.getElementById(id);
-let currentCustomer=null, brandedQrReady=false, qrDestination='';
-function setText(id,value){$(id).textContent=value===null||value===undefined||value===''?'—':String(value)}
-function showStatus(id,text,kind='muted'){const el=$(id);el.textContent=text;el.className='status '+kind}
-function friendlyDate(v){if(!v)return 'Not set';const d=new Date(v+'T00:00:00');return isNaN(d)?String(v):d.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'})}
-function safeError(e,fallback){const m=(e&&e.message)||'';if(/No unlinked|not linked|matching this email/i.test(m))return 'This verified email does not match an existing PingMe customer account. Please contact PingMe support.';return fallback}
-async function buildBrandedQr(){
- brandedQrReady=false;showStatus('qrMessage','Preparing your branded QR…');
- const logo=new Image();logo.src='/assets/pingme-logo.png';
- try{await new Promise((resolve,reject)=>{logo.onload=resolve;logo.onerror=reject});}
- catch(e){showStatus('qrMessage','Official PingMe logo could not be loaded. QR download and print are disabled.','warning');return}
- if(typeof QRCode==='undefined'){showStatus('qrMessage','QR generator did not load. Refresh and try again.','warning');return}
- const stage=$('qrStage');stage.innerHTML='';
- const node=document.createElement('div');stage.appendChild(node);
- new QRCode(node,{text:qrDestination,width:520,height:520,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
- let qrImg=node.querySelector('img'),qrCanvas=node.querySelector('canvas');
- if(qrImg){await new Promise((resolve,reject)=>{if(qrImg.complete&&qrImg.naturalWidth)resolve();else{qrImg.onload=resolve;qrImg.onerror=reject}})}
- const source=qrCanvas||qrImg;
- if(!source){showStatus('qrMessage','QR generation failed. Download and print are disabled.','warning');return}
- const out=$('qrCanvas'),ctx=out.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,600,740);
- ctx.drawImage(source,40,150,520,520);
- // Logo sits ABOVE the QR (never on it) so scanning is never disturbed.
- {const mw=330,mh=105,r=logo.width/logo.height;let w=mw,h=w/r;if(h>mh){h=mh;w=h*r}ctx.drawImage(logo,300-w/2,20+(mh-h)/2,w,h);}
- // Brand footer is embedded in the exported canvas itself.
- ctx.fillStyle='#102b62';ctx.textAlign='center';ctx.font='800 22px Arial';ctx.fillText('SCAN TO CONNECT',300,710);
- brandedQrReady=true;showStatus('qrMessage','Your PingMe-branded QR is ready. Download or print this same QR anytime.','success');
-}
-function exportQrBlob(){return new Promise(resolve=> $('qrCanvas').toBlob(resolve,'image/png'))}
-async function downloadQr(){
- if(!brandedQrReady){showStatus('qrMessage','Branded QR is not ready. Download is blocked.','warning');return}
- await db.rpc('pingme_log_qr_action',{p_action:'download'});
- const blob=await exportQrBlob();if(!blob){showStatus('qrMessage','Could not create the branded PNG. Try again.','warning');return}
- await db.rpc('pingme_log_customer_qr_action',{p_action:'download'});
- const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='PingMe-'+(currentCustomer?.customer_id||'QR')+'-Branded.png';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
-}
-async function printQr(){
- if(!brandedQrReady){showStatus('qrMessage','Branded QR is not ready. Printing is blocked.','warning');return}
- await db.rpc('pingme_log_qr_action',{p_action:'print'});
- const data=$('qrCanvas').toDataURL('image/png'),w=window.open('','_blank');
- if(!w){showStatus('qrMessage','Allow pop-ups to print your branded QR.','warning');return}
- await db.rpc('pingme_log_customer_qr_action',{p_action:'print'});
- w.document.write('<!doctype html><html><head><title>PingMe QR</title><style>body{font-family:Arial;text-align:center;margin:20px}img{width:min(90vw,90vh);max-width:520px;height:auto}p{font-weight:bold;color:#102b62}@media print{button{display:none}}</style></head><body><img src="'+data+'" alt="PingMe branded QR"><p>ONE SCAN. INSTANT CONNECTION.</p><button onclick="window.print()">Print</button></body></html>');w.document.close();
-}
-async function loadAccount(){
- const {data:{user},error:authErr}=await db.auth.getUser();
- if(authErr||!user){$('loginPanel').classList.remove('hidden');$('accountPanel').classList.add('hidden');return}
- $('loginPanel').classList.add('hidden');
- const already=await db.from('pingme_customers').select('id').eq('auth_user_id',user.id).maybeSingle();
- const {error:claimError}=already.data?{error:null}:await db.rpc('pingme_claim_customer_account');
- if(claimError){$('loginPanel').classList.remove('hidden');showStatus('loginMessage',safeError(claimError,'Account linking is not ready. Please contact PingMe support.'),'warning');return}
- const {data,error}=await db.from('pingme_customers').select('*').eq('auth_user_id',user.id).maybeSingle();
- if(error||!data){$('loginPanel').classList.remove('hidden');showStatus('loginMessage','Your verified email is not linked to a PingMe customer account. Please contact PingMe support.','warning');return}
- currentCustomer=data;$('accountPanel').classList.remove('hidden');setText('accountEmail',user.email||'');
- setText('customerId',data.customer_id);setText('status',data.status);setText('paidCredits',data.paid_credits);try{const lc=document.getElementById('lowCreditBanner'),pc=Number(data.paid_credits)||0;if(data.status==='Active'&&pc<=20){lc.style.display='block';lc.innerHTML='<b>'+(pc<=0?'You have no credits left – alerts will stop.':'Only '+pc+' credits left.')+'</b> Recharge on WhatsApp: <a href="https://wa.me/919150047587?text='+encodeURIComponent('Hi PingMe, please recharge my account '+data.customer_id)+'" target="_blank" rel="noopener">message PingMe</a>'}else lc.style.display='none'}catch(e){}setText('testCredits',data.test_credits);
- setText('subscriptionStart',friendlyDate(data.subscription_start));setText('subscriptionExpiry',friendlyDate(data.subscription_expiry));
- $('profileName').value=data.name||'';$('profileMobile').value=data.mobile||'';$('profileEmail').value=data.email||user.email||'';$('profileAddress').value=data.address||'';
- setText('qrCustomer',data.customer_id);
- // Preserve the existing public route and identifier already used by Admin-generated QR codes.
- qrDestination=location.origin+'/?t='+encodeURIComponent(data.customer_id);
- $('openScanner').href=qrDestination;
- renderAlerts(data);
- loadPhoto();
- if(!window.__viewInit){window.__viewInit=1;const h=(location.hash||'').slice(1);showView(VIEWS[h]?h:undefined)}
- await buildBrandedQr();
- if(recoveryMode){showStatus('pwMessage','Choose your new password below.','warning');showView('pw')}
-}
-const PM_API='https://pingme-api.pingmeconnect.workers.dev',PM_WA='919150047587';
-let recoveryMode=/type=recovery/.test(location.hash);
-db.auth.onAuthStateChange(ev=>{if(ev==='PASSWORD_RECOVERY')recoveryMode=true});
-const PW_RULE=/^(?=.*[A-Za-z])(?=.*\d).{8,72}$/;
-$('showPw').onclick=()=>{const i=$('loginPassword'),s=i.type==='password';i.type=s?'text':'password';$('showPw').textContent=s?'Hide':'Show'};
-$('signInPw').onclick=async()=>{
- const id=$('email').value.trim(),pw=$('loginPassword').value;
- if(!id||!pw){showStatus('loginMessage','Enter your email or mobile number and your password.','warning');return}
- const digits=id.replace(/\D/g,'');
- if(!id.includes('@')&&(digits.length<10||digits.length>12)){showStatus('loginMessage','Enter a valid email address or 10-digit mobile number.','warning');return}
- $('signInPw').disabled=true;showStatus('loginMessage','Signing in…');
- let err=null;
- try{
-  // Email AND mobile both sign in through the PingMe server, so the wrong-password lock (5 tries / 15 min) always applies.
-  let r=null;
-  try{r=await fetch(PM_API+'/api/customer/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({identifier:id,password:pw})})}catch(e){r=null}
-  if(!r){
-   if(id.includes('@')){({error:err}=await db.auth.signInWithPassword({email:id,password:pw}))}   // server unreachable: plain email sign-in still works
-   else err={message:'network'}
-  }else{
-   const j=await r.json().catch(()=>({}));
-   if(!r.ok)err={message:j.error||'failed',locked:r.status===429};
-   else{const s=await db.auth.setSession({access_token:j.access_token,refresh_token:j.refresh_token});err=s.error}
-  }
- }catch(e){err=e}
- $('signInPw').disabled=false;
- if(err){showStatus('loginMessage',err.locked?err.message:'Sign-in failed. Check your email or mobile and your password. Forgot it? Tap “Forgot your password?”.','warning');return}
- $('loginPassword').value='';showStatus('loginMessage','');await loadAccount();
-};
-$('loginPassword').addEventListener('keydown',e=>{if(e.key==='Enter')$('signInPw').click()});
-$('email').addEventListener('keydown',e=>{if(e.key==='Enter')$('loginPassword').focus()});
-const waText=()=>'Hello PingMe, I forgot my password. My registered mobile/email: '+($('email').value.trim()||'(please add)')+'.';
-$('forgotLink').onclick=e=>{e.preventDefault();$('forgotBox').classList.toggle('hidden');const em=$('email').value.trim();if(em.includes('@'))$('resetEmail').value=em;$('waHelp').href='https://wa.me/'+PM_WA+'?text='+encodeURIComponent(waText())};
-$('email').addEventListener('input',()=>{$('waHelp').href='https://wa.me/'+PM_WA+'?text='+encodeURIComponent(waText())});
-$('sendReset').onclick=async()=>{
- const email=$('resetEmail').value.trim();
- if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){showStatus('loginMessage','Enter the email registered with PingMe.','warning');return}
- $('sendReset').disabled=true;
- await db.auth.resetPasswordForEmail(email,{redirectTo:location.origin+'/account/'});
- $('sendReset').disabled=false;
- showStatus('loginMessage','If that email is registered, a reset link is on its way. Check your inbox and spam folder. Nothing arrived? Use the WhatsApp option below.','success');
-};
-$('savePw').onclick=async()=>{
- const a=$('newPw').value,b=$('newPw2').value;
- if(!PW_RULE.test(a)){showStatus('pwMessage','Use at least 8 characters with a letter and a number.','warning');return}
- if(a!==b){showStatus('pwMessage','The two passwords do not match.','warning');return}
- $('savePw').disabled=true;
- const {error}=await db.auth.updateUser({password:a});
- $('savePw').disabled=false;
- if(error){showStatus('pwMessage','Could not update the password. Please sign in again and retry.','warning');return}
- $('newPw').value='';$('newPw2').value='';recoveryMode=false;showStatus('pwMessage','Password updated. Use it next time you sign in.','success');
-};
-
-
-/* ===== Dashboard views ===== */
-const VIEWS={qr:['qrPanel'],alerts:['alertPanel'],profile:['profilePanel'],credits:['creditsPanel','activityPanel'],pw:['pwPanel'],help:['morePanel']};
-const ALLV=[].concat(...Object.values(VIEWS));
-function showView(v){
- const home=!v||!VIEWS[v];
- $('overview').classList.toggle('hidden',!home);
- ALLV.forEach(id=>$(id).classList.add('hidden'));
- if(!home)VIEWS[v].forEach(id=>$(id).classList.remove('hidden'));
- try{history.replaceState(null,'',home?location.pathname+location.search:'#'+v)}catch(e){}
- window.scrollTo({top:0});
-}
-document.querySelectorAll('#tiles .tile').forEach(b=>b.onclick=()=>showView(b.dataset.view));
-ALLV.forEach(id=>{const s=$(id);if(s.querySelector('.backBtn'))return;const b=document.createElement('button');b.className='backBtn';b.type='button';b.textContent='← Back to dashboard';b.onclick=()=>showView();s.insertBefore(b,s.firstChild)});
-function initials(n){const p=String(n||'').trim().split(/\s+/).filter(Boolean);return ((p[0]||'?')[0]+(p[1]?p[1][0]:'')).toUpperCase()}
-function setAvatar(src){
- const nm=(currentCustomer&&currentCustomer.name)||'';
- [['heroAv','heroAvTxt'],['profAv','profAvTxt']].forEach(([a,tx])=>{const el=$(a);if(src){el.style.backgroundImage='url("'+src+'")';$(tx).textContent=''}else{el.style.backgroundImage='';$(tx).textContent=initials(nm)}});
- $('photoRemove').classList.toggle('hidden',!src);
-}
-async function loadPhoto(){try{const {data,error}=await db.rpc('pingme_photo_get');setAvatar(!error&&typeof data==='string'?data:null)}catch(e){setAvatar(null)}}
-function toJpeg256(file){return new Promise((res,rej)=>{const u=URL.createObjectURL(file),im=new Image();im.onload=()=>{try{const s=Math.min(im.width,im.height),c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,256,256);x.drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,256,256);URL.revokeObjectURL(u);res(c.toDataURL('image/jpeg',.82))}catch(e){rej(e)}};im.onerror=()=>{URL.revokeObjectURL(u);rej(new Error('bad image'))};im.src=u})}
-['heroAv','profAv'].forEach(id=>{$(id).onclick=()=>$('photoFile').click();$(id).onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('photoFile').click()}}});
-$('photoPick').onclick=()=>$('photoFile').click();
-$('photoFile').onchange=async()=>{
- const f=$('photoFile').files[0];$('photoFile').value='';if(!f)return;
- if(!/^image\//.test(f.type)){showStatus('photoMsg','Please choose a picture (JPG or PNG).','warning');return}
- try{
-  showStatus('photoMsg','Saving your photo…');const d=await toJpeg256(f);
-  const {data,error}=await db.rpc('pingme_photo_set',{p_photo:d});
-  if(error||!data||data.result!=='ok'){showStatus('photoMsg',error?'Photo saving is not enabled yet. Please try again later.':'Could not save this picture. Try a different one.','warning');return}
-  setAvatar(d);showStatus('photoMsg','Photo saved ✓','success');
- }catch(e){showStatus('photoMsg','Could not read this picture. Try a different one.','warning')}
-};
-$('photoRemove').onclick=async()=>{if(!confirm('Remove your photo?'))return;const {data,error}=await db.rpc('pingme_photo_remove');if(error||!data||data.result!=='ok'){showStatus('photoMsg','Could not remove it. Please try again.','warning');return}setAvatar(null);showStatus('photoMsg','Photo removed.','success')};
-function renderTiles(c){
- try{
-  const act=c.status==='Active';$('heroPill').textContent=c.status||'—';$('heroPill').className='pill'+(act?'':' off');
-  $('heroName').textContent=c.name||'My PingMe Account';
-  const nm=(c.secondary_name||'').replace(/[<>&"]/g,'');
-  $('tAlerts').textContent=c.secondary_mobile?'You + '+(nm||'2nd number')+' ✓':c.secondary_pending?'Waiting for confirmation…':'Only your number';
-  $('tProfile').textContent=c.name||'Name, photo, address';
-  $('tCredits').textContent=(c.paid_credits??0)+' credits'+(c.subscription_expiry?' · till '+friendlyDate(c.subscription_expiry):'');
-  if(!$('profAv').style.backgroundImage)setAvatar(null);
- }catch(e){}
-}
-
-/* ===== Alert numbers & email ===== */
-const PM_WA_NUMBER='+91 91500 47587';
-const fmtNum=n=>{const d=String(n||'').replace(/\D/g,'').slice(-10);return d.length===10?d.slice(0,5)+' '+d.slice(5):d};
-const SEC_MSG={invalid_name:'Please enter a name of 2 to 30 letters.',invalid_number:'Enter a valid 10-digit Indian mobile number.',same_as_primary:'That is already your primary number.',already:'That number is already added.',number_limit:'This number is already linked to the maximum number of PingMe accounts.',not_eligible:'Alert numbers are available for active accounts only.',auth_required:'Please sign in again.',invalid_email:'Enter a valid email address.',no_secondary:'Add a second number first.',number_in_use:'This number is already registered with PingMe (as someone’s main or second number). Please use a different number.'};
-const secMsg=r=>r&&r.result==='change_limit'?'You changed your alert number recently. You can change it again in '+r.days_left+' day(s). Contact PingMe if it is urgent.':(SEC_MSG[r&&r.result]||'Something went wrong. Please try again.');
-async function refreshAlerts(){const {data:{user}}=await db.auth.getUser();if(!user)return;const {data}=await db.from('pingme_customers').select('*').eq('auth_user_id',user.id).maybeSingle();if(data){currentCustomer=data;renderAlerts(data)}}
-function renderAlerts(c){
- setText('alPrimary',fmtNum(c.mobile));
- const box=$('alSecondary');
-  if(c.secondary_pending||c.secondary_mobile){
-  const ok=!!c.secondary_mobile&&!c.secondary_pending,num=c.secondary_pending||c.secondary_mobile,nm=String(c.secondary_name||'').replace(/[<>&"]/g,'');
-  const head=`<div class="secCard"><div class="secTop"><div class="secAv">👤</div><div style="flex:1;min-width:0"><div class="secName"><span id="alNameTxt">${nm||'(no name yet)'}</span> <button id="alRenameBtn" class="linkBtn" type="button">✎ Edit name</button></div><div class="secNum">${fmtNum(num)} · ${ok?'verified ✓':'waiting for confirmation'}</div></div></div>
-   <div id="alRenameBox" class="hidden" style="margin-top:10px"><div class="field"><label for="alRenameIn">Name of this person</label><input id="alRenameIn" maxlength="30" value="${nm}" placeholder="e.g. Meena"></div><div class="row" style="justify-content:flex-start"><button id="alRenameGo" type="button">Save name</button><button id="alRenameNo" type="button" class="secondary">Cancel</button></div></div>`;
-  if(ok){
-  box.innerHTML=head+`<label style="display:flex;gap:10px;align-items:center;font-weight:700;margin-top:12px"><input type="checkbox" id="alSecOn" style="width:20px;height:20px" ${c.alert_secondary?'checked':''}> Send alerts to this number too (1 extra credit per alert)</label>
-   <div class="row" style="margin-top:10px;justify-content:flex-start"><button id="alChange" class="secondary">Change number</button><button id="alRemove" class="secondary">Remove</button></div>
-   <div id="alChangeBox" class="hidden" style="margin-top:10px"><div class="field"><label for="alNewName">Name of this person</label><input id="alNewName" maxlength="30" placeholder="e.g. Meena" value="${nm}"></div><div class="field"><label for="alNewSec">New number</label><input id="alNewSec" type="tel" placeholder="98765 43210"></div><button id="alChangeGo">Continue</button><p class="muted small">Only the <b>number</b> is limited to one change every 30 days. You can edit the <b>name</b> anytime. The new number must confirm with a code.</p></div></div>`;
-  $('alChange').onclick=()=>$('alChangeBox').classList.toggle('hidden');
-  $('alChangeGo').onclick=()=>addSecondary($('alNewSec').value,$('alNewName').value);
-  $('alRemove').onclick=removeSecondary;
-  }else{
-  box.innerHTML=head+`<div class="notice warning" style="margin-top:12px"><b>Last step:</b> ask that person to open WhatsApp and send <b>JOIN ${c.customer_id}</b> to <b>${PM_WA_NUMBER}</b> from <b>that number</b>. They will get a 6-digit code. Enter it here:</div>
-   <div class="field" style="margin-top:10px"><label for="alCode">6-digit code</label><input id="alCode" inputmode="numeric" maxlength="6" placeholder="123456"></div>
-   <div class="row" style="justify-content:flex-start"><button id="alVerify">Confirm number</button><button id="alCancel" class="secondary">Cancel</button></div></div>`;
-  $('alVerify').onclick=verifySecondary;$('alCancel').onclick=removeSecondary;
-  }
-  $('alRenameBtn').onclick=()=>{$('alRenameBox').classList.remove('hidden');$('alRenameIn').focus()};
-  $('alRenameNo').onclick=()=>$('alRenameBox').classList.add('hidden');
-  $('alRenameGo').onclick=renameSecondary;
- }else{
-  box.innerHTML=`<div class="field"><label for="alNewName">Name of this person *</label><input id="alNewName" maxlength="30" placeholder="e.g. Meena (wife)"></div><div class="field"><label for="alNewSec">Add a second WhatsApp number (optional)</label><input id="alNewSec" type="tel" placeholder="98765 43210"></div>
-   <button id="alAdd" class="secondary">Add number</button>
-   <p class="muted small">Useful if you might miss an alert on your primary number, for example a family member's number. That person must confirm by sending a WhatsApp message, so nobody is added without agreeing.</p>`;
-  $('alAdd').onclick=()=>addSecondary($('alNewSec').value,$('alNewName').value);
- }
- $('alEmailOn').checked=c.alert_email!==false;
- $('alEmail').value=c.alert_email_address||c.email||'';
- renderTiles(c);
-}
-async function renameSecondary(){
- const nm=String($('alRenameIn').value||'').trim().replace(/\s+/g,' ');
- if(nm.length<2||nm.length>30){showStatus('alertMessage','Please enter a name of 2 to 30 letters.','warning');return}
- showStatus('alertMessage','Saving name…');
- const {data,error}=await db.rpc('pingme_secondary_rename',{p_name:nm});
- if(error||!data||data.result!=='ok'){showStatus('alertMessage',error?'Name change is not enabled yet. Please try again later.':secMsg(data),'warning');return}
- showStatus('alertMessage','Name updated ✓','success');await refreshAlerts();
-}
-async function addSecondary(v,nm){
- nm=String(nm||'').trim();
- if(nm.length<2){showStatus('alertMessage','Please enter the name of the person who owns this number.','warning');return}
- showStatus('alertMessage','Saving…');
- const {data,error}=await db.rpc('pingme_secondary_set',{p_mobile:String(v||''),p_name:nm});
- if(error||!data||data.result!=='ok'){showStatus('alertMessage',error?'Could not save. Please try again.':secMsg(data),'warning');return}
- showStatus('alertMessage','Saved. Now the second number must confirm it (see the steps above).','success');await refreshAlerts();
-}
-async function removeSecondary(){
- if(!confirm('Remove the second number? You can add a different one again only after 30 days.'))return;
- const {data,error}=await db.rpc('pingme_secondary_remove');
- if(error||!data||!['ok','nothing'].includes(data.result)){showStatus('alertMessage','Could not remove it. Please try again.','warning');return}
- showStatus('alertMessage','Removed.','success');await refreshAlerts();
-}
-async function verifySecondary(){
- const code=($('alCode').value||'').trim();
- if(!/^\d{6}$/.test(code)){showStatus('alertMessage','Enter the 6-digit code.','warning');return}
- $('alVerify').disabled=true;showStatus('alertMessage','Checking…');
- try{
-  const {data:{session}}=await db.auth.getSession();
-  const r=await fetch(PM_API+'/api/customer/secondary-verify',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+(session?.access_token||'')},body:JSON.stringify({code})});
-  const j=await r.json().catch(()=>({}));
-  if(!r.ok){showStatus('alertMessage',j.error||'Could not verify the code.','warning');$('alVerify').disabled=false;return}
-  showStatus('alertMessage','Number confirmed. It will now receive your alerts.','success');await refreshAlerts();
- }catch(e){showStatus('alertMessage','Network problem. Please try again.','warning');$('alVerify').disabled=false}
-}
-$('saveAlerts').onclick=async()=>{
- const c=currentCustomer||{};const typed=$('alEmail').value.trim();
- const addr=typed&&typed.toLowerCase()!==String(c.email||'').toLowerCase()?typed:'';
- if(typed&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(typed)){showStatus('alertMessage','Enter a valid email address.','warning');return}
- if($('alEmailOn').checked&&!typed){showStatus('alertMessage','Enter an email address to receive email alerts.','warning');return}
- $('saveAlerts').disabled=true;
- const sec=$('alSecOn')?$('alSecOn').checked:false;
- const {data,error}=await db.rpc('pingme_set_alert_prefs',{p_alert_secondary:sec,p_alert_email:$('alEmailOn').checked,p_email_address:addr});
- $('saveAlerts').disabled=false;
- if(error||!data||data.result!=='ok'){showStatus('alertMessage',error?'Could not save. Please try again.':secMsg(data),'warning');return}
- showStatus('alertMessage','Alert settings saved. They apply to your next alert.','success');await refreshAlerts();
-};
-$('signOut').onclick=async()=>{await db.auth.signOut();location.reload()};
-$('saveProfile').onclick=async()=>{
- if(!currentCustomer)return;const name=$('profileName').value.trim(),address=$('profileAddress').value.trim();
- if(!name){showStatus('profileMessage','Name is required.','warning');return}
- $('saveProfile').disabled=true;
- const {error}=await db.rpc('pingme_update_customer_profile',{p_name:name,p_address:address});
- $('saveProfile').disabled=false;
- if(error){showStatus('profileMessage','Profile update is not available yet. Please contact PingMe support.','warning');return}
- currentCustomer.name=name;currentCustomer.address=address;showStatus('profileMessage','Your profile has been updated.','success');
-};
-$('requestMobile').onclick=()=> $('mobileRequestBox').classList.toggle('hidden');
-$('submitMobileRequest').onclick=async()=>{
- const mobile=$('newMobile').value.trim(),reason=$('mobileReason').value.trim();
- if(!/^\+?[0-9\s()-]{8,20}$/.test(mobile)){showStatus('mobileMessage','Enter a valid mobile number.','warning');return}
- $('submitMobileRequest').disabled=true;
- const {error}=await db.rpc('pingme_request_mobile_change',{p_new_mobile:mobile,p_reason:reason||null});
- $('submitMobileRequest').disabled=false;
- if(error){showStatus('mobileMessage','Could not submit the request. Please contact PingMe support.','warning');return}
- $('newMobile').value='';$('mobileReason').value='';showStatus('mobileMessage','Your request has been sent for PingMe admin review. Your registered number has not changed.','success');
-};
-$('downloadQr').onclick=downloadQr;$('printQr').onclick=printQr;
-db.auth.onAuthStateChange((event)=>{if(event==='SIGNED_IN'||event==='TOKEN_REFRESHED')setTimeout(loadAccount,0)});
-loadAccount();
+(function(){var els=[].slice.call(document.querySelectorAll("[data-ta]"));els.forEach(function(e){e.setAttribute("data-en",e.innerHTML)});
+function apply(l){els.forEach(function(e){e.innerHTML=l==="ta"?e.getAttribute("data-ta"):e.getAttribute("data-en")});document.documentElement.lang=l==="ta"?"ta":"en";var b=document.getElementById("langBtn");if(b)b.textContent=l==="ta"?"English":"தமிழ்";try{localStorage.setItem("pmLang",l)}catch(x){}}
+var cur="en";try{cur=localStorage.getItem("pmLang")||((navigator.language||"").slice(0,2)==="ta"?"ta":"en")}catch(x){}
+var b=document.getElementById("langBtn");if(b)b.addEventListener("click",function(){cur=cur==="ta"?"en":"ta";apply(cur)});if(cur==="ta")apply("ta");})();
+</script>
+<script>
+(function(){fetch("https://pingme-api.pingmeconnect.workers.dev/api/prices").then(function(r){return r.json()}).then(function(p){
+document.querySelectorAll("[data-price]").forEach(function(e){var v=p[e.getAttribute("data-price")];if(!v)return;e.textContent=(e.getAttribute("data-pre")||"")+v+(e.getAttribute("data-post")||"");e.removeAttribute("hidden")});
+if(p.kit)document.querySelectorAll("a[data-order]").forEach(function(a){a.href=a.href.replace("Connect%20Kit.","Connect%20Kit%20priced%20at%20%E2%82%B9"+encodeURIComponent(p.kit)+".")})}).catch(function(){})})();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+(function(){var API="https://pingme-api.pingmeconnect.workers.dev/api/";
+Promise.all([fetch(API+"payment-options").then(function(r){return r.json()}),fetch(API+"prices").then(function(r){return r.json()}).catch(function(){return {}})]).then(function(a){var o=a[0]||[],pr=a[1]||{};if(!o.length)return;
+document.getElementById("pay").hidden=false;var g=document.getElementById("payGrid");
+o.forEach(function(x){var c=document.createElement("div");c.style.cssText="background:#fff;border:1px solid #c9d6ee;border-radius:16px;padding:18px;text-align:center";
+var t=document.createElement("b");t.textContent=x.label;c.appendChild(t);var q=document.createElement("div");q.style.cssText="margin:12px auto;width:200px;height:200px;display:flex;align-items:center;justify-content:center";c.appendChild(q);
+if(x.qr_image){var im=new Image();im.src=x.qr_image;im.alt="UPI QR";im.style.cssText="max-width:200px;max-height:200px";q.appendChild(im)}
+else if(x.upi_id&&window.QRCode){var link="upi://pay?pa="+encodeURIComponent(x.upi_id)+"&pn="+encodeURIComponent(x.payee_name||"Bharani Innovations")+(pr.kit?"&am="+encodeURIComponent(pr.kit):"")+"&cu=INR&tn="+encodeURIComponent("PingMe");new QRCode(q,{text:link,width:200,height:200})}
+if(x.upi_id){var u=document.createElement("div");u.style.cssText="font-weight:800;word-break:break-all";u.textContent=x.upi_id;c.appendChild(u);var bt=document.createElement("button");bt.type="button";bt.textContent="Copy UPI ID";bt.style.cssText="margin-top:8px;border:1px solid #1764df;background:#fff;color:#1764df;border-radius:999px;padding:6px 14px;font-weight:700;cursor:pointer";bt.onclick=function(){try{navigator.clipboard.writeText(x.upi_id);bt.textContent="Copied ✓"}catch(e){}};c.appendChild(bt)}
+if(x.payee_name){var pn=document.createElement("div");pn.style.cssText="font-size:12px;color:#52627c;margin-top:8px";pn.textContent=x.payee_name;c.appendChild(pn)}
+if(x.note){var n=document.createElement("div");n.style.cssText="font-size:12px;color:#52627c;margin-top:4px";n.textContent=x.note;c.appendChild(n)}
+g.appendChild(c)})}).catch(function(){})})();
 </script>
 </body></html>
