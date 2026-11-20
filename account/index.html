@@ -265,7 +265,7 @@ $('savePw').onclick=async()=>{
 /* ===== Alert numbers & email ===== */
 const PM_WA_NUMBER='+91 91500 47587';
 const fmtNum=n=>{const d=String(n||'').replace(/\D/g,'').slice(-10);return d.length===10?d.slice(0,5)+' '+d.slice(5):d};
-const SEC_MSG={invalid_number:'Enter a valid 10-digit Indian mobile number.',same_as_primary:'That is already your primary number.',already:'That number is already added.',number_limit:'This number is already linked to the maximum number of PingMe accounts.',not_eligible:'Alert numbers are available for active accounts only.',auth_required:'Please sign in again.',invalid_email:'Enter a valid email address.'};
+const SEC_MSG={invalid_name:'Please enter a name of 2 to 30 letters.',invalid_number:'Enter a valid 10-digit Indian mobile number.',same_as_primary:'That is already your primary number.',already:'That number is already added.',number_limit:'This number is already linked to the maximum number of PingMe accounts.',not_eligible:'Alert numbers are available for active accounts only.',auth_required:'Please sign in again.',invalid_email:'Enter a valid email address.'};
 const secMsg=r=>r&&r.result==='change_limit'?'You changed your alert number recently. You can change it again in '+r.days_left+' day(s). Contact PingMe if it is urgent.':(SEC_MSG[r&&r.result]||'Something went wrong. Please try again.');
 async function refreshAlerts(){const {data:{user}}=await db.auth.getUser();if(!user)return;const {data}=await db.from('pingme_customers').select('*').eq('auth_user_id',user.id).maybeSingle();if(data){currentCustomer=data;renderAlerts(data)}}
 function renderAlerts(c){
@@ -277,25 +277,27 @@ function renderAlerts(c){
    <div class="row"><button id="alVerify">Confirm number</button><button id="alCancel" class="secondary">Cancel</button></div>`;
   $('alVerify').onclick=verifySecondary;$('alCancel').onclick=removeSecondary;
  }else if(c.secondary_mobile){
-  box.innerHTML=`<div class="metric"><small>Second WhatsApp number (verified ✓)</small><b>${fmtNum(c.secondary_mobile)}</b></div>
+  box.innerHTML=`<div class="metric"><small>Second WhatsApp number (verified ✓)</small><b>${fmtNum(c.secondary_mobile)}</b>${c.secondary_name?'<small>'+String(c.secondary_name).replace(/[<>&"]/g,'')+'</small>':''}</div>
    <label style="display:flex;gap:10px;align-items:center;font-weight:700;margin-top:10px"><input type="checkbox" id="alSecOn" style="width:20px;height:20px" ${c.alert_secondary?'checked':''}> Send alerts to this number too (1 extra credit per alert)</label>
    <div class="row" style="margin-top:10px"><button id="alChange" class="secondary">Change number</button><button id="alRemove" class="secondary">Remove</button></div>
-   <div id="alChangeBox" class="hidden" style="margin-top:10px"><div class="field"><label for="alNewSec">New number</label><input id="alNewSec" type="tel" placeholder="98765 43210"></div><button id="alChangeGo">Continue</button><p class="muted small">You can change this number once every 30 days. The new number must confirm with a code.</p></div>`;
+   <div id="alChangeBox" class="hidden" style="margin-top:10px"><div class="field"><label for="alNewName">Name of this person</label><input id="alNewName" maxlength="30" placeholder="e.g. Meena" value="${(c.secondary_name||'').replace(/[<>&"]/g,'')}"></div><div class="field"><label for="alNewSec">New number</label><input id="alNewSec" type="tel" placeholder="98765 43210"></div><button id="alChangeGo">Continue</button><p class="muted small">You can change this number once every 30 days. The new number must confirm with a code.</p></div>`;
   $('alChange').onclick=()=>$('alChangeBox').classList.toggle('hidden');
-  $('alChangeGo').onclick=()=>addSecondary($('alNewSec').value);
+  $('alChangeGo').onclick=()=>addSecondary($('alNewSec').value,$('alNewName').value);
   $('alRemove').onclick=removeSecondary;
  }else{
-  box.innerHTML=`<div class="field"><label for="alNewSec">Add a second WhatsApp number (optional)</label><input id="alNewSec" type="tel" placeholder="98765 43210"></div>
+  box.innerHTML=`<div class="field"><label for="alNewName">Name of this person *</label><input id="alNewName" maxlength="30" placeholder="e.g. Meena (wife)"></div><div class="field"><label for="alNewSec">Add a second WhatsApp number (optional)</label><input id="alNewSec" type="tel" placeholder="98765 43210"></div>
    <button id="alAdd" class="secondary">Add number</button>
    <p class="muted small">Useful if you might miss an alert on your primary number, for example a family member's number. That person must confirm by sending a WhatsApp message, so nobody is added without agreeing.</p>`;
-  $('alAdd').onclick=()=>addSecondary($('alNewSec').value);
+  $('alAdd').onclick=()=>addSecondary($('alNewSec').value,$('alNewName').value);
  }
  $('alEmailOn').checked=c.alert_email!==false;
  $('alEmail').value=c.alert_email_address||c.email||'';
 }
-async function addSecondary(v){
+async function addSecondary(v,nm){
+ nm=String(nm||'').trim();
+ if(nm.length<2){showStatus('alertMessage','Please enter the name of the person who owns this number.','warning');return}
  showStatus('alertMessage','Saving…');
- const {data,error}=await db.rpc('pingme_secondary_set',{p_mobile:String(v||'')});
+ const {data,error}=await db.rpc('pingme_secondary_set',{p_mobile:String(v||''),p_name:nm});
  if(error||!data||data.result!=='ok'){showStatus('alertMessage',error?'Could not save. Please try again.':secMsg(data),'warning');return}
  showStatus('alertMessage','Saved. Now the second number must confirm it (see the steps above).','success');await refreshAlerts();
 }
