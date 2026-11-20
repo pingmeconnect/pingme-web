@@ -1,0 +1,33 @@
+:root{--blue:#123b80;--navy:#14264b;--ink:#52617a;--mute:#71809a;--line:#d9e1ef;--bg:#f2f5fb;--ok:#1b7f4b;--err:#b3261e;color-scheme:light}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:"Avenir Next","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;background:var(--bg);color:var(--navy);min-height:100vh;line-height:1.5}
+.shell{max-width:30rem;margin:0 auto;padding:1.25rem 1rem 2rem}
+.brand{display:flex;align-items:center;gap:.8rem;background:var(--blue);color:#fff;padding:1rem 1.1rem;border-radius:1rem 1rem 0 0}
+.mark{width:2.6rem;height:2.6rem;flex:none}
+.word{font-size:1.45rem;font-weight:700;letter-spacing:.01em;line-height:1.1}
+.tag{font-size:.82rem;opacity:.85}
+.card{background:#fff;border:1px solid var(--line);border-top:0;border-radius:0 0 1rem 1rem;padding:1.4rem 1.2rem 1.6rem;box-shadow:0 10px 30px rgba(18,59,128,.08)}
+h1{font-size:1.4rem;margin:.1rem 0 .8rem}
+.steps{margin:0 0 1.3rem;padding-left:1.2rem;color:var(--ink);font-size:.93rem}
+.steps li{margin:.3rem 0}.steps strong{color:var(--navy)}
+label{display:block;font-weight:600;font-size:.9rem;margin:1rem 0 .35rem}
+input{width:100%;font:inherit;font-size:1rem;padding:.8rem .85rem;border:1.5px solid var(--line);border-radius:.65rem;background:#fbfcff;color:var(--navy)}
+input:focus-visible,button:focus-visible{outline:3px solid #7ea6f0;outline-offset:1px;border-color:var(--blue)}
+#otp{letter-spacing:.35em;font-variant-numeric:tabular-nums;font-size:1.25rem}
+.pwrow{display:flex;gap:.5rem}.pwrow input{flex:1}
+.hint{margin:.35rem 0 0;font-size:.8rem;color:var(--mute)}
+button{font:inherit;cursor:pointer;border-radius:.65rem}
+.ghost{background:#fff;border:1.5px solid var(--line);color:var(--blue);padding:0 .9rem;font-weight:600}
+.primary{width:100%;margin-top:1.3rem;padding:.95rem;border:0;background:var(--blue);color:#fff;font-size:1.05rem;font-weight:700}
+.primary:hover{background:#0e2f69}
+.primary:disabled{opacity:.6;cursor:progress}
+.msg{margin-top:1.1rem;padding:.75rem .9rem;border-radius:.65rem;font-size:.92rem}
+.msg.err{background:#fdeceb;color:var(--err);border:1px solid #f3c4c1}
+.done{text-align:center;padding:1rem .3rem}
+.done h2{margin:.6rem 0 .4rem}.done p{color:var(--ink);margin:0}
+.tick{width:3.4rem;height:3.4rem;border-radius:50%;background:var(--ok);color:#fff;font-size:1.9rem;line-height:3.4rem;margin:0 auto}
+.foot{text-align:center;color:var(--mute);font-size:.8rem;margin-top:1.1rem}
+@media (prefers-reduced-motion:no-preference){.done:not([hidden]){animation:pop .35s ease-out}@keyframes pop{from{transform:scale(.96);opacity:0}to{transform:none;opacity:1}}}
+
+.brand{background:#fff;color:#082b78;border-bottom:3px solid #e8b84d;flex-wrap:wrap;justify-content:space-between}.brand .logo{width:150px;height:auto}.brand .tag{color:#082b78;font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
