@@ -34,9 +34,12 @@ footer{text-align:center;color:var(--muted);padding:26px 16px;font-size:12px}
 <main>
 <section id="loginPanel" class="panel">
   <h1>Welcome to your PingMe account</h1>
-  <p class="muted">Sign in using the email address registered with your PingMe customer account. We’ll send you a secure email sign-in link.</p>
-  <div class="field"><label for="email">Registered email address</label><input id="email" type="email" autocomplete="email" placeholder="you@example.com" required></div>
-  <button id="sendLink">Send secure sign-in link</button>
+  <p class="muted">Already activated? Sign in with your registered email (or mobile) and the password you created. Not activated yet? Send ACTIVATE and your Customer ID to PingMe on WhatsApp, then finish at <a href="/activate/">pingmeconnect.in/activate</a>.</p>
+  <div class="field"><label for="email">Registered email or mobile number</label><input id="email" type="text" autocomplete="username" placeholder="you@example.com" required></div>
+  <div class="field"><label for="loginPassword">Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Your PingMe password"></div>
+  <button id="signInPw">Sign in</button>
+  <p class="muted small" style="margin:14px 0 6px">Forgot your password or never set one? Get a one-time email link instead:</p>
+  <button id="sendLink" class="secondary">Send secure sign-in link</button>
   <p id="loginMessage" class="status muted" role="status" aria-live="polite"></p>
   <div class="notice">This portal is for existing registered customers. New customers must first be registered by PingMe. Public QR scanning does not require customer login.</div>
 </section>
@@ -163,7 +166,8 @@ async function loadAccount(){
  const {data:{user},error:authErr}=await db.auth.getUser();
  if(authErr||!user){$('loginPanel').classList.remove('hidden');$('accountPanel').classList.add('hidden');return}
  $('loginPanel').classList.add('hidden');
- const {error:claimError}=await db.rpc('pingme_claim_customer_account');
+ const already=await db.from('pingme_customers').select('id').eq('auth_user_id',user.id).maybeSingle();
+ const {error:claimError}=already.data?{error:null}:await db.rpc('pingme_claim_customer_account');
  if(claimError){$('loginPanel').classList.remove('hidden');showStatus('loginMessage',safeError(claimError,'Account linking is not ready. Please contact PingMe support.'),'warning');return}
  const {data,error}=await db.from('pingme_customers').select('id,customer_id,qr_token,name,mobile,email,address,status,subscription_start,subscription_expiry,paid_credits,test_credits').eq('auth_user_id',user.id).maybeSingle();
  if(error||!data){$('loginPanel').classList.remove('hidden');showStatus('loginMessage','Your verified email is not linked to a PingMe customer account. Please contact PingMe support.','warning');return}
@@ -177,8 +181,21 @@ async function loadAccount(){
  $('openScanner').href=qrDestination;
  await buildBrandedQr();
 }
+$('signInPw').onclick=async()=>{
+ const id=$('email').value.trim(),pw=$('loginPassword').value;
+ if(!id||!pw){showStatus('loginMessage','Enter your email (or mobile) and password.','warning');return}
+ const digits=id.replace(/\D/g,'');
+ const cred=id.includes('@')?{email:id,password:pw}:(digits.length>=10&&digits.length<=12?{phone:'+'+(digits.length===10?'91'+digits:digits),password:pw}:null);
+ if(!cred){showStatus('loginMessage','Enter a valid email address or 10-digit mobile number.','warning');return}
+ $('signInPw').disabled=true;showStatus('loginMessage','Signing in…');
+ const {error}=await db.auth.signInWithPassword(cred);
+ $('signInPw').disabled=false;
+ if(error){showStatus('loginMessage','Sign-in failed. Check your email/mobile and password, or use the email link below.','warning');return}
+ $('loginPassword').value='';showStatus('loginMessage','');await loadAccount();};
+$('loginPassword').addEventListener('keydown',e=>{if(e.key==='Enter')$('signInPw').click()});
 $('sendLink').onclick=async()=>{const email=$('email').value.trim();if(!email){showStatus('loginMessage','Enter your registered email.','warning');return}
  $('sendLink').disabled=true;showStatus('loginMessage','Sending secure sign-in link…');
+ if(!email.includes('@')){showStatus('loginMessage','The email link needs your registered email address.','warning');return}
  const {error}=await db.auth.signInWithOtp({email,options:{emailRedirectTo:location.origin+'/account/'}});
  $('sendLink').disabled=false;showStatus('loginMessage',error?error.message:'Check your email for the secure PingMe sign-in link.');};
 $('signOut').onclick=async()=>{await db.auth.signOut();location.reload()};
