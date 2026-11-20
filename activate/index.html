@@ -7,6 +7,14 @@
 <meta name="referrer" content="no-referrer">
 <title>Activate your PingMe account</title>
 <link rel="stylesheet" href="/activate/activate.css">
+<style>
+.lead{margin:-.4rem 0 1.1rem;color:var(--mute,#66748c);font-size:.95rem}
+.stephead{display:flex;align-items:center;gap:.6rem;font-weight:800;color:var(--navy,#0b1e45);font-size:1.02rem;margin:.2rem 0 .6rem}
+.stephead .num{width:1.7rem;height:1.7rem;border-radius:50%;background:var(--blue,#1768c5);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:.9rem;flex:none}
+.wabtn{display:flex;align-items:center;justify-content:center;margin-top:.9rem;padding:1rem;border-radius:14px;background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;font-weight:800;font-size:1.08rem;text-decoration:none;box-shadow:0 8px 22px #128c7e44}
+.wabtn.off{filter:grayscale(.7);opacity:.6}
+.wabtn:active{transform:scale(.99)}
+</style>
 </head>
 <body>
 <main class="shell">
@@ -16,16 +24,17 @@
 
   <section class="card" id="card">
     <h1>Activate your account</h1>
-    <ol class="steps">
-      <li>On WhatsApp, send <strong>ACTIVATE</strong> and your Customer ID (for example <strong>ACTIVATE PM-A15E3C15</strong>) to the PingMe Business number, from your registered mobile.</li>
-      <li>You will receive a six-digit code, valid for 30 minutes.</li>
-      <li>Enter it below and choose a password.</li>
-    </ol>
+    <p class="lead">Two quick steps. It takes about a minute.</p>
 
     <form id="form" novalidate autocomplete="off">
-      <label for="cid">Customer ID</label>
+      <div class="stephead"><span class="num">1</span> Get your code on WhatsApp</div>
+      <label for="cid">Your Customer ID</label>
       <input id="cid" name="cid" type="text" inputmode="text" autocapitalize="characters" autocomplete="off" spellcheck="false" maxlength="40" placeholder="PM-A15E3C15" required>
+      <p class="hint">Find it on your PingMe kit card or in the message PingMe sent you.</p>
+      <a id="waBtn" class="wabtn" href="#" target="_blank" rel="noopener" role="button">💬&nbsp; Open WhatsApp &amp; send ACTIVATE</a>
+      <p class="hint" id="waHint">WhatsApp opens with the message ready. Just press <b>Send</b> — from your <b>registered mobile</b>. You will get a six-digit code within a few seconds (valid 30 minutes).</p>
 
+      <div class="stephead" style="margin-top:1.6rem"><span class="num">2</span> Enter the code and choose a password</div>
       <label for="otp">Six-digit code</label>
       <input id="otp" name="otp" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" placeholder="123456" required>
 
@@ -51,6 +60,19 @@
   </section>
   <p class="foot">Private · Secure · Simple</p>
 </main>
+<script>
+(function(){
+  var WA="919150047587",cid=document.getElementById("cid"),btn=document.getElementById("waBtn"),hint=document.getElementById("waHint");
+  var q=new URLSearchParams(location.search),pre=(q.get("id")||q.get("c")||"").toUpperCase().replace(/[^A-Z0-9-]/g,"");
+  if(pre)cid.value=pre;
+  function norm(){return cid.value.toUpperCase().replace(/[^A-Z0-9-]/g,"")}
+  function ok(){return /^PM-[A-Z0-9]{4,}$/.test(norm())}
+  function sync(){var id=norm();btn.classList.toggle("off",!ok());btn.href=ok()?"https://wa.me/"+WA+"?text="+encodeURIComponent("ACTIVATE "+id):"#"}
+  var HINT=hint.innerHTML;
+  cid.addEventListener("input",function(){sync();if(ok())hint.innerHTML=HINT});sync();
+  btn.addEventListener("click",function(e){if(!ok()){e.preventDefault();hint.innerHTML="<b style=\"color:#b42318\">Please type your Customer ID first</b> (it looks like PM-A15E3C15), then tap the green button.";cid.focus();}else{hint.innerHTML="WhatsApp is opening… press <b>Send</b>. Then come back here and type the six-digit code you receive.";}});
+})();
+</script>
 <script src="/activate/activate.js"></script>
 </body>
 </html>
