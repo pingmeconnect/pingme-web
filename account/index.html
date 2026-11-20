@@ -54,7 +54,7 @@ footer{text-align:center;color:var(--muted);padding:26px 16px;font-size:12px}
   <div class="field"><label for="email">Email or mobile number</label><input id="email" type="text" autocomplete="username" inputmode="email" placeholder="you@example.com  or  9876543210" required></div>
   <div class="field"><label for="loginPassword">Password</label><div style="display:flex;gap:8px"><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Your PingMe password" style="flex:1"><button type="button" id="showPw" class="secondary" aria-label="Show or hide password">Show</button></div></div>
   <button id="signInPw">Sign in</button>
-  <p class="small" style="margin:14px 0 0"><a href="#" id="forgotLink">Forgot your password?</a> &nbsp;·&nbsp; <a href="/activate/">Activate my account</a></p>
+  <p class="small" style="margin:14px 0 0"><a href="#" id="forgotLink">Forgot your password?</a> &nbsp;·&nbsp; <a href="/activate/" style="font-weight:800">New here? Activate my account →</a></p>
   <div id="forgotBox" class="hidden" style="margin-top:14px;border-top:1px solid var(--line);padding-top:14px">
     <b>Reset your password</b>
     <p class="muted small" style="margin:6px 0 10px"><b>Have an email on your account?</b> Enter it and we’ll email you a reset link (free).</p>
@@ -258,16 +258,20 @@ $('signInPw').onclick=async()=>{
  $('signInPw').disabled=true;showStatus('loginMessage','Signing in…');
  let err=null;
  try{
-  if(id.includes('@')){({error:err}=await db.auth.signInWithPassword({email:id,password:pw}))}
-  else{
-   const r=await fetch(PM_API+'/api/customer/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({identifier:id,password:pw})});
+  // Email AND mobile both sign in through the PingMe server, so the wrong-password lock (5 tries / 15 min) always applies.
+  let r=null;
+  try{r=await fetch(PM_API+'/api/customer/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({identifier:id,password:pw})})}catch(e){r=null}
+  if(!r){
+   if(id.includes('@')){({error:err}=await db.auth.signInWithPassword({email:id,password:pw}))}   // server unreachable: plain email sign-in still works
+   else err={message:'network'}
+  }else{
    const j=await r.json().catch(()=>({}));
-   if(!r.ok)err={message:j.error||'failed'};
+   if(!r.ok)err={message:j.error||'failed',locked:r.status===429};
    else{const s=await db.auth.setSession({access_token:j.access_token,refresh_token:j.refresh_token});err=s.error}
   }
  }catch(e){err=e}
  $('signInPw').disabled=false;
- if(err){showStatus('loginMessage','Sign-in failed. Check your email or mobile and your password. Forgot it? Tap “Forgot your password?”.','warning');return}
+ if(err){showStatus('loginMessage',err.locked?err.message:'Sign-in failed. Check your email or mobile and your password. Forgot it? Tap “Forgot your password?”.','warning');return}
  $('loginPassword').value='';showStatus('loginMessage','');await loadAccount();
 };
 $('loginPassword').addEventListener('keydown',e=>{if(e.key==='Enter')$('signInPw').click()});
