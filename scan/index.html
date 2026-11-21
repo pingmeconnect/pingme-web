@@ -1114,7 +1114,7 @@ html body #appShell #waitingState .pm-scene{border-radius:inherit}
           <li>✓ <span data-i18n="kitItem3">Starter credits included</span></li>
           <li>✓ <span data-i18n="kitItem4">1-year subscription included</span></li>
         </ul>
-        <button onclick="orderStarterKitWhatsApp()" class="w-full py-4 rounded-2xl bg-emerald-600 text-white font-black text-lg shadow-lg">🟢 <span data-i18n="orderWhatsApp">ORDER ON WHATSAPP</span></button>
+        <button onclick="orderStarterKitWhatsApp()" class="w-full py-4 rounded-2xl bg-emerald-600 text-white font-black text-lg shadow-lg">🛒 <span data-i18n="orderWhatsApp">ORDER NOW</span></button>
         <a href="https://pingmeconnect.in/" target="_blank" rel="noopener" class="web-link-btn">🌐 pingmeconnect.in</a>
       </div>
     </div>
@@ -1201,7 +1201,7 @@ html body #appShell #waitingState .pm-scene{border-radius:inherit}
         kitIntro:"Everything you need to connect through one QR.",
         kitItem1:"QR stickers for vehicle and other uses", kitItem2:"QR keychains and reusable tags",
         kitItem3:"Starter credits included", kitItem4:"1-year subscription included",
-        orderWhatsApp:"ORDER ON WHATSAPP", rateTitle:"REVIEW",
+        orderWhatsApp:"ORDER NOW", rateTitle:"REVIEW",
         reviewPlaceholder:"Your feedback (optional)...", sendFeedback:"SEND FEEDBACK",
         photoAdded:"✓ Photo selected", locationAdded:"✓ Location captured",
         noReply:"No reply in 180 seconds.", closeAfterTimeout:"CLOSE SESSION",
@@ -1224,7 +1224,7 @@ html body #appShell #waitingState .pm-scene{border-radius:inherit}
         kitPriceNote:"ஒருமுறை செலுத்தும் விலை", kitIntro:"ஒரே QR மூலம் இணைக்க தேவையான அனைத்தும்.",
         kitItem1:"வாகனம் மற்றும் பிற பயன்பாடுகளுக்கான QR ஸ்டிக்கர்கள்", kitItem2:"QR கீசெயின்கள் மற்றும் மீண்டும் பயன்படுத்தும் டேக்குகள்",
         kitItem3:"தொடக்க கிரெடிட்கள் சேர்க்கப்பட்டுள்ளன", kitItem4:"1 ஆண்டு சந்தா சேர்க்கப்பட்டுள்ளது",
-        orderWhatsApp:"WHATSAPP மூலம் ஆர்டர்", rateTitle:"உங்கள் கருத்தைப் பகிருங்கள்",
+        orderWhatsApp:"இப்போதே ஆர்டர் செய்யுங்கள்", rateTitle:"உங்கள் கருத்தைப் பகிருங்கள்",
         reviewPlaceholder:"உங்கள் கருத்து (விருப்பம்)...", sendFeedback:"கருத்தை அனுப்பு",
         photoAdded:"✓ புகைப்படம் தேர்ந்தெடுக்கப்பட்டது", locationAdded:"✓ இருப்பிடம் பெறப்பட்டது",
         noReply:"180 விநாடிகளில் பதில் இல்லை.", closeAfterTimeout:"முடிக்கவும்",
@@ -1846,8 +1846,7 @@ html body #appShell #waitingState .pm-scene{border-radius:inherit}
     function closeBuyModal() { document.getElementById("buyModal").classList.add("hidden"); }
 
     function orderStarterKitWhatsApp() {
-      const message = "Hi, I'm interested in ordering the PingMe Smart Connect Kit" + (window.PM_KIT_PRICE ? " priced at ₹" + window.PM_KIT_PRICE : "") + ". Please share the details.";
-      window.open(`https://wa.me/${CONFIG.WHATSAPP_ORDER_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
+      window.open("https://pingmeconnect.in/order/", "_blank");
     }
 
     async function openShareModal() {
