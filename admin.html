@@ -1366,6 +1366,7 @@ async function pmAdSave(){var t=document.getElementById('ad_title').value.trim()
 .pmHint{display:block;margin-top:3px;font-size:11.5px;line-height:1.4;color:#5b6b8c;font-weight:400}
 .pmHint i{display:block;font-style:normal}
 body.pmNoHelp .pmHelp,body.pmNoHelp .pmHint{display:none}
+#pmHelpFab{position:fixed;right:14px;bottom:84px;z-index:50;border:1px solid #1764df;background:#fff;color:#1764df;border-radius:999px;width:auto;min-width:40px;height:40px;padding:0 12px;font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.18)}
 #pmHelpBtn{margin:14px 10px 0;font-size:12px;border:1px solid #6f8fd8;background:transparent;color:#cfe0ff;border-radius:999px;padding:6px 12px;cursor:pointer;width:calc(100% - 20px)}
 </style>
 <script>
@@ -1450,13 +1451,13 @@ var F=[
 ["email","Your admin login email.","உங்கள் நிர்வாக உள்நுழைவு மின்னஞ்சல்."],
 ["password","Your admin password. Keep it private.","உங்கள் நிர்வாக கடவுச்சொல். ரகசியமாக வைத்திருங்கள்."]
 ];
-var enabled=true;try{enabled=localStorage.getItem('pmHelp')!=='off'}catch(e){}
+var enabled=false;try{enabled=localStorage.getItem('pmHelp')==='on'}catch(e){}
 document.body.classList.toggle('pmNoHelp',!enabled);
 function pageHelp(){document.querySelectorAll('section.page').forEach(function(sec){var id=sec.id.replace('page-','');var h=PAGE[id];if(!h)return;var ph=sec.querySelector('.panelhead');if(!ph)return;var ex=sec.querySelector(':scope > .pmHelp');if(ex&&ex.dataset.p===id)return;if(ex)ex.remove();var d=document.createElement('div');d.className='pmHelp';d.dataset.p=id;d.innerHTML='ⓘ '+h[0]+'<i>'+h[1]+'</i>';ph.insertAdjacentElement('afterend',d)})}
 function fieldHints(){document.querySelectorAll('.field > label').forEach(function(l){if(l.dataset.h)return;var t=l.textContent.toLowerCase().replace(/\s+/g,' ').trim();var m=null;for(var i=0;i<F.length;i++){if(t.indexOf(F[i][0])===0||(F[i][0].length>7&&t.indexOf(F[i][0])>-1)){m=F[i];break}}l.dataset.h='1';if(!m)return;var s=document.createElement('small');s.className='pmHint';s.innerHTML=m[1]+'<i>'+m[2]+'</i>';l.insertAdjacentElement('afterend',s)})}
 var tm=null;function run(){clearTimeout(tm);tm=setTimeout(function(){try{pageHelp();fieldHints()}catch(e){}},120)}
 new MutationObserver(run).observe(document.body,{childList:true,subtree:true});run();
-var nav=document.querySelector('.sidebar nav');if(nav){var b=document.createElement('button');b.id='pmHelpBtn';b.type='button';var set=function(){b.textContent=enabled?'ⓘ Help notes: ON / உதவி: ON':'ⓘ Help notes: OFF / உதவி: OFF';document.body.classList.toggle('pmNoHelp',!enabled)};b.onclick=function(){enabled=!enabled;try{localStorage.setItem('pmHelp',enabled?'on':'off')}catch(e){}set()};set();nav.appendChild(b)}
+var nav=document.querySelector('.sidebar nav');var btns=[];var set=function(){btns.forEach(function(b){b.textContent=b.dataset.f?(enabled?'ⓘ ON':'ⓘ'):(enabled?'ⓘ Help notes: ON / உதவி: ON':'ⓘ Help notes: OFF / உதவி: OFF')});document.body.classList.toggle('pmNoHelp',!enabled)};var tog=function(){enabled=!enabled;try{localStorage.setItem('pmHelp',enabled?'on':'off')}catch(e){}set()};if(nav){var b=document.createElement('button');b.id='pmHelpBtn';b.type='button';b.onclick=tog;btns.push(b);nav.appendChild(b)}var f=document.createElement('button');f.id='pmHelpFab';f.type='button';f.dataset.f='1';f.title='Help notes on/off';f.onclick=tog;btns.push(f);document.body.appendChild(f);set()
 })();
 </script>
 </body></html>
