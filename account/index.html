@@ -229,7 +229,7 @@ async function loadAccount(){
  const {data,error}=await db.from('pingme_customers').select('*').eq('auth_user_id',user.id).maybeSingle();
  if(error||!data){$('loginPanel').classList.remove('hidden');showStatus('loginMessage','Your verified email is not linked to a PingMe customer account. Please contact PingMe support.','warning');return}
  currentCustomer=data;$('accountPanel').classList.remove('hidden');setText('accountEmail',user.email||'');
- setText('customerId',data.customer_id);setText('status',data.status);setText('paidCredits',data.paid_credits);try{const lc=document.getElementById('lowCreditBanner'),pc=Number(data.paid_credits)||0;if(data.status==='Active'&&pc<=20){lc.style.display='block';lc.innerHTML='<b>'+(pc<=0?'You have no credits left – alerts will stop.':'Only '+pc+' credits left.')+'</b> Recharge on WhatsApp: <a href="https://wa.me/919840547587?text='+encodeURIComponent('Hi PingMe, please recharge my account '+data.customer_id)+'" target="_blank" rel="noopener">message PingMe</a>'}else lc.style.display='none'}catch(e){}setText('testCredits',data.test_credits);
+ setText('customerId',data.customer_id);setText('status',data.status);setText('paidCredits',data.paid_credits);try{const lc=document.getElementById('lowCreditBanner'),pc=Number(data.paid_credits)||0;if(data.status==='Active'&&pc<=20){lc.style.display='block';lc.innerHTML='<b>'+(pc<=0?'You have no credits left – alerts will stop.':'Only '+pc+' credits left.')+'</b> Recharge on WhatsApp: <a href="https://wa.me/919150047587?text='+encodeURIComponent('Hi PingMe, please recharge my account '+data.customer_id)+'" target="_blank" rel="noopener">message PingMe</a>'}else lc.style.display='none'}catch(e){}setText('testCredits',data.test_credits);
  setText('subscriptionStart',friendlyDate(data.subscription_start));setText('subscriptionExpiry',friendlyDate(data.subscription_expiry));
  $('profileName').value=data.name||'';$('profileMobile').value=data.mobile||'';$('profileEmail').value=data.email||user.email||'';$('profileAddress').value=data.address||'';
  setText('qrCustomer',data.customer_id);
@@ -510,7 +510,7 @@ function showAgreementModal(){
 <script>
 /* ===== Notifications: automatic reminders + announcements (popup, then kept in the list) ===== */
 (function(){
-var _l=loadAccount,shown=false,SUP='919840547587';
+var _l=loadAccount,shown=false,SUP='919150047587';
 function esc(x){return String(x==null?'':x).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function wa(msg){return 'https://wa.me/'+SUP+'?text='+encodeURIComponent(msg)}
 function fd(v){try{return new Date(v).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}catch(e){return ''}}
