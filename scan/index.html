@@ -1054,9 +1054,9 @@ html body #appShell #waitingState .pm-scene{border-radius:inherit}
           <img src="/assets/qr-tag-mockup.png" alt="PingMe QR tag" />
         </div>
         <div class="action-grid">
-          <button onclick="openBuyModal()" class="action-button action-buy">🛒 <span data-i18n="buyPingMe">BUY</span></button>
+          <button onclick="orderStarterKitWhatsApp()" class="action-button action-buy">🛒 <span data-i18n="buyPingMe">BUY</span></button>
           <button onclick="openShareModal()" class="action-button action-share">↗ <span data-i18n="referFriend">SHARE</span></button>
-          <button onclick="openReviewModal()" class="action-button action-rate">★ <span data-i18n="rateUs">RATE</span></button>
+          <button onclick="goGoogleReview()" class="action-button action-rate">★ <span data-i18n="rateUs">RATE</span></button>
           <button onclick="finishSession()" class="action-button action-done">✓ <span data-i18n="done">DONE</span></button>
         </div>
       </div>
@@ -1067,9 +1067,9 @@ html body #appShell #waitingState .pm-scene{border-radius:inherit}
           <div class="result-heading"><div class="status-pill timeout-pill">◷ <span data-i18n="timeUp">TIME'S UP!</span></div><p data-i18n="noReplyShort">No reply yet.</p><p class="timeout-note" data-i18n="sessionEnded">Your session has ended.</p></div>
         </div>
         <div class="action-grid">
-          <button onclick="openBuyModal()" class="action-button action-buy">🛒 <span data-i18n="buyPingMe">BUY</span></button>
+          <button onclick="orderStarterKitWhatsApp()" class="action-button action-buy">🛒 <span data-i18n="buyPingMe">BUY</span></button>
           <button onclick="openShareModal()" class="action-button action-share">↗ <span data-i18n="referFriend">SHARE</span></button>
-          <button onclick="openReviewModal()" class="action-button action-rate">★ <span data-i18n="rateUs">RATE</span></button>
+          <button onclick="goGoogleReview()" class="action-button action-rate">★ <span data-i18n="rateUs">RATE</span></button>
           <button onclick="finishSession()" class="action-button action-done">✓ <span data-i18n="done">DONE</span></button>
         </div>
       </div>
@@ -1119,6 +1119,15 @@ html body #appShell #waitingState .pm-scene{border-radius:inherit}
       </div>
     </div>
 
+    <div id="reviewThankOverlay" class="hidden fixed inset-0 z-50 bg-slate-950/85 flex items-center justify-center p-4" onclick="closeReviewThanks()">
+      <div class="w-full max-w-sm rounded-3xl bg-white border-2 border-amber-300 p-6 text-center text-slate-900 space-y-3 shadow-2xl">
+        <img src="/assets/mascot-smile.png" alt="Happy PingMe mascot" class="mx-auto h-44 object-contain mascot-float" />
+        <div class="text-4xl">🙏😊</div>
+        <h3 class="font-black text-indigo-900 text-2xl">Thank you!</h3>
+        <p class="font-bold text-slate-700">Thanks for your review. It means a lot to us!</p>
+        <button onclick="closeReviewThanks()" class="w-full py-3 rounded-2xl bg-emerald-600 text-white font-black text-lg">OK</button>
+      </div>
+    </div>
     <!-- RATE MODAL: feedback is saved to Supabase table pingme_reviews (shown in Admin > Reviews) -->
     <div id="reviewModal" class="hidden fixed inset-0 z-50 bg-slate-950/85 flex items-center justify-center p-4">
       <div class="w-full max-w-sm rounded-3xl bg-white border-2 border-amber-300 p-5 text-slate-900 space-y-4 shadow-2xl">
@@ -1846,7 +1855,7 @@ html body #appShell #waitingState .pm-scene{border-radius:inherit}
     function closeBuyModal() { document.getElementById("buyModal").classList.add("hidden"); }
 
     function orderStarterKitWhatsApp() {
-      window.open("https://pingmeconnect.in/order/", "_blank");
+      window.location.href = "https://pingmeconnect.in/order/";
     }
 
     async function openShareModal() {
@@ -1878,6 +1887,11 @@ html body #appShell #waitingState .pm-scene{border-radius:inherit}
       document.querySelector('#reviewModal button[onclick="submitReview()"]').classList.toggle("hidden", !show);
       document.getElementById("reviewThanksBox").classList.toggle("hidden", show);
     }
+    function goGoogleReview() {
+      try { window.open("https://g.page/r/CcRuXE4I0rmfEBM/review", "_blank", "noopener"); } catch (e) { window.location.href = "https://g.page/r/CcRuXE4I0rmfEBM/review"; }
+      const o = document.getElementById("reviewThankOverlay"); if (o) o.classList.remove("hidden");
+    }
+    function closeReviewThanks() { document.getElementById("reviewThankOverlay").classList.add("hidden"); }
     function openReviewModal() { selectedRating = 0; paintStars(); document.getElementById("reviewText").value = ""; setReviewFormVisible(!reviewSubmitted); document.getElementById("reviewModal").classList.remove("hidden"); }
     function closeReviewModal() { document.getElementById("reviewModal").classList.add("hidden"); }
     function setRating(value) { selectedRating = value; paintStars(); }
@@ -2487,6 +2501,21 @@ button:active:not(:disabled), label:active, .cat-card:active, .tpl-pill:active{ 
 
 <script src="/scan/pingme-lively.js" defer></script>
 <script src="/scan/pm-ads.js" defer></script>
+<script id="pmWelcomeVoice">
+/* Warm "Vanakkam! Welcome to PingMe" voice, once per visit. Browsers allow sound only after a first tap/click, so it plays on the first touch (or at once where the browser allows it).
+   To use a real recorded voice, upload /assets/welcome-en.mp3 and /assets/welcome-ta.mp3 - they are used automatically; otherwise the phone's en-IN / ta-IN voice speaks. */
+(function(){
+  var done=false,busy=false;
+  try{if(sessionStorage.getItem("pmWelcomedScan")==="1")return}catch(e){}
+  function ta(){try{return (typeof currentLang!=="undefined"?currentLang==="ta":document.documentElement.lang==="ta")}catch(e){return false}}
+  function pick(t){var v=[];try{v=speechSynthesis.getVoices()||[]}catch(e){}var best=null,bs=-1;v.forEach(function(x){var s=0,l=String(x.lang||"").replace("_","-"),n=String(x.name||"");if(t){if(/^ta(-|$)/i.test(l))s+=10}else{if(/^en-IN$/i.test(l))s+=10;else if(/^(hi|ta|te|ml|kn)-IN$/i.test(l))s+=4;else if(/^en(-|$)/i.test(l))s+=1}if(s>0){if(/female|heera|neerja|veena|lekha|priya|kalpana|google/i.test(n))s+=3;if(/male/i.test(n)&&!/female/i.test(n))s-=1}if(s>bs){bs=s;best=x}});return bs>0?best:null}
+  function tts(){try{if(!("speechSynthesis" in window)){busy=false;return}var t=ta(),u=new SpeechSynthesisUtterance(t?"வணக்கம்! பிங்மீக்கு வரவேற்கிறோம்.":"Vanakkam! Welcome to PingMe.");u.lang=t?"ta-IN":"en-IN";u.rate=.95;u.pitch=1.12;u.volume=1;var pv=pick(t);if(pv){u.voice=pv;u.lang=pv.lang||u.lang}u.onstart=function(){done=true;try{sessionStorage.setItem("pmWelcomedScan","1")}catch(e){}};u.onerror=function(){busy=false};u.onend=function(){busy=false};speechSynthesis.cancel();speechSynthesis.speak(u);setTimeout(function(){if(!done)busy=false},400)}catch(e){busy=false}}
+  function play(){if(done||busy)return;busy=true;if(!window.__pmMp3){tts();return}try{var a=new Audio(ta()?"/assets/welcome-ta.mp3":"/assets/welcome-en.mp3");a.volume=1;a.addEventListener("error",tts,{once:true});var p=a.play();if(p&&p.then)p.then(function(){done=true;try{sessionStorage.setItem("pmWelcomedScan","1")}catch(e){}}).catch(function(err){if(err&&err.name==="NotAllowedError")busy=false;else tts()})}catch(e){tts()}}
+  try{if("speechSynthesis" in window){speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=function(){play()}}}catch(e){}
+  play();
+  ["pointerdown","touchstart","click","keydown"].forEach(function(ev){document.addEventListener(ev,function h(){if(done){document.removeEventListener(ev,h,true);return}play()},{capture:true,passive:true})});
+})();
+</script>
 </body>
 </html>
 
