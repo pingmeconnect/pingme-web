@@ -471,7 +471,7 @@ async function pmQrDownloadRaw(url,code){
  try{
   new QRCode(host,{text:url,width:1200,height:1200,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
   await new Promise(r=>setTimeout(r,350));const q=host.querySelector('canvas');if(!q)throw new Error('QR image is not ready.');
-  const canvas=document.createElement('canvas');canvas.width=1200;canvas.height=1480;const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,1200,1480);pmDrawLogoAbove(ctx,600,40,620,200,logo);ctx.drawImage(q,60,280,1080,1080);ctx.fillStyle='#102b62';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='800 54px Arial';ctx.fillText('SCAN TO CONNECT',600,1425);
+  const canvas=document.createElement('canvas');canvas.width=1200;canvas.height=1480;const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,1200,1480);pmDrawLogoAbove(ctx,600,40,620,200,logo);ctx.drawImage(q,190,350,820,820);ctx.fillStyle='#102b62';ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='800 54px Arial';ctx.fillText('SCAN TO CONNECT',600,1425);
   const a=document.createElement('a');a.href=canvas.toDataURL('image/png');a.download=`PingMe_QR_${code}.png`;a.click();toast('PingMe QR PNG downloaded (logo on top).');
  }catch(e){toast('QR export blocked: '+e.message)}finally{host.remove()}
 }
@@ -487,9 +487,9 @@ async function pmQrDownloadArtwork(url,code,name,format){
   // navy frame
   c.strokeStyle='#0b1f44';c.lineWidth=0.7*u;const m=0.9*u;c.beginPath();c.roundRect(m,m,px-2*m,px-2*m,2.2*u);c.stroke();
   // logo on top
-  pmDrawLogoAbove(c,px/2,2*u,27*u,6.4*u,logo);
-  // QR 34 mm
-  const qs=32*u,qx=(px-qs)/2,qy=9*u;c.fillStyle='#fff';c.fillRect(qx-.8*u,qy-.8*u,qs+1.6*u,qs+1.6*u);c.imageSmoothingEnabled=false;c.drawImage(q,qx,qy,qs,qs);
+  pmDrawLogoAbove(c,px/2,2*u,24*u,5.4*u,logo);
+  // QR 26 mm with a 3.4 mm clear white quiet zone (needed by phone cameras)
+  const qs=26*u,qx=(px-qs)/2,qy=11.2*u;c.fillStyle='#fff';c.fillRect(qx-3.4*u,qy-3.4*u,qs+6.8*u,qs+6.8*u);c.imageSmoothingEnabled=false;c.drawImage(q,qx,qy,qs,qs);
   // words
   c.textAlign='center';c.textBaseline='middle';c.fillStyle='#0b1f44';c.font='900 '+(3.1*u)+'px Arial';c.fillText('SCAN TO CONTACT OWNER',px/2,43.6*u,43*u);
   c.fillStyle='#1764df';c.font='700 '+(2.2*u)+'px "Noto Sans Tamil","Latin Modern Sans",Arial';c.fillText('உரிமையாளரைத் தொடர்பு கொள்ள ஸ்கேன் செய்யுங்கள்',px/2,46.9*u,43*u);
@@ -624,7 +624,14 @@ let pmSettings={};
 var PM_PRICE_MAP={starter_kit_price:'kit',renewal_price:'renewal',recharge_plan_1_price:'recharge1_price',recharge_plan_1_credits:'recharge1_credits',recharge_plan_2_price:'recharge2_price',recharge_plan_2_credits:'recharge2_credits'};window.pmPrices=window.pmPrices||{};
 function pmSet(k){if(PM_PRICE_MAP[k]){return window.pmPrices[PM_PRICE_MAP[k]]||''}const v=pmSettings[k];const d=PM_DEFAULTS[k];if(v===undefined||v===null||v==='')return d;if(typeof d==='number'){const n=Number(v);return Number.isFinite(n)?n:d}return String(v)}
 async function pmLoadSettings(){try{const {data,error}=await db.from('app_settings').select('setting_key,setting_value');if(error)return;pmSettings={};(data||[]).forEach(r=>{let v=r.setting_value;try{v=JSON.parse(v)}catch(e){}pmSettings[r.setting_key]=v})}catch(e){}}
-function pmWaLink(mobile,text){let d=String(mobile||'').replace(/\D/g,'');if(d.length===10)d='91'+d;else if(d.length===11&&d[0]==='0')d='91'+d.slice(1);return 'https://wa.me/'+d+(text?'?text='+encodeURIComponent(text):'')}
+function pmWaLink(){return '#'} /* retired: admin never opens a personal WhatsApp chat */
+async function pmPingMeSend(c,text){
+  if(!c||!c.mobile){toast('This customer has no mobile number.');return false}
+  if(!text||!String(text).trim()){toast('Write a message first.');return false}
+  if(!confirm('Send now from the PingMe number to '+(c.name||'this customer')+'?\n\nIt only delivers if they messaged the PingMe number in the last 24 hours. Otherwise use an approved template.'))return false;
+  try{const r=await pmApi('/api/admin/whatsapp-send',{method:'POST',body:JSON.stringify({recipients:[{name:c.name,to:String(c.mobile).replace(/\D/g,'')}],message:String(text),consent_confirmed:true,service_window_open:true})});const x=(r.results||[])[0]||{};if(x.success){toast('Sent from the PingMe number.');return true}toast('Not sent: '+(x.error||'unknown error'));return false}catch(e){toast('Not sent: '+e.message);return false}
+}
+document.addEventListener('click',function(e){const b=e.target.closest&&e.target.closest('[data-pm-send-act]');if(!b)return;const c=(typeof customers!=='undefined'?customers:[]).find(x=>String(x.id)===b.dataset.pmSendAct);if(c)pmPingMeSend(c,PM_MSG.activate(c))});
 function pmDaysTo(v){if(!v)return null;const t=new Date();t.setHours(0,0,0,0);return Math.round((new Date(v+'T00:00:00')-t)/864e5)}
 function pmFirst(n){return String(n||'there').trim().split(/\s+/)[0]}
 async function pmToken(){const {data:{session}}=await db.auth.getSession();if(!session?.access_token)throw new Error('Admin session expired. Please sign in again.');return session.access_token}
@@ -690,8 +697,9 @@ async function pmRenderDashboard(){
   if(!cur[2].length){body.innerHTML=`<div class="empty"><b>All clear ✓</b>Nothing here right now.</div>`;return}
   if(pmAttnTab==='mobile'){body.innerHTML=cur[2].map(r=>{const c=list.find(x=>x.id===r.customer_row_id)||{};return `<div class="arow"><div class="who"><b>${safe(c.name||'Customer')}</b><span>${safe(r.old_mobile)} → <b style="display:inline">${safe(r.requested_mobile)}</b>${r.reason?' · '+safe(r.reason):''}</span></div><button class="btn small" data-rv="${r.id}" data-d="Approved">Approve</button><button class="btn light small" data-rv="${r.id}" data-d="Rejected">Reject</button></div>`}).join('');
    body.querySelectorAll('[data-rv]').forEach(b=>b.onclick=async()=>{const dec=b.dataset.d;let note=prompt(dec==='Approved'?'Confirm you verified the NEW number (this note is required):':'Reason for rejecting (optional):','');if(note===null)return;if(dec==='Approved'&&note.trim().length<5){toast('Please write a short note confirming the new number was verified.');return}const {error}=await db.rpc('pingme_admin_review_mobile_change',{p_request_id:b.dataset.rv,p_decision:dec,p_admin_note:note.trim()||null});if(error){toast('Review failed: '+error.message);return}toast('Request '+dec.toLowerCase()+'.');await loadCustomers()});return}
-  body.innerHTML=cur[2].slice(0,20).map(c=>{const msg=pmAttnTab==='low'?PM_MSG.lowcredit(c):pmAttnTab==='expiry'?PM_MSG.expiry(c):PM_MSG.activate(c);const sub=pmAttnTab==='low'?`${Number(c.paid_credits)||0} credits left`:pmAttnTab==='expiry'?(pmDaysTo(c.subscription_expiry)<0?'Expired ':'Expires ')+fmtDate(c.subscription_expiry):'Has the kit, not activated yet';return `<div class="arow"><div class="who"><b>${safe(c.name)}</b><span>${safe(c.customer_id)} · ${sub}</span></div><a class="btn wa small" target="_blank" rel="noopener" href="${pmWaLink(c.mobile,msg)}">WhatsApp</a><button class="btn light small" data-open="${c.id}">Open</button></div>`}).join('')+(cur[2].length>20?`<p class="footerhint">Showing 20 of ${cur[2].length}.</p>`:'');
+  body.innerHTML=cur[2].slice(0,20).map(c=>{const msg=pmAttnTab==='low'?PM_MSG.lowcredit(c):pmAttnTab==='expiry'?PM_MSG.expiry(c):PM_MSG.activate(c);const sub=pmAttnTab==='low'?`${Number(c.paid_credits)||0} credits left`:pmAttnTab==='expiry'?(pmDaysTo(c.subscription_expiry)<0?'Expired ':'Expires ')+fmtDate(c.subscription_expiry):'Has the kit, not activated yet';return `<div class="arow"><div class="who"><b>${safe(c.name)}</b><span>${safe(c.customer_id)} · ${sub}</span></div><button type="button" class="btn wa small" data-send="${c.id}">Send</button><button class="btn light small" data-open="${c.id}">Open</button></div>`}).join('')+(cur[2].length>20?`<p class="footerhint">Showing 20 of ${cur[2].length}.</p>`:'');
   body.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>openCustomer(b.dataset.open));
+  body.querySelectorAll('[data-send]').forEach(b=>b.onclick=()=>{const c=cur[2].find(x=>String(x.id)===b.dataset.send);if(!c)return;pmPingMeSend(c,pmAttnTab==='low'?PM_MSG.lowcredit(c):pmAttnTab==='expiry'?PM_MSG.expiry(c):PM_MSG.activate(c))});
  };
  drawAttn();
  // async data
@@ -743,7 +751,7 @@ renderCustomers=function(){
  const per=20,pages=Math.max(1,Math.ceil(rows.length/per));if(pmCustPage>pages)pmCustPage=pages;if(pmCustPage<1)pmCustPage=1;
  const slice=rows.slice((pmCustPage-1)*per,pmCustPage*per);
  document.getElementById('customerRows').innerHTML=slice.map(c=>{const d=pmDaysTo(c.subscription_expiry);const exp=c.subscription_expiry?fmtDate(c.subscription_expiry)+(d!==null&&d<0?' ⚠':''):'—';
-  return `<tr><td data-label="Customer"><b>${safe(c.name)}</b><br><span class="footerhint" style="padding:0">${safe(c.customer_id)}</span></td><td data-label="Mobile">${safe(c.mobile)}</td><td data-label="Credits">${c.paid_credits??0} paid · ${c.test_credits??0} test</td><td data-label="Expiry">${exp}</td><td data-label="Status"><span class="pill ${c.status==='Inactive'?'off':c.status==='Testing'?'warn':''}">${safe(c.status)}</span></td><td class="act"><button class="btn small" data-customer-view="${c.id}">Open</button><a class="btn wa small" target="_blank" rel="noopener" href="${pmWaLink(c.mobile,PM_MSG.hello(c))}">WhatsApp</a></td></tr>`}).join('')||'<tr><td colspan="6"><div class="empty"><b>No customers found</b>Try a different search or filter.</div></td></tr>';
+  return `<tr><td data-label="Customer"><b>${safe(c.name)}</b><br><span class="footerhint" style="padding:0">${safe(c.customer_id)}</span></td><td data-label="Mobile">${safe(c.mobile)}</td><td data-label="Credits">${c.paid_credits??0} paid · ${c.test_credits??0} test</td><td data-label="Expiry">${exp}</td><td data-label="Status"><span class="pill ${c.status==='Inactive'?'off':c.status==='Testing'?'warn':''}">${safe(c.status)}</span></td><td class="act"><button class="btn small" data-customer-view="${c.id}">Open</button></td></tr>`}).join('')||'<tr><td colspan="6"><div class="empty"><b>No customers found</b>Try a different search or filter.</div></td></tr>';
  document.querySelectorAll('[data-customer-view]').forEach(b=>b.addEventListener('click',()=>openCustomer(b.dataset.customerView)));
  const cnt=document.getElementById('customerCount');if(cnt)cnt.textContent=rows.length+' customer'+(rows.length===1?'':'s');
  const pg=document.getElementById('customerPager');
@@ -769,10 +777,10 @@ function pmWhatsAppPanel(c){
  const kinds=[['activate','Activation help'],['lowcredit','Low credits'],['expiry','Renewal'],['hello','Custom']];
  let cur='hello';
  host.innerHTML=`<div class="actpanel"><b>Message ${safe(c.name)}</b><div class="chips" id="pmWaChips">${kinds.map(([k,l])=>`<button type="button" data-k="${k}" class="${k===cur?'on':''}">${l}</button>`).join('')}</div><div class="field"><textarea id="pmWaText" rows="5"></textarea></div>
- <div class="btnrow"><a class="btn wa" id="pmWaOpen" target="_blank" rel="noopener">Open in WhatsApp</a><button class="btn light" id="pmWaApi">Send from PingMe number</button></div>
- <p class="footerhint">“Open in WhatsApp” works anytime from your own WhatsApp. “Send from PingMe number” only delivers if this customer messaged the PingMe number in the last 24 hours; otherwise use an approved template in Automation Hub.</p></div>`;
+ <div class="btnrow"><button class="btn light" id="pmWaApi">Send from PingMe number</button></div>
+ <p class="footerhint">Messages are sent only from the PingMe number, and it only delivers if this customer messaged the PingMe number in the last 24 hours; otherwise use an approved template in Automation Hub.</p></div>`;
  host.scrollIntoView({behavior:'smooth',block:'start'});const ta=document.getElementById('pmWaText'),open=document.getElementById('pmWaOpen');
- const sync=()=>{open.href=pmWaLink(c.mobile,ta.value)};
+ const sync=()=>{};
  const load=k=>{cur=k;ta.value=PM_MSG[k](c);document.querySelectorAll('#pmWaChips button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));sync()};
  document.querySelectorAll('#pmWaChips button').forEach(b=>b.onclick=()=>load(b.dataset.k));ta.oninput=sync;load('hello');
  document.getElementById('pmWaApi').onclick=async()=>{const body=ta.value.trim();if(!body){toast('Write a message first.');return}if(!confirm('Send now from the PingMe number?\n\nThis only works if '+c.name+' messaged the PingMe WhatsApp number in the last 24 hours and agreed to receive messages.'))return;
@@ -783,7 +791,7 @@ async function pmActivationPanel(c){
  const host=document.getElementById('pmCustomerActions');const linked=!!c.auth_user_id;
  const state=c.status==='Testing'?'Testing account — activation does not apply.':linked?(c.status==='Active'?'Activated. A login is linked to this customer.':'Deactivated, but a login is still linked. Reset activation if they must activate again.'):(c.status==='Inactive'?'Waiting to activate.':'Active without a customer login (activated manually).');
  host.innerHTML=`<div class="actpanel"><b>Activation</b><p style="margin:6px 0 8px">${state}</p>
- ${c.status==='Inactive'&&!linked?`<div class="notice">Customer sends <b>ACTIVATE ${safe(c.customer_id)}</b> on WhatsApp from <b>${safe(c.mobile)}</b>, gets a 6-digit code, and finishes at pingmeconnect.in/activate.</div><div class="btnrow" style="margin-top:8px"><a class="btn wa" target="_blank" rel="noopener" href="${pmWaLink(c.mobile,PM_MSG.activate(c))}">Send activation steps</a></div>`:''}
+ ${c.status==='Inactive'&&!linked?`<div class="notice">Customer sends <b>ACTIVATE ${safe(c.customer_id)}</b> on WhatsApp from <b>${safe(c.mobile)}</b>, gets a 6-digit code, and finishes at pingmeconnect.in/activate.</div><div class="btnrow" style="margin-top:8px"><button type="button" class="btn wa" data-pm-send-act="${c.id}">Send activation steps (from PingMe number)</button></div>`:''}
  ${linked&&c.status!=='Testing'?`<div class="btnrow" style="margin-top:8px"><button class="btn gold" id="pmTempPw">Set temporary password</button><button class="btn red" id="pmActReset">Reset activation</button></div><div id="pmTempPwOut"></div><p class="footerhint"><b>Forgot password?</b> Set a temporary password, then send it to the customer on WhatsApp (free). They can change it in My Account → Password. “Reset activation” deletes the login so they must activate again. Credits, QR and history are kept either way.</p>`:''}
  <h3 style="margin:12px 0 4px;font-size:13px">Recent activation requests</h3><div id="pmActReqs"><div class="skel"></div></div></div>`;
  host.scrollIntoView({behavior:'smooth',block:'start'});const rb=document.getElementById('pmActReset');
@@ -792,7 +800,7 @@ async function pmActivationPanel(c){
   if(!confirm('Set a new temporary password for '+c.name+'?\n\nTheir current password stops working immediately.'))return;
   try{tb.disabled=true;await pmApi('/api/admin/set-password',{method:'POST',body:JSON.stringify({customer_id:c.customer_id,password:pw})});
    const msg='Hello '+pmFirst(c.name)+'! Your PingMe temporary password is: '+pw+'  Sign in at https://pingmeconnect.in/account/ with your email or mobile number, then change it under Password. – PingMe';
-   document.getElementById('pmTempPwOut').innerHTML='<div class="notice" style="margin-top:8px"><b>New password: <span style="font-size:15px;letter-spacing:.5px">'+safe(pw)+'</span></b><br>Shown only now. Send it to the customer:</div><div class="btnrow" style="margin-top:8px"><a class="btn wa" target="_blank" rel="noopener" href="'+pmWaLink(c.mobile,msg)+'">Send on WhatsApp</a></div>';toast('Temporary password set.')}
+   document.getElementById('pmTempPwOut').innerHTML='<div class="notice" style="margin-top:8px"><b>New password: <span style="font-size:15px;letter-spacing:.5px">'+safe(pw)+'</span></b><br>Shown only now. Send it to the customer:</div><div class="btnrow" style="margin-top:8px"><button type="button" class="btn wa" id="pmSendPw">Send from PingMe number</button></div>';document.getElementById('pmSendPw').onclick=function(){pmPingMeSend(c,msg)};toast('Temporary password set.')}
   catch(e){toast('Failed: '+e.message)}finally{tb.disabled=false}};
  if(rb)rb.onclick=async()=>{const t=prompt('This deletes the customer login. Type the Customer ID to confirm:\n'+c.customer_id);if(t===null)return;if(t.trim().toUpperCase()!==c.customer_id.toUpperCase()){toast('Customer ID did not match. Nothing changed.');return}
   try{rb.disabled=true;await pmApi('/api/admin/activation-reset',{method:'POST',body:JSON.stringify({customer_id:c.customer_id,confirm:true})});toast('Activation reset.');await loadCustomers();openCustomer(c.id);pmActivationPanel(customers.find(x=>x.id===c.id)||c)}catch(e){rb.disabled=false;toast('Reset failed: '+e.message)}};
@@ -1261,17 +1269,17 @@ function pmMsgGroups(){var C=customers||[],thr=pmSet('low_credit_threshold'),ed=
  waiting:{t:'Not activated yet',d:'Kit sold, customer has not activated',l:C.filter(function(c){return (c.status==='Inactive'||c.status==='Testing')&&!c.auth_user_id}),m:'activate',x:function(c){return c.customer_id}}}}
 function pmMsgSent(k,c){try{return localStorage.getItem('pmsent_'+k+'_'+c.id+'_'+new Date().toISOString().slice(0,10))==='1'}catch(e){return false}}
 function pmMsgMark(k,c){try{localStorage.setItem('pmsent_'+k+'_'+c.id+'_'+new Date().toISOString().slice(0,10),'1')}catch(e){}}
-function pmMsgRow(k,c,text,extra){var done=pmMsgSent(k,c);return '<div class="healthrow"><span><b>'+safe(c.name)+'</b> · '+safe(c.mobile||'')+(extra?' · <small>'+safe(extra)+'</small>':'')+'</span><b><button type="button" class="btn small'+(done?' light':'')+'" data-wa="'+safe(c.id)+'" data-k="'+k+'">'+(done?'Sent today ✓ (open again)':'Send on WhatsApp')+'</button></b></div>'}
+function pmMsgRow(k,c,text,extra){var done=pmMsgSent(k,c);return '<div class="healthrow"><span><b>'+safe(c.name)+'</b> · '+safe(c.mobile||'')+(extra?' · <small>'+safe(extra)+'</small>':'')+'</span><b><button type="button" class="btn small'+(done?' light':'')+'" data-wa="'+safe(c.id)+'" data-k="'+k+'">'+(done?'Sent today ✓ (send again)':'Send from PingMe number')+'</button></b></div>'}
 async function pmRenderMessages(){
  var el=document.getElementById('page-communication');if(!customers||!customers.length){try{await loadCustomers()}catch(e){}}
  await pmLoadSettings();var G=pmMsgGroups();
  var tabs=[['rem','Reminders'],['ann','Announcement'],['his','History']];
- var h='<div class="panelhead"><div><h1>✉ Messages</h1><p>Tap a button, WhatsApp opens with the message ready, press send.</p></div><button class="btn light small" id="pmMsgRef">↻ Refresh</button></div><div class="tabs">'+tabs.map(function(t){return '<button type="button" class="'+(pmMsgTab===t[0]?'active':'')+'" data-mt="'+t[0]+'">'+t[1]+(t[0]==='rem'?' ('+(G.low.l.length+G.expiry.l.length+G.waiting.l.length)+')':'')+'</button>'}).join('')+'</div><div id="pmMsgBody"></div>';
+ var h='<div class="panelhead"><div><h1>✉ Messages</h1><p>Tap Send. Every message goes from the PingMe number, never from your own phone.</p></div><button class="btn light small" id="pmMsgRef">↻ Refresh</button></div><div class="tabs">'+tabs.map(function(t){return '<button type="button" class="'+(pmMsgTab===t[0]?'active':'')+'" data-mt="'+t[0]+'">'+t[1]+(t[0]==='rem'?' ('+(G.low.l.length+G.expiry.l.length+G.waiting.l.length)+')':'')+'</button>'}).join('')+'</div><div id="pmMsgBody"></div>';
  el.innerHTML=h;
  el.querySelectorAll('[data-mt]').forEach(function(b){b.onclick=function(){pmMsgTab=b.dataset.mt;pmRenderMessages()}});
  document.getElementById('pmMsgRef').onclick=async function(){await loadCustomers();pmRenderMessages()};
  var body=document.getElementById('pmMsgBody');
- function wire(map){body.querySelectorAll('[data-wa]').forEach(function(b){b.onclick=function(){var c=customers.find(function(x){return String(x.id)===b.dataset.wa});if(!c)return;var f=map(b.dataset.k,c);window.open(pmWaLink(c.mobile,f),'_blank','noopener');pmMsgMark(b.dataset.k,c);b.className='btn small light';b.textContent='Sent today ✓ (open again)'}})}
+ function wire(map){body.querySelectorAll('[data-wa]').forEach(function(b){b.onclick=function(){var c=customers.find(function(x){return String(x.id)===b.dataset.wa});if(!c)return;var f=map(b.dataset.k,c);pmPingMeSend(c,f).then(function(ok){if(ok){pmMsgMark(b.dataset.k,c);b.className='btn small light';b.textContent='Sent today ✓'}})}})}
  if(pmMsgTab==='rem'){
   body.innerHTML=Object.keys(G).map(function(k){var g=G[k];return '<div class="card" style="margin-bottom:14px"><h2>'+g.t+' <small style="font-weight:400">('+g.l.length+')</small></h2><p class="footerhint">'+g.d+'</p>'+(g.l.length?g.l.map(function(c){return pmMsgRow(k,c,'',g.x(c))}).join(''):'<div class="healthrow"><span>✅ Nobody right now</span><b></b></div>')+'</div>'}).join('')+'<p class="footerhint">Change the limits (low-credit number, days before expiry) in Settings. Prices in the messages come from your Prices settings.</p>';
   wire(function(k,c){return PM_MSG[G[k].m](c)});
