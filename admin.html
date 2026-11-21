@@ -1460,4 +1460,63 @@ new MutationObserver(run).observe(document.body,{childList:true,subtree:true});r
 var nav=document.querySelector('.sidebar nav');var btns=[];var set=function(){btns.forEach(function(b){b.textContent=b.dataset.f?(enabled?'ⓘ ON':'ⓘ'):(enabled?'ⓘ Help notes: ON / உதவி: ON':'ⓘ Help notes: OFF / உதவி: OFF')});document.body.classList.toggle('pmNoHelp',!enabled)};var tog=function(){enabled=!enabled;try{localStorage.setItem('pmHelp',enabled?'on':'off')}catch(e){}set()};if(nav){var b=document.createElement('button');b.id='pmHelpBtn';b.type='button';b.onclick=tog;btns.push(b);nav.appendChild(b)}var f=document.createElement('button');f.id='pmHelpFab';f.type='button';f.dataset.f='1';f.title='Help notes on/off';f.onclick=tog;btns.push(f);document.body.appendChild(f);set()
 })();
 </script>
+<script id="pmKitOrders">
+/* ===== Orders tab: website kit orders, payment check, dispatch + courier details, customer messages ===== */
+(function(){
+var ST=[['new','New (payment to check)'],['paid','Paid ✔'],['packed','Packed'],['dispatched','Dispatched'],['delivered','Delivered'],['cancelled','Cancelled']];
+var COL={new:'#c0362c',paid:'#b7791f',packed:'#6b46c1',dispatched:'#1764df',delivered:'#12805c',cancelled:'#6b7280'};
+var cache=[],filter='all';
+function fmtD(t){try{return new Date(t).toLocaleString('en-IN',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit',hour12:true})}catch(e){return t}}
+async function pmRenderKitOrders(){
+ var el=document.getElementById('page-orders');if(!el)return;
+ el.innerHTML='<div class="panelhead"><div><h1>▣ Orders & Dispatch</h1><p>Orders from the website order form. Check the money, pack, dispatch and message the customer.</p></div><button class="btn light small" id="koRefresh">↻ Refresh</button></div><div id="koBody"><p class="footerhint">Loading orders…</p></div>';
+ document.getElementById('koRefresh').onclick=pmRenderKitOrders;
+ try{var r=await pmApi('/api/admin/kit-orders');cache=r.orders||[]}catch(e){document.getElementById('koBody').innerHTML='<p class="footerhint">Could not load orders: '+safe(e.message)+'. Run sql/kit_orders.sql in Supabase and deploy the new Worker.</p>';return}
+ draw()}
+function draw(){
+ var host=document.getElementById('koBody');if(!host)return;
+ var counts={};cache.forEach(function(o){counts[o.status]=(counts[o.status]||0)+1});
+ var tabs='<div class="btnrow" style="margin:6px 0 10px;flex-wrap:wrap">'+[['all','All ('+cache.length+')']].concat(ST.map(function(s){return[s[0],s[1].split(' (')[0]+' ('+(counts[s[0]]||0)+')']})).map(function(t){return'<button class="btn '+(filter===t[0]?'':'light')+' small" data-kf="'+t[0]+'">'+t[1]+'</button>'}).join('')+'</div>';
+ var list=cache.filter(function(o){return filter==='all'||o.status===filter});
+ host.innerHTML=tabs+(list.length?list.map(card).join(''):'<p class="footerhint">No orders here yet.</p>');
+ host.querySelectorAll('[data-kf]').forEach(function(b){b.onclick=function(){filter=b.dataset.kf;draw()}});
+ host.querySelectorAll('[data-ko]').forEach(function(box){wire(box)})}
+function card(o){
+ var opts=ST.map(function(s){return'<option value="'+s[0]+'"'+(o.status===s[0]?' selected':'')+'>'+s[1]+'</option>'}).join('');
+ return '<details class="card" data-ko="'+o.id+'" style="margin:10px 0;padding:12px"'+(o.status==='new'?' open':'')+'><summary style="cursor:pointer;display:flex;gap:8px;align-items:center;flex-wrap:wrap"><b>'+safe(o.order_no)+'</b><span style="background:'+COL[o.status]+';color:#fff;border-radius:20px;padding:2px 10px;font-size:11px;font-weight:700">'+safe(o.status.toUpperCase())+'</span><span>'+safe(o.name)+'</span><span class="footerhint">'+safe(o.mobile)+' · '+(o.amount?'₹'+o.amount:'-')+' · '+fmtD(o.created_at)+'</span></summary>'
+ +'<div style="margin-top:10px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px 16px;font-size:13px">'
+ +'<div><b>WhatsApp</b><br>'+safe(o.mobile)+'</div><div><b>Email</b><br>'+safe(o.email)+'</div>'
+ +'<div style="grid-column:1/-1"><b>Address</b><br>'+safe(o.address)+', '+safe(o.city)+', '+safe(o.state)+' - '+safe(o.pincode)+'</div>'
+ +'<div><b>Transaction ID (UTR)</b><br>'+safe(o.txn_id)+'</div><div><button class="btn light small" data-act="proof">View payment screenshot</button></div></div>'
+ +'<div data-proofbox style="margin-top:8px"></div>'
+ +'<hr style="border:0;border-top:1px solid #e3eaf7;margin:12px 0">'
+ +'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px 14px">'
+ +'<label>Status<select data-f="status">'+opts+'</select></label>'
+ +'<label>Kit code = Customer ID <span class="footerhint">(printed on the box)</span><input data-f="kit_code" value="'+safe(o.kit_code||'')+'" placeholder="PM-XXXXXXXX"></label></div>'
+ +'<div data-dispatchbox style="display:'+((o.status==='dispatched'||o.status==='delivered')?'block':'none')+';margin-top:8px"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px 14px">'
+ +'<label>Courier name <span class="footerhint">(optional)</span><input data-f="courier_name" value="'+safe(o.courier_name||'')+'" placeholder="e.g. DTDC · blank = N/A"></label>'
+ +'<label>Tracking number <span class="footerhint">(optional)</span><input data-f="tracking_no" value="'+safe(o.tracking_no||'')+'" placeholder="blank = N/A"></label>'
+ +'<label>Dispatch date<input data-f="dispatched_on" type="date" value="'+safe(o.dispatched_on||'')+'"></label></div>'
+ +'<p class="footerhint" style="margin:6px 0 0">Direct delivery? Leave courier and tracking empty. The customer message will say "N/A".</p></div>'
+ +'<label style="display:block;margin-top:8px">Notes (only you see this)<input data-f="notes" value="'+safe(o.notes||'')+'"></label>'
+ +'<div class="btnrow" style="margin-top:10px"><button class="btn small" data-act="save">Save</button><button class="btn gold small" data-act="savesend" title="Saves and messages the customer on WhatsApp and email">Save + message customer</button></div>'
+ +'<p class="footerhint" style="margin:6px 0 0">“Save + message customer” works when status is <b>Dispatched</b> (tracking details + Customer ID) or <b>Delivered</b> (activation steps + Customer ID).</p></details>'}
+function wire(box){
+ var id=box.dataset.ko,sel=box.querySelector('[data-f=status]'),db=box.querySelector('[data-dispatchbox]');
+ sel.onchange=function(){db.style.display=(sel.value==='dispatched'||sel.value==='delivered')?'block':'none';if(sel.value==='dispatched'){var d=box.querySelector('[data-f=dispatched_on]');if(!d.value)d.value=new Date().toISOString().slice(0,10)}};
+ box.querySelector('[data-act=proof]').onclick=async function(e){e.preventDefault();var pb=box.querySelector('[data-proofbox]');pb.innerHTML='<span class="footerhint">Loading…</span>';try{var r=await pmApi('/api/admin/kit-order-proof?id='+id);pb.innerHTML=r.proof_image?'<img src="'+r.proof_image+'" style="max-width:100%;max-height:420px;border:1px solid #dbe5f5;border-radius:8px">':'<span class="footerhint">No screenshot stored.</span>'}catch(err){pb.innerHTML='<span class="footerhint">'+safe(err.message)+'</span>'}};
+ async function save(send){
+  var body={id:id,send_message:send};box.querySelectorAll('[data-f]').forEach(function(f){body[f.dataset.f]=f.value});
+  if(send&&body.status!=='dispatched'&&body.status!=='delivered'){toast('Set status to Dispatched or Delivered to message the customer.');return}
+  if(send&&!confirm('Save and message the customer now?'))return;
+  try{var r=await pmApi('/api/admin/kit-order-update',{method:'POST',body:JSON.stringify(body)});
+   var msg='Saved.';if(send&&r.sent)msg='Saved. WhatsApp: '+(r.sent.whatsapp?'sent':'not sent (template not approved yet?)')+' · Email: '+(r.sent.email?'sent':'not sent');
+   toast(msg);var o=cache.find(function(x){return x.id===id});if(o)Object.assign(o,{status:body.status,kit_code:(body.kit_code||'').toUpperCase()||null,courier_name:body.courier_name||null,tracking_no:body.tracking_no||null,dispatched_on:body.dispatched_on||null,notes:body.notes});draw()}
+  catch(err){toast(err.message||'Could not save')}}
+ box.querySelector('[data-act=save]').onclick=function(e){e.preventDefault();save(false)};
+ box.querySelector('[data-act=savesend]').onclick=function(e){e.preventDefault();save(true)}}
+window.pmRenderKitOrders=pmRenderKitOrders;
+var _prev=window.pmReloadPage;window.pmReloadPage=function(p){if(p==='orders')return pmRenderKitOrders();return _prev?_prev(p):undefined};
+})();
+</script>
 </body></html>
